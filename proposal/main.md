@@ -19,7 +19,7 @@ with Python and R."
 
 ### 3. Please describe in detail the subject of your book and indicate its academic level.
 
-This book will cover an overview of Operational Research problem with a
+This book will cover an overview of Operational Research problems with a
 specific emphasis on solving them with open source software. The academic level
 will be from undergraduate to postgraduate students and researchers either
 aiming to learn about Operational Research and/or wanting to solve applied
@@ -61,7 +61,7 @@ tools.
 
 1. Full description and setup instructions for use of open source software.
 2. Theoretic description of a number of mathematical problem solving tools.
-3. Clear and detailed code examples in one or when appropriate two open source
+3. Clear and detailed code examples in one, or when appropriate two open source
    programming languages.
 4. Discussion of research carried out in each topic.
 
@@ -98,14 +98,14 @@ academics who want to learn how to use open source software.
 - Taha's "Operations Research: An Introduction, Global Edition"
   https://www.amazon.co.uk/Operations-Research-Introduction-Hamdy-Taha/dp/1292165545/ref=sr_1_1?ie=UTF8&qid=1543934254&sr=8-1&keywords=operational+research.
   The proposed text will actually complement these sorts of general texts quite
-  while by showing implementation of the concepts using open source software.
+  well by showing implementation of the concepts using open source software.
 - Jones, Maillardet and Robinson's "Introduction to Scientific Programming and
   Simulation Using R (Chapman & Hall/CRC: The R Series)"
   https://www.amazon.co.uk/Introduction-Scientific-Programming-Simulation-Chapman/dp/1466569999/ref=sr_1_2?s=books&ie=UTF8&qid=1543934328&sr=1-2&keywords=Owen+Jones+R.
   The proposed text will differ from this as it will concentrate on two
   programming languages, thus hopefully showcasing the implementation as a
   general concept. Furthermore, the proposed text will be briefer in its form
-  aiming to provide a handbook like experience to readers.
+  aiming to provide a handbook-like experience to readers.
 - "Python for healthcare analytics and modelling" https://pythonhealthcare.org/.
   The proposed text differs from this by offering a more general text, both in
   terms of programming language but also in terms of the subjects considered.
@@ -180,7 +180,7 @@ of some research using these notions will be used.
 In a similar fashion to Chapter 8: some queueing network problems cannot be
 easily computed as a Markov chain. This chapter will describe the theoretic
 background of discrete event simulation. It will illustrate the simulation of a
-complex queuing network using Python/R. Further examples of Research in this
+complex queuing network using Python/R. Further examples of research in this
 area will be described.
 
 ##### Part 2: Dynamical systems
@@ -196,11 +196,11 @@ topics will be included.
 ###### Chapter 6. Systems dynamics
 
 This chapter will describe the numerical solution of a dynamical system: for
-some systems of differential equations, obtaining exact solutions is too complex
+some systems of differential equations, obtaining exact solutions is too complex,
 in which case they can be solved numerically. An example of modelling the spread
 of disease in a complex format will be used. Python/R will be used to build the
 underlying equations and solve them numerically. Some what if scenarios will be
-considered.  Finally a discussion of some research using these notions will be
+considered. Finally a discussion of some research using these notions will be
 used.
 
 ##### Part 3: Emergent behaviour
@@ -215,7 +215,7 @@ will be used.
 
 ###### Chapter 8. Agent based simulation
 
-Notions of Agent based simulation will be used. As an example Schelling’s model
+Notions of agent based simulation will be used. As an example Schelling’s model
 of segregation will be built using Python/R. Research in this area will also be
 described. (Capture relationships with networkX).
 
@@ -232,7 +232,8 @@ research using these notions will be used.
 
 ###### Chapter 10. Heuristics
 
-Some optimisation problems cannot be solved exactly: for example the TSP. The
+Some optimisation problems cannot be solved exactly: for example the travelling
+salesman problem (TSP). The
 basic theory will be covered. An example of solving the TSP using heuristic
 optimisation algorithms in Python/R will be covered. Further examples of this in
 research will be discussed.
