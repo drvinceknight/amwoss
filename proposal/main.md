@@ -153,7 +153,7 @@ Research software communities:
 ###### Chapter 1. Introduction
 
 This chapter will introduce the book: describing what is to be considered an
-applied mathematical problem. The origins of Operational Research. This chapter
+applied mathematical problem. This chapter
 will also describe the origins of open source software and give a number of
 examples of them.
 
@@ -209,7 +209,7 @@ used.
 
 This will describe basics of game theory: theoretic background to concepts of
 equilibria will be described.  A game modelling interactions between two
-transport providers (or something) will be considered. Python/R will be used to
+service providers will be considered. Python/R will be used to
 obtain the Nash equilibria. A discussion of some research using these notions
 will be used.
 
@@ -217,14 +217,14 @@ will be used.
 
 Notions of agent based simulation will be used. As an example Schelling’s model
 of segregation will be built using Python/R. Research in this area will also be
-described. (Capture relationships with networkX).
+described. Graph theory libraries will be used to capture spacial relationships.
 
 
 ##### Part 4: Optimisation
 
 ###### Chapter 9. Linear programming
 
-This chapter will describe the optimisation of a linear programme: the basic
+This chapter will describe the optimisation of a linear program: the basic
 theory will be covered. An example of scheduling exams will be illustrated,
 Python/R will be used to build the LP and solve it. A discussion of some
 research using these notions will be used.
@@ -233,7 +233,7 @@ research using these notions will be used.
 ###### Chapter 10. Heuristics
 
 Some optimisation problems cannot be solved exactly: for example the travelling
-salesman problem (TSP). The
+salesman problem. The
 basic theory will be covered. An example of solving the TSP using heuristic
 optimisation algorithms in Python/R will be covered. Further examples of this in
 research will be discussed.
@@ -251,7 +251,8 @@ subject.
 
 Vince Knight is a senior lecturer (associate professor) of Mathematics at
 Cardiff University. He is a maintainer of open source libraries used in agent
-based modelling and game theoretic research. He is a fellow of the
+based modelling and game theoretic research. He uses open source software for
+all his teaching and research. He is a fellow of the
 sustainable software institute highlighting his interest in best practice when
 it comes to scientific programming. He has been teaching programming for more
 than 10 years and is regularly involved in organising Python conferences in the
