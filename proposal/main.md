@@ -261,6 +261,6 @@ UK and Africa.
 Geraint Palmer is a teaching associate of Mathematics at Cardiff University. He
 is a maintainer of an open source library for discrete event simulation. He is
 also a fellow of the sustainable software institute and has presented at a
-number of international conference on the subject of best practice of scientific
+number of international conferences on the subject of best practice of scientific
 computing. He has used open software tools in his own research and regularly
 teaches programming.
