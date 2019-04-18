@@ -1,0 +1,6 @@
+name: ampwoss
+channels:
+  - defaults
+dependencies:
+  - python=3.7.3
+prefix: /Users/vince/anaconda3/envs/ampwoss
