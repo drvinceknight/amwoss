@@ -1,0 +1,9 @@
+### In R
+
+Consider the following vector
+
+```{r}
+x <- c(-7, 3, 3, 0, 1)
+```
+
+We can do a number of things with this.
