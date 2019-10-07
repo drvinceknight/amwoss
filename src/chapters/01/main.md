@@ -51,7 +51,7 @@ The other author, Geraint, used mathematics to find a good set of Pokemon. Using
 an area of mathematics call linear programming which is based on linear algebra
 he was able to find the best makeup of pokemon. # TODO Geraint does any of this make poke sense?.
 
-Applied mathematics is the type of mathematics that helps us answer questions
+Here, applied mathematics is the type of mathematics that helps us answer questions
 that the real world asks.
 
 # What is open source software
@@ -64,14 +64,21 @@ that someone will not use a particular piece of software due to a confusion
 between cost and value: if something is free is it really going to be any good?
 
 In practice open source software is used all of the world and powers some of the
-most important infra suture around. For example, one should never use any
+most important infrastructure around. For example, one should never use any
 cryptographic software that is not open source: if you cannot open up and read
 things than you should not trust it (this is indeed why most cryptographic
-systems used are open source).
+systems used are open source).  TODO Add a reference to back up this claim.
 
 Today, open source software is a lot more than a licensing agreement: it's a
 community of practice. Bugs are fixed faster, research is implemented
 immediately and knowledge is spread more widely thanks to open source software.
+Bugs are fixed faster because anyone can read and inspect the source code. Most
+open source software projects also have very clear mechanisms for communicating
+with the developers and even reviewing and accepting code contributions from the general
+public. Research is implemented immediately because when new algorithms are
+discovered they are often added directly to the software by the researchers who
+found them. This all contributes to the spread of knowledge: open source
+software is the modern should of giants that we all stand on.
 
 Open source software is software that, like scientific knowledge is not
 restricted in its use.
@@ -80,11 +87,11 @@ restricted in its use.
 
 The book itself is open source. You can find the source files for this book
 online at [github.com/drvinceknight/ampwoss](github.com/drvinceknight/ampwoss).
-There will will also find a number of *Jupyter notebooks* and *R mardkwon files*
+There will will also find a number of *Jupyter notebooks* and *R markdown files*
 that include code snippets that let you follow along.
 
 We feel that you can choose to read the book from cover to cover, writing out
-the code examples as you go or it could also be used as a reference text when
+the code examples as you go; or it could also be used as a reference text when
 faced with particular problem and wanting to know where to start.
 
 The book is made up of 10 chapters that are paired in two 4 parts. Each part
