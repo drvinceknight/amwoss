@@ -342,7 +342,7 @@ brief list of some of them:
         \mintinline{python}{3.4}, \mintinline{python}{-3.459060}.
     \item Strings -- \mintinline{python}{str} -- for example \mintinline{python}{"two"}, \mintinline{python}{"hello
         world"}, \mintinline{python}{"3450"}.
-    \item Booleans -- \mintline{bool} -- for example \mintinline{python}{True} or
+    \item Booleans -- \mintinline{python}{bool} -- for example \mintinline{python}{True} or
         \mintinline{python}{False}.
 \end{itemize}
 
@@ -423,8 +423,8 @@ tennis_players = ["Federer", "S. Williams", "V. Williams", "Nadal", "King"]
 There are a number of things that can be done with lists but one particular
 aspect is that they are a sub type of something called an iterable in Python
 which means we can iterate over them. We do this in Python using a
-\mintinline{for} loop. For example, the following code will iterate over the
-list and print all the values:
+\mintinline{python}{for} loop. For example, the following code will iterate over
+the list and print all the values:
 
 \begin{minted}{python}
 for name in tennis_players:
@@ -448,7 +448,8 @@ anaconda distribution but if you want to download one that is not you can always
 do so as long as you have an internet connection.
 
 For example, to download a library for studying queueing systems
-\mintinline{ciw} open your command line interface and type the following:
+\mintinline{python}{ciw} open your command line interface and type the
+following:
 
 \begin{minted}{bash}
 pip install ciw
@@ -456,7 +457,7 @@ pip install ciw
 
 Once you restart your python interpreter, for exampl if you are using a Jupyter
 notebook then restart the Kernel and then you can run the following to make
-\mintinline{ciw} available to you:
+\mintinline{python}{ciw} available to you:
 
 \begin{minted}{python}
 import ciw
@@ -503,8 +504,9 @@ brief list of some of them:
         \mintinline{R}{3.4}, \mintinline{R}{-3.459060}.
     \item Strings -- \mintinline{R}{character} -- for example
         \mintinline{R}{"two"}, \mintinline{R}{"hello world"}, \mintinline{R}{"3450"}.
-    \item Booleans -- \mintline{logical} -- for example \mintinline{R}{True} or
-        \mintinline{R}{False}.
+    \item Booleans -- \mintinline{R}{logical} -- for example
+        \mintinline{R}{TRUE} or
+        \mintinline{R}{FALSE}.
 \end{itemize}
 
 Based on the values of a variable it is possible to construct Booleans:
@@ -637,7 +639,7 @@ specific to given problems. If you want to download and use one you can always
 do so as long as you have an internet connection.
 
 For example, to download a very common collection of data science tools called
-\mintinline{tidyverse}
+\mintinline{R}{tidyverse}
 we use the following line of code inside of an R session:
 
 \begin{minted}{R}
@@ -646,6 +648,6 @@ install.packages{"tidyverse")
 
 Once this package is installed you load it using
 
-\begin{minted}{python}
+\begin{minted}{R}
 library(tidyverse)
 \end{minted}
