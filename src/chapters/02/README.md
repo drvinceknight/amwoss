@@ -1,4 +1,4 @@
-# Chapter 2. Softwarer
+# Chapter 2. Software
 
 This chapter will describe the installation and setup of Anaconda. It will also
 describe using the command line as an interface to your computer. Finally, some
