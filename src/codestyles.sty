@@ -1,16 +1,19 @@
 \usepackage{minted}
 \usepackage{mdframed}
-\surroundwithmdframed{code}
+\usepackage{xcolor}
 
-\newenvironment{code}[2]
+\newenvironment{code}[3]
 % The basic code environment.
 % Used to create further environments.
 %
-% Take two arguments: a string of text to appear and a language for syntax
-% highlighting that minted recognizes.
+% Take three arguments:
+% - a string of text to appear and a language for syntax
+% - a string of text to appear and a language for syntax
+% - the width of the border frame
+%
 % For example:
 %
-% \begin{code}{Python input}{python}
+% \begin{code}{Python input}{python}{0.4pt}
 % for i in range(5):
 %   print(i)
 % end{code}
@@ -22,11 +25,19 @@
  \VerbatimEnvironment
  \begin{minted}[
     linenos=true,
-    mathescape,
-    style=solarizedlight,
-    frame=lines
+    style=friendly,
+    samepage=true,
+    frame=single,
+    framerule=#3,
+    bgcolor=white,
+    firstnumber=last,
     ]{#2}}
 {\end{minted}}
+
+%%%%% Python code environments
+
+\surroundwithmdframed[backgroundcolor=cyan!5]{pyin}
+\surroundwithmdframed[backgroundcolor=yellow!5]{pyout}
 
 \newenvironment{pyin}
 % Python input environment
@@ -36,7 +47,7 @@
 % end{pyin}
 {
 \VerbatimEnvironment
-\begin{code}{Python input}{python}}
+\begin{code}{Python input}{python}{0.8pt}}
 {\end{code}}
 
 \newenvironment{pyout}
@@ -50,5 +61,55 @@
 % end{pyout}
 {
 \VerbatimEnvironment
-\begin{code}{Python output}{python}}
+\begin{code}{Python output}{python}{0.4pt}}
 {\end{code}}
+
+%%%%% R code environments
+\surroundwithmdframed[backgroundcolor=magenta!5]{Rin}
+\surroundwithmdframed[backgroundcolor=green!5]{Rout}
+
+
+\newenvironment{Rin}
+% R input environment
+% for (i in seq(0, 4)) {
+%   print(i)
+% }
+% end{pyin}
+{
+\VerbatimEnvironment
+\begin{code}{R input}{R}{0.8pt}}
+{\end{code}}
+
+
+\newenvironment{Rout}
+% R output environment
+% \begin{Rout}
+% 0
+% 1
+% 2
+% 3
+% 4
+% end{Rout}
+{
+\VerbatimEnvironment
+\begin{code}{R output}{R}{0.4pt}}
+{\end{code}}
+
+
+%%%%% Cli code environments
+\surroundwithmdframed{cliin}
+\surroundwithmdframed{cliout}
+
+\newenvironment{cliin}
+{
+\VerbatimEnvironment
+\begin{code}{Cli input}{bash}{0.8pt}}
+{\end{code}}
+
+
+\newenvironment{cliout}
+{
+\VerbatimEnvironment
+\begin{code}{Cli output}{bash}{0.4pt}}
+{\end{code}}
+
