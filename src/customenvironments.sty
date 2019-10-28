@@ -11,26 +11,30 @@
 
 %%% Code environments
 
-\newenvironment{code}[3]
+\newenvironment{code}[4]
 % The basic code environment.
 % Used to create further environments.
 %
-% Take three arguments:
+% Take four arguments:
 % - a string of text to appear and a language for syntax
 % - a string of text to appear and a language for syntax
 % - the width of the border frame
+% - the color of the background
 %
 % For example:
 %
-% \begin{code}{Python input}{python}{0.4pt}
+% \begin{code}{Python input}{python}{0.4pt}{cyan!5}
 % for i in range(5):
 %   print(i)
 % end{code}
-{\begin{tiny}
-        \begin{center}
-            \framebox{\texttt{#1}}
-         \end{center}
- \end{tiny}
+{\begin{mdframed}[nobreak=true,
+                  frametitle={\colorbox{#4}{\space#1\space}},
+                  innertopmargin=10pt,
+                  frametitlefont=\ttfamily,
+                  frametitleaboveskip=-\ht\strutbox,
+                  frametitlealignment=\center,
+                  backgroundcolor=#4,
+                  ]
  \VerbatimEnvironment
  \begin{minted}[
     linenos=true,
@@ -41,12 +45,9 @@
     bgcolor=white,
     firstnumber=last,
     ]{#2}}
-{\end{minted}}
+{\end{minted}\end{mdframed}}
 
 %%%%% Python code environments
-
-\surroundwithmdframed[backgroundcolor=cyan!5, nobreak=true]{pyin}
-\surroundwithmdframed[backgroundcolor=yellow!5, nobreak=true]{pyout}
 
 \newenvironment{pyin}
 % Python input environment
@@ -56,7 +57,7 @@
 % end{pyin}
 {
 \VerbatimEnvironment
-\begin{code}{Python input}{python}{0.8pt}}
+\begin{code}{Python input}{python}{0.8pt}{cyan!5}}
 {\end{code}}
 
 \newenvironment{pyout}
@@ -70,13 +71,10 @@
 % end{pyout}
 {
 \VerbatimEnvironment
-\begin{code}{Python output}{python}{0.4pt}}
+\begin{code}{Python output}{python}{0.4pt}{yellow!5}}
 {\end{code}}
 
 %%%%% R code environments
-\surroundwithmdframed[backgroundcolor=magenta!5, nobreak=true]{Rin}
-\surroundwithmdframed[backgroundcolor=green!5, nobreak=true]{Rout}
-
 
 \newenvironment{Rin}
 % R input environment
@@ -86,7 +84,7 @@
 % end{pyin}
 {
 \VerbatimEnvironment
-\begin{code}{R input}{R}{0.8pt}}
+\begin{code}{R input}{R}{0.8pt}{magenta!5}}
 {\end{code}}
 
 
@@ -101,24 +99,22 @@
 % end{Rout}
 {
 \VerbatimEnvironment
-\begin{code}{R output}{R}{0.4pt}}
+\begin{code}{R output}{R}{0.4pt}{green!5}}
 {\end{code}}
 
 
 %%%%% Cli code environments
-\surroundwithmdframed[nobreak=true]{cliin}
-\surroundwithmdframed[nobreak=true]{cliout}
 
 \newenvironment{cliin}
 {
 \VerbatimEnvironment
-\begin{code}{Cli input}{bash}{0.8pt}}
+\begin{code}{Cli input}{bash}{0.8pt}{white}}
 {\end{code}}
 
 
 \newenvironment{cliout}
 {
 \VerbatimEnvironment
-\begin{code}{Cli output}{bash}{0.4pt}}
+\begin{code}{Cli output}{bash}{0.4pt}{white}}
 {\end{code}}
 
