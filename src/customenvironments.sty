@@ -11,6 +11,7 @@
 
 %%% Code environments
 
+<<<<<<< HEAD
 \newenvironment{code}[4]
 % The basic code environment.
 % Used to create further environments.
@@ -35,6 +36,28 @@
                   frametitlealignment=\center,
                   backgroundcolor=#4,
                   ]
+=======
+\newenvironment{code}[3]
+% The basic code environment.
+% Used to create further environments.
+%
+% Take three arguments:
+% - a string of text to appear and a language for syntax
+% - a string of text to appear and a language for syntax
+% - the width of the border frame
+%
+% For example:
+%
+% \begin{code}{Python input}{python}{0.4pt}
+% for i in range(5):
+%   print(i)
+% end{code}
+{\begin{tiny}
+        \begin{center}
+            \framebox{\texttt{#1}}
+         \end{center}
+ \end{tiny}
+>>>>>>> Add env for explanation and add some options.
  \VerbatimEnvironment
  \begin{minted}[
     linenos=true,
@@ -45,10 +68,20 @@
     bgcolor=white,
     firstnumber=last,
     ]{#2}}
+<<<<<<< HEAD
 {\end{minted}\end{mdframed}}
 
 %%%%% Python code environments
 
+=======
+{\end{minted}}
+
+%%%%% Python code environments
+
+\surroundwithmdframed[backgroundcolor=cyan!5, nobreak=true]{pyin}
+\surroundwithmdframed[backgroundcolor=yellow!5, nobreak=true]{pyout}
+
+>>>>>>> Add env for explanation and add some options.
 \newenvironment{pyin}
 % Python input environment
 % \begin{pyin}
@@ -57,7 +90,11 @@
 % end{pyin}
 {
 \VerbatimEnvironment
+<<<<<<< HEAD
 \begin{code}{Python input}{python}{0.8pt}{cyan!5}}
+=======
+\begin{code}{Python input}{python}{0.8pt}}
+>>>>>>> Add env for explanation and add some options.
 {\end{code}}
 
 \newenvironment{pyout}
@@ -71,10 +108,20 @@
 % end{pyout}
 {
 \VerbatimEnvironment
+<<<<<<< HEAD
 \begin{code}{Python output}{python}{0.4pt}{yellow!5}}
 {\end{code}}
 
 %%%%% R code environments
+=======
+\begin{code}{Python output}{python}{0.4pt}}
+{\end{code}}
+
+%%%%% R code environments
+\surroundwithmdframed[backgroundcolor=magenta!5, nobreak=true]{Rin}
+\surroundwithmdframed[backgroundcolor=green!5, nobreak=true]{Rout}
+
+>>>>>>> Add env for explanation and add some options.
 
 \newenvironment{Rin}
 % R input environment
@@ -84,7 +131,11 @@
 % end{pyin}
 {
 \VerbatimEnvironment
+<<<<<<< HEAD
 \begin{code}{R input}{R}{0.8pt}{magenta!5}}
+=======
+\begin{code}{R input}{R}{0.8pt}}
+>>>>>>> Add env for explanation and add some options.
 {\end{code}}
 
 
@@ -99,22 +150,39 @@
 % end{Rout}
 {
 \VerbatimEnvironment
+<<<<<<< HEAD
 \begin{code}{R output}{R}{0.4pt}{green!5}}
+=======
+\begin{code}{R output}{R}{0.4pt}}
+>>>>>>> Add env for explanation and add some options.
 {\end{code}}
 
 
 %%%%% Cli code environments
+<<<<<<< HEAD
+=======
+\surroundwithmdframed[nobreak=true]{cliin}
+\surroundwithmdframed[nobreak=true]{cliout}
+>>>>>>> Add env for explanation and add some options.
 
 \newenvironment{cliin}
 {
 \VerbatimEnvironment
+<<<<<<< HEAD
 \begin{code}{Cli input}{bash}{0.8pt}{white}}
+=======
+\begin{code}{Cli input}{bash}{0.8pt}}
+>>>>>>> Add env for explanation and add some options.
 {\end{code}}
 
 
 \newenvironment{cliout}
 {
 \VerbatimEnvironment
+<<<<<<< HEAD
 \begin{code}{Cli output}{bash}{0.4pt}{white}}
+=======
+\begin{code}{Cli output}{bash}{0.4pt}}
+>>>>>>> Add env for explanation and add some options.
 {\end{code}}
 
