@@ -1,0 +1,54 @@
+\usepackage{minted}
+\usepackage{mdframed}
+\surroundwithmdframed{code}
+
+\newenvironment{code}[2]
+% The basic code environment.
+% Used to create further environments.
+%
+% Take two arguments: a string of text to appear and a language for syntax
+% highlighting that minted recognizes.
+% For example:
+%
+% \begin{code}{Python input}{python}
+% for i in range(5):
+%   print(i)
+% end{code}
+{\begin{tiny}
+        \begin{center}
+            \framebox{\texttt{#1}}
+         \end{center}
+ \end{tiny}
+ \VerbatimEnvironment
+ \begin{minted}[
+    linenos=true,
+    mathescape,
+    style=solarizedlight,
+    frame=lines
+    ]{#2}}
+{\end{minted}}
+
+\newenvironment{pyin}
+% Python input environment
+% \begin{pyin}
+% for i in range(5):
+%   print(i)
+% end{pyin}
+{
+\VerbatimEnvironment
+\begin{code}{Python input}{python}}
+{\end{code}}
+
+\newenvironment{pyout}
+% Python ouput environment
+% \begin{pyout}
+% 0
+% 1
+% 2
+% 3
+% 4
+% end{pyout}
+{
+\VerbatimEnvironment
+\begin{code}{Python output}{python}}
+{\end{code}}
