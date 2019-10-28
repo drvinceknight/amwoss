@@ -1,0 +1,120 @@
+\usepackage{minted}
+\usepackage{tikz}
+\usepackage[framemethod=TikZ]{mdframed}
+\usepackage{xcolor}
+
+%%% Test environment
+
+\newenvironment{explanation}
+{\begin{mdframed}[nobreak=true, roundcorner=10pt]}
+{\end{mdframed}}
+
+%%% Code environments
+
+\newenvironment{code}[4]
+% The basic code environment.
+% Used to create further environments.
+%
+% Take four arguments:
+% - a string of text to appear and a language for syntax
+% - a string of text to appear and a language for syntax
+% - the width of the border frame
+% - the color of the background
+%
+% For example:
+%
+% \begin{code}{Python input}{python}{0.4pt}{cyan!5}
+% for i in range(5):
+%   print(i)
+% end{code}
+{\begin{mdframed}[nobreak=true,
+                  frametitle={\colorbox{#4}{\space#1\space}},
+                  innertopmargin=10pt,
+                  frametitlefont=\ttfamily,
+                  frametitleaboveskip=-\ht\strutbox,
+                  frametitlealignment=\center,
+                  backgroundcolor=#4,
+                  ]
+ \VerbatimEnvironment
+ \begin{minted}[
+    linenos=true,
+    style=friendly,
+    samepage=true,
+    frame=single,
+    framerule=#3,
+    bgcolor=white,
+    firstnumber=last,
+    ]{#2}}
+{\end{minted}\end{mdframed}}
+
+%%%%% Python code environments
+
+\newenvironment{pyin}
+% Python input environment
+% \begin{pyin}
+% for i in range(5):
+%   print(i)
+% end{pyin}
+{
+\VerbatimEnvironment
+\begin{code}{Python input}{python}{0.8pt}{cyan!5}}
+{\end{code}}
+
+\newenvironment{pyout}
+% Python ouput environment
+% \begin{pyout}
+% 0
+% 1
+% 2
+% 3
+% 4
+% end{pyout}
+{
+\VerbatimEnvironment
+\begin{code}{Python output}{python}{0.4pt}{yellow!5}}
+{\end{code}}
+
+%%%%% R code environments
+
+\newenvironment{Rin}
+% R input environment
+% for (i in seq(0, 4)) {
+%   print(i)
+% }
+% end{pyin}
+{
+\VerbatimEnvironment
+\begin{code}{R input}{R}{0.8pt}{magenta!5}}
+{\end{code}}
+
+
+\newenvironment{Rout}
+% R output environment
+% \begin{Rout}
+% 0
+% 1
+% 2
+% 3
+% 4
+% end{Rout}
+{
+\VerbatimEnvironment
+\begin{code}{R output}{R}{0.4pt}{green!5}}
+{\end{code}}
+
+
+%%%%% Cli code environments
+
+\newenvironment{cliin}
+{
+\VerbatimEnvironment
+\begin{code}{Cli input}{bash}{0.8pt}{white}}
+{\end{code}}
+
+
+\newenvironment{cliout}
+{
+\VerbatimEnvironment
+\begin{code}{Cli output}{bash}{0.4pt}{white}}
+{\end{code}}
+
