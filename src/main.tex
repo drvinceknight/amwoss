@@ -1,15 +1,75 @@
-\documentclass{book}
+\documentclass[Alon2,singlecolor,11pt]{Alon}
+\usepackage{fixltx2e,fix-cm}
+\usepackage[english]{babel}
+\usepackage{epigrafica}
+\usepackage[LGR,OT1]{fontenc}
+%\usepackage{mathptmx,txfonts}
+\usepackage{lmodern}
+\usepackage{amssymb}
+\usepackage{amsmath}
+\usepackage{graphicx}
+\usepackage{subfigure}
+\usepackage{makeidx}
+\usepackage{multicol}
+
+\renewcommand{\sfdefault}{txss}
+
+\usepackage{changepage}% for text width to include margin
 
 \usepackage{minted}
-\usepackage{amssymb}
-\usepackage{hyperref}
+
+\frenchspacing
+\tolerance=5000
+
+\makeindex
+
+\include{frontmatter/preamble}%place custom commands and macros here
+\usepackage{version}
+
+% Non publisher libraries
+
+\title{Applied mathematics problems with Open Source Software:
+       Operational Research with Python and R.}
+\author{Vincent Knight and Geraint Palmer}
 
 \begin{document}
 
-\chapter{1}
+\frontmatter
+
+%%%\maketitle%This is a placeholder titlepage, it will not be final.
+
+%%%Placeholder for front matter
+
+\halftitle
+
+\booktitle
+
+\locpage
+
+\include{frontmatter/dedication/main}
+
+\cleardoublepage
+\setcounter{page}{7} %previous pages reserved for frontmatter to be added later
+\tableofcontents
+%%\listoffigures
+%%\listoftables
+
+\include{frontmatter/foreword/main}
+\include{frontmatter/preface/main}
+\include{frontmatter/contributor/main}
+
+
+\mainmatter
+
+\part{Getting Started}
 \input{./chapters/01/main.tex}
 
-\chapter{2}
 \input{./chapters/02/main.tex}
 
+
+\bibliographystyle{plain}
+\bibliography{library}
+
+\printindex
+\cleardoublepage
 \end{document}

@@ -1,6 +1,9 @@
-This book will involve using software, the particular interface to software we
-will use is to write code. There are numerous reasons why this is the correct
-way to do things but one of them is reproducibility. % TODO Include a reference here
+\chapter[Software]{Software}
+
+\chapterinitial{T}{his} book will involve using software, the particular
+interface to software we will use is to write code. There are numerous reasons
+why this is the correct way to do things but one of them is reproducibility. %
+%TODO Include a reference here
 
 This chapter will go over the basics of getting your computer set up to use the
 software: the programming languages R % TODO include reference
@@ -35,11 +38,11 @@ be getting what we need:
 
 \begin{itemize}
     \item Python: we will use the Anaconda distribution:
-        \href{https://www.anaconda.com/distribution/}
+        \texttt{https://www.anaconda.com/distribution/}
     \item R: we will be getting this directly from the Comprehensive R Archive
         Network (commonly referred to as CRAN):
-        \href{https://cran.r-project.org}. We will also use another piece of
-        software called Rstudio: \href{https://rstudio.com}.
+        \texttt{https://cran.r-project.org}. We will also use another piece of
+        software called Rstudio: \texttt{https://rstudio.com}.
 \end{itemize}
 
 \subsection{Installing Python}\label{sec:installing-python}
@@ -48,7 +51,7 @@ Installing Python and all the software we need around it is done by downloading
 and running the installer for the Anaconda distribution.
 
 \begin{enumerate}
-    \item Go to this webpage: \href{https://www.anaconda.com/download/}.
+    \item Go to this webpage: \texttt{https://www.anaconda.com/download/}.
     \item Identify and download the version of Python 3 for your operating system
         (Windows, Mac OSX, Linux). Run the installer.
 \end{enumerate}
@@ -60,10 +63,10 @@ purposes of this book, first the R language itself and second an application
 with which we will write R code.
 
 \begin{enumerate}
-    \item Go to this webpage: \href{https://cran.r-project.org}.
+    \item Go to this webpage: \texttt{https://cran.r-project.org}.
     \item Identify and download the latest version of R for your operating system
         (Windows, Mac OSX, Linux). Run the installer.
-    \item Go to this webpage: \href{https://rstudio.com}.
+    \item Go to this webpage: \texttt{https://rstudio.com}.
     \item Identify and download the latest version of Rstudio for your operating system
         (Windows, Mac OSX, Linux). Run the installer.
 \end{enumerate}
@@ -466,7 +469,10 @@ import ciw
 \section{Basic R}\label{sec:basic-R}
 
 This section gives a very brief overview of some introductory aspects of R,
-there are excellent resources available for learning R and we recommend the
+there are excellent resources available for learning
+R~\cite{wickham2014advanced} % TODO Modify/add this is just a place holder to
+                             % check the style file.
+and we recommend the
 reader goes there if they feel they need an in depth understanding of the
 language % TODO Cite courses/books etc...
 
@@ -651,3 +657,21 @@ Once this package is installed you load it using
 \begin{minted}{R}
 library(tidyverse)
 \end{minted}
+
+\begin{thefurtherreading}{99}  % TODO This should not be here, it is just an
+                               % example of our further reading sections for 
+                               % chapters 3 onwards.
+
+\bibitem{} Becskei, A. and Serrano, L. (2000). Engineering stability in gene
+networks by autoregulation. \textit{Nature, }405: 590--593.
+
+\bibitem{} Rosenfeld, N., Elowitz, M.B., and Alon, U. (2002). Negative
+auto-regulation speeds the response time of transcription networks. \textit{J.
+Mol. Biol.}, 323: 785--793.
+
+\bibitem{} Savageau, M.A. (1976). \textit{Biochemical Systems Analysis: A study
+of Function and Design in Molecular Biology. }Addison-Wesley. Chap. 16.
+
+\bibitem{} Savageau, M.A. (1974). Comparison of classical and auto-genous
+systems of regulation in inducible operons. \textit{Nature}, 252: 546--549.
+\end{thefurtherreading}
