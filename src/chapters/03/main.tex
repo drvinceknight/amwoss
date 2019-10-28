@@ -1,0 +1,57 @@
+\chapter[Markov Chains]{Markov Chains}
+
+% Introduction
+\chapterinitial{M}{any} real world situations have some level of
+unpredictability through randomness: the flip of a coin, the number of orders of
+coffee in a shop, the winning numbers of the lottery. However, mathematics can
+in fact let us make predictions about what we expect to happen. One tool used to
+understand randomness is Markov chains, an area of mathematics sitting at the
+intersection of probability and linear algebra.
+
+\section{Problem}\label{sec:problem}
+
+- Barber shop
+- 2 chairs and 2 barbers
+- Room for 4 people to wait
+- Add room for 2 people to wait or add 1 more barber + chair?
+
+\section{Theory}\label{sec:theory}
+
+- System can be described using a Markov chain which is a collection of States,
+transitions etc...
+- In this instance, it is a type of birth-death process that can be drawn...
+- Has a Matrix representation: Q
+- We can calculate the expected smallest time for a change to occur.
+- There is a mathematical process that discretises this system to give us P and
+the corresponding picture...
+- In Delta t time what is the probability...
+- Now we can think about P pi, ..., P to a high power will give us...  this will
+correspond to pi P = pi (this is an eigenvalue problem).
+- Return to continuous system.
+
+\section{Solving with Python}\label{sec:solving-with-python}
+
+- numpy array
+- function to generate Q
+- function to discretise Q
+- multiple P by vectors
+- raise P to high power
+- write function to solve matrix equation and return pfull - eigenvalue approach
+
+- Run for both scenarios
+
+
+\section{Solving with R}\label{sec:solving-with-R}
+
+- R matrix
+- function to generate Q
+- function to discretise Q
+- multiple P by vectors
+- raise P to high power
+- write function to solve matrix equation and return pfull - eigenvalue approach
+
+- Run for both scenarios
+
+\section{Research}\label{sec:research}
+
+TBA
