@@ -1,6 +1,15 @@
 \usepackage{minted}
-\usepackage{mdframed}
+\usepackage{tikz}
+\usepackage[framemethod=TikZ]{mdframed}
 \usepackage{xcolor}
+
+%%% Test environment
+
+\newenvironment{explanation}
+{\begin{mdframed}[nobreak=true, roundcorner=10pt]}
+{\end{mdframed}}
+
+%%% Code environments
 
 \newenvironment{code}[3]
 % The basic code environment.
@@ -36,8 +45,8 @@
 
 %%%%% Python code environments
 
-\surroundwithmdframed[backgroundcolor=cyan!5]{pyin}
-\surroundwithmdframed[backgroundcolor=yellow!5]{pyout}
+\surroundwithmdframed[backgroundcolor=cyan!5, nobreak=true]{pyin}
+\surroundwithmdframed[backgroundcolor=yellow!5, nobreak=true]{pyout}
 
 \newenvironment{pyin}
 % Python input environment
@@ -65,8 +74,8 @@
 {\end{code}}
 
 %%%%% R code environments
-\surroundwithmdframed[backgroundcolor=magenta!5]{Rin}
-\surroundwithmdframed[backgroundcolor=green!5]{Rout}
+\surroundwithmdframed[backgroundcolor=magenta!5, nobreak=true]{Rin}
+\surroundwithmdframed[backgroundcolor=green!5, nobreak=true]{Rout}
 
 
 \newenvironment{Rin}
@@ -97,8 +106,8 @@
 
 
 %%%%% Cli code environments
-\surroundwithmdframed{cliin}
-\surroundwithmdframed{cliout}
+\surroundwithmdframed[nobreak=true]{cliin}
+\surroundwithmdframed[nobreak=true]{cliout}
 
 \newenvironment{cliin}
 {
