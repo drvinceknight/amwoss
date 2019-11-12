@@ -6,20 +6,20 @@ why this is the correct way to do things but one of them is reproducibility. %
 %TODO Include a reference here
 
 This chapter will go over the basics of getting your computer set up to use the
-software: the programming languages R % TODO include reference
+software discussed in this book: the programming languages R % TODO include reference
 and Python. % TODO include reference.
 It will also briefly discuss using the command line: a particular interface to
-your whole compute and finally it will give a brief introduction to R and
+your whole computer. Finally it will give a brief introduction to R and
 Python.
 
-What this Chapter (and indeed this whole book) is not is a place to learn R and
-Python completely. We will cover very specific tasks and how to carry them out
-but we will not cover the entire intricacies of each language. There are
+This chapter (and indeed this whole book) is not a place to learn R and
+Python completely. We will cover very specific tasks and how to carry them out in each language,
+but we will not cover the every intricacy of each language. There are
 numerous places (books, websites, courses) that are available to do that.
 A lot of these places would argue that you should not learn multiple
-programming books from one book and instead concentrate on a single skill at a
-time. We agree and the single skill to concentrate on with this book is the use
-of software to solve applied mathematical problems. The software itself is not
+programming languages from one book, and instead concentrate on a single skill at a
+time. We agree, and the single skill to concentrate on with this book is the use
+of software to solve applied mathematical problems. The particular software itself is not
 the most important component.
 
 \section{Software installation}\label{sec:software-installation}
@@ -31,9 +31,9 @@ vegetables and in some places you can even get a box of vegetables regularly
 posted to you. Software is similar, there are a variety of places from which you
 can get it and a number of different forms in which it can be obtained.
 
-IF you're comfortable with using R and Python then you probably do not need to
+If you're comfortable with using R and Python then you probably do not need to
 read this section and you might even use different so called ``distributions''
-of each piece of software but for the purpose of this book here is where we will
+of each piece of software, but for the purpose of this book here is where we will
 be getting what we need:
 
 \begin{itemize}
@@ -76,7 +76,7 @@ with which we will write R code.
 There are various interfaces to using a computer, the most common one is to use
 a mouse and keyboard and click on programmes we want to use. Another approach is
 to use what is called a command line interface this is where we do not interact
-visually with a computer but we type in specific commands.
+graphically with a computer but we type in specific commands.
 
 % TODO Add image of command line on a variety of computer systems.
 
@@ -96,7 +96,7 @@ So let us start by opening our command line interface:
 
 \begin{itemize}
     \item Windows: after having installed Anaconda look to open the
-        AnacondaPrompt. There are a number of other command line interfaces
+        Anaconda Prompt. There are a number of other command line interfaces
         available but this is the one we recommend for the purposes of this
         book.
     \item Nix: look to open the Terminal.
@@ -152,7 +152,7 @@ The command line is an important tool to learn to use when doing tasks:
         using a graphical interface is inefficient.
     \item If we want someone else to be able to repeat the tasks, we can use
         screenshots of graphical interfaces but there will always be a level of
-        ambiguity whereas the commands use in the command line are precise.
+        ambiguity whereas the commands used in the command line are precise.
 \end{itemize}
 
 We can use our two programming languages right within the command line interface
@@ -187,7 +187,7 @@ When you press Enter, this will give:
 \end{pyout}
 
 This particular way of using Python is called a REPL which stands for: `Read
-eval print loop' which indicates that it takes a command, evaluates it and waits
+Eval Print Loop' which indicates that it takes a command, evaluates it and waits
 for the next one.
 
 To quit Python's REPL type the following (note that \mintinline{python}{()},
@@ -255,7 +255,7 @@ what you just did. You can type \mintinline{R}{n} for now:
 \end{Rin}
 
 These two REPLs are not unique and also not the most efficient way of using the
-languages however they can at times be useful if you just want to type a very
+languages, however they can at times be useful if you just want to type a very
 short command or perhaps check something quickly.
 
 Another approach is to save a collection of commands in a plain text file and
@@ -274,7 +274,7 @@ Similarly for a file with a number of R commands \mintinline{bash}{main.R}:
 Rscript main.R
 \end{cliin}
 
-These are just a few of many ways to use Python and R, an important notion to
+These are just a few of many ways to use Python and R. An important notion to
 understand is that Python and R are not the particular tools that we use to
 interface to them. On a day to day basis the authors of this book will use both
 of the above approaches as well as the next ones, we recommend readers take time
@@ -510,8 +510,8 @@ following:
 pip install ciw
 \end{cliin}
 
-Once you restart your python interpreter, for exampl if you are using a Jupyter
-notebook then restart the Kernel and then you can run the following to make
+Once you restart your python interpreter, for example if you are using a Jupyter
+notebook then restart the Kernel, you can then run the following to make
 \mintinline{python}{ciw} available to you:
 
 \begin{pyin}
@@ -620,7 +620,7 @@ which gives:
 6 5
 \end{Rout}
 
-If you are experimenting by typing the code as you go change the value of
+If you are experimenting by typing the code as you go, change the value of
 \mintinline{R}{a} or \mintinline{R}{b} to see how the behaviour changes.
 What happens if they are equal?
 
@@ -661,7 +661,7 @@ It is important to be able to reuse code, this is done using a programming
 concept called a \textit{function}, which acts similarly to a mathematical
 function.
 
-The following code, creates a function that takes two variables as input and
+The following code creates a function that takes two variables as input and
 outputs the largest number and the smallest increased by 3.
 
 \begin{Rin}
@@ -762,7 +762,7 @@ we use the following line of code inside of an R session:
 install.packages{"tidyverse")
 \end{Rin}
 
-Once this package is installed you load it using
+Once this package is installed it is loaded using
 
 \begin{Rin}
 library(tidyverse)
