@@ -175,13 +175,13 @@ Type "help", "copyright", "credits" or "license" for more information.
 The \mintinline{python}{>>>} is a prompt ready to accept a Python command. Let
 us start with the following:
 
-\begin{pyin}
+\begin{pyin} % Skip doctest
 >>> 2 + 2
 \end{pyin}
 
 When you press Enter, this will give:
 
-\begin{pyout}
+\begin{pyout} % Skip doctest
 4
 \end{pyout}
 
@@ -192,7 +192,7 @@ for the next one.
 To quit Python's REPL type the following (note that \mintinline{python}{()},
 more about that later):
 
-\begin{pyin}
+\begin{pyin} % Skip doctest
 >>> quit()
 \end{pyin}
 
@@ -230,26 +230,26 @@ Type 'q()' to quit R.
 The \mintinline{R}{>} is a prompt ready to accept an R command. Let
 us start with the following:
 
-\begin{Rin}
+\begin{Rin} % Skip doctest
 > 2 + 2
 \end{Rin}
 
 When you press Enter, this will give:
 
-\begin{Rout}
+\begin{Rout} % Skip doctest
 4
 \end{Rout}
 
 To quit R's REPL type the following:
 
-\begin{Rin}
+\begin{Rin} % Skip doctest
 > q()
 \end{Rin}
 
 This will bring up a further prompt asking you to save some information about
 what you just did. You can type \mintinline{R}{n} for now:
 
-\begin{Rin}
+\begin{Rin} % Skip doctest
 > Save workspace image? [y/n/c]: n
 \end{Rin}
 
@@ -324,7 +324,7 @@ In the previous section, we saw how to get Python to perform a single
 calculation:
 
 \begin{pyin}
-3 + 5
+print(3 + 5)
 \end{pyin}
 
 which will give:
@@ -339,7 +339,7 @@ We can also assign values to a variable:
 a = 3
 b = 5
 c = a + b
-c
+print(c)
 \end{pyin}
 
 \begin{explanation}
@@ -390,13 +390,13 @@ elif a > b:
 else:
     a = a + 3
     b = b + 3
-a, b
+print(a, b)
 \end{pyin}
 
 which gives:
 
 \begin{pyout}
-6, 5
+6 5
 \end{pyout}
 
 If you are experimenting by typing the code as you go change the value of
@@ -437,13 +437,13 @@ def add_3_to_smallest(a, b):
 Once we have defined the function, the following is how we use it:
 
 \begin{pyin}
-add_3_to_smallest(a=5, b=-42)
+print(add_3_to_smallest(a=5, b=-42))
 \end{pyin}
 
 which gives:
 
 \begin{pyout}
-5, -39
+(5, -39)
 \end{pyout}
 
 Python has a type of variable that is in fact a collection of pointers to other
@@ -467,10 +467,10 @@ for name in tennis_players:
 which gives:
 
 \begin{pyout}
-"Federer"
-"S. Williams"
-"V. Williams"
-"King"
+Federer
+S. Williams
+V. Williams
+King
 \end{pyout}
 
 We will often want to iterate over a set of integers, Python has a
