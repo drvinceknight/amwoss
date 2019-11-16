@@ -9,7 +9,7 @@ import dwys
 pyin_pattern = re.compile(r"\\begin\{pyin\}\n(.*?)\\end\{pyin\}", re.DOTALL)
 pyout_pattern = re.compile(r"\\begin\{pyout\}\n(.*?)\n\\end\{pyout\}", re.DOTALL)
 Rin_pattern = re.compile(r"\\begin\{Rin\}\n(.*?)\\end\{Rin\}", re.DOTALL)
-Rout_pattern = re.compile(r"\\begin\{Rout\}\n(.*?)\\end\{Rout\}", re.DOTALL)
+Rout_pattern = re.compile(r"\\begin\{Rout\}\n(.*?)\n\\end\{Rout\}", re.DOTALL)
 pyexecution_command = "python"
 Rexecution_command = "Rscript"
 
