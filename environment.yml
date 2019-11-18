@@ -9,3 +9,4 @@ dependencies:
       - ciw
       - dwys
       - invoke
+      - black
