@@ -8,3 +8,4 @@ dependencies:
   - pip:
       - ciw
       - dwys
+      - invoke
