@@ -36,7 +36,7 @@ for i, p in enumerate(book):
             if execution_command == "python":
                 input_filename = f"{dir_for_python_input_files}/{i}.py"
             else:
-                input_filename = f"{dir_for_python_input_files}/{i}.R"
+                input_filename = f"{dir_for_R_input_files}/{i}.R"
 
             try:
                 diff, output, expected_output = dwys.diff(
@@ -51,13 +51,14 @@ for i, p in enumerate(book):
                     assert diff == []
                     print(f"{execution_command}: ✅")
                 except AssertionError:
-                    print(f"{execution_command}: Input does not match output in {p}")
+                    print(f"{execution_command}: ❌ Input does not match output in {p}")
                     print(f"Obtained output:\n{output}")
                     print(f"Expected output:\n{expected_output}")
                     print(f"\t {diff}")
 
             except AssertionError:
-                print(f"{execution_command} Syntax error in {p}")
+                print(f"{execution_command}: ❌ Syntax error in {p}")
+                print(input_filename)
 
 print("Running black")
 subprocess.call(["black", "--check", "--diff", dir_for_python_input_files])
