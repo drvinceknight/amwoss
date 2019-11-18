@@ -175,15 +175,15 @@ Type "help", "copyright", "credits" or "license" for more information.
 The \mintinline{python}{>>>} is a prompt ready to accept a Python command. Let
 us start with the following:
 
-\begin{pyin} % Skip doctest
+\begin{pyin-no-test}
 >>> 2 + 2
-\end{pyin}
+\end{pyin-no-test}
 
 When you press Enter, this will give:
 
-\begin{pyout} % Skip doctest
+\begin{pyout-no-test}
 4
-\end{pyout}
+\end{pyout-no-test}
 
 This particular way of using Python is called a REPL which stands for: `Read
 Eval Print Loop' which indicates that it takes a command, evaluates it and waits
@@ -192,9 +192,9 @@ for the next one.
 To quit Python's REPL type the following (note that \mintinline{python}{()},
 more about that later):
 
-\begin{pyin} % Skip doctest
+\begin{pyin-no-test}
 >>> quit()
-\end{pyin}
+\end{pyin-no-test}
 
 We can do the same for R. To start R's REPL, in your command line type the
 following and press Enter:
@@ -230,28 +230,28 @@ Type 'q()' to quit R.
 The \mintinline{R}{>} is a prompt ready to accept an R command. Let
 us start with the following:
 
-\begin{Rin} % Skip doctest
+\begin{Rin-no-test}
 > 2 + 2
-\end{Rin}
+\end{Rin-no-test}
 
 When you press Enter, this will give:
 
-\begin{Rout} % Skip doctest
+\begin{Rout-no-test}
 4
-\end{Rout}
+\end{Rout-no-test}
 
 To quit R's REPL type the following:
 
-\begin{Rin} % Skip doctest
+\begin{Rin-no-test}
 > q()
-\end{Rin}
+\end{Rin-no-test}
 
 This will bring up a further prompt asking you to save some information about
 what you just did. You can type \mintinline{R}{n} for now:
 
-\begin{Rin} % Skip doctest
+\begin{Rin-no-test}
 > Save workspace image? [y/n/c]: n
-\end{Rin}
+\end{Rin-no-test}
 
 These two REPLs are not unique and also not the most efficient way of using the
 languages, however they can at times be useful if you just want to type a very
@@ -757,9 +757,9 @@ For example, to download a very common collection of data science tools called
 \mintinline{R}{tidyverse}
 we use the following line of code inside of an R session:
 
-\begin{Rin} % Skip doctest
+\begin{Rin-no-test}
 install.packages("simmer")
-\end{Rin}
+\end{Rin-no-test}
 
 Once this package is installed it is loaded using
 
