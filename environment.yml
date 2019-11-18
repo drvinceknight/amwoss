@@ -4,6 +4,7 @@ channels:
 dependencies:
   - python
   - r-essentials
+  - r-lintr
   - pip:
       - ciw
       - dwys
