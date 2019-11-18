@@ -21,7 +21,7 @@ def compile(c):
     """
     Compile the LaTeX document.
     """
-    c.run("cd src; latexmk --xelatex -shell-escape main.tex")
+    c.run("cd src; latexmk  -interaction=nonstopmode  --xelatex -shell-escape main.tex")
 
 
 @task
