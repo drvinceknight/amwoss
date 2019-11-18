@@ -2,6 +2,7 @@ import pathlib
 import re
 import subprocess
 import tempfile
+import sys
 
 import dwys
 
@@ -43,6 +44,7 @@ def doctest(c):
     dir_for_python_input_files = tempfile.mkdtemp()
     dir_for_R_input_files = tempfile.mkdtemp()
 
+    exit_codes = []
     for i, p in enumerate(book):
         if p.suffix == ".tex":
             print(f"Testing {p}")
@@ -78,6 +80,7 @@ def doctest(c):
 
                     try:
                         assert diff == []
+                        exit_codes.append(0)
                         print(f"{execution_command}: ✅")
                     except AssertionError:
                         print(
@@ -86,15 +89,19 @@ def doctest(c):
                         print(f"Obtained output:\n{output}")
                         print(f"Expected output:\n{expected_output}")
                         print(f"\t {diff}")
+                        exit_codes.append(1)
 
                 except AssertionError:
                     print(f"{execution_command}: ❌ Syntax error in {p}")
                     print(input_filename)
+                    exit_codes.append(1)
 
     print("Running black")
-    subprocess.call(["black", "--check", "--diff", dir_for_python_input_files])
+    ec =  subprocess.call(["black", "--check", "--diff", dir_for_python_input_files])
+    exit_codes.append(ec)
+
     print("Running lintr")
-    subprocess.call(
+    ec = subprocess.call(
         [
             "Rscript",
             "-e",
@@ -102,3 +109,5 @@ def doctest(c):
             dir_for_R_input_files,
         ]
     )
+    exit_codes.append(ec)
+    sys.exit(max(exit_codes))
