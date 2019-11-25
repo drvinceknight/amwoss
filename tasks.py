@@ -105,6 +105,9 @@ def doctest(c):
                 except AssertionError:
                     print(f"{execution_command}: ❌ Syntax error in {p}")
                     print(input_filename)
+                    print(subprocess.check_output([
+                        execution_command,
+                        input_filename]))
                     exit_codes.append(1)
 
     print("Running black")
