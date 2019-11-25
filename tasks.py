@@ -8,13 +8,20 @@ import dwys
 
 from invoke import task
 
+
 @task
 def env(c):
     """
     Finish the installation of any libraries and packages need for the
     environment.
     """
-    c.run("""Rscript -e 'install.packages("simmer", repos="http://cran.us.r-project.org")'""")
+    c.run(
+        """Rscript -e 'install.packages("simmer", repos="http://cran.us.r-project.org")'"""
+    )
+    c.run(
+        """Rscript -e 'install.packages("expm", repos="http://cran.us.r-project.org")'"""
+    )
+
 
 @task
 def compile(c):
@@ -97,17 +104,21 @@ def doctest(c):
                     exit_codes.append(1)
 
     print("Running black")
-    ec =  subprocess.call(["black", "--check", "--diff", dir_for_python_input_files])
+    ec = subprocess.call(["black", "--check", "--diff", dir_for_python_input_files])
     exit_codes.append(ec)
 
     print("Running lintr")
-    ec = subprocess.call(
-        [
-            "Rscript",
-            "-e",
-            "'lintr::lint(commandArgs(trailingOnly = TRUE))'",
-            dir_for_R_input_files,
-        ]
-    )
-    exit_codes.append(ec)
+    # This excludes one specific lintr called 'object_usage_linter' as this is a
+    # known issue with the lintr package in R.
+    for path in pathlib.Path(dir_for_R_input_files).glob("*"):
+        output = subprocess.check_output(
+            [
+                "Rscript",
+                "-e",
+                f"lintr::lint('{path}', linters=lintr::default_linters[names(lintr::default_linters) != 'object_usage_linter'])",
+            ]
+        )
+        if len(output) > 0:
+            print(output.decode("utf-8"))
+            exit_codes.append(1)
     sys.exit(max(exit_codes))
