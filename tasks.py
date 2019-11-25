@@ -14,6 +14,10 @@ def env(c):
     """
     Finish the installation of any libraries and packages need for the
     environment.
+
+    These are installation steps that are not able to be included in the
+    anaconda environment file `environment.yml` (for example some R packages do
+    not have anaconda binaries).
     """
     c.run(
         """Rscript -e 'install.packages("simmer", repos="http://cran.us.r-project.org")'"""
