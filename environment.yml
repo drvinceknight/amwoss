@@ -5,6 +5,7 @@ dependencies:
   - python
   - r-essentials
   - r-lintr
+  - r-pracma
   - pip:
       - ciw
       - dwys

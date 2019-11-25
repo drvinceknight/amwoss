@@ -14,6 +14,7 @@ intersection of probability and linear algebra.
 - 2 chairs and 2 barbers
 - Room for 4 people to wait
 - Add room for 2 people to wait or add 1 more barber + chair?
+- What is the probability of having to wait?
 
 \section{Theory}\label{sec:theory}
 
@@ -43,14 +44,291 @@ correspond to pi P = pi (this is an eigenvalue problem).
 
 \section{Solving with R}\label{sec:solving-with-R}
 
-- R matrix
-- function to generate Q
-- function to discretise Q
-- multiple P by vectors
-- raise P to high power
-- write function to solve matrix equation and return pfull - eigenvalue approach
+The first step we will take is write a function to obtain the transition rates
+between two given states:
 
-- Run for both scenarios
+\begin{Rin}
+#' Return the transition rate for two given states.
+#'
+#' @description
+#' For a given barber shop problem this returns the transition rate between two
+#' states. As well as taking the two states as inputs it takes a number of
+#' parameters that define the system.
+#'
+#' @param in_state an integer denoting the current state
+#' @param out_state an integer denoting the next state
+#' @param waiting_room an integer denoting the size of the waiting room
+#' (default: 4)
+#' @param number_of_barbers an integer denoting the number of barber and chairs
+#' (default: 2)
+#' @param arrival_rate a real number denoting the number of individuals per
+#' unit time that arrive at the barber shop (default: 10)
+#' @param service_rate a real number denoting the number of individuals per unit
+#' time that a single barber can serve (default: 4)
+#'
+#' @return A real
+get_transition_rate <- function(
+                                in_state,
+                                out_state,
+                                waiting_room = 4,
+                                number_of_barbers = 2,
+                                arrival_rate = 10,
+                                service_rate = 4) {
+  capacity <- waiting_room + number_of_barbers
+  delta <- out_state - in_state
+
+  if (delta == 1) {
+    if (in_state < capacity) {
+      return(arrival_rate)
+    }
+  }
+
+  if (delta == -1) {
+    return(min(in_state, number_of_barbers) * service_rate)
+  }
+  return(0)
+}
+\end{Rin}
+
+We will not actually use this function but a vectorized version of this:
+
+\begin{Rin}
+vectorized_get_transition_rate <- Vectorize(
+  get_transition_rate,
+  vectorize.args = c("in_state", "out_state")
+)
+\end{Rin}
+
+This function can now take a vector of inputs for the \mintinline{R}{in_state}
+and \mintinline{R}{out_state} variables which will allow us to simplify the
+following code that creates the matrices:
+
+\begin{Rin}
+#' Return the transition rate matrix Q
+#'
+#' @description
+#' For a given barber shop problem this returns the transition rate matrix
+#' As inputs it takes a number of
+#' parameters that define the system.
+#'
+#' @param waiting_room an integer denoting the size of the waiting room
+#' (default: 4)
+#' @param number_of_barbers an integer denoting the number of barber and chairs
+#' (default: 2)
+#' @param arrival_rate a real number denoting the number of individuals per
+#' unit time that arrive at the barber shop (default: 10)
+#' @param service_rate a real number denoting the number of individuals per unit
+#' time that a single barber can serve (default: 4)
+#'
+#' @return A matrix
+get_transition_rate_matrix <- function(
+                                       waiting_room = 4,
+                                       number_of_barbers = 2,
+                                       arrival_rate = 10,
+                                       service_rate = 4) {
+  max_state <- waiting_room + number_of_barbers
+
+  Q <- outer(0:max_state,
+    0:max_state,
+    vectorized_get_transition_rate,
+    waiting_room = waiting_room,
+    number_of_barbers = number_of_barbers,
+    arrival_rate = arrival_rate,
+    service_rate = service_rate
+  )
+  row_sums <- rowSums(Q)
+
+  diag(Q) <- -row_sums
+  Q
+}
+\end{Rin}
+
+Using this we can obtain the matrix \(Q\) for our default system:
+
+\begin{Rin}
+Q <- get_transition_rate_matrix()
+Q
+\end{Rin}
+
+which gives:
+
+\begin{Rout}
+     [,1] [,2] [,3] [,4] [,5] [,6] [,7]
+[1,]  -10   10    0    0    0    0    0
+[2,]    4  -14   10    0    0    0    0
+[3,]    0    8  -18   10    0    0    0
+[4,]    0    0    8  -18   10    0    0
+[5,]    0    0    0    8  -18   10    0
+[6,]    0    0    0    0    8  -18   10
+[7,]    0    0    0    0    0    8   -8
+\end{Rout}
+
+One immediate thing we can do with this matrix is take the matrix exponential
+discussed above. To do this, we need to use an R library call
+\mintinline{R}{expm}:
+
+\begin{Rin}
+library(expm, warn.conflicts = FALSE, quietly = TRUE)
+\end{Rin}
+
+To be able to make use of the nice \mintinline{R}{%>%} "pipe" operator we are
+also going to load the \mintinline{R}{dplyr} library:
+
+\begin{Rin}
+library(dplyr, warn.conflicts = FALSE, quietly = TRUE)
+\end{Rin}
+
+Now if we wanted to see what would happen after 500 time units we obtain:
+
+\begin{Rin}
+(t(Q) * 500) %>% expm %>% round(6)
+\end{Rin}
+
+which gives:
+
+\begin{Rout}
+         [,1]     [,2]     [,3]     [,4]     [,5]     [,6]     [,7]
+[1,] 0.034309 0.034309 0.034309 0.034309 0.034309 0.034309 0.034309
+[2,] 0.085772 0.085772 0.085772 0.085772 0.085772 0.085772 0.085772
+[3,] 0.107215 0.107215 0.107215 0.107215 0.107215 0.107215 0.107215
+[4,] 0.134019 0.134019 0.134019 0.134019 0.134019 0.134019 0.134019
+[5,] 0.167524 0.167524 0.167524 0.167524 0.167524 0.167524 0.167524
+[6,] 0.209405 0.209405 0.209405 0.209405 0.209405 0.209405 0.209405
+[7,] 0.261756 0.261756 0.261756 0.261756 0.261756 0.261756 0.261756
+\end{Rout}
+
+We see that no matter what state (column) we are in, after 500 time units the
+probabilities are all the same. We could in fact stop our analysis here, however
+our choice of 500 time units was arbitrary and might not be the correct amount
+for all possible scenarios, as such we will continue to aim to solve the
+underlying equation directly. % TODO Point at underlying equation.
+
+To be able to do this, we will make use of the versatile \mintinline{R}{pracma}
+package which includes a number of numerical analysis functions for efficient
+computations.
+
+\begin{Rin}
+library(pracma, warn.conflicts = FALSE, quietly = TRUE)
+
+#' Return the steady state vector of any given continuous time transition rate
+#' matrix
+#'
+#' @description
+#' Solves the matrix equation Ax=b where A is the matrix Q with an extra row of
+#' ones (to ensure a probability vector is given) and b is a vector of 0s and a
+#' single one.
+#'
+#' @param Q a transition rate matrix
+#'
+#' @return A vector
+get_steady_state_vector <- function(Q){
+  state_space_size <- dim(Q)[1]
+  A <- rbind(t(Q), 1)
+  b <- c(integer(state_space_size), 1)
+  mldivide(A, b)
+}
+\end{Rin}
+
+This is making use of \mintinline{R}{pracma}'s \mintinline{mldivide} function
+which chooses the best numerical algorithm to find the solution to a given
+matrix equation \(Ax=b\).
+
+So if we now see the steady state vector for our default system:
+
+\begin{Rin}
+get_steady_state_vector(Q)
+\end{Rin}
+
+we get:
+
+\begin{Rout}
+           [,1]
+[1,] 0.03430888
+[2,] 0.08577220
+[3,] 0.10721525
+[4,] 0.13401906
+[5,] 0.16752383
+[6,] 0.20940479
+[7,] 0.26175598
+\end{Rout}
+
+We can see that the shop is expected to be empty approximately 3.4\% of the time
+and full 26.2\% of the time.
+
+The final piece of this puzzle is to create a single function that uses all of
+the above to just return the probability of the shop being full.
+
+\begin{Rin}
+#' Return the probability of the barber shop being full
+#'
+#' @description
+#' For a given barber shop problem this returns the probability of it being full
+#' As inputs it takes a number of
+#' parameters that define the system.
+#'
+#' @param waiting_room an integer denoting the size of the waiting room
+#' (default: 4)
+#' @param number_of_barbers an integer denoting the number of barber and chairs
+#' (default: 2)
+#' @param arrival_rate a real number denoting the number of individuals per
+#' unit time that arrive at the barber shop (default: 10)
+#' @param service_rate a real number denoting the number of individuals per unit
+#' time that a single barber can serve (default: 4)
+#'
+#' @return A real
+get_probability_of_full_shop <- function(
+                                         waiting_room = 4,
+                                         number_of_barbers = 2,
+                                         arrival_rate = 10,
+                                         service_rate = 4) {
+  pi <- get_transition_rate_matrix(
+    waiting_room = waiting_room,
+    number_of_barbers = number_of_barbers,
+    arrival_rate = arrival_rate,
+    service_rate = service_rate
+  ) %>%
+    get_steady_state_vector()
+
+  capacity <- waiting_room + number_of_barbers
+  pi[capacity]
+}
+\end{Rin}
+
+Now we can run this code efficiently with both scenarios:
+
+\begin{Rin}
+get_probability_of_full_shop(waiting_room = 6)
+\end{Rin}
+
+which decreases the probability of a full shop to:
+
+\begin{Rout}
+[1] 0.1884559
+\end{Rout}
+
+but adding another barber and chair:
+
+\begin{Rin}
+get_probability_of_full_shop(number_of_barbers = 3)
+\end{Rin}
+
+gives:
+
+\begin{Rout}
+[1] 0.09436308
+\end{Rout}
+
+In fact even with room for 20 people to wait the only way 2 barbers would be
+able to have a less than 10\% of the shop being full is to find a way to each
+serve .4 more of a customer per hour:
+
+\begin{Rin}
+get_probability_of_full_shop(waiting_room = 20, service_rate = 4.5)
+\end{Rin}
+
+\begin{Rout}
+[1] 0.09928879
+\end{Rout}
 
 \section{Research}\label{sec:research}
 
