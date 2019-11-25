@@ -6,20 +6,20 @@ why this is the correct way to do things but one of them is reproducibility. %
 %TODO Include a reference here
 
 This chapter will go over the basics of getting your computer set up to use the
-software: the programming languages R % TODO include reference
+software discussed in this book: the programming languages R % TODO include reference
 and Python. % TODO include reference.
 It will also briefly discuss using the command line: a particular interface to
-your whole compute and finally it will give a brief introduction to R and
+your whole computer. Finally it will give a brief introduction to R and
 Python.
 
-What this Chapter (and indeed this whole book) is not is a place to learn R and
-Python completely. We will cover very specific tasks and how to carry them out
-but we will not cover the entire intricacies of each language. There are
-numerous places (books, websites, courses) that are available to do that.
+This chapter (and indeed this whole book) is not a place to learn R and
+Python completely. We will cover specific tasks and how to carry them out in each language,
+but we will not cover the every intricacy of each language. There are
+numerous sources (books, websites, courses) that are available to do that.
 A lot of these places would argue that you should not learn multiple
-programming books from one book and instead concentrate on a single skill at a
-time. We agree and the single skill to concentrate on with this book is the use
-of software to solve applied mathematical problems. The software itself is not
+programming languages from one book, and instead concentrate on a single skill at a
+time. We agree, and the single skill to concentrate on with this book is the use
+of software to solve applied mathematical problems. The particular software itself is not
 the most important component.
 
 \section{Software installation}\label{sec:software-installation}
@@ -31,9 +31,9 @@ vegetables and in some places you can even get a box of vegetables regularly
 posted to you. Software is similar, there are a variety of places from which you
 can get it and a number of different forms in which it can be obtained.
 
-IF you're comfortable with using R and Python then you probably do not need to
+If you're comfortable with using R and Python then you probably do not need to
 read this section and you might even use different so called ``distributions''
-of each piece of software but for the purpose of this book here is where we will
+of each piece of software, but for the purpose of this book here is where we will
 be getting what we need:
 
 \begin{itemize}
@@ -76,7 +76,7 @@ with which we will write R code.
 There are various interfaces to using a computer, the most common one is to use
 a mouse and keyboard and click on programmes we want to use. Another approach is
 to use what is called a command line interface this is where we do not interact
-visually with a computer but we type in specific commands.
+graphically with a computer but we type in specific commands.
 
 % TODO Add image of command line on a variety of computer systems.
 
@@ -96,7 +96,7 @@ So let us start by opening our command line interface:
 
 \begin{itemize}
     \item Windows: after having installed Anaconda look to open the
-        AnacondaPrompt. There are a number of other command line interfaces
+        Anaconda Prompt. There are a number of other command line interfaces
         available but this is the one we recommend for the purposes of this
         book.
     \item Nix: look to open the Terminal.
@@ -119,7 +119,6 @@ ls
 \begin{cliin}
 dir
 \end{cliin}
-
 
 It is also possible to get the name of the directory we are currently in:
 
@@ -152,7 +151,7 @@ The command line is an important tool to learn to use when doing tasks:
         using a graphical interface is inefficient.
     \item If we want someone else to be able to repeat the tasks, we can use
         screenshots of graphical interfaces but there will always be a level of
-        ambiguity whereas the commands use in the command line are precise.
+        ambiguity whereas the commands used in the command line are precise.
 \end{itemize}
 
 We can use our two programming languages right within the command line interface
@@ -176,26 +175,26 @@ Type "help", "copyright", "credits" or "license" for more information.
 The \mintinline{python}{>>>} is a prompt ready to accept a Python command. Let
 us start with the following:
 
-\begin{pyin}
+\begin{pyin-no-test}
 >>> 2 + 2
-\end{pyin}
+\end{pyin-no-test}
 
 When you press Enter, this will give:
 
-\begin{pyout}
+\begin{pyout-no-test}
 4
-\end{pyout}
+\end{pyout-no-test}
 
 This particular way of using Python is called a REPL which stands for: `Read
-eval print loop' which indicates that it takes a command, evaluates it and waits
+Eval Print Loop' which indicates that it takes a command, evaluates it and waits
 for the next one.
 
 To quit Python's REPL type the following (note that \mintinline{python}{()},
 more about that later):
 
-\begin{pyin}
+\begin{pyin-no-test}
 >>> quit()
-\end{pyin}
+\end{pyin-no-test}
 
 We can do the same for R. To start R's REPL, in your command line type the
 following and press Enter:
@@ -231,31 +230,31 @@ Type 'q()' to quit R.
 The \mintinline{R}{>} is a prompt ready to accept an R command. Let
 us start with the following:
 
-\begin{Rin}
+\begin{Rin-no-test}
 > 2 + 2
-\end{Rin}
+\end{Rin-no-test}
 
 When you press Enter, this will give:
 
-\begin{Rout}
+\begin{Rout-no-test}
 4
-\end{Rout}
+\end{Rout-no-test}
 
 To quit R's REPL type the following:
 
-\begin{Rin}
+\begin{Rin-no-test}
 > q()
-\end{Rin}
+\end{Rin-no-test}
 
 This will bring up a further prompt asking you to save some information about
 what you just did. You can type \mintinline{R}{n} for now:
 
-\begin{Rin}
+\begin{Rin-no-test}
 > Save workspace image? [y/n/c]: n
-\end{Rin}
+\end{Rin-no-test}
 
 These two REPLs are not unique and also not the most efficient way of using the
-languages however they can at times be useful if you just want to type a very
+languages, however they can at times be useful if you just want to type a very
 short command or perhaps check something quickly.
 
 Another approach is to save a collection of commands in a plain text file and
@@ -274,7 +273,7 @@ Similarly for a file with a number of R commands \mintinline{bash}{main.R}:
 Rscript main.R
 \end{cliin}
 
-These are just a few of many ways to use Python and R, an important notion to
+These are just a few of many ways to use Python and R. An important notion to
 understand is that Python and R are not the particular tools that we use to
 interface to them. On a day to day basis the authors of this book will use both
 of the above approaches as well as the next ones, we recommend readers take time
@@ -325,7 +324,7 @@ In the previous section, we saw how to get Python to perform a single
 calculation:
 
 \begin{pyin}
-3 + 5
+print(3 + 5)
 \end{pyin}
 
 which will give:
@@ -340,7 +339,7 @@ We can also assign values to a variable:
 a = 3
 b = 5
 c = a + b
-c
+print(c)
 \end{pyin}
 
 \begin{explanation}
@@ -391,13 +390,13 @@ elif a > b:
 else:
     a = a + 3
     b = b + 3
-a, b
+print(a, b)
 \end{pyin}
 
 which gives:
 
 \begin{pyout}
-6, 5
+6 5
 \end{pyout}
 
 If you are experimenting by typing the code as you go change the value of
@@ -438,13 +437,13 @@ def add_3_to_smallest(a, b):
 Once we have defined the function, the following is how we use it:
 
 \begin{pyin}
-add_3_to_smallest(a=5, b=-42)
+print(add_3_to_smallest(a=5, b=-42))
 \end{pyin}
 
 which gives:
 
 \begin{pyout}
-5, -39
+(5, -39)
 \end{pyout}
 
 Python has a type of variable that is in fact a collection of pointers to other
@@ -468,10 +467,10 @@ for name in tennis_players:
 which gives:
 
 \begin{pyout}
-"Federer"
-"S. Williams"
-"V. Williams"
-"King"
+Federer
+S. Williams
+V. Williams
+King
 \end{pyout}
 
 We will often want to iterate over a set of integers, Python has a
@@ -510,8 +509,8 @@ following:
 pip install ciw
 \end{cliin}
 
-Once you restart your python interpreter, for exampl if you are using a Jupyter
-notebook then restart the Kernel and then you can run the following to make
+Once you restart your python interpreter, for example if you are using a Jupyter
+notebook then restart the Kernel, you can then run the following to make
 \mintinline{python}{ciw} available to you:
 
 \begin{pyin}
@@ -532,13 +531,13 @@ In the previous section, we saw how to get R to perform a single
 calculation:
 
 \begin{Rin}
-3 + 5
+print(3 + 5)
 \end{Rin}
 
 which will give:
 
 \begin{Rout}
-8
+[1] 8
 \end{Rout}
 
 We can also assign values to a variable:
@@ -547,13 +546,13 @@ We can also assign values to a variable:
 a <- 3
 b <- 5
 c <- a + b
-c
+print(c)
 \end{Rin}
 
 which will give:
 
 \begin{Rout}
-8
+[1] 8
 \end{Rout}
 
 An important difference between R and Python is that in R the base structure is
@@ -562,13 +561,13 @@ in fact a vector, even if it only contains a single variable. We can use the
 together:
 
 \begin{Rin}
-c(a, 4)
+print(c(a, 4))
 \end{Rin}
 
 giving:
 
 \begin{Rout}
-3 8
+[1] 3 4
 \end{Rout}
 
 There are a number of different types of variables in R, here is a very
@@ -611,16 +610,16 @@ if (a < b) {
   a <- a + 3
   b <- b + 3
 }
-c(a, b)
+print(c(a, b))
 \end{Rin}
 
 which gives:
 
 \begin{Rout}
-6 5
+[1] 6 5
 \end{Rout}
 
-If you are experimenting by typing the code as you go change the value of
+If you are experimenting by typing the code as you go, change the value of
 \mintinline{R}{a} or \mintinline{R}{b} to see how the behaviour changes.
 What happens if they are equal?
 
@@ -631,13 +630,13 @@ statement that applies to vectors of booleans. For example:
 
 \begin{Rin}
 booleans <- c(FALSE, TRUE, FALSE, FALSE)
-ifelse(booleans, "cat", "dog")
+print(ifelse(booleans, "cat", "dog"))
 \end{Rin}
 
 which gives:
 
 \begin{Rout}
-"dog" "cat" "dog" "dog"
+[1] "dog" "cat" "dog" "dog"
 \end{Rout}
 
 It is also possible to use conditional statements to repeat code. For
@@ -661,7 +660,7 @@ It is important to be able to reuse code, this is done using a programming
 concept called a \textit{function}, which acts similarly to a mathematical
 function.
 
-The following code, creates a function that takes two variables as input and
+The following code creates a function that takes two variables as input and
 outputs the largest number and the smallest increased by 3.
 
 \begin{Rin}
@@ -694,13 +693,13 @@ add_3_to_smallest <- function(a, b) {
 Once we have defined the function, the following is how we use it:
 
 \begin{Rin}
-add_3_to_smallest(a=5, b=-42)
+print(add_3_to_smallest(a=5, b=-42))
 \end{Rin}
 
 which gives:
 
 \begin{Rout}
-5, -39
+[1]   5 -39
 \end{Rout}
 
 It is possible to iterate over elements inside R vectors:
@@ -720,10 +719,10 @@ for (name in tennis_players) {
 which gives:
 
 \begin{Rout}
-"Federer"
-"S. Williams"
-"V. Williams"
-"King"
+[1] "Federer"
+[1] "S. Williams"
+[1] "V. Williams"
+[1] "King"
 \end{Rout}
 
 We will often want to iterate over a vector of integers, R has a \mintinline{R}
@@ -740,13 +739,13 @@ for (i in seq(30, 50, 3)) {
 which will give:
 
 \begin{Rout}
-30
-33
-36
-39
-42
-45
-48
+[1] 30
+[1] 33
+[1] 36
+[1] 39
+[1] 42
+[1] 45
+[1] 48
 \end{Rout}
 
 A final important aspect of R is that of packages. The code examples above
@@ -758,14 +757,14 @@ For example, to download a very common collection of data science tools called
 \mintinline{R}{tidyverse}
 we use the following line of code inside of an R session:
 
-\begin{Rin}
-install.packages{"tidyverse")
-\end{Rin}
+\begin{Rin-no-test}
+install.packages("simmer")
+\end{Rin-no-test}
 
-Once this package is installed you load it using
+Once this package is installed it is loaded using
 
 \begin{Rin}
-library(tidyverse)
+library(simmer)
 \end{Rin}
 
 \section{A note on how code is displayed in this

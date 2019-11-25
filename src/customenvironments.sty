@@ -74,6 +74,20 @@
 \begin{code}{Python output}{python}{0.4pt}{yellow!5}}
 {\end{code}}
 
+\newenvironment{pyin-no-test}
+% Python input environment that is not tested
+{
+\VerbatimEnvironment
+\begin{pyin}}
+{\end{pyin}}
+
+\newenvironment{pyout-no-test}
+% Python ouput environment that is not tested
+{
+\VerbatimEnvironment
+\begin{pyout}}
+{\end{pyout}}
+
 %%%%% R code environments
 
 \newenvironment{Rin}
@@ -102,6 +116,19 @@
 \begin{code}{R output}{R}{0.4pt}{green!5}}
 {\end{code}}
 
+\newenvironment{Rin-no-test}
+% R input environment that will be skipped by doctester
+{
+\VerbatimEnvironment
+\begin{Rin}}
+{\end{Rin}}
+
+\newenvironment{Rout-no-test}
+% R output environment that will be skipped by doctester
+{
+\VerbatimEnvironment
+\begin{Rout}}
+{\end{Rout}}
 
 %%%%% Cli code environments
 

@@ -1,0 +1,12 @@
+name: ampwoss
+channels:
+  - defaults
+dependencies:
+  - python
+  - r-essentials
+  - r-lintr
+  - pip:
+      - ciw
+      - dwys
+      - invoke
+      - black
