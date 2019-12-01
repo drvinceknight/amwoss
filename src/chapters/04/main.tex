@@ -1,7 +1,7 @@
 \chapter[Discrete Event Simulation]{Discrete Event Simulation}
 
 % Introduction
-\chapterinitial{C}{omplex} situations further companded by randomness appear
+\chapterinitial{C}{omplex} situations further compounded by randomness appear
 throughout our daily lives. For example, data flowing through a computer
 network, patients being treated at an emergency services, and daily commutes to
 work.
@@ -13,23 +13,143 @@ Discrete Event Simulation.
 
 \section{Problem}\label{sec:problem}
 
-- proposed Bike repair shop
-- Inspection followed by repair (don't need repair if inspection: 20\% of bikes
-don't need repair)
-- 1 inspection counter
-- 2 repair people
-- Infinite capacity
-- The shop wants to guarantee a 30 minute maximum time in the shop for all
-bikes: is this feasible? (Possibly include costs/salary/money back guarantee).
+Consider the following situation: a bicycle repair shop would like reconfigure
+their set-up in order to guarantee that all bicycles processed by the repair
+shop take a maximum of 30 minutes.
+Their current set-up is as follows:
+
+\begin{itemize}
+  \item Bicycles arrive randomly at the shop at a rate of 10 per hour.
+  \item They wait in line to be seen at an inspection counter, manned by one
+  member of staff who can inspect one bicycle at a time. On average an
+  inspection takes around 3 minutes.
+  \item After inspection it is found that around 20\% of bicycles do not need
+  repair, and they are then ready for collection.
+  \item After inspection is is found that around 80\% of bicycles go on to be
+  repaired. These then wait in line outside the repair workshop, which is manned
+  by two members of staff who can each repair one bicycle at a time. On average
+  a repair takes around 6 minutes.
+  \item After repair the bicycles are ready for collection.
+\end{itemize}
+
+A diagram of the system is shown below:
+
+We can also assume that there is infinite capacity at the bicycle repair shop
+for waiting bicycles.
+The shop will hire and extra member of staff in order to meet their target of a
+maximum throughout of 30 minutes. They would like to know if they should work on
+the inspection counter or in the repair workshop?
+
 
 \section{Theory}\label{sec:theory}
 
-- Law of large numbers.
-- Pseudo random numbers (maybe seeding?, possibly a graph showing law of large
-numbers)
-- Trials are important. (Smoothing, how many ones in 10 dice rolls).
-- Put in context of a simple queueing system
-- Two types of DES
+A number of the events that govern the behaviour of the bicycle shop above are
+probabilistic, or act probabilistic under a lack of information. For example the
+times that bicycles arrive at the shop, the duration of the inspection and
+repairs, and whether the bicycle would need to go on to be repaired or not.
+When a number of these probabilistic events are arranged in a complex system
+such as the bicycle shop, using analytical methods to manipulate these
+probabilities becomes difficult. One methods to deal with this is
+\textit{simulation}.
+
+Consider one probabilistic event, rolling a die.
+A die has six sides numbered 1 to 6, each side is equally likely to land.
+Therefore the probability of rolling a 1 is $\frac{1}{6}$, the probability of
+rolling a 2 is $\frac{1}{6}$, and so on. This means that that if we roll the die
+a large number of times, we would except $\frac{1}{6}$ of those rolls to be a 1.
+This is called the \textit{law of large numbers}.
+
+Now imagine we have an event in which we do not know the analytical probability
+of it occurring. This could be due to lack of information or because the event
+is the result of a complex system. Consider rolling a weighted die, that is a
+die in which the probability of obtaining one number is much greater than the
+others. How can we estimate the probability of obtaining a 5 on this die?
+
+Rolling the weighted die once does not give us much information.
+However due to the law of large numbers, we can roll this die a number of times,
+and find the proportion of those rolls which gave a 4. The more times we roll
+the die, the closer this proportion approaches the underlying probability of
+obtaining a 4.
+
+For a complex system such as the bicycle shop, we would like to estimate the
+proportion of bicycles that take longer than 30 minutes to be processed. As it
+is a complex system it is difficult to work this out analytically. So we would
+like to `run' this system a number of times and record the overall proportions
+of bicycles spending longer than 30 minutes in the shop.
+However unlike rolling a weighted die, it it costly to observe this shop over a
+number of days with identical conditions. In this case it is costly in terms of
+time, as the repair shop already exists. However some scenarios, for example the
+scenario where the repair shop hires and additional member of staff, do not yet
+exist, so observing this this would be costly in terms of money also.
+We can however build a virtual representation of this complex system on a
+computer, and `run' a day of work much more quickly and much less costly on the
+computer, similar to a video game.
+
+% Computers not good at generating random numbers, so use pseudo random numbers. e.g. (formula)
+In order to do this, the computer needs to be able to generate random outcomes
+of each of the smaller events that make up the large complex system. Generating
+random events are essentially functions of random numbers, that need to be
+generated.
+
+Computers are not good at generating true randomness.
+
+They can however generate pseudorandom numbers: sequences of numbers that look
+random, and behave as random numbers, but are entirely determined from the
+previous number in the sequence. Every programming language has methods of doing
+this.
+
+In order to simulate an event we can again manipulate the law of large numbers.
+Let $X \sim U(0, 1)$, a uniformly pseudorandom variable between 0 and 1.
+Let $R$ be the outcome of a roll of an unbiased die. Then $R$ can be defined as:
+
+\begin{equation}
+R =
+  \begin{cases}
+    1 & \text{if } 0 \leq X < \frac{1}{6}\\
+    2 & \text{if } \frac{1}{6} \leq X < \frac{2}{6}\\
+    3 & \text{if } \frac{2}{6} \leq X < \frac{3}{6}\\
+    4 & \text{if } \frac{3}{6} \leq X < \frac{4}{6}\\
+    5 & \text{if } \frac{4}{6} \leq X < \frac{5}{6}\\
+    6 & \text{if } \frac{5}{6} \leq X < 1
+  \end{cases}
+\end{equation}
+
+% What we gonna do: use pseudo random numbers to 'simulate' the system. - because law of large number we can simulate many times and smoothe.
+The bicycle repair shop is a system made up of interactions of a number of other
+simpler random events. This can be thought of a functions of functions of
+functions of random variables, each generated using pseudorandom numbers.
+
+In this case the random simpler random event that need to be generated are:
+\begin{itemize}
+  \item time each bicycle arrives to the repair shop,
+  \item the time each bicycle spends at the inspection counter,
+  \item whether each bicycle needs to go on the the repair workshop,
+  \item the time each those bicycles spends at the repair shop.
+\end{itemize}
+
+As the simulation progresses these events will be generated, and will interact
+together as described in Section~\ref{sec:problem}.
+The proportion of customers spending longer than 30 minutes in the shop can then
+be counted. This proportion itself is a random variable, and so just like the
+weighted die, running this simulation once does not give us much information.
+But we can run the simulation many times and take an average proportion, so
+smooth out any variability.
+
+% Two types of DES - event scheduleing in Python, process-based in R.
+The process outlined above is called \textit{discrete event simulation}, a
+particular implementation of Monte Carlo simulation, which generates
+pseudorandom numbers and observes their interactions. In practice there are two
+main approaches to simulating complex probabilistic systems such as this one:
+the \textit{event scheduling} approach, and \textit{process based} simulation.
+It just so happens that the main implementations in Python and R use each of
+these approaches.
+
+% Event scheduling
+\subsection{Event Scheduling Approach}
+
+% Process based
+\subsection{Process Based Simulation}
+
 
 \section{Solving with Python}\label{sec:solving-with-python}
 
