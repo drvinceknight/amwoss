@@ -99,7 +99,6 @@ def doctest(c):
                         )
                         print(f"Obtained output:\n{output}")
                         print(f"Expected output:\n{expected_output}")
-                        print(f"\t {diff}")
                         exit_codes.append(1)
 
                 except AssertionError:
@@ -111,7 +110,7 @@ def doctest(c):
                     exit_codes.append(1)
 
     print("Running black")
-    ec = subprocess.call(["black", "--check", "--diff", dir_for_python_input_files])
+    ec = subprocess.call(["black", "--check", "--diff", "-l 63", dir_for_python_input_files])
     exit_codes.append(ec)
 
     print("Running lintr")

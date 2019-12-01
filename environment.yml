@@ -3,6 +3,8 @@ channels:
   - defaults
 dependencies:
   - python
+  - numpy
+  - scipy
   - r-essentials
   - r-lintr
   - r-pracma

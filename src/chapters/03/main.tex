@@ -32,14 +32,303 @@ correspond to pi P = pi (this is an eigenvalue problem).
 
 \section{Solving with Python}\label{sec:solving-with-python}
 
-- numpy array
-- function to generate Q
-- function to discretise Q
-- multiple P by vectors
-- raise P to high power
-- write function to solve matrix equation and return pfull - eigenvalue approach
+The first step we will take is to write a function to obtain the transition
+rates between two given states:
 
-- Run for both scenarios
+
+\begin{pyin}
+def get_transition_rate(
+    in_state,
+    out_state,
+    waiting_room=4,
+    number_of_barbers=2,
+    arrival_rate=10,
+    service_rate=4,
+):
+    """
+    Return the transition rate for two given states.
+
+    For a given barber shop problem this returns the transition rate between two
+    states. As well as taking the two states as inputs it takes a number of
+    parameters that define the system.
+
+    Args:
+        in_state: an integer denoting the current state
+        out_state: an integer denoting the next state
+        waiting_room: an integer denoting the size of the waiting room (default: 4)
+        number_of_barbers: an integer denoting the number of barber and chairs (default: 2)
+        arrival_rate: a real number denoting the number of individuals per unit time
+                      that arrive at the barber shop (default: 10)
+        service_rate: a real number denoting the number of individuals per unit time
+                      that a single barber can serve (default: 4)
+
+    Returns:
+        A real.
+    """
+    capacity = waiting_room + number_of_barbers
+    delta = out_state - in_state
+
+    if delta == 1 and in_state < capacity:
+        return arrival_rate
+
+    if delta == -1:
+        return min(in_state, number_of_barbers) * service_rate
+
+    return 0
+\end{pyin}
+
+Next, we write a function that creates an entire transition rate matrix \(Q\)
+for a given problem. We will use the \mintinline{python}{numpy} to handle all
+the linear algebra and the \mintinline{python}{itertools} library for some
+iterations:
+
+\begin{pyin}
+import itertools
+import numpy as np
+\end{pyin}
+
+Now we define the function:
+
+\begin{pyin}
+def get_transition_rate_matrix(
+    waiting_room=4,
+    number_of_barbers=2,
+    arrival_rate=10,
+    service_rate=4,
+):
+    """
+    Return the transition matrix Q.
+
+    For a given barber shop problem this returns the transition rate matrix
+    As inputs it takes a number of
+    parameters that define the system.
+
+
+    Args:
+        waiting_room: an integer denoting the size of the waiting room (default: 4)
+        number_of_barbers: an integer denoting the number of barber and chairs (default: 2)
+        arrival_rate: a real number denoting the number of individuals per unit time
+                      that arrive at the barber shop (default: 10)
+        service_rate: a real number denoting the number of individuals per unit time
+                      that a single barber can serve (default: 4)
+
+    Returns:
+        A matrix.
+    """
+    capacity = waiting_room + number_of_barbers
+    state_pairs = itertools.product(
+        range(capacity + 1), repeat=2
+    )
+    flat_transition_rates = [
+        get_transition_rate(
+            in_state=in_state,
+            out_state=out_state,
+            waiting_room=waiting_room,
+            number_of_barbers=number_of_barbers,
+            arrival_rate=arrival_rate,
+            service_rate=service_rate,
+        )
+        for in_state, out_state in state_pairs
+    ]
+    transition_rates = np.reshape(
+        flat_transition_rates, (capacity + 1, capacity + 1)
+    )
+    np.fill_diagonal(
+        transition_rates, -transition_rates.sum(axis=1)
+    )
+
+    return transition_rates
+\end{pyin}
+
+Using this we can obtain the matrix \(Q\) for our default system:
+
+\begin{pyin}
+Q = get_transition_rate_matrix()
+print(Q)
+\end{pyin}
+
+which gives:
+
+\begin{pyout}
+[[-10  10   0   0   0   0   0]
+ [  4 -14  10   0   0   0   0]
+ [  0   8 -18  10   0   0   0]
+ [  0   0   8 -18  10   0   0]
+ [  0   0   0   8 -18  10   0]
+ [  0   0   0   0   8 -18  10]
+ [  0   0   0   0   0   8  -8]]
+\end{pyout}
+
+We can take the matrix exponential
+discussed above. To do this, we need to use the \mintinline{python}{scipy}
+library:
+
+\begin{pyin}
+import scipy.linalg
+\end{pyin}
+
+To see what would happen after 500 time units we obtain:
+
+\begin{pyin}
+print(scipy.linalg.expm(Q * 500).round(6))
+\end{pyin}
+
+which gives:
+
+\begin{pyout}
+[[0.034309 0.085772 0.107215 0.134019 0.167524 0.209405 0.261756]
+ [0.034309 0.085772 0.107215 0.134019 0.167524 0.209405 0.261756]
+ [0.034309 0.085772 0.107215 0.134019 0.167524 0.209405 0.261756]
+ [0.034309 0.085772 0.107215 0.134019 0.167524 0.209405 0.261756]
+ [0.034309 0.085772 0.107215 0.134019 0.167524 0.209405 0.261756]
+ [0.034309 0.085772 0.107215 0.134019 0.167524 0.209405 0.261756]
+ [0.034309 0.085772 0.107215 0.134019 0.167524 0.209405 0.261756]]
+\end{pyout}
+
+We see that no matter what state (column) the system is in, after 500 time units
+the probabilities are all the same. We could in fact stop our analysis here,
+however our choice of 500 time units was arbitrary and might not be the correct
+amount for all possible scenarios, as such we will continue to aim to solve the
+underlying equation directly. % TODO Point at underlying equation.
+
+To do this we will solve the underlying system using a numerically efficient
+algorithm called least squares optimisation (available from the
+\mintinline{python}{numpy} library):
+
+\begin{pyin}
+def get_steady_state_vector(Q):
+    """
+    Return the steady state vector of any given continuous time transition rate
+    matrix
+
+    Solves the matrix equation Ax=b where A is the matrix Q with an extra row of
+    ones (to ensure a probability vector is given) and b is a vector of 0s and a
+    single one.
+
+    Args:
+       Q: a transition rate matrix
+
+    Returns:
+        A vector
+    """
+    state_space_size, _ = Q.shape
+    A = np.vstack((Q.T, np.ones(state_space_size)))
+    b = np.append(np.zeros(state_space_size), 1)
+    x, _, _, _ = np.linalg.lstsq(A, b, rcond=None)
+    return x
+\end{pyin}
+
+So if we now see the steady state vector for our default system:
+
+\begin{pyin}
+print(get_steady_state_vector(Q))
+\end{pyin}
+
+we get:
+
+\begin{pyout}
+[0.03430888 0.0857722  0.10721525 0.13401906 0.16752383 0.20940479
+ 0.26175598]
+\end{pyout}
+
+We can see that the shop is expected to be empty approximately 3.4\% of the time
+and full 26.2\% of the time.
+
+The final function we will write is one that uses all of
+the above to just return the probability of the shop being full.
+
+\begin{pyin}
+def get_probability_of_full_shop(
+    waiting_room=4,
+    number_of_barbers=2,
+    arrival_rate=10,
+    service_rate=4,
+):
+    """
+    Return the probability of the barber shop being full
+
+    For a given barber shop problem this returns the probability of it being full
+    As inputs it takes a number of parameters that define the system.
+
+    Args:
+        waiting_room: an integer denoting the size of the waiting room
+                      (default: 4)
+        number_of_barbers: an integer denoting the number of barber and chairs
+                           (default: 2)
+        arrival_rate: a real number denoting the number of individuals per
+                      unit time that arrive at the barber shop (default: 10)
+        service_rate: a real number denoting the number of individuals per unit
+                      time that a single barber can serve (default: 4)
+
+    Returns:
+        A real.
+    """
+    Q = get_transition_rate_matrix(
+        waiting_room=waiting_room,
+        number_of_barbers=number_of_barbers,
+        arrival_rate=arrival_rate,
+        service_rate=service_rate,
+    )
+    pi = get_steady_state_vector(Q)
+    return pi[-1]
+\end{pyin}
+
+We can now confirm the previous probability calculated probability of the shop
+being full:
+
+\begin{pyin}
+print(round(get_probability_of_full_shop(), 6))
+\end{pyin}
+
+which gives:
+
+\begin{pyout}
+0.261756
+\end{pyout}
+
+If we were too have 2 extra space in the waiting room:
+
+\begin{pyin}
+print(round(get_probability_of_full_shop(waiting_room=6), 6))
+\end{pyin}
+
+which gives:
+
+\begin{pyout}
+0.23557
+\end{pyout}
+
+This is a slight improvement however, increasing the number of barbers has a
+substantial effect:
+
+\begin{pyin}
+print(
+    round(get_probability_of_full_shop(number_of_barbers=3), 6)
+)
+\end{pyin}
+
+\begin{pyout}
+0.078636
+\end{pyout}
+
+In fact the only way to lower the probability of the shop being full below the
+10\% threshold is to have barbers work at the faster rate of 4.6 customers per
+time unit:
+
+\begin{pyin}
+print(
+    round(
+        get_probability_of_full_shop(
+            waiting_room=20, service_rate=4.6
+        ),
+        6,
+    )
+)
+\end{pyin}
+
+\begin{pyout}
+0.094487
+\end{pyout}
 
 
 \section{Solving with R}\label{sec:solving-with-R}
@@ -147,7 +436,7 @@ Using this we can obtain the matrix \(Q\) for our default system:
 
 \begin{Rin}
 Q <- get_transition_rate_matrix()
-Q
+print(Q)
 \end{Rin}
 
 which gives:
@@ -181,7 +470,7 @@ library(dplyr, warn.conflicts = FALSE, quietly = TRUE)
 Now if we wanted to see what would happen after 500 time units we obtain:
 
 \begin{Rin}
-(t(Q) * 500) %>% expm %>% round(6)
+print( (t(Q) * 500) %>% expm %>% round(6))
 \end{Rin}
 
 which gives:
@@ -236,7 +525,7 @@ matrix equation \(Ax=b\).
 So if we now see the steady state vector for our default system:
 
 \begin{Rin}
-get_steady_state_vector(Q)
+print(get_steady_state_vector(Q))
 \end{Rin}
 
 we get:
@@ -297,7 +586,7 @@ get_probability_of_full_shop <- function(
 Now we can run this code efficiently with both scenarios:
 
 \begin{Rin}
-get_probability_of_full_shop(waiting_room = 6)
+print(get_probability_of_full_shop(waiting_room = 6))
 \end{Rin}
 
 which decreases the probability of a full shop to:
@@ -309,7 +598,7 @@ which decreases the probability of a full shop to:
 but adding another barber and chair:
 
 \begin{Rin}
-get_probability_of_full_shop(number_of_barbers = 3)
+print(get_probability_of_full_shop(number_of_barbers = 3))
 \end{Rin}
 
 gives:
@@ -320,14 +609,14 @@ gives:
 
 In fact even with room for 20 people to wait the only way 2 barbers would be
 able to have a less than 10\% of the shop being full is to find a way to each
-serve .4 more of a customer per hour:
+serve .6 more of a customer per hour:
 
 \begin{Rin}
-get_probability_of_full_shop(waiting_room = 20, service_rate = 4.5)
+print(get_probability_of_full_shop(waiting_room = 20, service_rate = 4.6))
 \end{Rin}
 
 \begin{Rout}
-[1] 0.1103209
+[1] 0.09448688
 \end{Rout}
 
 \section{Research}\label{sec:research}
