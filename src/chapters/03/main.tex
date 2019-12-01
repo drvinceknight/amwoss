@@ -290,7 +290,7 @@ get_probability_of_full_shop <- function(
     get_steady_state_vector()
 
   capacity <- waiting_room + number_of_barbers
-  pi[capacity]
+  pi[capacity + 1]
 }
 \end{Rin}
 
@@ -303,7 +303,7 @@ get_probability_of_full_shop(waiting_room = 6)
 which decreases the probability of a full shop to:
 
 \begin{Rout}
-[1] 0.1884559
+[1] 0.2355699
 \end{Rout}
 
 but adding another barber and chair:
@@ -315,7 +315,7 @@ get_probability_of_full_shop(number_of_barbers = 3)
 gives:
 
 \begin{Rout}
-[1] 0.09436308
+[1] 0.0786359
 \end{Rout}
 
 In fact even with room for 20 people to wait the only way 2 barbers would be
@@ -327,7 +327,7 @@ get_probability_of_full_shop(waiting_room = 20, service_rate = 4.5)
 \end{Rin}
 
 \begin{Rout}
-[1] 0.09928879
+[1] 0.1103209
 \end{Rout}
 
 \section{Research}\label{sec:research}
