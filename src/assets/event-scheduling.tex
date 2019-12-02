@@ -1,0 +1,35 @@
+\documentclass{standalone}
+
+\begin{document}
+
+\begin{tikzpicture}
+
+\node[align=center] (initial) [style={minimum width=4cm, minimum height=1cm, text width=4.8cm, draw=black,fill=black!10,text=black,shape=rectangle,align=center, rounded corners}] at (0, 0) {Initialise\\simulation};
+\node[align=center] (clock) [style={minimum width=4cm, minimum height=1cm, text width=4.8cm, draw=black,fill=black!10,text=black,shape=rectangle,align=center, rounded corners}] at (8, 0) {Move clock to\\next event};
+\node[align=center] (scheduled) [style={minimum width=4cm, minimum height=1cm, text width=4.8cm, draw=black,fill=black!10,text=black,shape=rectangle,align=center, rounded corners}] at (16, 0) {Carry out a\\scheduled event};
+\node[align=center] (unscheduled) [style={minimum width=4cm, minimum height=1cm, text width=4.8cm, draw=black,fill=black!10,text=black,shape=rectangle,align=center, rounded corners}] at (24, 0) {Carry out an\\unscheduled event};
+\node[align=center] (moreunsched) [style={minimum width=4cm, minimum height=1cm, text width=4.8cm, draw=black,fill=black!10,text=black,shape=rectangle,align=center, rounded corners}] at (24, -3) {Any more\\unscheduled events?};
+\node[align=center] (moresched) [style={minimum width=4cm, minimum height=1cm, text width=4.8cm, draw=black,fill=black!10,text=black,shape=rectangle,align=center, rounded corners}] at (16, -3) {Any more\\scheduled events?};
+\node[align=center] (isend) [style={minimum width=4cm, minimum height=1cm, text width=4.8cm, draw=black,fill=black!10,text=black,shape=rectangle,align=center, rounded corners}] at (8, -3) {End of\\simulation?};
+\node[align=center] (end) [style={minimum width=4cm, minimum height=1cm, text width=4.8cm, draw=black,fill=black!10,text=black,shape=rectangle,align=center, rounded corners}] at (0, -3) {End simulation};
+
+\draw[-triangle 90] (initial) -- (clock);
+\draw[-triangle 90] (clock) -- (scheduled);
+\draw[-triangle 90] (scheduled) -- (unscheduled);
+\draw[-triangle 90] (moreunsched) -- (unscheduled);
+\draw[-triangle 90] (moreunsched) -- (moresched);
+\draw[-triangle 90] (moresched) -- (isend);
+\draw[-triangle 90] (isend) -- (end);
+\draw[-triangle 90] (unscheduled) edge[out=0,in=0] (moreunsched);
+\draw[-triangle 90] (moresched) -- (scheduled);
+\draw[-triangle 90] (isend) -- (clock);
+
+\node[align=center] at (20, -2.7) {\textit{No}};
+\node[align=center] at (12, -2.7) {\textit{No}};
+\node[align=center] at (4, -2.7) {\textit{Yes}};
+\node[align=left] at (16.5, -1.5) {\textit{Yes}};
+\node[align=left] at (8.5, -1.5) {\textit{No}};
+\node[align=left] at (24.5, -1.5) {\textit{Yes}};
+\end{tikzpicture}
+
+\end{document}
