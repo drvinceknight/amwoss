@@ -352,26 +352,24 @@ def get_probability_of_full_shop(
 ):
     """Return the probability of the barber shop being full.
 
-    Arguments:
+    Args:
+        waiting_room: an integer denoting the size of
+                      the waiting room (default: 4)
 
-    waiting_room --  an integer denoting the size of
-                     the waiting room (default: 4)
+        number_of_barbers: an integer denoting the number
+                           of barber and chairs
+                           (default: 2)
 
-    number_of_barbers --  an integer denoting the number
-                          of barber and chairs
-                          (default: 2)
+        arrival_rate: a real number denoting the number of
+                      individuals per unit time that arrive
+                      at the barber shop (default: 10)
 
-    arrival_rate -- a real number denoting the number of
-                    individuals per unit time that arrive
-                    at the barber shop (default: 10)
-
-    service_rate -- a real number denoting the number of
-                    individuals per unit time that a single
-                    barber can serve (default: 4)
+        service_rate: a real number denoting the number of
+                      individuals per unit time that a single
+                      barber can serve (default: 4)
 
     Returns:
-
-    A real.
+        A real.
     """
     Q = get_transition_rate_matrix(
         waiting_room=waiting_room,
