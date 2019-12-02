@@ -26,7 +26,9 @@ avoid this situation. They know the following information:
 This is represented diagrammatically in Figure~\ref{fig:barber-shop}.
 
 \begin{figure}[!hbtp]
-    \includestandalone[width=\textwidth]{./assets/barber-shop/main}
+    \begin{center}
+    \includestandalone[width=.6\textwidth]{./assets/barber-shop/main}
+    \end{center}
     \caption{Diagrammatic representation of the barber shop as a queuing system.}
     \label{fig:barber-shop}
 \end{figure}
@@ -55,8 +57,16 @@ particular Markov Process is:
     \label{eqn:barber_shop_state_space}
 \end{equation}
 
-As customers arrive and leave the system goes between states as shown in Figure
-% TODO Draw birth death process without rates.
+As customers arrive and leave the system goes between states as shown in
+Figure~\ref{fig:barber-shop-birth-death-no-rates}.
+
+\begin{figure}[!hbtp]
+    \begin{center}
+    \includestandalone[width=.6\textwidth]{./assets/barber-shop-birth-death-no-rates/main}
+    \end{center}
+    \caption{Diagrammatic representation of the state space}
+    \label{fig:barber-shop-birth-death-no-rates}
+\end{figure}
 
 The rules that govern how to move between these states can be defined in two
 ways:
@@ -69,7 +79,16 @@ ways:
 \end{itemize}
 
 For our barber shop we will consider it as a continuous Markov process as shown
-in Figure % TODO Draw the process with rates.
+in Figure~\ref{fig:barber-shop-continuous-markov-process}
+
+\begin{figure}[!hbtp]
+    \begin{center}
+    \includestandalone[width=.6\textwidth]{./assets/barber-shop-continuous-markov-process/main}
+    \end{center}
+    \caption{Diagrammatic representation of the state space and the transition
+    rates}
+    \label{fig:barber-shop-continuous-markov-process}
+\end{figure}
 
 Note that a Markov process assumes the rates follow an exponential distribution.
 One interesting property of this distribution is that it is considered
