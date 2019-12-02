@@ -1,0 +1,35 @@
+\documentclass{standalone}
+
+ \usepackage{tikz}
+
+ \begin{document}
+
+ \begin{tikzpicture}
+
+   \node at (4, 3.5) {\LARGE{Barber shop}};
+   % Queue inspection
+   \draw (-1, 0.5) -- (8, 0.5);
+   \draw (-1, 2.5) -- (8, 2.5);
+
+   \draw (-1, 0.5) -- (-1, 2.5);
+   \draw (4, 0.5) -- (4, 2.5);
+   \draw (5, 0.5) -- (5, 2.5);
+   \draw (6, 0.5) -- (6, 2.5);
+   \draw (7, 0.5) -- (7, 2.5);
+   \draw (8, 0.5) -- (8, 2.5);
+   % Service center inspection
+   \node at (10, 0) {\Large $\approx 4/\text{hour}$};
+   \draw (10, 0) circle (1.5);
+   \node at (10, 3) {\Large $\approx 4/\text{hour}$};
+   \draw (10, 3) circle (1.5);
+
+   \node at (1.5, 1.5) {Waiting room capacity: 4};
+
+   % Routing
+   \draw[-triangle 90] (-4.5, 1.5) -- (-1, 1.5);
+   \node at (-2.5, 2) {\Large $\approx 10/\text{hour}$};
+
+
+ \end{tikzpicture}
+
+ \end{document}
