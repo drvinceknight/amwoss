@@ -200,7 +200,7 @@ def doctest(c):
     for path in book:
         latex = path.read_text()
         aspell_output = subprocess.check_output(
-            ["aspell", "-t", "--list"], input=latex, text=True
+            ["aspell", "-t", "--list", "--lang=en_GB"], input=latex, text=True
         )
         incorrect_words = set(aspell_output.split("\n")) - {""} - known.words
         if len(incorrect_words) > 0:
