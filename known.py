@@ -34,6 +34,7 @@ words = {
     "Jupyter",
     "Krak",
     "Livermore",
+    "Los",
     "Micha",
     "Moffett",
     "Mol",
@@ -101,6 +102,7 @@ words = {
     "reproducibility",
     "rowSums",
     "scipy",
+    "screenshots",
     "str",
     "subdirectory",
     "tidyverse",
@@ -109,4 +111,5 @@ words = {
     "vectorized",
     "vectorized",
     "webpage",
+    "workspace",
 }
