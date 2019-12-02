@@ -34,6 +34,8 @@ Their current set-up is as follows:
 
 A diagram of the system is shown below:
 
+\includestandalone[width=\textwidth]{./assets/bike-repair-shop}
+
 We can also assume that there is infinite capacity at the bicycle repair shop
 for waiting bicycles.
 The shop will hire and extra member of staff in order to meet their target of a
@@ -144,11 +146,69 @@ the \textit{event scheduling} approach, and \textit{process based} simulation.
 It just so happens that the main implementations in Python and R use each of
 these approaches.
 
+The approaches are essentially equivalent, but they do require a fundamentally
+different way of thinking about the system.
+
 % Event scheduling
 \subsection{Event Scheduling Approach}
+When using the event scheduling approach, we can think of the `virtual
+representation' of the system as being the facilities that the bicycles use, and
+let entities (the bicycles) interact with these facilities. It is these
+facilities that determine how the entities behave.
+
+In a simulation that uses an event scheduling approach, a key concept is that
+events occur that cause further events to occur in the future. These events can
+either be unscheduled, that is they must occur immediately after their cause
+event; or they can be scheduled events, meaning they are scheduled for a set
+time in the future, usually after a delay from the cause event. Which events
+need to be scheduled, and when they are to be scheduled, can be determined by a
+number of factors, including the state of the system and the outcome of random
+events.
+
+In the bicycle shop, one scheduled event may be the arrival of a bicycle to the
+shop (scheduled to occur some random amount of time after the previous arrival).
+Depending on the state of the system, this could cause a number of other events
+to occur:
+
+\begin{itemize}
+  \item if there are bicycles already waiting for the inspection counter, then
+  the unscheduled event occurs in which the new arrival joins the queue;
+  \item if the is no queue at the inspection counter, then the unscheduled event
+  occurs where the new arrival begins service at the inspection counter, and
+  another event is scheduled after some delay where that bicycle finished
+  service.
+\end{itemize}
+
+The simulation progresses by jumping the clock forward to the next scheduled
+event, carrying out all possible events that are to occur there (and any
+unscheduled events that occur immediately after them), scheduling any other
+events for the future, and then repeating this process by jumping the clock
+forward to the next scheduled event in this newly updated list of events.
+
+This is summarised in the diagram below:
+
+\includestandalone[width=\textwidth]{./assets/event-scheduling}
 
 % Process based
 \subsection{Process Based Simulation}
+When using process based simulation, we can think of the `virtual
+representation' of the system as being the sequence of actions that each entity
+(the bicycles) must take, and these sequences of actions might contain delays as
+a number of entities seize and release a finite amount of resources. It is the
+sequence of actions that determine how the entities behave.
+
+For the bicycle repair shop an example of one possible sequence of actions would
+be:
+
+\textit{arrive $\rightarrow$ seize inspection counter $\rightarrow$ delay $\rightarrow$ release inspection counter $\rightarrow$ seize repair shop $\rightarrow$ delay $\rightarrow$ release repair shop $\rightarrow$ leave}
+
+The scheduled delays in this sequence of events correspond to the time spend
+being inspected and the time spend being repaired. Waiting in line for service
+at these facilities are not included in the sequence of events; that is implicit
+by the `seize' and `release' actions, as an entity will wait for a free resource
+before seizing one.
+Therefore in process based simulations, in addition to defining a sequence of
+events, resource types and their numbers also need to be defined.
 
 
 \section{Solving with Python}\label{sec:solving-with-python}
