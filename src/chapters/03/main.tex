@@ -10,25 +10,108 @@ intersection of probability and linear algebra.
 
 \section{Problem}\label{sec:problem}
 
-- Barber shop
-- 2 chairs and 2 barbers
-- Room for 4 people to wait
-- Add room for 2 people to wait or add 1 more barber + chair?
-- What is the probability of having to wait?
+Consider a barber shop. The shop owners have noticed that customers will not
+wait if there is no room in their waiting room and will choose to take their
+business elsewhere. The Barber shop would like to make an investment so as to
+avoid this situation. They know the following information:
+
+\begin{itemize}
+    \item They currently have 2 barber chairs (and 2 barbers).
+    \item They have waiting room for 4 people.
+    \item They usually have 10 customers arrive per hour.
+    \item Each Barber takes about 15 minutes to serve a customer so they can
+        serve 4 customers an hour.
+\end{itemize}
+
+This is represented diagrammatically in Figure % TODO Draw figure.
+
+They are planning on
+reconfiguring space to either have 2 extra waiting chairs or
+another barber's chair and barber.
+
+The mathematical tool used to model this situation is a Markov Processes.
 
 \section{Theory}\label{sec:theory}
 
-- System can be described using a Markov chain which is a collection of States,
-transitions etc...
-- In this instance, it is a type of birth-death process that can be drawn...
-- Has a Matrix representation: Q
-- We can calculate the expected smallest time for a change to occur.
-- There is a mathematical process that discretises this system to give us P and
-the corresponding picture...
-- In Delta t time what is the probability...
-- Now we can think about P pi, ..., P to a high power will give us...  this will
-correspond to pi P = pi (this is an eigenvalue problem).
-- Return to continuous system.
+A Markov Process is a model of a sequence of random events that is defined by a
+collection of \textbf{states} and rules that define how to move between these
+states.
+
+For example, in the barber shop a single number is sufficient to describe the
+status of the shop. If that number is 1 this implies that 1 customer is
+currently having their hair cut. If that number is 5 this implies that 2
+customers are being served and 3 are waiting. Thus the state space for this
+particular Markov Process is:
+
+\[S = \{0, 1, 2, 3, 4, 5, 6\}\]
+
+As customers arrive and leave the system goes between states as shown in Figure
+% TODO Draw birth death process without rates.
+
+The rules that govern how to move between these states can be defined in two
+ways:
+
+\begin{itemize}
+    \item Using probabilities of changing state (or not) in a well defined time
+        period.  This is called a discrete Markov process.
+    \item Using rates of change from one state to another. This is called a
+        continuous time Markov process.
+\end{itemize}
+
+For our barber shop we will consider it as a continuous Markov process as shown
+in Figure % TODO Draw the process with rates.
+
+Note that a Markov process assumes the rates follow an exponential distribution.
+One interesting property of this distribution is that it is considered
+memoryless which means that if a customer has been having their hair cut for 5
+minutes this does not change the rate at which their service ends.
+This distribution is quite common in the real world and therefore a common
+assumption.
+
+These states and rates can be represented mathematically using a transition
+matrix \(Q\) where \(Q_{ij}\) represents the rate of going from state \(i\) to
+state \(j\). In this case we have:
+
+\[
+Q =
+\begin{pmatrix}
+-10 &  10 &   0 &   0 &   0 &   0 &   0\\
+  4 & -14 &  10 &   0 &   0 &   0 &   0\\
+  0 &   8 & -18 &  10 &   0 &   0 &   0\\
+  0 &   0 &   8 & -18 &  10 &   0 &   0\\
+  0 &   0 &   0 &   8 & -18 &  10 &   0\\
+  0 &   0 &   0 &   0 &   8 & -18 &  10\\
+  0 &   0 &   0 &   0 &   0 &   8 &  -8\\
+ \end{pmatrix}
+\]
+
+You will see that \(Q_{ii}\) are negative and ensure the rows of \(Q\) sum to 0.
+This gives the total rate of change leaving state \(i\).
+
+We can use \(Q\) to understand the probability of being in a given state after
+\(t\) time unis. This is can be represented mathematically using a matrix
+\(P_{t}\) where \((P_{t})_{ij}\) is the probability of being in state \(j\)
+after \(t\) time units having started in state \(i\). We can use \(Q\) to
+calculate \(P_{t}\) using the matrix exponential:
+
+\[
+    P_t = e^{Qt}
+\]
+
+What is also useful is understanding the long run behaviour of the
+system. This allows us to answer questions such as ``what state are we most
+likely to be in on average?'' or ``what is the probability of being in the last
+state on average?''.
+
+This long run probability distribution over the state can be represented using a
+vector \(\pi\) where \(\pi_i\) represents the probability of being in state
+\(i\). This vector is in fact the solution to the following matrix equation:
+
+\[
+    \pi Q = 0
+\]
+
+In the upcoming sections we will demonstrate all of the above concepts.
 
 \section{Solving with Python}\label{sec:solving-with-python}
 
@@ -166,13 +249,31 @@ which gives:
  [  0   0   0   0   0   8  -8]]
 \end{pyout}
 
-We can take the matrix exponential
+We can take the matrix exponential as
 discussed above. To do this, we need to use the \mintinline{python}{scipy}
 library:
 
 \begin{pyin}
 import scipy.linalg
 \end{pyin}
+
+To see what would happen after .5 time units we obtain:
+
+\begin{pyin}
+print(scipy.linalg.expm(Q * 0.5).round(5))
+\end{pyin}
+
+which gives:
+
+\begin{pyout}
+[[0.10492 0.21254 0.20377 0.17142 0.13021 0.09564 0.0815 ]
+ [0.08501 0.18292 0.18666 0.1708  0.14377 0.1189  0.11194]
+ [0.06521 0.14933 0.16338 0.16478 0.15633 0.14751 0.15346]
+ [0.04388 0.10931 0.13183 0.15181 0.16777 0.18398 0.21142]
+ [0.02667 0.07361 0.10005 0.13422 0.17393 0.2189  0.27262]
+ [0.01567 0.0487  0.07552 0.11775 0.17512 0.24484 0.32239]
+ [0.01068 0.03668 0.06286 0.10824 0.17448 0.25791 0.34914]]
+\end{pyout}
 
 To see what would happen after 500 time units we obtain:
 
@@ -227,14 +328,13 @@ def get_steady_state_vector(Q):
 So if we now see the steady state vector for our default system:
 
 \begin{pyin}
-print(get_steady_state_vector(Q))
+print(get_steady_state_vector(Q).round(5))
 \end{pyin}
 
 we get:
 
 \begin{pyout}
-[0.03430888 0.0857722  0.10721525 0.13401906 0.16752383 0.20940479
- 0.26175598]
+[0.03431 0.08577 0.10722 0.13402 0.16752 0.2094  0.26176]
 \end{pyout}
 
 We can see that the shop is expected to be empty approximately 3.4\% of the time
@@ -487,26 +587,45 @@ also going to load the \mintinline{R}{dplyr} library:
 library(dplyr, warn.conflicts = FALSE, quietly = TRUE)
 \end{Rin}
 
-Now if we wanted to see what would happen after 500 time units we obtain:
+Now if we wanted to see what would happen after .5 time units we obtain:
 
 \begin{Rin}
-print( (t(Q) * 500) %>% expm %>% round(5))
+print( (Q * .5) %>% expm %>% round(5))
 \end{Rin}
 
 which gives:
 
 \begin{Rout}
         [,1]    [,2]    [,3]    [,4]    [,5]    [,6]    [,7]
-[1,] 0.03431 0.03431 0.03431 0.03431 0.03431 0.03431 0.03431
-[2,] 0.08577 0.08577 0.08577 0.08577 0.08577 0.08577 0.08577
-[3,] 0.10722 0.10722 0.10722 0.10722 0.10722 0.10722 0.10722
-[4,] 0.13402 0.13402 0.13402 0.13402 0.13402 0.13402 0.13402
-[5,] 0.16752 0.16752 0.16752 0.16752 0.16752 0.16752 0.16752
-[6,] 0.20940 0.20940 0.20940 0.20940 0.20940 0.20940 0.20940
-[7,] 0.26176 0.26176 0.26176 0.26176 0.26176 0.26176 0.26176
+[1,] 0.10492 0.21254 0.20377 0.17142 0.13021 0.09564 0.08150
+[2,] 0.08501 0.18292 0.18666 0.17080 0.14377 0.11890 0.11194
+[3,] 0.06521 0.14933 0.16338 0.16478 0.15633 0.14751 0.15346
+[4,] 0.04388 0.10931 0.13183 0.15181 0.16777 0.18398 0.21142
+[5,] 0.02667 0.07361 0.10005 0.13422 0.17393 0.21890 0.27262
+[6,] 0.01567 0.04870 0.07552 0.11775 0.17512 0.24484 0.32239
+[7,] 0.01068 0.03668 0.06286 0.10824 0.17448 0.25791 0.34914
 \end{Rout}
 
-We see that no matter what state (column) we are in, after 500 time units the
+After 500 time units we obtain:
+
+\begin{Rin}
+print( (Q * 500) %>% expm %>% round(5))
+\end{Rin}
+
+which gives:
+
+\begin{Rout}
+        [,1]    [,2]    [,3]    [,4]    [,5]   [,6]    [,7]
+[1,] 0.03431 0.08577 0.10722 0.13402 0.16752 0.2094 0.26176
+[2,] 0.03431 0.08577 0.10722 0.13402 0.16752 0.2094 0.26176
+[3,] 0.03431 0.08577 0.10722 0.13402 0.16752 0.2094 0.26176
+[4,] 0.03431 0.08577 0.10722 0.13402 0.16752 0.2094 0.26176
+[5,] 0.03431 0.08577 0.10722 0.13402 0.16752 0.2094 0.26176
+[6,] 0.03431 0.08577 0.10722 0.13402 0.16752 0.2094 0.26176
+[7,] 0.03431 0.08577 0.10722 0.13402 0.16752 0.2094 0.26176
+\end{Rout}
+
+We see that no matter what state (row) we are in, after 500 time units the
 probabilities are all the same. We could in fact stop our analysis here, however
 our choice of 500 time units was arbitrary and might not be the correct amount
 for all possible scenarios, as such we will continue to aim to solve the
