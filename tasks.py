@@ -37,6 +37,30 @@ def compile(c):
     """
     c.run("cd src; latexmk  -interaction=nonstopmode  --xelatex -shell-escape main.tex")
 
+@task
+def analyse(c):
+    """
+    Analyse the document style and wording.
+
+    This makes use of the `diction` and `style` packages.
+
+    Installation:
+
+        Linux:
+
+            apt install diction
+            apt install style
+
+        OS X:
+
+            brew install diction
+            brew install style
+    """
+    book = list(pathlib.Path("./src/").glob("**/*.tex"))
+    for path in book:
+        print(path)
+        c.run(f"detex {path} | diction -s -L en_gb")
+        c.run(f"detex {path} | style -L en_gb")
 
 @task
 def doctest(c):
