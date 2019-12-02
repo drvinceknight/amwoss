@@ -426,9 +426,7 @@ outputs the largest number and the smallest increased by 3.
 
 \begin{pyin}
 def add_3_to_smallest(a, b):
-    """
-    This function adds 3 to the smallest of a or b.
-    """
+    """This function adds 3 to the smallest of a or b."""
     if a < b:
         return a + 3, b
     return a, b + 3
@@ -710,7 +708,10 @@ which gives:
 It is possible to iterate over elements inside R vectors:
 
 \begin{Rin}
-tennis_players <- c("Federer", "S. Williams", "V. Williams", "King")
+tennis_players <- c("Federer",
+                    "S. Williams",
+                    "V. Williams",
+                    "King")
 \end{Rin}
 
 The following will print all the names contained in the vector:

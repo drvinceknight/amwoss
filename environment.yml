@@ -13,3 +13,4 @@ dependencies:
       - dwys
       - invoke
       - black
+      - docformatter

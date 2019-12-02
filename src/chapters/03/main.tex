@@ -45,22 +45,26 @@ def get_transition_rate(
     arrival_rate=10,
     service_rate=4,
 ):
-    """
-    Return the transition rate for two given states.
+    """Return the transition rate for two given states.
 
-    For a given barber shop problem this returns the transition rate between two
-    states. As well as taking the two states as inputs it takes a number of
-    parameters that define the system.
+    For a given barber shop problem this returns the
+    transition rate between two states. As well as taking
+    the two states as inputs it takes a number of parameters
+    that define the system.
 
     Args:
         in_state: an integer denoting the current state
         out_state: an integer denoting the next state
-        waiting_room: an integer denoting the size of the waiting room (default: 4)
-        number_of_barbers: an integer denoting the number of barber and chairs (default: 2)
-        arrival_rate: a real number denoting the number of individuals per unit time
-                      that arrive at the barber shop (default: 10)
-        service_rate: a real number denoting the number of individuals per unit time
-                      that a single barber can serve (default: 4)
+        waiting_room: an integer denoting the size of the
+                      waiting room (default: 4)
+        number_of_barbers: an integer denoting the number of
+                           barber and chairs (default: 2)
+        arrival_rate: a real number denoting the number of
+                      individuals per unit time that arrive at
+                      the barber shop (default: 10)
+        service_rate: a real number denoting the number of
+                      individuals per unit time that a single
+                      barber can serve (default: 4)
 
     Returns:
         A real.
@@ -96,21 +100,24 @@ def get_transition_rate_matrix(
     arrival_rate=10,
     service_rate=4,
 ):
-    """
-    Return the transition matrix Q.
+    """Return the transition matrix Q.
 
-    For a given barber shop problem this returns the transition rate matrix
-    As inputs it takes a number of
-    parameters that define the system.
+    For a given barber shop problem this returns
+    the transition rate matrix As inputs it takes
+    a number of parameters that define the system.
 
 
     Args:
-        waiting_room: an integer denoting the size of the waiting room (default: 4)
-        number_of_barbers: an integer denoting the number of barber and chairs (default: 2)
-        arrival_rate: a real number denoting the number of individuals per unit time
-                      that arrive at the barber shop (default: 10)
-        service_rate: a real number denoting the number of individuals per unit time
-                      that a single barber can serve (default: 4)
+        waiting_room: an integer denoting the size of the
+                      waiting room (default: 4)
+        number_of_barbers: an integer denoting the number of
+                           barber and chairs (default: 2)
+        arrival_rate: a real number denoting the number of
+                      individuals per unit time that arrive at
+                      the barber shop (default: 10)
+        service_rate: a real number denoting the number of
+                      individuals per unit time that a single
+                      barber can serve (default: 4)
 
     Returns:
         A matrix.
@@ -197,13 +204,12 @@ algorithm called least squares optimisation (available from the
 
 \begin{pyin}
 def get_steady_state_vector(Q):
-    """
-    Return the steady state vector of any given continuous time transition rate
-    matrix
+    """Return the steady state vector of any given continuous
+    time transition rate matrix.
 
-    Solves the matrix equation Ax=b where A is the matrix Q with an extra row of
-    ones (to ensure a probability vector is given) and b is a vector of 0s and a
-    single one.
+    Solves the matrix equation Ax=b where A is the matrix Q
+    with an extra row of ones (to ensure a probability vector
+    is given) and b is a vector of 0s and a single one.
 
     Args:
        Q: a transition rate matrix
@@ -244,24 +250,32 @@ def get_probability_of_full_shop(
     arrival_rate=10,
     service_rate=4,
 ):
-    """
-    Return the probability of the barber shop being full
+    """Return the probability of the barber shop being full.
 
-    For a given barber shop problem this returns the probability of it being full
-    As inputs it takes a number of parameters that define the system.
+    For a given barber shop problem this returns the
+    probability of it being full As inputs it takes a
+    number of parameters that define the system.
 
-    Args:
-        waiting_room: an integer denoting the size of the waiting room
-                      (default: 4)
-        number_of_barbers: an integer denoting the number of barber and chairs
-                           (default: 2)
-        arrival_rate: a real number denoting the number of individuals per
-                      unit time that arrive at the barber shop (default: 10)
-        service_rate: a real number denoting the number of individuals per unit
-                      time that a single barber can serve (default: 4)
+    Arguments:
+
+    waiting_room --  an integer denoting the size of
+                     the waiting room (default: 4)
+
+    number_of_barbers --  an integer denoting the number
+                          of barber and chairs
+                          (default: 2)
+
+    arrival_rate -- a real number denoting the number of
+                    individuals per unit time that arrive
+                    at the barber shop (default: 10)
+
+    service_rate -- a real number denoting the number of
+                    individuals per unit time that a single
+                    barber can serve (default: 4)
 
     Returns:
-        A real.
+
+    A real.
     """
     Q = get_transition_rate_matrix(
         waiting_room=waiting_room,
@@ -340,20 +354,23 @@ between two given states:
 #' Return the transition rate for two given states.
 #'
 #' @description
-#' For a given barber shop problem this returns the transition rate between two
-#' states. As well as taking the two states as inputs it takes a number of
+#' For a given barber shop problem this returns the
+#' transition rate between two states. As well as
+#' taking the two states as inputs it takes a number of
 #' parameters that define the system.
 #'
 #' @param in_state an integer denoting the current state
 #' @param out_state an integer denoting the next state
-#' @param waiting_room an integer denoting the size of the waiting room
-#' (default: 4)
-#' @param number_of_barbers an integer denoting the number of barber and chairs
-#' (default: 2)
-#' @param arrival_rate a real number denoting the number of individuals per
-#' unit time that arrive at the barber shop (default: 10)
-#' @param service_rate a real number denoting the number of individuals per unit
-#' time that a single barber can serve (default: 4)
+#' @param waiting_room an integer denoting the size of
+#'        the waiting room (default: 4)
+#' @param number_of_barbers an integer denoting the number
+#'        of barber and chairs (default: 2)
+#' @param arrival_rate a real number denoting the number
+#'        of individuals per  unit time that arrive at
+#'        the barber shop (default: 10)
+#' @param service_rate a real number denoting the number
+#'        of individuals per unit time that a single barber
+#'        can serve (default: 4)
 #'
 #' @return A real
 get_transition_rate <- function(
@@ -396,18 +413,21 @@ following code that creates the matrices:
 #' Return the transition rate matrix Q
 #'
 #' @description
-#' For a given barber shop problem this returns the transition rate matrix
+#' For a given barber shop problem this returns the
+#' transition rate matrix
 #' As inputs it takes a number of
 #' parameters that define the system.
 #'
-#' @param waiting_room an integer denoting the size of the waiting room
-#' (default: 4)
-#' @param number_of_barbers an integer denoting the number of barber and chairs
-#' (default: 2)
-#' @param arrival_rate a real number denoting the number of individuals per
-#' unit time that arrive at the barber shop (default: 10)
-#' @param service_rate a real number denoting the number of individuals per unit
-#' time that a single barber can serve (default: 4)
+#' @param waiting_room an integer denoting the size of the
+#'        waiting room (default: 4)
+#' @param number_of_barbers an integer denoting the number of
+#'        barber and chairs (default: 2)
+#' @param arrival_rate a real number denoting the number of
+#'        individuals per #' unit time that arrive at the
+#'        barber shop (default: 10)
+#' @param service_rate a real number denoting the number of
+#'        individuals per unit time that a single barber
+#'        can serve (default: 4)
 #'
 #' @return A matrix
 get_transition_rate_matrix <- function(
@@ -499,13 +519,13 @@ computations.
 \begin{Rin}
 library(pracma, warn.conflicts = FALSE, quietly = TRUE)
 
-#' Return the steady state vector of any given continuous time transition rate
-#' matrix
+#' Return the steady state vector of any given continuous time
+#' transition rate matrix
 #'
 #' @description
-#' Solves the matrix equation Ax=b where A is the matrix Q with an extra row of
-#' ones (to ensure a probability vector is given) and b is a vector of 0s and a
-#' single one.
+#' Solves the matrix equation Ax=b where A is the matrix Q with
+#' an extra row of #' ones (to ensure a probability vector is
+#' given) and b is a vector of 0s and a single one.
 #'
 #' @param Q a transition rate matrix
 #'
@@ -551,18 +571,20 @@ the above to just return the probability of the shop being full.
 #' Return the probability of the barber shop being full
 #'
 #' @description
-#' For a given barber shop problem this returns the probability of it being full
-#' As inputs it takes a number of
-#' parameters that define the system.
+#' For a given barber shop problem this returns the probability
+#' of it being full As inputs it takes a number of parameters
+#' that define the system.
 #'
-#' @param waiting_room an integer denoting the size of the waiting room
-#' (default: 4)
-#' @param number_of_barbers an integer denoting the number of barber and chairs
-#' (default: 2)
-#' @param arrival_rate a real number denoting the number of individuals per
-#' unit time that arrive at the barber shop (default: 10)
-#' @param service_rate a real number denoting the number of individuals per unit
-#' time that a single barber can serve (default: 4)
+#' @param waiting_room an integer denoting the size of the
+#'        waiting room (default: 4)
+#' @param number_of_barbers an integer denoting the number of
+#'        barber and chairs (default: 2)
+#' @param arrival_rate a real number denoting the number of
+#'        individuals per #' unit time that arrive at the
+#'        barber shop (default: 10)
+#' @param service_rate a real number denoting the number of
+#'        individuals per unit time that a single barber can
+#'        serve (default: 4)
 #'
 #' @return A real
 get_probability_of_full_shop <- function(
@@ -612,7 +634,11 @@ able to have a less than 10\% of the shop being full is to find a way to each
 serve .6 more of a customer per hour:
 
 \begin{Rin}
-print(get_probability_of_full_shop(waiting_room = 20, service_rate = 4.6))
+print(
+    get_probability_of_full_shop(
+        waiting_room = 20,
+        service_rate = 4.6)
+        )
 \end{Rin}
 
 \begin{Rout}

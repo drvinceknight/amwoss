@@ -1,8 +1,9 @@
+import itertools
 import pathlib
 import re
 import subprocess
-import tempfile
 import sys
+import tempfile
 
 import dwys
 
@@ -44,6 +45,7 @@ def doctest(c):
     - Check style of python code with black
     - Check style of R code with lintr (TODO Check that this works)
     """
+    max_column_length = 63
     pyin_pattern = re.compile(r"\\begin\{pyin\}\n(.*?)\\end\{pyin\}", re.DOTALL)
     pyout_pattern = re.compile(r"\\begin\{pyout\}\n(.*?)\n\\end\{pyout\}", re.DOTALL)
     Rin_pattern = re.compile(r"\\begin\{Rin\}\n(.*?)\\end\{Rin\}", re.DOTALL)
@@ -113,6 +115,17 @@ def doctest(c):
     ec = subprocess.call(["black", "--check", "--diff", "-l 63", dir_for_python_input_files])
     exit_codes.append(ec)
 
+    print("Running docformatter")
+    ec = subprocess.call(["docformatter", "--check", "--wrap-descriptions",
+        "63", "--wrap-summaries", "63", "-r", dir_for_python_input_files])
+    if ec > 0:
+        diff = subprocess.check_output(["docformatter", "--wrap-descriptions",
+        "63", "--wrap-summaries", "63", "-r", dir_for_python_input_files])
+        print(diff.decode("utf-8"))
+    else:
+        print("Docstrings follow PEP 257 ✅")
+    exit_codes.append(min(ec, 1))
+
     print("Running lintr")
     # This excludes one specific lintr called 'object_usage_linter' as this is a
     # known issue with the lintr package in R.
@@ -127,4 +140,15 @@ def doctest(c):
         if len(output) > 0:
             print(output.decode("utf-8"))
             exit_codes.append(1)
+
+    print("Ensuring column lengths fit book")
+    for path in itertools.chain(
+            pathlib.Path(dir_for_R_input_files).glob("*"),
+            pathlib.Path(dir_for_python_input_files).glob("*"),
+            ):
+        lines = path.read_text().split("\n")
+        for line in lines:
+            if len(line) > max_column_length:
+                print(f"'{line[:max_column_length]}' is too long ({len(line)} > {max_column_length})")
+                exit_codes.append(1)
     sys.exit(max(exit_codes))
