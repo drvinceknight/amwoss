@@ -50,7 +50,10 @@ currently having their hair cut. If that number is 5 this implies that 2
 customers are being served and 3 are waiting. Thus the state space for this
 particular Markov Process is:
 
-\[S = \{0, 1, 2, 3, 4, 5, 6\}\]
+\begin{equation}
+    S = \{0, 1, 2, 3, 4, 5, 6\}
+    \label{eqn:barber_shop_state_space}
+\end{equation}
 
 As customers arrive and leave the system goes between states as shown in Figure
 % TODO Draw birth death process without rates.
@@ -79,7 +82,7 @@ These states and rates can be represented mathematically using a transition
 matrix \(Q\) where \(Q_{ij}\) represents the rate of going from state \(i\) to
 state \(j\). In this case we have:
 
-\[
+\begin{equation}
 Q =
 \begin{pmatrix}
 -10 &  10 &   0 &   0 &   0 &   0 &   0\\
@@ -90,7 +93,8 @@ Q =
   0 &   0 &   0 &   0 &   8 & -18 &  10\\
   0 &   0 &   0 &   0 &   0 &   8 &  -8\\
  \end{pmatrix}
-\]
+ \label{eqn:barber_shop_transition_matrix}
+\end{equation}
 
 You will see that \(Q_{ii}\) are negative and ensure the rows of \(Q\) sum to 0.
 This gives the total rate of change leaving state \(i\).
@@ -101,9 +105,10 @@ We can use \(Q\) to understand the probability of being in a given state after
 after \(t\) time units having started in state \(i\). We can use \(Q\) to
 calculate \(P_{t}\) using the matrix exponential:
 
-\[
+\begin{equation}
     P_t = e^{Qt}
-\]
+    \label{eqn:continuous_time_markov_process_matrix_exponential}
+\end{equation}
 
 What is also useful is understanding the long run behaviour of the
 system. This allows us to answer questions such as ``what state are we most
@@ -114,9 +119,10 @@ This long run probability distribution over the state can be represented using a
 vector \(\pi\) where \(\pi_i\) represents the probability of being in state
 \(i\). This vector is in fact the solution to the following matrix equation:
 
-\[
+\begin{equation}
     \pi Q = 0
-\]
+    \label{eqn:continuous_time_markov_process_steady_state}
+\end{equation}
 
 In the upcoming sections we will demonstrate all of the above concepts.
 
@@ -304,7 +310,8 @@ We see that no matter what state (column) the system is in, after 500 time units
 the probabilities are all the same. We could in fact stop our analysis here,
 however our choice of 500 time units was arbitrary and might not be the correct
 amount for all possible scenarios, as such we will continue to aim to solve the
-underlying equation directly. % TODO Point at underlying equation.
+underlying equation~\ref{eqn:continuous_time_markov_process_steady_state}
+directly.
 
 To do this we will solve the underlying system using a numerically efficient
 algorithm called least squares optimisation (available from the
@@ -636,7 +643,8 @@ We see that no matter what state (row) we are in, after 500 time units the
 probabilities are all the same. We could in fact stop our analysis here, however
 our choice of 500 time units was arbitrary and might not be the correct amount
 for all possible scenarios, as such we will continue to aim to solve the
-underlying equation directly. % TODO Point at underlying equation.
+underlying equation~\ref{eqn:continuous_time_markov_process_steady_state}
+directly.
 
 To be able to do this, we will make use of the versatile \mintinline{R}{pracma}
 package which includes a number of numerical analysis functions for efficient
