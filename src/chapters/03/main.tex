@@ -143,11 +143,6 @@ def get_transition_rate(
 ):
     """Return the transition rate for two given states.
 
-    For a given barber shop problem this returns the
-    transition rate between two states. As well as taking
-    the two states as inputs it takes a number of parameters
-    that define the system.
-
     Args:
         in_state: an integer denoting the current state
         out_state: an integer denoting the next state
@@ -197,11 +192,6 @@ def get_transition_rate_matrix(
     service_rate=4,
 ):
     """Return the transition matrix Q.
-
-    For a given barber shop problem this returns
-    the transition rate matrix As inputs it takes
-    a number of parameters that define the system.
-
 
     Args:
         waiting_room: an integer denoting the size of the
@@ -322,10 +312,6 @@ def get_steady_state_vector(Q):
     """Return the steady state vector of any given continuous
     time transition rate matrix.
 
-    Solves the matrix equation Ax=b where A is the matrix Q
-    with an extra row of ones (to ensure a probability vector
-    is given) and b is a vector of 0s and a single one.
-
     Args:
        Q: a transition rate matrix
 
@@ -365,10 +351,6 @@ def get_probability_of_full_shop(
     service_rate=4,
 ):
     """Return the probability of the barber shop being full.
-
-    For a given barber shop problem this returns the
-    probability of it being full As inputs it takes a
-    number of parameters that define the system.
 
     Arguments:
 
@@ -467,12 +449,6 @@ between two given states:
 \begin{Rin}
 #' Return the transition rate for two given states.
 #'
-#' @description
-#' For a given barber shop problem this returns the
-#' transition rate between two states. As well as
-#' taking the two states as inputs it takes a number of
-#' parameters that define the system.
-#'
 #' @param in_state an integer denoting the current state
 #' @param out_state an integer denoting the next state
 #' @param waiting_room an integer denoting the size of
@@ -525,12 +501,6 @@ following code that creates the matrices:
 
 \begin{Rin}
 #' Return the transition rate matrix Q
-#'
-#' @description
-#' For a given barber shop problem this returns the
-#' transition rate matrix
-#' As inputs it takes a number of
-#' parameters that define the system.
 #'
 #' @param waiting_room an integer denoting the size of the
 #'        waiting room (default: 4)
@@ -656,11 +626,6 @@ library(pracma, warn.conflicts = FALSE, quietly = TRUE)
 #' Return the steady state vector of any given continuous time
 #' transition rate matrix
 #'
-#' @description
-#' Solves the matrix equation Ax=b where A is the matrix Q with
-#' an extra row of #' ones (to ensure a probability vector is
-#' given) and b is a vector of 0s and a single one.
-#'
 #' @param Q a transition rate matrix
 #'
 #' @return A vector
@@ -703,11 +668,6 @@ the above to just return the probability of the shop being full.
 
 \begin{Rin}
 #' Return the probability of the barber shop being full
-#'
-#' @description
-#' For a given barber shop problem this returns the probability
-#' of it being full As inputs it takes a number of parameters
-#' that define the system.
 #'
 #' @param waiting_room an integer denoting the size of the
 #'        waiting room (default: 4)
