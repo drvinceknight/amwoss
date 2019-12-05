@@ -426,9 +426,7 @@ outputs the largest number and the smallest increased by 3.
 
 \begin{pyin}
 def add_3_to_smallest(a, b):
-    """ 
-    This function adds 3 to the smallest of a or b.
-    """
+    """This function adds 3 to the smallest of a or b."""
     if a < b:
         return a + 3, b
     return a, b + 3
@@ -450,7 +448,12 @@ Python has a type of variable that is in fact a collection of pointers to other
 variables. This is called a list. Here for example is a collection of strings:
 
 \begin{pyin}
-tennis_players = ["Federer", "S. Williams", "V. Williams", "King"]
+tennis_players = [
+    "Federer",
+    "S. Williams",
+    "V. Williams",
+    "King",
+]
 \end{pyin}
 
 There are a number of things that can be done with lists but one particular
@@ -693,7 +696,7 @@ add_3_to_smallest <- function(a, b) {
 Once we have defined the function, the following is how we use it:
 
 \begin{Rin}
-print(add_3_to_smallest(a=5, b=-42))
+print(add_3_to_smallest(a = 5, b = -42))
 \end{Rin}
 
 which gives:
@@ -705,7 +708,10 @@ which gives:
 It is possible to iterate over elements inside R vectors:
 
 \begin{Rin}
-tennis_players <- c("Federer", "S. Williams", "V. Williams", "King")
+tennis_players <- c("Federer",
+                    "S. Williams",
+                    "V. Williams",
+                    "King")
 \end{Rin}
 
 The following will print all the names contained in the vector:
@@ -775,7 +781,7 @@ book}\label{sec:a-note-on-how-code-is-displayed-in-this-book}
 % - Line number throughout
 
 \begin{thefurtherreading}{99}  % TODO This should not be here, it is just an
-                               % example of our further reading sections for 
+                               % example of our further reading sections for
                                % chapters 3 onwards.
 
 \bibitem{} Becskei, A. and Serrano, L. (2000). Engineering stability in gene

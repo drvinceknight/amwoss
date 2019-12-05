@@ -12,11 +12,19 @@
 \usepackage{makeidx}
 \usepackage{multicol}
 
+
 \renewcommand{\sfdefault}{txss}
 
 \usepackage{changepage}% for text width to include margin
 
 \usepackage{customenvironments}
+
+% Adding our own packages
+\usepackage{standalone}
+\usepackage{tikz}
+\usetikzlibrary{arrows}
+%---------------------
+
 
 \frenchspacing
 \tolerance=5000
@@ -65,6 +73,9 @@
 \input{./chapters/01/main.tex}
 
 \input{./chapters/02/main.tex}
+
+\part{Probabilistic Modelling}
+\input{./chapters/03/main.tex}
 
 
 \bibliographystyle{plain}

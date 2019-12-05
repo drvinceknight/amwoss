@@ -3,10 +3,14 @@ channels:
   - defaults
 dependencies:
   - python
+  - numpy
+  - scipy
   - r-essentials
   - r-lintr
+  - r-pracma
   - pip:
       - ciw
       - dwys
       - invoke
       - black
+      - docformatter
