@@ -95,6 +95,7 @@ words = {
     "param",
     "pokemon",
     "pracma",
+    "pseudorandom",
     "pwd",
     "py",
     "queueing",

@@ -19,7 +19,7 @@ shop take a maximum of 30 minutes.
 Their current set-up is as follows:
 
 \begin{itemize}
-  \item Bicycles arrive randomly at the shop at a rate of 10 per hour.
+  \item Bicycles arrive randomly at the shop at a rate of 15 per hour.
   \item They wait in line to be seen at an inspection counter, manned by one
   member of staff who can inspect one bicycle at a time. On average an
   inspection takes around 3 minutes.
@@ -46,12 +46,12 @@ the inspection counter or in the repair workshop?
 \section{Theory}\label{sec:theory}
 
 A number of the events that govern the behaviour of the bicycle shop above are
-probabilistic, or act probabilistic under a lack of information. For example the
+probabilistic. For example the
 times that bicycles arrive at the shop, the duration of the inspection and
 repairs, and whether the bicycle would need to go on to be repaired or not.
 When a number of these probabilistic events are arranged in a complex system
 such as the bicycle shop, using analytical methods to manipulate these
-probabilities becomes difficult. One methods to deal with this is
+probabilities becomes difficult. One method to deal with this is
 \textit{simulation}.
 
 Consider one probabilistic event, rolling a die.
@@ -62,43 +62,42 @@ a large number of times, we would except $\frac{1}{6}$ of those rolls to be a 1.
 This is called the \textit{law of large numbers}.
 
 Now imagine we have an event in which we do not know the analytical probability
-of it occurring. This could be due to lack of information or because the event
-is the result of a complex system. Consider rolling a weighted die, that is a
+of it occurring. Consider rolling a weighted die, in this case a
 die in which the probability of obtaining one number is much greater than the
 others. How can we estimate the probability of obtaining a 5 on this die?
 
 Rolling the weighted die once does not give us much information.
 However due to the law of large numbers, we can roll this die a number of times,
-and find the proportion of those rolls which gave a 4. The more times we roll
+and find the proportion of those rolls which gave a 5. The more times we roll
 the die, the closer this proportion approaches the underlying probability of
-obtaining a 4.
+obtaining a 5.
 
 For a complex system such as the bicycle shop, we would like to estimate the
 proportion of bicycles that take longer than 30 minutes to be processed. As it
 is a complex system it is difficult to work this out analytically. So we would
-like to `run' this system a number of times and record the overall proportions
-of bicycles spending longer than 30 minutes in the shop.
+like to observe this system a number of times and record the overall proportions
+of bicycles spending longer than 30 minutes in the shop, which will converge to
+the true underlying proportion.
 However unlike rolling a weighted die, it it costly to observe this shop over a
 number of days with identical conditions. In this case it is costly in terms of
 time, as the repair shop already exists. However some scenarios, for example the
 scenario where the repair shop hires and additional member of staff, do not yet
 exist, so observing this this would be costly in terms of money also.
 We can however build a virtual representation of this complex system on a
-computer, and `run' a day of work much more quickly and much less costly on the
-computer, similar to a video game.
+computer, and observe a virtual day of work much more quickly and much less
+costly on the computer, similar to a video game.
 
 % Computers not good at generating random numbers, so use pseudo random numbers. e.g. (formula)
 In order to do this, the computer needs to be able to generate random outcomes
 of each of the smaller events that make up the large complex system. Generating
-random events are essentially functions of random numbers, that need to be
+random events are essentially doing things to random numbers, that need to be
 generated.
 
-Computers are not good at generating true randomness.
-
+Computers are deterministic, therefore true randomness is not always possible.
 They can however generate pseudorandom numbers: sequences of numbers that look
-random, and behave as random numbers, but are entirely determined from the
-previous number in the sequence. Every programming language has methods of doing
-this.
+like random numbers, but are entirely determined from the
+previous numbers in the sequence. Most programming languages have methods of
+doing this.
 
 In order to simulate an event we can again manipulate the law of large numbers.
 Let $X \sim U(0, 1)$, a uniformly pseudorandom variable between 0 and 1.
@@ -118,10 +117,10 @@ R =
 
 % What we gonna do: use pseudo random numbers to 'simulate' the system. - because law of large number we can simulate many times and smoothe.
 The bicycle repair shop is a system made up of interactions of a number of other
-simpler random events. This can be thought of a functions of functions of
-functions of random variables, each generated using pseudorandom numbers.
+simpler random events. This can be thought of as many interactions of random
+variables, each generated using pseudorandom numbers.
 
-In this case the random simpler random event that need to be generated are:
+In this case the fundemental random event that need to be generated are:
 \begin{itemize}
   \item time each bicycle arrives to the repair shop,
   \item the time each bicycle spends at the inspection counter,
@@ -134,20 +133,18 @@ together as described in Section~\ref{sec:problem}.
 The proportion of customers spending longer than 30 minutes in the shop can then
 be counted. This proportion itself is a random variable, and so just like the
 weighted die, running this simulation once does not give us much information.
-But we can run the simulation many times and take an average proportion, so
+But we can run the simulation many times and take an average proportion, to
 smooth out any variability.
 
 % Two types of DES - event scheduleing in Python, process-based in R.
-The process outlined above is called \textit{discrete event simulation}, a
-particular implementation of Monte Carlo simulation, which generates
+The process outlined above is a particular implementation of Monte Carlo
+simulation called \textit{discrete event simulation}, which generates
 pseudorandom numbers and observes their interactions. In practice there are two
 main approaches to simulating complex probabilistic systems such as this one:
 the \textit{event scheduling} approach, and \textit{process based} simulation.
 It just so happens that the main implementations in Python and R use each of
-these approaches.
+these approaches, so you will see both approaches used here.
 
-The approaches are essentially equivalent, but they do require a fundamentally
-different way of thinking about the system.
 
 % Event scheduling
 \subsection{Event Scheduling Approach}
@@ -157,37 +154,12 @@ let entities (the bicycles) interact with these facilities. It is these
 facilities that determine how the entities behave.
 
 In a simulation that uses an event scheduling approach, a key concept is that
-events occur that cause further events to occur in the future. These events can
-either be unscheduled, that is they must occur immediately after their cause
-event; or they can be scheduled events, meaning they are scheduled for a set
-time in the future, usually after a delay from the cause event. Which events
-need to be scheduled, and when they are to be scheduled, can be determined by a
-number of factors, including the state of the system and the outcome of random
-events.
-
-In the bicycle shop, one scheduled event may be the arrival of a bicycle to the
-shop (scheduled to occur some random amount of time after the previous arrival).
-Depending on the state of the system, this could cause a number of other events
-to occur:
-
-\begin{itemize}
-  \item if there are bicycles already waiting for the inspection counter, then
-  the unscheduled event occurs in which the new arrival joins the queue;
-  \item if the is no queue at the inspection counter, then the unscheduled event
-  occurs where the new arrival begins service at the inspection counter, and
-  another event is scheduled after some delay where that bicycle finished
-  service.
-\end{itemize}
-
-The simulation progresses by jumping the clock forward to the next scheduled
-event, carrying out all possible events that are to occur there (and any
-unscheduled events that occur immediately after them), scheduling any other
-events for the future, and then repeating this process by jumping the clock
-forward to the next scheduled event in this newly updated list of events.
-
-This is summarised in the diagram below:
-
-\includestandalone[width=\textwidth]{./assets/event-scheduling}
+events occur that cause further events to occur in the future, either
+immediately or after a delay, such as after some time in service.
+In the bicycle shop examples of such events include a bicycle joining a queue, a
+bicycle beginning service, and a bicycle finishing service. At each event the
+event list is updated, and the clock then jumps forward to the next event in
+this updated list.
 
 % Process based
 \subsection{Process Based Simulation}
@@ -213,11 +185,213 @@ events, resource types and their numbers also need to be defined.
 
 \section{Solving with Python}\label{sec:solving-with-python}
 
-- Build ciw model with some set of parameters
-- Run ciw model (with trials) and find that you can't do it.
-- Write function to build ciw model with given set of parameters
-- Loops.
-- Conclusion? (possibly visualisation)
+In this book we will use the Ciw library in order to conduct discrete event
+simulation.
+Ciw uses the event scheduling approach, which means we must define the system's
+facilities, and then let customers loose to interact with them.
+
+In this case there are two facilities to define: the inspection desk and the
+repair workshop. Let's order these as so. For each of these we need to define:
+
+\begin{itemize}
+  \item the distribution of times between consecutive bicycles arriving,
+  \item the distribution of times the bicycles spend in service,
+  \item the number of servers available,
+  \item the probability of routing to each of the other facilities after
+  service.
+\end{itemize}
+
+In this case we will assume that the time between consecutive arrivals follow a
+exponential distribution, and that the service times also follow exponential
+distributions. These are common assumptions for this sort of queueing system.
+
+In Ciw, these are defined in a Network object, created using the
+\mintinline{python}{ciw.create_network} function. The code below uses this
+function to create a Network object that defines the current bicycle repair
+shop:
+
+\begin{pyin}
+import ciw
+
+N = ciw.create_network(
+    arrival_distributions=[ciw.dists.Exponential(15), ciw.dists.NoArrivals()],
+    service_distributions=[ciw.dists.Exponential(20), ciw.dists.Exponential(10)],
+    number_of_servers=[1, 2],
+    routing=[[0.0, 0.8], [0.0, 0.0]]
+)
+\end{pyin}
+
+This function takes arguments that are used to define each of the four
+properties we listed above. Each of these arguments take in a list of
+properties, for each facility respectively in their order.
+Arguments asking for for distributions take in Ciw objects defining those
+distributions, \mintinline{python}{ciw.dists.Exponential} for exponential
+distributions, and \mintinline{python}{ciw.dists.NoArrivals} for when there are
+no external arrivals at the repair workshop (all bicycles arriving there are
+routed from the inspection desk).
+The \mintinline{python}{number_of_servers} argument takes a list of integers (1
+server at the inspection desk, 2 at the repair workshop).
+The \mintinline{python}{routing} argument defines how bicycles are routed after
+service: from the inspection desk there is zero probability of returning to the
+inspection desk, and a probability of 0.8 of being routed to the repair
+workshop; from the repair workshop bicycles are not routed anywhere, they leave
+the system.
+
+Now this we have defined the system, we need to use this to build the virtual
+representation of the system: in Ciw this is a Simulation object:
+
+\begin{pyin}
+ciw.seed(0)
+Q = ciw.Simulation(N)
+\end{pyin}
+
+Notice here a random seed is set. This is because there is some element of
+randomness when initialising this object, and in order to ensure reproducible
+results we force the pseudorandom number generator to produce the same sequence
+of pseudorandom numbers each time.
+
+Now we have a virtual representation of the system, we can run this for one
+eight hour working day:
+
+\begin{pyin}
+Q.simulate_until_max_time(8)
+\end{pyin}
+
+Note that the simulation always begins with an empty system, so the first
+bicycle to arrive will never wait for service. Depending on the situation this
+may be an unwanted feature, though not in this case as it is reasonable to
+assume that the bicycle shop will begin the day with no customers.
+Now we'll count the number of bicycles that have finished service, and count the
+number of those whose entire journey through the system lasted longer than 0.5
+hours:
+
+\begin{pyin}
+left_individuals = Q.nodes[-1].all_individuals
+number_over_30mins = 0
+for ind in left_individuals:
+    throughput = 0
+    for record in ind.data_records:
+        throughput += record.exit_date - record.arrival_date
+    if throughput > 0.5:
+        number_over_30mins += 1
+print(number_over_30mins / len(left_individuals))
+\end{pyin}
+
+The first line here obtains a list of all the individuals who have left the
+system, that is reach the final (index -1) node.
+Each individual will have a data record for each facility they visited. This
+contains many pieces of information about their time at that facility, the ones
+relevant here are their \mintinline{python}{arrival_date} and their
+\mintinline{python}{exit_date}, the difference of which gives their total time
+spent at that facility. Summing the total time spent at every facility gives
+their overall throughput in the system.
+
+This piece of code gives
+
+\begin{pyout}
+0.26126126126126126
+\end{pyout}
+
+meaning 26.13\% of all bicycles spent longer than half an hour at the repair
+shop.
+
+However this particular day may have contained a number of extreme events.
+For a more accurate proportion this experiment should be repeated, and an
+average proportion taken.
+In order to do so, let's write a function that performs the above experiment, so
+that we can eventually repeat the function call.
+
+\begin{pyin}
+def find_percentage_over_30mins(n_inspectors, n_repairers, seed):
+    """Returns the percentage of bicycles spending over 30 minutes
+    at the repair shop in one run of the simulation.
+    
+    Args:
+        n_inspectors: the number of servers at the inspection desk
+        n_repairers: the number of servers in the repair workshop
+        seed: the seed for the pseudorandom number generator
+    """
+    N = ciw.create_network(
+        arrival_distributions=[ciw.dists.Exponential(15), ciw.dists.NoArrivals()],
+        service_distributions=[ciw.dists.Exponential(20), ciw.dists.Exponential(10)],
+        number_of_servers=[n_inspectors, n_repairers],
+        routing=[[0.0, 0.8], [0.0, 0.0]]
+    )
+
+    ciw.seed(seed)
+    Q = ciw.Simulation(N)
+    Q.simulate_until_max_time(24)
+
+    left_individuals = Q.nodes[-1].all_individuals
+    number_over_30mins = 0
+    for ind in left_individuals:
+        throughput = 0
+        for record in ind.data_records:
+            throughput += record.exit_date - record.arrival_date
+        if throughput > 0.5:
+            number_over_30mins += 1
+    return number_over_30mins / len(left_individuals)
+\end{pyin}
+
+This can be used to find the average proportion over 100 trials:
+
+\begin{pyin}
+throughputs = []
+for trial in range(100):
+    throughputs.append(find_percentage_over_30mins(1, 2, trial))
+print(sum(throughputs) / len(throughputs))
+\end{pyin}
+
+which gives:
+
+\begin{pyout}
+0.15935355368513382
+\end{pyout}
+
+that is, on average 15.94\% of bicycles will spend longer than 30 minutes at the
+repair shop.
+
+Now consider the two possible future scenarios we wish top compare: hiring an
+extra member of staff to serve at the inspection desk, or hiring an extra member
+of staff at the repair workshop. Which scenario yields a smaller proportion of
+bicycles spending over 30 minutes at the shop? Let's investigate. First look at
+the situation where the additional member of staff works at the inspection desk:
+
+\begin{pyin}
+throughputs = []
+for trial in range(100):
+    throughputs.append(find_percentage_over_30mins(2, 2, trial))
+print(sum(throughputs) / len(throughputs))
+\end{pyin}
+
+which gives:
+
+\begin{pyout}
+0.038476805648229126
+\end{pyout}
+
+that is 3.85\% of bicycles.
+
+Now look at the situation where the additional member of staff works at the
+repair workshop:
+
+\begin{pyin}
+throughputs = []
+for trial in range(100):
+    throughputs.append(find_percentage_over_30mins(1, 3, trial))
+print(sum(throughputs) / len(throughputs))
+\end{pyin}
+
+which gives:
+
+\begin{pyout}
+0.10359146418929761
+\end{pyout}
+
+that is 10.36\% of bicycles.
+
+Therefore an additional member of staff at the inspection desk would be more
+beneficial than an additional member of staff at the repair workshop.
 
 
 \section{Solving with R}\label{sec:solving-with-R}
