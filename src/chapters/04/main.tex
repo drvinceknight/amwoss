@@ -310,6 +310,9 @@ def find_percentage_over_30mins(n_inspectors, n_repairers, seed):
         n_inspectors: the number of servers at the inspection desk
         n_repairers: the number of servers in the repair workshop
         seed: the seed for the pseudorandom number generator
+
+    Returns:
+        A real.
     """
     N = ciw.create_network(
         arrival_distributions=[ciw.dists.Exponential(15), ciw.dists.NoArrivals()],
@@ -336,10 +339,10 @@ def find_percentage_over_30mins(n_inspectors, n_repairers, seed):
 This can be used to find the average proportion over 100 trials:
 
 \begin{pyin}
-throughputs = []
+percentage_over_30 = []
 for trial in range(100):
-    throughputs.append(find_percentage_over_30mins(1, 2, trial))
-print(sum(throughputs) / len(throughputs))
+    percentage_over_30.append(find_percentage_over_30mins(1, 2, trial))
+print(sum(percentage_over_30) / len(percentage_over_30))
 \end{pyin}
 
 which gives:
@@ -358,10 +361,10 @@ bicycles spending over 30 minutes at the shop? Let's investigate. First look at
 the situation where the additional member of staff works at the inspection desk:
 
 \begin{pyin}
-throughputs = []
+percentage_over_30 = []
 for trial in range(100):
-    throughputs.append(find_percentage_over_30mins(2, 2, trial))
-print(sum(throughputs) / len(throughputs))
+    percentage_over_30.append(find_percentage_over_30mins(2, 2, trial))
+print(sum(percentage_over_30) / len(percentage_over_30))
 \end{pyin}
 
 which gives:
@@ -376,10 +379,10 @@ Now look at the situation where the additional member of staff works at the
 repair workshop:
 
 \begin{pyin}
-throughputs = []
+percentage_over_30 = []
 for trial in range(100):
-    throughputs.append(find_percentage_over_30mins(1, 3, trial))
-print(sum(throughputs) / len(throughputs))
+    percentage_over_30.append(find_percentage_over_30mins(1, 3, trial))
+print(sum(percentage_over_30) / len(percentage_over_30))
 \end{pyin}
 
 which gives:
@@ -396,11 +399,222 @@ beneficial than an additional member of staff at the repair workshop.
 
 \section{Solving with R}\label{sec:solving-with-R}
 
-- Build simmer model with some set of parameters
-- Run simmer model (with trials) and find that you can't do it.
-- Write function to build simmer model with given set of parameters
-- Loops.
-- Conclusion? (possibly visualisation)
+In this book we will use the Simmer package in order to conduct discrete event
+simulation.
+Simmer uses the process based approach, which means we must define the each
+bicycle's sequence of actions, and then generate a number of bicycles with these
+sequences.
+
+In Simmer these sequences of actions are made up of called trajectories. The
+diagram below shows the branched trajectories than a bicycle would take at the
+repair shop:
+
+% TODO add trajectories diagram
+
+These are defined in simmer by:
+
+\begin{Rin}
+library(simmer)
+
+bicycle <-
+  trajectory("Inspection") %>%
+  seize("Inspector") %>%
+  timeout(function() {rexp(1, 20)}) %>%
+  release("Inspector") %>%
+  branch(
+    function() (runif(1) < 0.8), continue=c(F),
+    trajectory("Repair") %>%
+      seize("Repairer") %>%
+      timeout(function() {rexp(1, 10)}) %>%
+      release("Repairer"),
+    trajectory("Out")
+  )
+\end{Rin}
+
+Here we define a \mintinline{R}{bicycle} object which is made up of Simmer
+\mintinline{R}{trajectory}s. You will see that this sequence of event matches
+those in Figure~\ref{fig:simmertrajectories}.
+First the bicycle seizes an ``Inspector'' resource (yet to be defined), pauses
+for some service time, sampled from an exponential distribution with parameter
+20, then releases the ``Inspector'' resource, so that resource is free to be
+seized by another bicycle.
+Then trajectory branches on the condition that an uniformly pseudorandom
+variable lies above or lies 0.8: if below begin the ``Repair'' sub-trajectory,
+otherwise the ``Out'' sub-trajectory which does not have any actions.
+The ``Repair trajectory first seizes a ``Repairer'' resource (again, yet to be
+defined), pauses for some service time, sampled from an exponential
+distribution with parameter 10, then releases the ``Repairer'' resource. Once
+there are no actions left in the sequence the bicycle leaves the system.
+
+These trajectories are not very useful alone, we are yet to define the resources
+used, or a way to generate bicycles with these trajectories. This is done in the
+code below, where a \mintinline{R}{repair_shop} is defined:
+
+\begin{Rin}
+repair_shop <-
+  simmer("Repair Shop") %>%
+  add_resource("Inspector", 1) %>%
+  add_resource("Repairer", 2) %>%
+  add_generator("Bicycle", bicycle, function() {rexp(1, 15)})
+\end{Rin}
+
+Here we have added one resource labelled ``Inspector'', and two resources
+labelled ``Repairer''. Finally we have added a generator which generates a
+number of the \mintinline{R}{bicycle} objects that we defined earlier. This
+generator also takes in a function to sample the delays between generating new 
+\mintinline{R}{bicycle} objects, that is the inter-arrival times. 
+
+Now we have a virtual representation of the system, we can run this for one
+eight hour working day:
+
+\begin{Rin}
+set.seed(seed)
+repair_shop %>% run(until=8)
+\end{Rin}
+
+Note that the simulation always begins with an empty system, so the first
+bicycle to arrive will never wait for service. Depending on the situation this
+may be an unwanted feature, though not in this case as it is reasonable to
+assume that the bicycle shop will begin the day with no customers.
+Now we'll count the number of bicycles that have finished service, and count the
+number of those whose entire journey through the system lasted longer than 0.5
+hours:
+
+\begin{Rin}
+recs <- repair_shop %>% get_mon_arrivals()
+throughput = recs$end_time - recs$start_time
+print(mean(throughput > 0.5))
+\end{Rin}
+
+The first line here obtains a data frame of information about all the arrivals
+to the system.
+This data frame will have columns containing a limited number of pieces of
+information about the arrivals, however much more information can be recorded
+and monitored by adding monitoring actions to the trajectories. The relevant
+columns here are the \mintinline{R}{start_time} and \mintinline{R}{end_time},
+the difference of which gives their total time spent in the system, the
+throughput. A new vector is created containing throughput information.
+We then calculate the proportion of entries in that vector over half an hour by
+taking the mean of a vector of boolean values checking this condition (this
+works because the booleans \mintinline{R}{TRUE} and \mintinlin{R}{FALSE} have
+numeric values of 1 and 0 respectively).
+
+This piece of code gives
+
+\begin{Rout}
+[1] 0.02777778
+\end{Rout}
+
+meaning 27.78\% of all bicycles spent longer than half an hour at the repair
+shop.
+
+However this particular day may have contained a number of extreme events.
+For a more accurate proportion this experiment should be repeated, and an
+average proportion taken.
+In order to do so, let's write a function that performs the above experiment, so
+that we can eventually repeat the function call.
+
+\begin{Rin}
+#' Returns the percentage of bicycles spending over 30 minutes
+#' at the repair shop in one run of the simulation.
+#'
+#' @param n_inspectors the number of servers at the inspection desk
+#' @param n_repairers the number of servers in the repair workshop
+#' @param seed the seed for the pseudorandom number generator
+#'
+#' @return A real
+find_percentage_over_30mins <- function(n_inspectors, n_repairers, seed) {
+  bicycle <-
+    trajectory("Inspection") %>%
+    seize("Inspector") %>%
+    timeout(function() {rexp(1, 20)}) %>%
+    release("Inspector") %>%
+    branch(
+      function() (runif(1) < 0.8), continue=c(F),
+      trajectory("Repair") %>%
+        seize("Repairer") %>%
+        timeout(function() {rexp(1, 10)}) %>%
+        release("Repairer"),
+      trajectory("Out")
+    )
+
+  repair_shop <-
+    simmer("Repair Shop") %>%
+    add_resource("Inspector", n_inspectors) %>%
+    add_resource("Repairer", n_repairers) %>%
+    add_generator("Bicycle", bicycle, function() {rexp(1, 15)})
+
+  set.seed(seed)
+  repair_shop %>% run(until=8)
+  recs <- repair_shop %>% get_mon_arrivals()
+  throughput = recs$end_time - recs$start_time
+  return(mean(throughput > 0.5))
+}
+\end{Rin}
+
+This can be used to find the average proportion over 100 trials:
+
+\begin{Rin}
+percentage_over_30 <- c()
+for (seed in 1:100) {
+  percentage_over_30[seed] <- find_percentage_over_30mins(1, 2, seed)
+}
+print(mean(percentage_over_30))
+\end{Rin}
+
+which gives:
+
+\begin{Rout}
+[1] 0.1551579
+\end{Rout}
+
+that is, on average 15.52\% of bicycles will spend longer than 30 minutes at the
+repair shop.
+
+Now consider the two possible future scenarios we wish top compare: hiring an
+extra member of staff to serve at the inspection desk, or hiring an extra member
+of staff at the repair workshop. Which scenario yields a smaller proportion of
+bicycles spending over 30 minutes at the shop? Let's investigate. First look at
+the situation where the additional member of staff works at the inspection desk:
+
+\begin{Rin}
+percentage_over_30 <- c()
+for (seed in 1:100) {
+  percentage_over_30[seed] <- find_percentage_over_30mins(2, 2, seed)
+}
+print(mean(percentage_over_30))
+\end{Rin}
+
+which gives:
+
+\begin{Rout}
+[1] 0.04115338
+\end{Rout}
+
+that is 4.12\% of bicycles.
+
+Now look at the situation where the additional member of staff works at the
+repair workshop:
+
+\begin{Rin}
+percentage_over_30 <- c()
+for (seed in 1:100) {
+  percentage_over_30[seed] <- find_percentage_over_30mins(1, 3, seed)
+}
+print(mean(percentage_over_30))
+\end{Rin}
+
+which gives:
+
+\begin{Rout}
+[1] 0.1000899
+\end{Rout}
+
+that is 10.01\% of bicycles.
+
+Therefore an additional member of staff at the inspection desk would be more
+beneficial than an additional member of staff at the repair workshop.
+
 
 \section{Research}\label{sec:research}
 
