@@ -32,15 +32,21 @@ Their current set-up is as follows:
   \item After repair the bicycles are ready for collection.
 \end{itemize}
 
-A diagram of the system is shown below:
+A diagram of the system is shown in Figure~\ref{fig:bike-shop}
 
+\begin{figure}
+\begin{center}
 \includestandalone[width=\textwidth]{./assets/bike-repair-shop}
+\end{center}
+\caption{Diagrammatic representation of the bicycle repair shop as a queuing system.}
+\label{fig:bike-shop}
+\end{figure}
 
 We can also assume that there is infinite capacity at the bicycle repair shop
 for waiting bicycles.
 The shop will hire and extra member of staff in order to meet their target of a
-maximum throughout of 30 minutes. They would like to know if they should work on
-the inspection counter or in the repair workshop?
+maximum time in the system of 30 minutes. They would like to know if they
+should work on the inspection counter or in the repair workshop?
 
 
 \section{Theory}\label{sec:theory}
@@ -51,7 +57,7 @@ times that bicycles arrive at the shop, the duration of the inspection and
 repairs, and whether the bicycle would need to go on to be repaired or not.
 When a number of these probabilistic events are arranged in a complex system
 such as the bicycle shop, using analytical methods to manipulate these
-probabilities becomes difficult. One method to deal with this is
+probabilities can become difficult. One method to deal with this is
 \textit{simulation}.
 
 Consider one probabilistic event, rolling a die.
@@ -74,7 +80,8 @@ obtaining a 5.
 
 For a complex system such as the bicycle shop, we would like to estimate the
 proportion of bicycles that take longer than 30 minutes to be processed. As it
-is a complex system it is difficult to work this out analytically. So we would
+is a complex system it is difficult to work this out analytically. So, just
+like the weighted die, we would
 like to observe this system a number of times and record the overall proportions
 of bicycles spending longer than 30 minutes in the shop, which will converge to
 the true underlying proportion.
@@ -101,10 +108,10 @@ doing this.
 
 In order to simulate an event we can again manipulate the law of large numbers.
 Let $X \sim U(0, 1)$, a uniformly pseudorandom variable between 0 and 1.
-Let $R$ be the outcome of a roll of an unbiased die. Then $R$ can be defined as:
+Let $D$ be the outcome of a roll of an unbiased die. Then $D$ can be defined as:
 
 \begin{equation}
-R =
+D =
   \begin{cases}
     1 & \text{if } 0 \leq X < \frac{1}{6}\\
     2 & \text{if } \frac{1}{6} \leq X < \frac{2}{6}\\
@@ -120,9 +127,9 @@ The bicycle repair shop is a system made up of interactions of a number of other
 simpler random events. This can be thought of as many interactions of random
 variables, each generated using pseudorandom numbers.
 
-In this case the fundemental random event that need to be generated are:
+In this case the fundemental random events that need to be generated are:
 \begin{itemize}
-  \item time each bicycle arrives to the repair shop,
+  \item the time each bicycle arrives to the repair shop,
   \item the time each bicycle spends at the inspection counter,
   \item whether each bicycle needs to go on the the repair workshop,
   \item the time each those bicycles spends at the repair shop.
@@ -149,7 +156,8 @@ these approaches, so you will see both approaches used here.
 % Event scheduling
 \subsection{Event Scheduling Approach}
 When using the event scheduling approach, we can think of the `virtual
-representation' of the system as being the facilities that the bicycles use, and
+representation' of the system as being the facilities that the bicycles use,
+shown in Figure~\ref{fig:bike-shop}. Then we
 let entities (the bicycles) interact with these facilities. It is these
 facilities that determine how the entities behave.
 
@@ -186,7 +194,7 @@ events, resource types and their numbers also need to be defined.
 \section{Solving with Python}\label{sec:solving-with-python}
 
 In this book we will use the Ciw library in order to conduct discrete event
-simulation.
+simulation in Python.
 Ciw uses the event scheduling approach, which means we must define the system's
 facilities, and then let customers loose to interact with them.
 
@@ -203,10 +211,10 @@ repair workshop. Let's order these as so. For each of these we need to define:
 
 In this case we will assume that the time between consecutive arrivals follow a
 exponential distribution, and that the service times also follow exponential
-distributions. These are common assumptions for this sort of queueing system.
+distributions. These are common assumptions for this sort of queueing system. % TODO add reference
 
 In Ciw, these are defined in a Network object, created using the
-\mintinline{python}{ciw.create_network} function. The function code below
+\mintinline{python}{ciw.create_network} function. The function below
 creates a Network object that defines the for a given set of parameters bicycle
 repair shop:
 
@@ -219,18 +227,17 @@ def build_network_object(
     repair_rate=10,
     number_inspectors=1,
     number_repairers=2,
-    probability_need_repair=0.8,
+    prob_need_repair=0.8,
 ):
-    """Returns the average proportion of bicycles spending over
-    a given limit at the repair shop.
+    """Returns a Network objext that defines the repair shop
     
     Args:
-        arrival_rate: a real
-        inspection_rate: a real
-        repair_rate: a real
-        number_inspectors: an integer
-        number_repairers: an integer
-        probability_need_repair: a probability
+        arrival_rate: a positive float (default: 15)
+        inspection_rate: a positive float (default: 20)
+        repair_rate: a positive float (default: 10)
+        number_inspectors: a positive integer (default: 1)
+        number_repairers: a positive integer (default: 2)
+        prob_need_repair: a float between 0 and 1 (default: 0.8)
     
     Returns:
         a Ciw network object
@@ -248,7 +255,7 @@ def build_network_object(
             number_inspectors,
             number_repairers,
         ],
-        routing=[[0.0, probability_need_repair], [0.0, 0.0]],
+        routing=[[0.0, prob_need_repair], [0.0, 0.0]],
     )
     return N
 \end{pyin}
@@ -274,8 +281,7 @@ virtual day. The following function does this:
 
 \begin{pyin}
 def run_simulation(network, seed=0, max_time=8):
-    """Returns the average proportion of bicycles spending over
-    a given limit at the repair shop.
+    """Builds a simulation object and runs it until max_time
     
     Args:
         network: a Ciw network object
@@ -294,7 +300,8 @@ def run_simulation(network, seed=0, max_time=8):
 \end{pyin}
 
 Notice here a random seed is set. This is because there is some element of
-randomness when initialising this object, and in order to ensure reproducible
+randomness when initialising this object, and much randomness in running
+the simulation, and in order to ensure reproducible
 results we force the pseudorandom number generator to produce the same sequence
 of pseudorandom numbers each time.
 Notice also that the simulation always begins with an empty system, so the first
@@ -311,15 +318,13 @@ efficient manipulation of data frames.
 import pandas as pd
 
 def get_proportion_over_limit(Q, limit=0.5):
-    """Returns the average proportion of bicycles spending
+    """Returns the proportion of bicycles spending
     over a given limit at the repair shop.
     
     Args:
         Q: a Ciw simulation object after a run of the
            simulation
-        limit: a real number denoting the limit to measure
-               number of bicycles spending over that time in
-               the repair shop    
+        limit: a positive float (default: 0.5)   
     Returns:
         a real
     """
@@ -365,27 +370,24 @@ def get_average_proportion_over_limit(
     repair_rate=10,
     number_inspectors=1,
     number_repairers=2,
-    probability_need_repair=0.8,
+    prob_need_repair=0.8,
     max_time=8,
     limit=0.5,
     num_trials=100,
 ):
-    """Returns the average proportion of bicycles spending over
-    a given limit at the repair shop.
+    """Returns the average proportion of bicycles spending
+    over a given limit at the repair shop.
     
     Args:
-        arrival_rate: a real
-        inspection_rate: a real
-        repair_rate: a real
-        number_inspectors: an integer
-        number_repairers: an integer
-        probability_need_repair: a probability
+        arrival_rate: a positive float (default: 15)
+        inspection_rate: a positive float (default: 20)
+        repair_rate: a positive float (default: 10)
+        number_inspectors: a positive integer (default: 1)
+        number_repairers: a positive integer (default: 2)
+        prob_need_repair: a float between 0 and 1 (default: 0.8)
         max_time: a real
-        limit: a real number denoting the limit to measure
-               number of bicycles spending over that time in
-               the repair shop
-        num_trials: an integer denoting the number of times to
-                    run the simulation
+        limit: a positive float (default: 0.5)   
+        num_trials: a positive integer (default: 100)
     
     Returns:
         a real
@@ -396,7 +398,7 @@ def get_average_proportion_over_limit(
         repair_rate=repair_rate,
         number_inspectors=number_inspectors,
         number_repairers=number_repairers,
-        probability_need_repair=probability_need_repair,
+        prob_need_repair=prob_need_repair,
     )
     proportions_over_limit = []
     for trial in range(num_trials):
@@ -470,12 +472,12 @@ beneficial than an additional member of staff at the repair workshop.
 \section{Solving with R}\label{sec:solving-with-R}
 
 In this book we will use the Simmer package in order to conduct discrete event
-simulation.
+simulation in R.
 Simmer uses the process based approach, which means we must define the each
 bicycle's sequence of actions, and then generate a number of bicycles with these
 sequences.
 
-In Simmer these sequences of actions are made up of called trajectories. The
+In Simmer these sequences of actions are made up of trajectories. The
 diagram below shows the branched trajectories than a bicycle would take at the
 repair shop:
 
@@ -489,12 +491,12 @@ The function below defines a simmer object that describes these trajectories:
 #'
 #' @param inspection_rate positive float (default: 20)
 #' @param repair_rate positive float (default: 10)
-#' @param probability_need_repair float between 0 and 1 (default: 0.8)
+#' @param prob_need_repair float between 0 and 1 (default: 0.8)
 #'
 #' @return A simmer trajectory object
 define_bicycle_trajectories <- function(inspection_rate = 20,
                                         repair_rate = 10,
-                                        probability_need_repair = 0.8) {
+                                        prob_need_repair = 0.8) {
   bicycle <-
     trajectory("Inspection") %>%
     seize("Inspector") %>%
@@ -503,7 +505,7 @@ define_bicycle_trajectories <- function(inspection_rate = 20,
     }) %>%
     release("Inspector") %>%
     branch(
-      function() (runif(1) < probability_need_repair),
+      function() (runif(1) < prob_need_repair),
       continue = c(F),
       trajectory("Repair") %>%
         seize("Repairer") %>%
@@ -534,7 +536,8 @@ virtual day. The following function does all this:
 #' @param seed float (default: 0)
 #' @param max_time positive float (default: 8)
 #'
-#' @return A simmer simulation object after one run of the simulation
+#' @return A simmer simulation object after one run of
+#;         the simulation
 run_simulation <- function(bicycle,
                            arrival_rate = 15,
                            number_inspectors = 1,
@@ -555,8 +558,8 @@ run_simulation <- function(bicycle,
 }
 \end{Rin}
 
-Notice here a random seed is set. This is because there is some element of
-randomness when initialising this object, and in order to ensure reproducible
+Notice here a random seed is set. This is because there are elements of
+randomness when running the simulation, and in order to ensure reproducible
 results we force the pseudorandom number generator to produce the same sequence
 of pseudorandom numbers each time.
 Notice also that the simulation always begins with an empty system, so the first
@@ -577,8 +580,8 @@ can get a data frame of records to manipulate.
 #'              measure number of bicycles spending
 #'              over that time in the repair shop
 #'
-#' @return A proportion of bicycles spending time in the repair
-#'         shop over the given limit
+#' @return A proportion of bicycles spending time in the
+#'         repair shop over the given limit
 get_proportion_over_limit <- function(repair_shop, limit = 0.5) {
   recs <- repair_shop %>% get_mon_arrivals()
   total_times <- recs$end_time - recs$start_time
@@ -616,7 +619,7 @@ over a number of trials, then finds an average proportion:
 #'
 #' @param inspection_rate positive float (default: 20)
 #' @param repair_rate positive float (default: 10)
-#' @param probability_need_repair float between 0 and 1 (default: 0.8)
+#' @param prob_need_repair float between 0 and 1 (default: 0.8)
 #' @param arrival_rate positive float(default: 15)
 #' @param number_inspectors positive integer (default: 1)
 #' @param number_repairers positive integer (default: 2)
@@ -626,7 +629,7 @@ over a number of trials, then finds an average proportion:
 #' @param num_trials positive integer (default: 100)
 get_average_proportion_over_limit <- function(inspection_rate = 20,
                                               repair_rate = 10,
-                                              probability_need_repair = 0.8,
+                                              prob_need_repair = 0.8,
                                               arrival_rate = 15,
                                               number_inspectors = 1,
                                               number_repairers = 2,
@@ -637,7 +640,7 @@ get_average_proportion_over_limit <- function(inspection_rate = 20,
   bicycle <- define_bicycle_trajectories(
     inspection_rate = inspection_rate,
     repair_rate = repair_rate,
-    probability_need_repair = probability_need_repair
+    prob_need_repair = prob_need_repair
   )
   proportions_over_limit <- c()
   for (trial in 1:num_trials) {
