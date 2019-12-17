@@ -478,10 +478,16 @@ bicycle's sequence of actions, and then generate a number of bicycles with these
 sequences.
 
 In Simmer these sequences of actions are made up of trajectories. The
-diagram below shows the branched trajectories than a bicycle would take at the
-repair shop:
+diagram in Figure~\ref{fig:processbased_diagram} shows the branched
+trajectories than a bicycle would take at the repair shop:
 
-% TODO add trajectories diagram
+\begin{figure}
+\begin{center}
+\includestandalone[width=\textwidth]{./assets/process_based}
+\caption{Diagrammatic representation of the forked trajectories a bicycle can take}
+\label{fog:processbased_ diagram}
+\end{center}
+\end{figure}
 
 The function below defines a simmer object that describes these trajectories:
 
