@@ -219,7 +219,7 @@ def build_network_object(
     repair_rate=10,
     number_inspectors=1,
     number_repairers=2,
-    probability_need_repair=0.8
+    probability_need_repair=0.8,
 ):
     """Returns the average proportion of bicycles spending over
     a given limit at the repair shop.
@@ -236,16 +236,25 @@ def build_network_object(
         a Ciw network object
     """
     N = ciw.create_network(
-        arrival_distributions=[ciw.dists.Exponential(arrival_rate), ciw.dists.NoArrivals()],
-        service_distributions=[ciw.dists.Exponential(inspection_rate), ciw.dists.Exponential(repair_rate)],
-        number_of_servers=[number_inspectors, number_repairers],
-        routing=[[0.0, probability_need_repair], [0.0, 0.0]]
+        arrival_distributions=[
+            ciw.dists.Exponential(arrival_rate),
+            ciw.dists.NoArrivals(),
+        ],
+        service_distributions=[
+            ciw.dists.Exponential(inspection_rate),
+            ciw.dists.Exponential(repair_rate),
+        ],
+        number_of_servers=[
+            number_inspectors,
+            number_repairers,
+        ],
+        routing=[[0.0, probability_need_repair], [0.0, 0.0]],
     )
     return N
-)
 \end{pyin}
 
-A Network object is used by Ciw to access system parameters. For example one piece of information it holds is the number of nodes of the system:
+A Network object is used by Ciw to access system parameters. For example one
+piece of information it holds is the number of nodes of the system:
 
 \begin{pyin}
 N = build_network_object()
@@ -302,21 +311,26 @@ efficient manipulation of data frames.
 import pandas as pd
 
 def get_proportion_over_limit(Q, limit=0.5):
-    """Returns the average proportion of bicycles spending over
-    a given limit at the repair shop.
+    """Returns the average proportion of bicycles spending
+    over a given limit at the repair shop.
     
     Args:
-        Q: a Ciw simulation object after a run of the simulation
-        limit: a real number denoting the limit to measure number
-               of bicycles spending over that time in the
-               repair shop    
+        Q: a Ciw simulation object after a run of the
+           simulation
+        limit: a real number denoting the limit to measure
+               number of bicycles spending over that time in
+               the repair shop    
     Returns:
         a real
     """
     inds = Q.nodes[-1].all_individuals
-    recs = pd.DataFrame(dr for ind in inds for dr in ind.data_records)
-    recs['total_time'] = recs['exit_date'] - recs['arrival_date']
-    total_times = recs.groupby('id_number')['total_time'].sum()
+    recs = pd.DataFrame(
+        dr for ind in inds for dr in ind.data_records
+    )
+    recs["total_time"] = (
+        recs["exit_date"] - recs["arrival_date"]
+    )
+    total_times = recs.groupby("id_number")["total_time"].sum()
     return (total_times > limit).mean()
 \end{pyin}
 
@@ -354,8 +368,8 @@ def get_average_proportion_over_limit(
     probability_need_repair=0.8,
     max_time=8,
     limit=0.5,
-    num_trials=100
-    ):
+    num_trials=100,
+):
     """Returns the average proportion of bicycles spending over
     a given limit at the repair shop.
     
@@ -367,9 +381,9 @@ def get_average_proportion_over_limit(
         number_repairers: an integer
         probability_need_repair: a probability
         max_time: a real
-        limit: a real number denoting the limit to measure number
-                    of bicycles spending over that time in the
-                    repair shop
+        limit: a real number denoting the limit to measure
+               number of bicycles spending over that time in
+               the repair shop
         num_trials: an integer denoting the number of times to
                     run the simulation
     
@@ -382,12 +396,14 @@ def get_average_proportion_over_limit(
         repair_rate=repair_rate,
         number_inspectors=number_inspectors,
         number_repairers=number_repairers,
-        probability_need_repair=probability_need_repair
+        probability_need_repair=probability_need_repair,
     )
     proportions_over_limit = []
     for trial in range(num_trials):
         Q = run_simulation(N, seed=trial, max_time=max_time)
-        proportion_over_limit = get_proportion_over_limit(Q=Q, limit=limit)
+        proportion_over_limit = get_proportion_over_limit(
+            Q=Q, limit=limit
+        )
         proportions_over_limit.append(proportion_over_limit)
     return sum(proportions_over_limit) / num_trials
 \end{pyin}
@@ -396,7 +412,9 @@ This can be used to find the average proportion over 100 trials for the current
 system of one inspector and two repair people:
 
 \begin{pyin}
-get_average_proportion_over_limit(number_inspectors=1, number_repairers=2)
+get_average_proportion_over_limit(
+    number_inspectors=1, number_repairers=2
+)
 \end{pyin}
 
 which gives:
@@ -415,7 +433,9 @@ bicycles spending over 30 minutes at the shop? Let's investigate. First look at
 the situation where the additional member of staff works at the inspection desk:
 
 \begin{pyin}
-get_average_proportion_over_limit(number_inspectors=2, number_repairers=2)
+get_average_proportion_over_limit(
+    number_inspectors=2, number_repairers=2
+)
 \end{pyin}
 
 which gives:
@@ -430,7 +450,9 @@ Now look at the situation where the additional member of staff works at the
 repair workshop:
 
 \begin{pyin}
-get_average_proportion_over_limit(number_inspectors=1, number_repairers=3)
+get_average_proportion_over_limit(
+    number_inspectors=1, number_repairers=3
+)
 \end{pyin}
 
 which gives:
@@ -462,33 +484,37 @@ repair shop:
 The function below defines a simmer object that describes these trajectories:
 
 \begin{Rin}
-#' Returns a simmer trajectory object outlining the bicycles path
-#' through the repair shop
+#' Returns a simmer trajectory object outlining the bicycles
+#' path through the repair shop
 #'
-#' @param inspection_rate the rate at which bicyclea are inspected
-#' @param repair_rate the rate at which bicyclea are repaired
-#' @param probability_need_repair the probability that a bicycle needs repairing
+#' @param inspection_rate positive float (default: 20)
+#' @param repair_rate positive float (default: 10)
+#' @param probability_need_repair float between 0 and 1 (default: 0.8)
 #'
 #' @return A simmer trajectory object
-define_bicycle_trajectories <- function(inspection_rate=20,
-                                        repair_rate=10,
-                                        probability_need_repair=0.8
-) {
-    bicycle <-
+define_bicycle_trajectories <- function(inspection_rate = 20,
+                                        repair_rate = 10,
+                                        probability_need_repair = 0.8) {
+  bicycle <-
     trajectory("Inspection") %>%
     seize("Inspector") %>%
-    timeout(function() {rexp(1, inspection_rate)}) %>%
+    timeout(function() {
+      rexp(1, inspection_rate)
+    }) %>%
     release("Inspector") %>%
     branch(
-      function() (runif(1) < probability_need_repair), continue=c(F),
+      function() (runif(1) < probability_need_repair),
+      continue = c(F),
       trajectory("Repair") %>%
         seize("Repairer") %>%
-        timeout(function() {rexp(1, repair_rate)}) %>%
+        timeout(function() {
+          rexp(1, repair_rate)
+        }) %>%
         release("Repairer"),
       trajectory("Out")
     )
-    return(bicycle)
-}
+  return(bicycle)
+}}
 \end{Rin}
 
 These trajectories are not very useful alone, we are yet to define the resources
@@ -502,28 +528,29 @@ virtual day. The following function does all this:
 #' Runs one trial of the simulation.
 #'
 #' @param bicycle a simmer trajectory object
-#' @param arrival_rate the rate at which bicyclea arrive
-#' @param number_inspectors the number of staff at the inspection desk
-#' @param number_repairers the number of staff at the repair workshop
-#' @param seed the seed to initialise the pseudorandom number generator
-#' @param max_time the amount of time to run the simulation for
+#' @param arrival_rate positive float(default: 15)
+#' @param number_inspectors positive integer (default: 1)
+#' @param number_repairers positive integer (default: 2)
+#' @param seed float (default: 0)
+#' @param max_time positive float (default: 8)
 #'
 #' @return A simmer simulation object after one run of the simulation
 run_simulation <- function(bicycle,
-                           arrival_rate=15,
-                           number_inspectors=1,
-                           number_repairers=2,
-                           seed=0,
-                           max_time=8
-) {
+                           arrival_rate = 15,
+                           number_inspectors = 1,
+                           number_repairers = 2,
+                           seed = 0,
+                           max_time = 8) {
   repair_shop <-
     simmer("Repair Shop") %>%
     add_resource("Inspector", number_inspectors) %>%
     add_resource("Repairer", number_repairers) %>%
-    add_generator("Bicycle", bicycle, function() {rexp(1, arrival_rate)})
+    add_generator("Bicycle", bicycle, function() {
+      rexp(1, arrival_rate)
+    })
 
   set.seed(seed)
-  repair_shop %>% run(until=8)
+  repair_shop %>% run(until = 8)
   return(repair_shop)
 }
 \end{Rin}
@@ -552,9 +579,9 @@ can get a data frame of records to manipulate.
 #'
 #' @return A proportion of bicycles spending time in the repair
 #'         shop over the given limit
-get_proportion_over_limit <- function(repair_shop, limit=0.5){
+get_proportion_over_limit <- function(repair_shop, limit = 0.5) {
   recs <- repair_shop %>% get_mon_arrivals()
-  total_times = recs$end_time - recs$start_time
+  total_times <- recs$end_time - recs$start_time
   return(mean(total_times > 0.5))
 }
 \end{Rin}
@@ -564,8 +591,8 @@ then find the proportion of bicycles spending over half an hour in the shop:
 
 \begin{Rin}
 bicycle <- define_bicycle_trajectories()
-repair_shop <- run_simulation(bicycle=bicycle)
-print(get_proportion_over_limit(repair_shop=repair_shop))
+repair_shop <- run_simulation(bicycle = bicycle)
+print(get_proportion_over_limit(repair_shop = repair_shop))
 \end{Rin}
 
 This piece of code gives
@@ -587,45 +614,45 @@ over a number of trials, then finds an average proportion:
 #' Returns the average proportion of bicycles spending over
 #' a given limit at the repair shop.
 #'
-#' @param inspection_rate the rate at which bicyclea are inspected
-#' @param repair_rate the rate at which bicyclea are repaired
-#' @param probability_need_repair the probability that a bicycle needs repairing
-#' @param arrival_rate the rate at which bicyclea arrive
-#' @param number_inspectors the number of staff at the inspection desk
-#' @param number_repairers the number of staff at the repair workshop
-#' @param seed the seed to initialise the pseudorandom number generator
-#' @param max_time the amount of time to run the simulation for
-#' @param limit a real number denoting the limit to
-#'              measure number of bicycles spending
-#'              over that time in the repair shop
-#' @param num_trials the number of trials for which to run the simulation for
-get_average_proportion_over_limit <- function(inspection_rate=20,
-                                              repair_rate=10,
-                                              probability_need_repair=0.8,
-                                              arrival_rate=15,
-                                              number_inspectors=1,
-                                              number_repairers=2,
-                                              seed=0,
-                                              max_time=8,
-                                              limit=0.5,
-                                              num_trials=100
-) {
+#' @param inspection_rate positive float (default: 20)
+#' @param repair_rate positive float (default: 10)
+#' @param probability_need_repair float between 0 and 1 (default: 0.8)
+#' @param arrival_rate positive float(default: 15)
+#' @param number_inspectors positive integer (default: 1)
+#' @param number_repairers positive integer (default: 2)
+#' @param seed float (default: 0)
+#' @param max_time positive float (default: 8)
+#' @param limit a float (default: 0.5)
+#' @param num_trials positive integer (default: 100)
+get_average_proportion_over_limit <- function(inspection_rate = 20,
+                                              repair_rate = 10,
+                                              probability_need_repair = 0.8,
+                                              arrival_rate = 15,
+                                              number_inspectors = 1,
+                                              number_repairers = 2,
+                                              seed = 0,
+                                              max_time = 8,
+                                              limit = 0.5,
+                                              num_trials = 100) {
   bicycle <- define_bicycle_trajectories(
-    inspection_rate=inspection_rate,
-    repair_rate=repair_rate,
-    probability_need_repair=probability_need_repair)
+    inspection_rate = inspection_rate,
+    repair_rate = repair_rate,
+    probability_need_repair = probability_need_repair
+  )
   proportions_over_limit <- c()
   for (trial in 1:num_trials) {
     repair_shop <- run_simulation(
-      bicycle=bicycle,
-      arrival_rate=arrival_rate,
-      number_inspectors=number_inspectors,
-      number_repairers=number_repairers,
-      seed=trial,
-      max_time=max_time)
+      bicycle = bicycle,
+      arrival_rate = arrival_rate,
+      number_inspectors = number_inspectors,
+      number_repairers = number_repairers,
+      seed = trial,
+      max_time = max_time
+    )
     proportion_over_limit <- get_proportion_over_limit(
-      repair_shop=repair_shop,
-      limit=limit)
+      repair_shop = repair_shop,
+      limit = limit
+    )
     proportions_over_limit[trial] <- proportion_over_limit
   }
   return(mean(proportions_over_limit))
@@ -635,7 +662,7 @@ get_average_proportion_over_limit <- function(inspection_rate=20,
 This can be used to find the average proportion over 100 trials:
 
 \begin{Rin}
-print(get_average_proportion_over_limit(number_inspectors=1, number_repairers=2))
+print(get_average_proportion_over_limit(number_inspectors = 1, number_repairers = 2))
 \end{Rin}
 
 which gives:
@@ -654,7 +681,7 @@ bicycles spending over 30 minutes at the shop? Let's investigate. First look at
 the situation where the additional member of staff works at the inspection desk:
 
 \begin{Rin}
-print(get_average_proportion_over_limit(number_inspectors=2, number_repairers=2))
+print(get_average_proportion_over_limit(number_inspectors = 2, number_repairers = 2))
 \end{Rin}
 
 which gives:
@@ -669,7 +696,7 @@ Now look at the situation where the additional member of staff works at the
 repair workshop:
 
 \begin{Rin}
-print(get_average_proportion_over_limit(number_inspectors=1, number_repairers=3))
+print(get_average_proportion_over_limit(number_inspectors = 1, number_repairers = 3))
 \end{Rin}
 
 which gives:

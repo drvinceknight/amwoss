@@ -5,6 +5,7 @@ dependencies:
   - python
   - numpy
   - scipy
+  - pandas
   - r-essentials
   - r-lintr
   - r-pracma
