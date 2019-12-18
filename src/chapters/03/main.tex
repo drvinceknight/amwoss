@@ -158,7 +158,7 @@ def get_transition_rate(
     in_state,
     out_state,
     waiting_room=4,
-    number_of_barbers=2,
+    num_barbers=2,
     arrival_rate=10,
     service_rate=4,
 ):
@@ -169,8 +169,8 @@ def get_transition_rate(
         out_state: an integer denoting the next state
         waiting_room: an integer denoting the size of the
                       waiting room (default: 4)
-        number_of_barbers: an integer denoting the number of
-                           barber and chairs (default: 2)
+        num_barbers:  an integer denoting the number of
+                      barber and chairs (default: 2)
         arrival_rate: a real number denoting the number of
                       individuals per unit time that arrive at
                       the barber shop (default: 10)
@@ -181,14 +181,14 @@ def get_transition_rate(
     Returns:
         A real.
     """
-    capacity = waiting_room + number_of_barbers
+    capacity = waiting_room + num_barbers
     delta = out_state - in_state
 
     if delta == 1 and in_state < capacity:
         return arrival_rate
 
     if delta == -1:
-        return min(in_state, number_of_barbers) * service_rate
+        return min(in_state, num_barbers) * service_rate
 
     return 0
 \end{pyin}
@@ -208,7 +208,7 @@ Now we define the function:
 \begin{pyin}
 def get_transition_rate_matrix(
     waiting_room=4,
-    number_of_barbers=2,
+    num_barbers=2,
     arrival_rate=10,
     service_rate=4,
 ):
@@ -217,7 +217,7 @@ def get_transition_rate_matrix(
     Args:
         waiting_room: an integer denoting the size of the
                       waiting room (default: 4)
-        number_of_barbers: an integer denoting the number of
+        num_barbers: an integer denoting the number of
                            barber and chairs (default: 2)
         arrival_rate: a real number denoting the number of
                       individuals per unit time that arrive at
@@ -229,7 +229,7 @@ def get_transition_rate_matrix(
     Returns:
         A matrix.
     """
-    capacity = waiting_room + number_of_barbers
+    capacity = waiting_room + num_barbers
     state_pairs = itertools.product(
         range(capacity + 1), repeat=2
     )
@@ -238,7 +238,7 @@ def get_transition_rate_matrix(
             in_state=in_state,
             out_state=out_state,
             waiting_room=waiting_room,
-            number_of_barbers=number_of_barbers,
+            num_barbers=num_barbers,
             arrival_rate=arrival_rate,
             service_rate=service_rate,
         )
@@ -367,7 +367,7 @@ the above to just return the probability of the shop being full.
 \begin{pyin}
 def get_probability_of_full_shop(
     waiting_room=4,
-    number_of_barbers=2,
+    num_barbers=2,
     arrival_rate=10,
     service_rate=4,
 ):
@@ -377,9 +377,9 @@ def get_probability_of_full_shop(
         waiting_room: an integer denoting the size of
                       the waiting room (default: 4)
 
-        number_of_barbers: an integer denoting the number
-                           of barber and chairs
-                           (default: 2)
+        num_barbers: an integer denoting the number
+                     of barber and chairs
+                     (default: 2)
 
         arrival_rate: a real number denoting the number of
                       individuals per unit time that arrive
@@ -394,7 +394,7 @@ def get_probability_of_full_shop(
     """
     Q = get_transition_rate_matrix(
         waiting_room=waiting_room,
-        number_of_barbers=number_of_barbers,
+        num_barbers=num_barbers,
         arrival_rate=arrival_rate,
         service_rate=service_rate,
     )
@@ -431,9 +431,7 @@ This is a slight improvement however, increasing the number of barbers has a
 substantial effect:
 
 \begin{pyin}
-print(
-    round(get_probability_of_full_shop(number_of_barbers=3), 6)
-)
+print(round(get_probability_of_full_shop(num_barbers=3), 6))
 \end{pyin}
 
 \begin{pyout}
@@ -451,7 +449,7 @@ between two given states:
 #' @param out_state an integer denoting the next state
 #' @param waiting_room an integer denoting the size of
 #'        the waiting room (default: 4)
-#' @param number_of_barbers an integer denoting the number
+#' @param num_barbers an integer denoting the number
 #'        of barber and chairs (default: 2)
 #' @param arrival_rate a real number denoting the number
 #'        of individuals per  unit time that arrive at
@@ -464,10 +462,10 @@ between two given states:
 get_transition_rate <- function(in_state,
                                 out_state,
                                 waiting_room = 4,
-                                number_of_barbers = 2,
+                                num_barbers = 2,
                                 arrival_rate = 10,
                                 service_rate = 4) {
-  capacity <- waiting_room + number_of_barbers
+  capacity <- waiting_room + num_barbers
   delta <- out_state - in_state
 
   if (delta == 1) {
@@ -477,7 +475,7 @@ get_transition_rate <- function(in_state,
   }
 
   if (delta == -1) {
-    return(min(in_state, number_of_barbers) * service_rate)
+    return(min(in_state, num_barbers) * service_rate)
   }
   return(0)
 }
@@ -501,7 +499,7 @@ following code that creates the matrices:
 #'
 #' @param waiting_room an integer denoting the size of the
 #'        waiting room (default: 4)
-#' @param number_of_barbers an integer denoting the number of
+#' @param num_barbers an integer denoting the number of
 #'        barber and chairs (default: 2)
 #' @param arrival_rate a real number denoting the number of
 #'        individuals per #' unit time that arrive at the
@@ -512,16 +510,16 @@ following code that creates the matrices:
 #'
 #' @return A matrix
 get_transition_rate_matrix <- function(waiting_room = 4,
-                                       number_of_barbers = 2,
+                                       num_barbers = 2,
                                        arrival_rate = 10,
                                        service_rate = 4) {
-  max_state <- waiting_room + number_of_barbers
+  max_state <- waiting_room + num_barbers
 
   Q <- outer(0:max_state,
     0:max_state,
     vectorized_get_transition_rate,
     waiting_room = waiting_room,
-    number_of_barbers = number_of_barbers,
+    num_barbers = num_barbers,
     arrival_rate = arrival_rate,
     service_rate = service_rate
   )
@@ -667,7 +665,7 @@ the above to just return the probability of the shop being full.
 #'
 #' @param waiting_room an integer denoting the size of the
 #'        waiting room (default: 4)
-#' @param number_of_barbers an integer denoting the number of
+#' @param num_barbers an integer denoting the number of
 #'        barber and chairs (default: 2)
 #' @param arrival_rate a real number denoting the number of
 #'        individuals per #' unit time that arrive at the
@@ -678,18 +676,18 @@ the above to just return the probability of the shop being full.
 #'
 #' @return A real
 get_probability_of_full_shop <- function(waiting_room = 4,
-                                         number_of_barbers = 2,
+                                         num_barbers = 2,
                                          arrival_rate = 10,
                                          service_rate = 4) {
   pi <- get_transition_rate_matrix(
     waiting_room = waiting_room,
-    number_of_barbers = number_of_barbers,
+    num_barbers = num_barbers,
     arrival_rate = arrival_rate,
     service_rate = service_rate
   ) %>%
     get_steady_state_vector()
 
-  capacity <- waiting_room + number_of_barbers
+  capacity <- waiting_room + num_barbers
   pi[capacity + 1]
 }
 \end{Rin}
@@ -709,7 +707,7 @@ which decreases the probability of a full shop to:
 but adding another barber and chair:
 
 \begin{Rin}
-print(get_probability_of_full_shop(number_of_barbers = 3))
+print(get_probability_of_full_shop(num_barbers = 3))
 \end{Rin}
 
 gives:
