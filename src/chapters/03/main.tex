@@ -49,8 +49,10 @@ states.
 For example, in the barber shop a single number is sufficient to describe the
 status of the shop. If that number is 1 this implies that 1 customer is
 currently having their hair cut. If that number is 5 this implies that 2
-customers are being served and 3 are waiting. Thus the state space for this
-particular Markov chain is:
+customers are being served and 3 are waiting. The entire state space is, in this
+case a finite set of integers from 0 to 6. If the system is full (all barbers
+and waiting room occupied) then we are in state 6 and if there is no one at the
+shop then we are in state 0. This is denoted mathematically as:
 
 \begin{equation}
     S = \{0, 1, 2, 3, 4, 5, 6\}
