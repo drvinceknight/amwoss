@@ -440,26 +440,6 @@ print(
 0.078636
 \end{pyout}
 
-In fact the only way to lower the probability of the shop being full below the
-10\% threshold is to have barbers work at the faster rate of 4.6 customers per
-time unit:
-
-\begin{pyin}
-print(
-    round(
-        get_probability_of_full_shop(
-            waiting_room=20, service_rate=4.6
-        ),
-        6,
-    )
-)
-\end{pyin}
-
-\begin{pyout}
-0.094487
-\end{pyout}
-
-
 \section{Solving with R}\label{sec:solving-with-R}
 
 The first step we will take is write a function to obtain the transition rates
@@ -740,22 +720,6 @@ gives:
 
 \begin{Rout}
 [1] 0.0786359
-\end{Rout}
-
-In fact even with room for 20 people to wait the only way 2 barbers would be
-able to have a less than 10\% of the shop being full is to find a way to each
-serve .6 more of a customer per hour:
-
-\begin{Rin}
-print(
-    get_probability_of_full_shop(
-        waiting_room = 20,
-        service_rate = 4.6)
-        )
-\end{Rin}
-
-\begin{Rout}
-[1] 0.09448688
 \end{Rout}
 
 \section{Research}\label{sec:research}
