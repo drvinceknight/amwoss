@@ -201,11 +201,8 @@ iterations:
 \begin{pyin}
 import itertools
 import numpy as np
-\end{pyin}
 
-Now we define the function:
 
-\begin{pyin}
 def get_transition_rate_matrix(
     waiting_room=4,
     num_barbers=2,
@@ -275,15 +272,10 @@ which gives:
 
 We can take the matrix exponential as
 discussed above. To do this, we need to use the \mintinline{python}{scipy}
-library:
-
+library. To see what would happen after .5 time units we obtain:
 \begin{pyin}
 import scipy.linalg
-\end{pyin}
 
-To see what would happen after .5 time units we obtain:
-
-\begin{pyin}
 print(scipy.linalg.expm(Q * 0.5).round(5))
 \end{pyin}
 
@@ -552,22 +544,17 @@ which gives:
 
 One immediate thing we can do with this matrix is take the matrix exponential
 discussed above. To do this, we need to use an R library call
-\mintinline{R}{expm}:
-
-\begin{Rin}
-library(expm, warn.conflicts = FALSE, quietly = TRUE)
-\end{Rin}
+\mintinline{R}{expm}.
 
 To be able to make use of the nice \mintinline{R}{%>%} "pipe" operator we are
-also going to load the \mintinline{R}{dplyr} library:
-
-\begin{Rin}
-library(dplyr, warn.conflicts = FALSE, quietly = TRUE)
-\end{Rin}
+also going to load the \mintinline{R}{magrittr} library:
 
 Now if we wanted to see what would happen after .5 time units we obtain:
 
 \begin{Rin}
+library(expm, warn.conflicts = FALSE, quietly = TRUE)
+library(magrittr, warn.conflicts = FALSE, quietly = TRUE)
+
 print( (Q * .5) %>% expm %>% round(5))
 \end{Rin}
 
