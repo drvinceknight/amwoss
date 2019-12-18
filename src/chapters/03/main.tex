@@ -38,11 +38,11 @@ They are planning on
 reconfiguring space to either have 2 extra waiting chairs or
 another barber's chair and barber.
 
-The mathematical tool used to model this situation is a Markov Processes.
+The mathematical tool used to model this situation is a Markov chain.
 
 \section{Theory}\label{sec:theory}
 
-A Markov Process is a model of a sequence of random events that is defined by a
+A Markov chain is a model of a sequence of random events that is defined by a
 collection of \textbf{states} and rules that define how to move between these
 states.
 
@@ -50,7 +50,7 @@ For example, in the barber shop a single number is sufficient to describe the
 status of the shop. If that number is 1 this implies that 1 customer is
 currently having their hair cut. If that number is 5 this implies that 2
 customers are being served and 3 are waiting. Thus the state space for this
-particular Markov Process is:
+particular Markov chain is:
 
 \begin{equation}
     S = \{0, 1, 2, 3, 4, 5, 6\}
@@ -73,12 +73,12 @@ ways:
 
 \begin{itemize}
     \item Using probabilities of changing state (or not) in a well defined time
-        period.  This is called a discrete Markov process.
+        period.  This is called a discrete Markov chain.
     \item Using rates of change from one state to another. This is called a
-        continuous time Markov process.
+        continuous time Markov chain.
 \end{itemize}
 
-For our barber shop we will consider it as a continuous Markov process as shown
+For our barber shop we will consider it as a continuous Markov chain as shown
 in Figure~\ref{fig:barber-shop-continuous-markov-process}
 
 \begin{figure}[!hbtp]
@@ -90,7 +90,7 @@ in Figure~\ref{fig:barber-shop-continuous-markov-process}
     \label{fig:barber-shop-continuous-markov-process}
 \end{figure}
 
-Note that a Markov process assumes the rates follow an exponential distribution.
+Note that a Markov chain assumes the rates follow an exponential distribution.
 One interesting property of this distribution is that it is considered
 memoryless which means that if a customer has been having their hair cut for 5
 minutes this does not change the rate at which their service ends.
