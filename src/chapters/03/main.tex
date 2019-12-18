@@ -439,7 +439,6 @@ print(
 \begin{pyout}
 0.078636
 \end{pyout}
-
 \section{Solving with R}\label{sec:solving-with-R}
 
 The first step we will take is write a function to obtain the transition rates
@@ -462,8 +461,7 @@ between two given states:
 #'        can serve (default: 4)
 #'
 #' @return A real
-get_transition_rate <- function(
-                                in_state,
+get_transition_rate <- function(in_state,
                                 out_state,
                                 waiting_room = 4,
                                 number_of_barbers = 2,
@@ -513,8 +511,7 @@ following code that creates the matrices:
 #'        can serve (default: 4)
 #'
 #' @return A matrix
-get_transition_rate_matrix <- function(
-                                       waiting_room = 4,
+get_transition_rate_matrix <- function(waiting_room = 4,
                                        number_of_barbers = 2,
                                        arrival_rate = 10,
                                        service_rate = 4) {
@@ -680,8 +677,7 @@ the above to just return the probability of the shop being full.
 #'        serve (default: 4)
 #'
 #' @return A real
-get_probability_of_full_shop <- function(
-                                         waiting_room = 4,
+get_probability_of_full_shop <- function(waiting_room = 4,
                                          number_of_barbers = 2,
                                          arrival_rate = 10,
                                          service_rate = 4) {
