@@ -9,6 +9,7 @@ dependencies:
   - r-essentials
   - r-lintr
   - r-pracma
+  - r-rjava
   - pip:
       - ciw
       - dwys
