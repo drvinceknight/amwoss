@@ -62,6 +62,7 @@ words = {
     "Urbana",
     "Vectorize",
     "Zizhong",
+    "analytical",
     "args",
     "autoregulation",
     "bool",
