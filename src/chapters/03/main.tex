@@ -38,19 +38,21 @@ They are planning on
 reconfiguring space to either have 2 extra waiting chairs or
 another barber's chair and barber.
 
-The mathematical tool used to model this situation is a Markov Processes.
+The mathematical tool used to model this situation is a Markov chain.
 
 \section{Theory}\label{sec:theory}
 
-A Markov Process is a model of a sequence of random events that is defined by a
+A Markov chain is a model of a sequence of random events that is defined by a
 collection of \textbf{states} and rules that define how to move between these
 states.
 
 For example, in the barber shop a single number is sufficient to describe the
 status of the shop. If that number is 1 this implies that 1 customer is
 currently having their hair cut. If that number is 5 this implies that 2
-customers are being served and 3 are waiting. Thus the state space for this
-particular Markov Process is:
+customers are being served and 3 are waiting. The entire state space is, in this
+case a finite set of integers from 0 to 6. If the system is full (all barbers
+and waiting room occupied) then we are in state 6 and if there is no one at the
+shop then we are in state 0. This is denoted mathematically as:
 
 \begin{equation}
     S = \{0, 1, 2, 3, 4, 5, 6\}
@@ -73,12 +75,12 @@ ways:
 
 \begin{itemize}
     \item Using probabilities of changing state (or not) in a well defined time
-        period.  This is called a discrete Markov process.
+        period.  This is called a discrete Markov chain.
     \item Using rates of change from one state to another. This is called a
-        continuous time Markov process.
+        continuous time Markov chain.
 \end{itemize}
 
-For our barber shop we will consider it as a continuous Markov process as shown
+For our barber shop we will consider it as a continuous Markov chain as shown
 in Figure~\ref{fig:barber-shop-continuous-markov-process}
 
 \begin{figure}[!hbtp]
@@ -90,7 +92,7 @@ in Figure~\ref{fig:barber-shop-continuous-markov-process}
     \label{fig:barber-shop-continuous-markov-process}
 \end{figure}
 
-Note that a Markov process assumes the rates follow an exponential distribution.
+Note that a Markov chain assumes the rates follow an exponential distribution.
 One interesting property of this distribution is that it is considered
 memoryless which means that if a customer has been having their hair cut for 5
 minutes this does not change the rate at which their service ends.
@@ -153,40 +155,30 @@ rates between two given states:
 
 \begin{pyin}
 def get_transition_rate(
-    in_state,
-    out_state,
-    waiting_room=4,
-    number_of_barbers=2,
-    arrival_rate=10,
-    service_rate=4,
+    in_state, out_state, waiting_room=4, num_barbers=2,
 ):
     """Return the transition rate for two given states.
 
     Args:
-        in_state: an integer denoting the current state
-        out_state: an integer denoting the next state
-        waiting_room: an integer denoting the size of the
-                      waiting room (default: 4)
-        number_of_barbers: an integer denoting the number of
-                           barber and chairs (default: 2)
-        arrival_rate: a real number denoting the number of
-                      individuals per unit time that arrive at
-                      the barber shop (default: 10)
-        service_rate: a real number denoting the number of
-                      individuals per unit time that a single
-                      barber can serve (default: 4)
+        in_state: an integer
+        out_state: an integer
+        waiting_room: an integer (default: 4)
+        num_barbers:  an integer (default: 2)
 
     Returns:
         A real.
     """
-    capacity = waiting_room + number_of_barbers
+    arrival_rate = 10
+    service_rate = 4
+
+    capacity = waiting_room + num_barbers
     delta = out_state - in_state
 
     if delta == 1 and in_state < capacity:
         return arrival_rate
 
     if delta == -1:
-        return min(in_state, number_of_barbers) * service_rate
+        return min(in_state, num_barbers) * service_rate
 
     return 0
 \end{pyin}
@@ -199,46 +191,29 @@ iterations:
 \begin{pyin}
 import itertools
 import numpy as np
-\end{pyin}
 
-Now we define the function:
 
-\begin{pyin}
-def get_transition_rate_matrix(
-    waiting_room=4,
-    number_of_barbers=2,
-    arrival_rate=10,
-    service_rate=4,
-):
+def get_transition_rate_matrix(waiting_room=4, num_barbers=2):
     """Return the transition matrix Q.
 
     Args:
-        waiting_room: an integer denoting the size of the
-                      waiting room (default: 4)
-        number_of_barbers: an integer denoting the number of
-                           barber and chairs (default: 2)
-        arrival_rate: a real number denoting the number of
-                      individuals per unit time that arrive at
-                      the barber shop (default: 10)
-        service_rate: a real number denoting the number of
-                      individuals per unit time that a single
-                      barber can serve (default: 4)
+        waiting_room: an integer (default: 4)
+        num_barbers: an integer (default: 2)
 
     Returns:
         A matrix.
     """
-    capacity = waiting_room + number_of_barbers
+    capacity = waiting_room + num_barbers
     state_pairs = itertools.product(
         range(capacity + 1), repeat=2
     )
+
     flat_transition_rates = [
         get_transition_rate(
             in_state=in_state,
             out_state=out_state,
             waiting_room=waiting_room,
-            number_of_barbers=number_of_barbers,
-            arrival_rate=arrival_rate,
-            service_rate=service_rate,
+            num_barbers=num_barbers,
         )
         for in_state, out_state in state_pairs
     ]
@@ -273,15 +248,10 @@ which gives:
 
 We can take the matrix exponential as
 discussed above. To do this, we need to use the \mintinline{python}{scipy}
-library:
-
+library. To see what would happen after .5 time units we obtain:
 \begin{pyin}
 import scipy.linalg
-\end{pyin}
 
-To see what would happen after .5 time units we obtain:
-
-\begin{pyin}
 print(scipy.linalg.expm(Q * 0.5).round(5))
 \end{pyin}
 
@@ -315,7 +285,7 @@ which gives:
  [0.03431 0.08577 0.10722 0.13402 0.16752 0.2094  0.26176]]
 \end{pyout}
 
-We see that no matter what state (column) the system is in, after 500 time units
+We see that no matter what state (row) the system is in, after 500 time units
 the probabilities are all the same. We could in fact stop our analysis here,
 however our choice of 500 time units was arbitrary and might not be the correct
 amount for all possible scenarios, as such we will continue to aim to solve the
@@ -364,37 +334,19 @@ the above to just return the probability of the shop being full.
 
 \begin{pyin}
 def get_probability_of_full_shop(
-    waiting_room=4,
-    number_of_barbers=2,
-    arrival_rate=10,
-    service_rate=4,
+    waiting_room=4, num_barbers=2
 ):
     """Return the probability of the barber shop being full.
 
     Args:
-        waiting_room: an integer denoting the size of
-                      the waiting room (default: 4)
-
-        number_of_barbers: an integer denoting the number
-                           of barber and chairs
-                           (default: 2)
-
-        arrival_rate: a real number denoting the number of
-                      individuals per unit time that arrive
-                      at the barber shop (default: 10)
-
-        service_rate: a real number denoting the number of
-                      individuals per unit time that a single
-                      barber can serve (default: 4)
+        waiting_room: an integer (default: 4)
+        num_barbers: an integer (default: 2)
 
     Returns:
         A real.
     """
     Q = get_transition_rate_matrix(
-        waiting_room=waiting_room,
-        number_of_barbers=number_of_barbers,
-        arrival_rate=arrival_rate,
-        service_rate=service_rate,
+        waiting_room=waiting_room, num_barbers=num_barbers,
     )
     pi = get_steady_state_vector(Q)
     return pi[-1]
@@ -429,35 +381,12 @@ This is a slight improvement however, increasing the number of barbers has a
 substantial effect:
 
 \begin{pyin}
-print(
-    round(get_probability_of_full_shop(number_of_barbers=3), 6)
-)
+print(round(get_probability_of_full_shop(num_barbers=3), 6))
 \end{pyin}
 
 \begin{pyout}
 0.078636
 \end{pyout}
-
-In fact the only way to lower the probability of the shop being full below the
-10\% threshold is to have barbers work at the faster rate of 4.6 customers per
-time unit:
-
-\begin{pyin}
-print(
-    round(
-        get_probability_of_full_shop(
-            waiting_room=20, service_rate=4.6
-        ),
-        6,
-    )
-)
-\end{pyin}
-
-\begin{pyout}
-0.094487
-\end{pyout}
-
-
 \section{Solving with R}\label{sec:solving-with-R}
 
 The first step we will take is write a function to obtain the transition rates
@@ -466,28 +395,20 @@ between two given states:
 \begin{Rin}
 #' Return the transition rate for two given states.
 #'
-#' @param in_state an integer denoting the current state
-#' @param out_state an integer denoting the next state
-#' @param waiting_room an integer denoting the size of
-#'        the waiting room (default: 4)
-#' @param number_of_barbers an integer denoting the number
-#'        of barber and chairs (default: 2)
-#' @param arrival_rate a real number denoting the number
-#'        of individuals per  unit time that arrive at
-#'        the barber shop (default: 10)
-#' @param service_rate a real number denoting the number
-#'        of individuals per unit time that a single barber
-#'        can serve (default: 4)
+#' @param in_state an integer
+#' @param out_state an integer
+#' @param waiting_room an integer (default: 4)
+#' @param num_barbers an integer  (default: 2)
 #'
 #' @return A real
-get_transition_rate <- function(
-                                in_state,
+get_transition_rate <- function(in_state,
                                 out_state,
                                 waiting_room = 4,
-                                number_of_barbers = 2,
-                                arrival_rate = 10,
-                                service_rate = 4) {
-  capacity <- waiting_room + number_of_barbers
+                                num_barbers = 2){
+  arrival_rate <- 10
+  service_rate <- 4
+
+  capacity <- waiting_room + num_barbers
   delta <- out_state - in_state
 
   if (delta == 1) {
@@ -497,7 +418,7 @@ get_transition_rate <- function(
   }
 
   if (delta == -1) {
-    return(min(in_state, number_of_barbers) * service_rate)
+    return(min(in_state, num_barbers) * service_rate)
   }
   return(0)
 }
@@ -519,32 +440,19 @@ following code that creates the matrices:
 \begin{Rin}
 #' Return the transition rate matrix Q
 #'
-#' @param waiting_room an integer denoting the size of the
-#'        waiting room (default: 4)
-#' @param number_of_barbers an integer denoting the number of
-#'        barber and chairs (default: 2)
-#' @param arrival_rate a real number denoting the number of
-#'        individuals per #' unit time that arrive at the
-#'        barber shop (default: 10)
-#' @param service_rate a real number denoting the number of
-#'        individuals per unit time that a single barber
-#'        can serve (default: 4)
+#' @param waiting_room an integer (default: 4)
+#' @param num_barbers an integer (default: 2)
 #'
 #' @return A matrix
-get_transition_rate_matrix <- function(
-                                       waiting_room = 4,
-                                       number_of_barbers = 2,
-                                       arrival_rate = 10,
-                                       service_rate = 4) {
-  max_state <- waiting_room + number_of_barbers
+get_transition_rate_matrix <- function(waiting_room = 4,
+                                       num_barbers = 2){
+  max_state <- waiting_room + num_barbers
 
   Q <- outer(0:max_state,
     0:max_state,
     vectorized_get_transition_rate,
     waiting_room = waiting_room,
-    number_of_barbers = number_of_barbers,
-    arrival_rate = arrival_rate,
-    service_rate = service_rate
+    num_barbers = num_barbers
   )
   row_sums <- rowSums(Q)
 
@@ -575,22 +483,17 @@ which gives:
 
 One immediate thing we can do with this matrix is take the matrix exponential
 discussed above. To do this, we need to use an R library call
-\mintinline{R}{expm}:
-
-\begin{Rin}
-library(expm, warn.conflicts = FALSE, quietly = TRUE)
-\end{Rin}
+\mintinline{R}{expm}.
 
 To be able to make use of the nice \mintinline{R}{%>%} "pipe" operator we are
-also going to load the \mintinline{R}{dplyr} library:
-
-\begin{Rin}
-library(dplyr, warn.conflicts = FALSE, quietly = TRUE)
-\end{Rin}
+also going to load the \mintinline{R}{magrittr} library:
 
 Now if we wanted to see what would happen after .5 time units we obtain:
 
 \begin{Rin}
+library(expm, warn.conflicts = FALSE, quietly = TRUE)
+library(magrittr, warn.conflicts = FALSE, quietly = TRUE)
+
 print( (Q * .5) %>% expm %>% round(5))
 \end{Rin}
 
@@ -686,32 +589,21 @@ the above to just return the probability of the shop being full.
 \begin{Rin}
 #' Return the probability of the barber shop being full
 #'
-#' @param waiting_room an integer denoting the size of the
-#'        waiting room (default: 4)
-#' @param number_of_barbers an integer denoting the number of
-#'        barber and chairs (default: 2)
-#' @param arrival_rate a real number denoting the number of
-#'        individuals per #' unit time that arrive at the
-#'        barber shop (default: 10)
-#' @param service_rate a real number denoting the number of
-#'        individuals per unit time that a single barber can
-#'        serve (default: 4)
+#' @param waiting_room (default: 4)
+#' @param num_barbers (default: 2)
 #'
 #' @return A real
-get_probability_of_full_shop <- function(
-                                         waiting_room = 4,
-                                         number_of_barbers = 2,
-                                         arrival_rate = 10,
-                                         service_rate = 4) {
+get_probability_of_full_shop <- function(waiting_room = 4,
+                                         num_barbers = 2){
+  arrival_rate <- 10
+  service_rate <- 4
   pi <- get_transition_rate_matrix(
     waiting_room = waiting_room,
-    number_of_barbers = number_of_barbers,
-    arrival_rate = arrival_rate,
-    service_rate = service_rate
-  ) %>%
+    num_barbers = num_barbers
+    ) %>%
     get_steady_state_vector()
 
-  capacity <- waiting_room + number_of_barbers
+  capacity <- waiting_room + num_barbers
   pi[capacity + 1]
 }
 \end{Rin}
@@ -731,29 +623,13 @@ which decreases the probability of a full shop to:
 but adding another barber and chair:
 
 \begin{Rin}
-print(get_probability_of_full_shop(number_of_barbers = 3))
+print(get_probability_of_full_shop(num_barbers = 3))
 \end{Rin}
 
 gives:
 
 \begin{Rout}
 [1] 0.0786359
-\end{Rout}
-
-In fact even with room for 20 people to wait the only way 2 barbers would be
-able to have a less than 10\% of the shop being full is to find a way to each
-serve .6 more of a customer per hour:
-
-\begin{Rin}
-print(
-    get_probability_of_full_shop(
-        waiting_room = 20,
-        service_rate = 4.6)
-        )
-\end{Rin}
-
-\begin{Rout}
-[1] 0.09448688
 \end{Rout}
 
 \section{Research}\label{sec:research}
