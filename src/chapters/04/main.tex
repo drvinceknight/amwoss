@@ -1,0 +1,681 @@
+\chapter[Discrete Event Simulation]{Discrete Event Simulation}
+
+% Introduction
+\chapterinitial{C}{omplex} situations further compounded by randomness appear
+throughout our daily lives. For example, data flowing through a computer
+network, patients being treated at an emergency services, and daily commutes to
+work.
+Mathematics can be used to understand these complex situations so as to
+make predictions which in turn can be used to make improvements. One tool used
+to do this is to let a computer create a dynamic virtual representation of the
+scenario in question, the particular type we are going to cover here is called
+Discrete Event Simulation.
+
+\section{Problem}\label{sec:problem}
+
+Consider the following situation: a bicycle repair shop would like reconfigure
+their set-up in order to guarantee that all bicycles processed by the repair
+shop take a maximum of 30 minutes.
+Their current set-up is as follows:
+
+\begin{itemize}
+  \item Bicycles arrive randomly at the shop at a rate of 15 per hour.
+  \item They wait in line to be seen at an inspection counter, manned by one
+  member of staff who can inspect one bicycle at a time. On average an
+  inspection takes around 3 minutes.
+  \item After inspection it is found that around 20\% of bicycles do not need
+  repair, and they are then ready for collection.
+  \item After inspection is is found that around 80\% of bicycles go on to be
+  repaired. These then wait in line outside the repair workshop, which is manned
+  by two members of staff who can each repair one bicycle at a time. On average
+  a repair takes around 6 minutes.
+  \item After repair the bicycles are ready for collection.
+\end{itemize}
+
+A diagram of the system is shown in Figure~\ref{fig:bike-shop}
+
+\begin{figure}
+\begin{center}
+\includestandalone[width=\textwidth]{./assets/bike-repair-shop}
+\end{center}
+\caption{Diagrammatic representation of the bicycle repair shop as a queuing system.}
+\label{fig:bike-shop}
+\end{figure}
+
+We can also assume that there is infinite capacity at the bicycle repair shop
+for waiting bicycles.
+The shop will hire and extra member of staff in order to meet their target of a
+maximum time in the system of 30 minutes. They would like to know if they
+should work on the inspection counter or in the repair workshop?
+
+
+\section{Theory}\label{sec:theory}
+
+A number of the events that govern the behaviour of the bicycle shop above are
+probabilistic. For example the
+times that bicycles arrive at the shop, the duration of the inspection and
+repairs, and whether the bicycle would need to go on to be repaired or not.
+When a number of these probabilistic events are arranged in a complex system
+such as the bicycle shop, using analytical methods to manipulate these
+probabilities can become difficult. One method to deal with this is
+\textit{simulation}.
+
+Consider one probabilistic event, rolling a die.
+A die has six sides numbered 1 to 6, each side is equally likely to land.
+Therefore the probability of rolling a 1 is $\frac{1}{6}$, the probability of
+rolling a 2 is $\frac{1}{6}$, and so on. This means that that if we roll the die
+a large number of times, we would except $\frac{1}{6}$ of those rolls to be a 1.
+This is called the \textit{law of large numbers}.
+
+Now imagine we have an event in which we do not know the analytical probability
+of it occurring. Consider rolling a weighted die, in this case a
+die in which the probability of obtaining one number is much greater than the
+others. How can we estimate the probability of obtaining a 5 on this die?
+
+Rolling the weighted die once does not give us much information.
+However due to the law of large numbers, we can roll this die a number of times,
+and find the proportion of those rolls which gave a 5. The more times we roll
+the die, the closer this proportion approaches the underlying probability of
+obtaining a 5.
+
+For a complex system such as the bicycle shop, we would like to estimate the
+proportion of bicycles that take longer than 30 minutes to be processed. As it
+is a complex system it is difficult to work this out analytically. So, just
+like the weighted die, we would
+like to observe this system a number of times and record the overall proportions
+of bicycles spending longer than 30 minutes in the shop, which will converge to
+the true underlying proportion.
+However unlike rolling a weighted die, it it costly to observe this shop over a
+number of days with identical conditions. In this case it is costly in terms of
+time, as the repair shop already exists. However some scenarios, for example the
+scenario where the repair shop hires and additional member of staff, do not yet
+exist, so observing this this would be costly in terms of money also.
+We can however build a virtual representation of this complex system on a
+computer, and observe a virtual day of work much more quickly and much less
+costly on the computer, similar to a video game.
+
+% Computers not good at generating random numbers, so use pseudo random numbers. e.g. (formula)
+In order to do this, the computer needs to be able to generate random outcomes
+of each of the smaller events that make up the large complex system. Generating
+random events are essentially doing things to random numbers, that need to be
+generated.
+
+Computers are deterministic, therefore true randomness is not always possible.
+They can however generate pseudorandom numbers: sequences of numbers that look
+like random numbers, but are entirely determined from the
+previous numbers in the sequence. Most programming languages have methods of
+doing this.
+
+In order to simulate an event we can again manipulate the law of large numbers.
+Let $X \sim U(0, 1)$, a uniformly pseudorandom variable between 0 and 1.
+Let $D$ be the outcome of a roll of an unbiased die. Then $D$ can be defined as:
+
+\begin{equation}
+D =
+  \begin{cases}
+    1 & \text{if } 0 \leq X < \frac{1}{6}\\
+    2 & \text{if } \frac{1}{6} \leq X < \frac{2}{6}\\
+    3 & \text{if } \frac{2}{6} \leq X < \frac{3}{6}\\
+    4 & \text{if } \frac{3}{6} \leq X < \frac{4}{6}\\
+    5 & \text{if } \frac{4}{6} \leq X < \frac{5}{6}\\
+    6 & \text{if } \frac{5}{6} \leq X < 1
+  \end{cases}
+\end{equation}
+
+% What we gonna do: use pseudo random numbers to 'simulate' the system. - because law of large number we can simulate many times and smoothe.
+The bicycle repair shop is a system made up of interactions of a number of other
+simpler random events. This can be thought of as many interactions of random
+variables, each generated using pseudorandom numbers.
+
+In this case the fundamental random events that need to be generated are:
+\begin{itemize}
+  \item the time each bicycle arrives to the repair shop,
+  \item the time each bicycle spends at the inspection counter,
+  \item whether each bicycle needs to go on the the repair workshop,
+  \item the time each those bicycles spends at the repair shop.
+\end{itemize}
+
+As the simulation progresses these events will be generated, and will interact
+together as described in Section~\ref{sec:problem}.
+The proportion of customers spending longer than 30 minutes in the shop can then
+be counted. This proportion itself is a random variable, and so just like the
+weighted die, running this simulation once does not give us much information.
+But we can run the simulation many times and take an average proportion, to
+smooth out any variability.
+
+% Two types of DES - event scheduleing in Python, process-based in R.
+The process outlined above is a particular implementation of Monte Carlo
+simulation called \textit{discrete event simulation}, which generates
+pseudorandom numbers and observes their interactions. In practice there are two
+main approaches to simulating complex probabilistic systems such as this one:
+the \textit{event scheduling} approach, and \textit{process based} simulation.
+It just so happens that the main implementations in Python and R use each of
+these approaches, so you will see both approaches used here.
+
+
+% Event scheduling
+\subsection{Event Scheduling Approach}
+When using the event scheduling approach, we can think of the `virtual
+representation' of the system as being the facilities that the bicycles use,
+shown in Figure~\ref{fig:bike-shop}. Then we
+let entities (the bicycles) interact with these facilities. It is these
+facilities that determine how the entities behave.
+
+In a simulation that uses an event scheduling approach, a key concept is that
+events occur that cause further events to occur in the future, either
+immediately or after a delay, such as after some time in service.
+In the bicycle shop examples of such events include a bicycle joining a queue, a
+bicycle beginning service, and a bicycle finishing service. At each event the
+event list is updated, and the clock then jumps forward to the next event in
+this updated list.
+
+% Process based
+\subsection{Process Based Simulation}
+When using process based simulation, we can think of the `virtual
+representation' of the system as being the sequence of actions that each entity
+(the bicycles) must take, and these sequences of actions might contain delays as
+a number of entities seize and release a finite amount of resources. It is the
+sequence of actions that determine how the entities behave.
+
+For the bicycle repair shop an example of one possible sequence of actions would
+be:
+
+\textit{arrive $\rightarrow$ seize inspection counter $\rightarrow$ delay $\rightarrow$ release inspection counter $\rightarrow$ seize repair shop $\rightarrow$ delay $\rightarrow$ release repair shop $\rightarrow$ leave}
+
+The scheduled delays in this sequence of events correspond to the time spend
+being inspected and the time spend being repaired. Waiting in line for service
+at these facilities are not included in the sequence of events; that is implicit
+by the `seize' and `release' actions, as an entity will wait for a free resource
+before seizing one.
+Therefore in process based simulations, in addition to defining a sequence of
+events, resource types and their numbers also need to be defined.
+
+
+\section{Solving with Python}\label{sec:solving-with-python}
+
+In this book we will use the Ciw library in order to conduct discrete event
+simulation in Python.
+Ciw uses the event scheduling approach, which means we must define the system's
+facilities, and then let customers loose to interact with them.
+
+In this case there are two facilities to define: the inspection desk and the
+repair workshop. Let's order these as so. For each of these we need to define:
+
+\begin{itemize}
+  \item the distribution of times between consecutive bicycles arriving,
+  \item the distribution of times the bicycles spend in service,
+  \item the number of servers available,
+  \item the probability of routing to each of the other facilities after
+  service.
+\end{itemize}
+
+In this case we will assume that the time between consecutive arrivals follow a
+exponential distribution, and that the service times also follow exponential
+distributions. These are common assumptions for this sort of queueing system. % TODO add reference
+
+In Ciw, these are defined in a Network object, created using the
+\mintinline{python}{ciw.create_network} function. The function below
+creates a Network object that defines the for a given set of parameters bicycle
+repair shop:
+
+\begin{pyin}
+import ciw
+
+
+def build_network_object(
+    num_inspectors=1, num_repairers=2,
+):
+    """Returns a Network object that defines the repair shop.
+
+    Args:
+        num_inspectors: a positive integer (default: 1)
+        num_repairers: a positive integer (default: 2)
+
+    Returns:
+        a Ciw network object
+    """
+    arrival_rate = 15
+    inspection_rate = 20
+    repair_rate = 10
+    prob_need_repair = 0.8
+    N = ciw.create_network(
+        arrival_distributions=[
+            ciw.dists.Exponential(arrival_rate),
+            ciw.dists.NoArrivals(),
+        ],
+        service_distributions=[
+            ciw.dists.Exponential(inspection_rate),
+            ciw.dists.Exponential(repair_rate),
+        ],
+        number_of_servers=[num_inspectors, num_repairers],
+        routing=[[0.0, prob_need_repair], [0.0, 0.0]],
+    )
+    return N
+\end{pyin}
+
+A Network object is used by Ciw to access system parameters. For example one
+piece of information it holds is the number of nodes of the system:
+
+\begin{pyin}
+N = build_network_object()
+print(N.number_of_nodes)
+\end{pyin}
+
+which gives:
+
+\begin{pyout}
+2
+\end{pyout}
+
+Now we have defined the system, we need to use this to build the virtual
+representation of the system: in Ciw this is a Simulation object.
+Once this is built the simulation can be run, that is observe it for one
+virtual day. The following function does this:
+
+\begin{pyin}
+def run_simulation(network, seed=0):
+    """Builds a simulation object and runs it for 8 time units.
+
+    Args:
+        network: a Ciw network object
+        seed: a float (default: 0)
+
+    Returns:
+        a Ciw simulation object after a run of the simulation
+    """
+    max_time = 8
+    ciw.seed(seed)
+    Q = ciw.Simulation(network)
+    Q.simulate_until_max_time(max_time)
+    return Q
+\end{pyin}
+
+Notice here a random seed is set. This is because there is some element of
+randomness when initialising this object, and much randomness in running
+the simulation, and in order to ensure reproducible
+results we force the pseudorandom number generator to produce the same sequence
+of pseudorandom numbers each time.
+Notice also that the simulation always begins with an empty system, so the first
+bicycle to arrive will never wait for service. Depending on the situation this
+may be an unwanted feature, though not in this case as it is reasonable to
+assume that the bicycle shop will begin the day with no customers.
+
+Now we wish to count the number of bicycles that have finished service, and to
+count the number of those whose entire journey through the system lasted longer
+than 0.5 hours. In order to do so, we'll use the \mintinline{python}{pandas}
+library for efficient manipulation of data frames.
+
+\begin{pyin}
+import pandas as pd
+
+
+def get_proportion(Q):
+    """Returns the proportion of bicycles spending over a given
+    limit at the repair shop.
+
+    Args:
+        Q: a Ciw simulation object after a run of the
+           simulation
+
+    Returns:
+        a real
+    """
+    limit = 0.5
+    inds = Q.nodes[-1].all_individuals
+    recs = pd.DataFrame(
+        dr for ind in inds for dr in ind.data_records
+    )
+    recs["total_time"] = (
+        recs["exit_date"] - recs["arrival_date"]
+    )
+    total_times = recs.groupby("id_number")["total_time"].sum()
+    return (total_times > limit).mean()
+\end{pyin}
+
+Altogether these functions can define the system, run one day of our system, and
+then find the proportion of bicycles spending over half an hour in the shop:
+
+\begin{pyin}
+N = build_network_object()
+Q = run_simulation(N)
+p = get_proportion(Q)
+print(round(p, 6))
+\end{pyin}
+
+This piece of code gives
+
+\begin{pyout}
+0.261261
+\end{pyout}
+
+meaning 26.13\% of all bicycles spent longer than half an hour at the repair
+shop.
+
+However this particular day may have contained a number of extreme events.
+For a more accurate proportion this experiment should be repeated, and an
+average proportion taken.
+In order to do so, let's write a function that performs the above experiment
+over a number of trials, then finds an average proportion:
+
+\begin{pyin}
+def get_average_proportion(num_inspectors=1, num_repairers=2):
+    """Returns the average proportion of bicycles spending over
+    a given limit at the repair shop.
+
+    Args:
+        num_inspectors: a positive integer (default: 1)
+        num_repairers: a positive integer (default: 2)
+
+    Returns:
+        a real
+    """
+    num_trials = 100
+    N = build_network_object(
+        num_inspectors=num_inspectors,
+        num_repairers=num_repairers,
+    )
+    proportions = []
+    for trial in range(num_trials):
+        Q = run_simulation(N, seed=trial)
+        proportion = get_proportion(Q=Q)
+        proportions.append(proportion)
+    return sum(proportions) / num_trials
+\end{pyin}
+
+This can be used to find the average proportion over 100 trials for the current
+system of one inspector and two repair people:
+
+\begin{pyin}
+p = get_average_proportion(num_inspectors=1, num_repairers=2)
+print(round(p, 6))
+\end{pyin}
+
+which gives:
+
+\begin{pyout}
+0.159354
+\end{pyout}
+
+that is, on average 15.94\% of bicycles will spend longer than 30 minutes at the
+repair shop.
+
+Now consider the two possible future scenarios we wish top compare: hiring an
+extra member of staff to serve at the inspection desk, or hiring an extra member
+of staff at the repair workshop. Which scenario yields a smaller proportion of
+bicycles spending over 30 minutes at the shop? Let's investigate. First look at
+the situation where the additional member of staff works at the inspection desk:
+
+\begin{pyin}
+p = get_average_proportion(num_inspectors=2, num_repairers=2)
+print(round(p, 6))
+\end{pyin}
+
+which gives:
+
+\begin{pyout}
+0.038477
+\end{pyout}
+
+that is 3.85\% of bicycles.
+
+Now look at the situation where the additional member of staff works at the
+repair workshop:
+
+\begin{pyin}
+p = get_average_proportion(num_inspectors=1, num_repairers=3)
+print(round(p, 6))
+\end{pyin}
+
+which gives:
+
+\begin{pyout}
+0.103591
+\end{pyout}
+
+that is 10.36\% of bicycles.
+
+Therefore an additional member of staff at the inspection desk would be more
+beneficial than an additional member of staff at the repair workshop.
+
+
+\section{Solving with R}\label{sec:solving-with-R}
+
+In this book we will use the Simmer package in order to conduct discrete event
+simulation in R.
+Simmer uses the process based approach, which means we must define the each
+bicycle's sequence of actions, and then generate a number of bicycles with these
+sequences.
+
+In Simmer these sequences of actions are made up of trajectories. The
+diagram in Figure~\ref{fig:processbased_diagram} shows the branched
+trajectories than a bicycle would take at the repair shop:
+
+\begin{figure}
+\begin{center}
+\includestandalone[width=\textwidth]{./assets/process_based}
+\caption{Diagrammatic representation of the forked trajectories a bicycle can take}
+\label{fog:processbased_diagram}
+\end{center}
+\end{figure}
+
+The function below defines a simmer object that describes these trajectories:
+
+\begin{Rin}
+library(simmer)
+
+#' Returns a simmer trajectory object outlining the bicycles
+#' path through the repair shop
+#'
+#' @return A simmer trajectory object
+define_bicycle_trajectories <- function() {
+  inspection_rate <- 20
+  repair_rate <- 10
+  prob_need_repair <- 0.8
+  bicycle <-
+    trajectory("Inspection") %>%
+    seize("Inspector") %>%
+    timeout(function() {
+      rexp(1, inspection_rate)
+    }) %>%
+    release("Inspector") %>%
+    branch(
+      function() (runif(1) < prob_need_repair),
+      continue = c(F),
+      trajectory("Repair") %>%
+        seize("Repairer") %>%
+        timeout(function() {
+          rexp(1, repair_rate)
+        }) %>%
+        release("Repairer"),
+      trajectory("Out")
+    )
+  return(bicycle)
+}
+\end{Rin}
+
+These trajectories are not very useful alone, we are yet to define the resources
+used, or a way to generate bicycles with these trajectories. This is done in the
+function below, which begins by defining a \mintinline{R}{repair_shop} with one
+resource labelled ``Inspector'', and two resources labelled ``Repairer''.
+Once this is built the simulation can be run, that is observe it for one
+virtual day. The following function does all this:
+
+\begin{Rin}
+#' Runs one trial of the simulation.
+#'
+#' @param bicycle a simmer trajectory object
+#' @param num_inspectors positive integer (default: 1)
+#' @param num_repairers positive integer (default: 2)
+#' @param seed a float (default: 0)
+#'
+#' @return A simmer simulation object after one run of
+#;         the simulation
+run_simulation <- function(bicycle,
+                           num_inspectors = 1,
+                           num_repairers = 2,
+                           seed = 0) {
+  arrival_rate <- 15
+  max_time <- 8
+  repair_shop <-
+    simmer("Repair Shop") %>%
+    add_resource("Inspector", num_inspectors) %>%
+    add_resource("Repairer", num_repairers) %>%
+    add_generator("Bicycle", bicycle, function() {
+      rexp(1, arrival_rate)
+    })
+
+  set.seed(seed)
+  repair_shop %>% run(until = 8)
+  return(repair_shop)
+}
+\end{Rin}
+
+Notice here a random seed is set. This is because there are elements of
+randomness when running the simulation, and in order to ensure reproducible
+results we force the pseudorandom number generator to produce the same sequence
+of pseudorandom numbers each time.
+Notice also that the simulation always begins with an empty system, so the first
+bicycle to arrive will never wait for service. Depending on the situation this
+may be an unwanted feature, though not in this case as it is reasonable to
+assume that the bicycle shop will begin the day with no customers.
+
+Now we wish to count the number of bicycles that have finished service, and to
+count the number of those whose entire journey through the system lasted longer
+than 0.5 hours. Using Simmer's \mintinline{R}{get_mon_arrivals()} function we
+can get a data frame of records to manipulate.
+
+\begin{Rin}
+#' Returns the proportion of bicycles spending over 30
+#' minutes in the repair shop
+#'
+#' @param repair_shop a simmer simulation object
+#'
+#' @return a float between 0 and 1
+get_proportion <- function(repair_shop) {
+  limit <- 0.5
+  recs <- repair_shop %>% get_mon_arrivals()
+  total_times <- recs$end_time - recs$start_time
+  return(mean(total_times > 0.5))
+}
+\end{Rin}
+
+Altogether these functions can define the system, run one day of our system, and
+then find the proportion of bicycles spending over half an hour in the shop:
+
+\begin{Rin}
+bicycle <- define_bicycle_trajectories()
+repair_shop <- run_simulation(bicycle = bicycle)
+print(get_proportion(repair_shop = repair_shop))
+\end{Rin}
+
+This piece of code gives
+
+\begin{Rout}
+[1] 0.04032258
+\end{Rout}
+
+meaning 4.03\% of all bicycles spent longer than half an hour at the repair
+shop.
+
+However this particular day may have contained a number of extreme events.
+For a more accurate proportion this experiment should be repeated, and an
+average proportion taken.
+In order to do so, let's write a function that performs the above experiment
+over a number of trials, then finds an average proportion:
+
+\begin{Rin}
+#' Returns the average proportion of bicycles spending over
+#' a given limit at the repair shop.
+#'
+#' @param num_inspectors positive integer (default: 1)
+#' @param num_repairers positive integer (default: 2)
+
+#' @return a float between 0 and 1
+get_average_proportion <- function(num_inspectors = 1,
+                                   num_repairers = 2) {
+  num_trials <- 100
+  bicycle <- define_bicycle_trajectories()
+  proportions <- c()
+  for (trial in 1:num_trials) {
+    repair_shop <- run_simulation(
+      bicycle = bicycle,
+      num_inspectors = num_inspectors,
+      num_repairers = num_repairers,
+      seed = trial
+    )
+    proportion <- get_proportion(
+      repair_shop = repair_shop
+    )
+    proportions[trial] <- proportion
+  }
+  return(mean(proportions))
+}
+\end{Rin}
+
+This can be used to find the average proportion over 100 trials:
+
+\begin{Rin}
+print(
+  get_average_proportion(
+    num_inspectors = 1,
+    num_repairers = 2)
+)
+\end{Rin}
+
+which gives:
+
+\begin{Rout}
+[1] 0.1551579
+\end{Rout}
+
+that is, on average 15.52\% of bicycles will spend longer than 30 minutes at the
+repair shop.
+
+Now consider the two possible future scenarios we wish top compare: hiring an
+extra member of staff to serve at the inspection desk, or hiring an extra member
+of staff at the repair workshop. Which scenario yields a smaller proportion of
+bicycles spending over 30 minutes at the shop? Let's investigate. First look at
+the situation where the additional member of staff works at the inspection desk:
+
+\begin{Rin}
+print(
+  get_average_proportion(
+    num_inspectors = 2,
+    num_repairers = 2)
+)
+\end{Rin}
+
+which gives:
+
+\begin{Rout}
+[1] 0.04115338
+\end{Rout}
+
+that is 4.12\% of bicycles.
+
+Now look at the situation where the additional member of staff works at the
+repair workshop:
+
+\begin{Rin}
+print(
+  get_average_proportion(
+    num_inspectors = 1,
+    num_repairers = 3)
+)
+\end{Rin}
+
+which gives:
+
+\begin{Rout}
+[1] 0.1000899
+\end{Rout}
+
+that is 10.01\% of bicycles.
+
+Therefore an additional member of staff at the inspection desk would be more
+beneficial than an additional member of staff at the repair workshop.
+
+
+\section{Research}\label{sec:research}
+
+TBA

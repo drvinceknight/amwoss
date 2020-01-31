@@ -28,4 +28,4 @@ install:
 
 script:
   - inv doctest  # Test all code
-  - inv compile  # Check LaTeX Compiles
+  - cd src; pdflatex -shell-escape main.tex  # Check LaTeX Compiles

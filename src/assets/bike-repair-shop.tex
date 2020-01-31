@@ -1,0 +1,51 @@
+\documentclass{standalone}
+
+\usepackage{tikz}
+
+\begin{document}
+
+\begin{tikzpicture}
+  
+  \draw[fill=none, draw=none] (-5, -3.5) rectangle (34, 3.5); % 'invisible' bounding box to not cut off arrows
+  
+  \node at (4, 3.5) {\LARGE{Inspection counter}};
+  % Queue inspection
+  \draw (0, 0) -- (8, 0);
+  \draw (8, 0) -- (8, 3);
+  \draw (0, 3) -- (8, 3);
+  \draw (4, 0) -- (4, 3);
+  \draw (5, 0) -- (5, 3);
+  \draw (6, 0) -- (6, 3);
+  \draw (7, 0) -- (7, 3);
+  % Service center inspection
+  \draw (10, 1.5) circle (1.5);
+
+
+  \node at (22, 3.5) {\LARGE{Repair workshop}};
+  % Queue repair
+  \draw (18, 0) -- (26, 0);
+  \draw (26, 0) -- (26, 3);
+  \draw (18, 3) -- (26, 3);
+  \draw (22, 0) -- (22, 3);
+  \draw (23, 0) -- (23, 3);
+  \draw (24, 0) -- (24, 3);
+  \draw (25, 0) -- (25, 3);
+  % Service center repair
+  \draw (28, 3.1) circle (1.5);
+  \draw (28, -0.1) circle (1.5);
+
+  % Routing
+  \draw[-triangle 90] (-4.5, 1.5) -- (0, 1.5);
+  \draw[-triangle 90] (11.75, 1.5) -- (18, 1.5);
+  \draw[-triangle 90] (29.5, 1.5) -- (33.5, 1.5);
+  \draw[-triangle 90] (13.5, 1.5) -- (13.5, -3) -- (33.5, -3);
+  \node at (15, 2) {\Large 80\%};
+  \node at (15, -2.5) {\Large 20\%};
+  \node at (-2.5, 2) {\Large $Poisson(15)$};
+  \node at (10, 1.5) {\Large $Expon(20)$};
+  \node at (28, 3.1) {\Large $Expon(10)$};
+  \node at (28, -0.1) {\Large $Expon(10)$};
+
+\end{tikzpicture}
+
+\end{document}
