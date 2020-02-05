@@ -1,9 +1,279 @@
-\chapter[Differential Equations]{Differential Equations}
+\chapter[Modelling with Differential Equations]{Modelling with Differential Equations}
 
-- Fancy paragraph about differential equations. (Speed and number)
-- Problem: Describe battle equation. Will Y win? What should Y0 be to win?
-- Theory: a differential equtaion is a relationship - a rule spomething must
-follow, a solution ios the thing itself. Show differential equations for LBE,
-Discuss what a solution would be, possibly use simple differential equation as
-example (toy example: speed of car).
-- Code: define equations, soolve them, plot them, answer questions
+% Introduction
+\chapterinitial{S}{ystems} often change in a way that depends on their current
+state. For example, the speed at which a cup of coffee cools down depends on its
+current temperature. These types of systems are called dynamical systems and are
+modelled mathematically using differential equations. In this chapter we will
+consider a direct solution approach using symbolic mathematics.
+
+\section{Problem}\label{sec:problem}
+
+Consider the following situation: the entire population of a small rural town
+has caught a cold. All 100 individuals will recover at an average rate of 2 per
+day.  The town leadership have noticed that being ill costs approximately
+\pound10 per day, this is due to general lack of productivity, poorer mood and
+other intangible aspects. They need to decide whether or not to order cold
+medicine which would \textbf{double} the recover rate. The cost of of the cold
+medicine is a one off cost of \pound5 per person. 
+
+\section{Theory}\label{sec:theory}
+
+In the case of this town, the overall rate at which people get better is
+dependent on the number of people in how are ill. This can be represented
+mathematically using a differential equation which is a way of relating the rate
+of change of a system to the state of the system itself.
+
+In general if we are interested in some variable \(x\) over time \(t\) the
+differential function equation will be of the form:
+
+\begin{equation}
+    \frac{dx}{dt} = f(x)
+\end{equation}
+
+For some function \(f\).
+In our case,
+if we denote the number of infected individuals as \(I\) where we implicitly
+mean that \(I\) is a function of time: \(I=I(t)\) and the rate at which
+individuals recover by \(\alpha\) then the differential equation
+that describes the above situation is:
+
+\begin{equation}
+    \frac{dI}{dt} = -\alpha I
+\end{equation}
+
+Finding a solution to this differential equation means finding an expression for
+\(I\) that when differentiated gives \(- alpha I\).
+
+In this particular case, one such function is:
+
+\begin{equation}
+    I(t) = e ^ {-\alpha t}
+\end{equation}
+
+However, \(I(0) = 1\) whereas for our problem we know that at time \(t=0\) there
+are 100 infected individuals. Indeed a differential equation defines a family of
+solutions and we need to know some sort of initial (also referred to as
+boundary) condition to have the exact solution. Which in this case would be:
+
+\begin{equation}
+    I(t) = 100e ^ {-\alpha t}
+\end{equation}
+
+To evaluate the cost we then need to know the sum of the values of that function
+over time. Integration gives us exactly this, so the cost would be:
+
+\begin{equation}
+    K \int_{0}^{\infty}I(t)dt
+\end{equation}
+
+where \(K\) is the cost per person per unit time.
+
+In the upcoming sections we will confirm and use code to carry out the above
+efficiently so as to answer the original question.
+
+\section{Solving with Python}\label{sec:solving-with-python}
+
+The first step we will take is to write a function to obtain the differential
+equation. Note that here we will be using the Python library
+\mintinline{python}{sympy} which allows us to carry out symbolic calculations.
+
+\begin{pyin}
+import sympy as sym
+
+t = sym.Symbol("t")
+alpha = sym.Symbol("alpha")
+I_0 = sym.Symbol("I_0")
+I = sym.Function("I")
+
+
+def get_equation(alpha=alpha):
+    """Return the differential equation.
+
+    Args:
+        alpha: a float (default: symbolic alpha)
+
+    Returns:
+        A symbolic equation
+    """
+    return sym.Eq(sym.Derivative(I(t), t), -alpha * I(t))
+\end{pyin}
+
+Using this we can get the equation that defines the population change over time:
+
+\begin{pyin}
+eq = get_equation()
+print(eq)
+\end{pyin}
+
+which gives:
+
+\begin{pyout}
+Eq(Derivative(I(t), t), -alpha*I(t))
+\end{pyout}
+
+Note that if you are using Jupyter then your output will actually be a
+well rendered mathematical equation:
+
+\[
+\frac{d}{d t} I{\left(t \right)} = - \alpha I{\left(t \right)}
+\]
+
+Note that we can pass a value to \(\alpha\) if we want to:
+
+\begin{pyin}
+eq = get_equation(alpha=1)
+print(eq)
+\end{pyin}
+
+\begin{pyout}
+Eq(Derivative(I(t), t), -I(t))
+\end{pyout}
+
+We will now write a function to obtain the solution to this differential
+
+\begin{pyin}
+def get_solution(I_0=I_0, alpha=alpha):
+    """Return the solution to the differential equation.
+
+    Args:
+        I_0: a float (default: symbolic I_0)
+        alpha: a float (default: symbolic alpha)
+
+    Returns:
+        A symbolic equation
+    """
+    eq = get_equation(alpha=alpha)
+    return sym.dsolve(eq, I(t), ics={I(0): I_0})
+\end{pyin}
+
+We can verify the solution discussed previously:
+
+\begin{pyin}
+sol = get_solution()
+print(sol)
+\end{pyin}
+
+which gives:
+
+\begin{pyout}
+Eq(I(t), I_0*exp(-alpha*t))
+\end{pyout}
+
+\[I(t) = I_0 e ^{-\alpha t}\]
+
+We can use sympy itself to verify the result, by taking the derivative of the
+right hand side of our solution.
+
+\begin{pyin}
+print(sym.diff(sol.rhs, t) == -alpha * sol.rhs)
+\end{pyin}
+
+which gives:
+
+\begin{pyout}
+True
+\end{pyout}
+
+All of the above has given us the general solution in terms of \(I(0)=I_0\) and
+\(\alpha\) however we have written the code in such a way as we can pass the
+actual parameters:
+
+\begin{pyin}
+sol = get_solution(alpha=2, I_0=100)
+print(sol)
+\end{pyin}
+
+which gives:
+
+\begin{pyout}
+Eq(I(t), 100*exp(-2*t))
+\end{pyout}
+
+Now, to calculate the cost we will write a function to integrate our result:
+
+\begin{pyin}
+def get_cost_without_cure(
+    I_0=I_0, alpha=alpha, cost_per_person=10
+):
+    """Return the cost.
+
+    Args:
+        I_0: a float (default: symbolic I_0)
+        alpha: a float (default: symbolic alpha)
+        cost_per_person: a float (default: 10)
+
+    Returns:
+        A symbolic expression
+    """
+    I_sol = get_solution(I_0=I_0, alpha=alpha)
+    return (
+        sym.integrate(I_sol.rhs, (t, 0, sym.oo))
+        * cost_per_person
+    )
+\end{pyin}
+
+The cost with cure can use the above but needs to modify the rate \(\alpha\) and
+include the one off cost per person:
+
+\begin{pyin}
+def get_cost_with_cure(
+    I_0=I_0,
+    alpha=alpha,
+    cost_per_person=10,
+    cost_of_cure_per_person=5,
+):
+    """Return the cost when purchasing the cure.
+
+    Args:
+        I_0: a float (default: symbolic I_0)
+        alpha: a float (default: symbolic alpha)
+        cost_per_person: a float (default: 10)
+        cost_of_cure_per_person: a float (default: 10)
+
+    Returns:
+        A symbolic expression
+    """
+    return (
+        get_cost_without_cure(
+            I_0=I_0,
+            alpha=2 * alpha,
+            cost_per_person=cost_per_person,
+        )
+        + cost_of_cure_per_person * I_0
+    )
+\end{pyin}
+
+We can now obtain the cost without purchasing the cure:
+
+\begin{pyin}
+print(get_cost_without_cure(I_0=100, alpha=2))
+\end{pyin}
+
+which gives:
+
+\begin{pyout}
+500
+\end{pyout}
+
+and the cost of purchasing the cure:
+
+\begin{pyin}
+print(get_cost_with_cure(I_0=100, alpha=2))
+\end{pyin}
+
+which gives:
+
+\begin{pyout}
+750
+\end{pyout}
+
+So given the current parameters it is not worth purchasing the cure.
+
+\section{Solving with R}\label{sec:solving-with-R}
+
+% TODO Write R.
+
+\section{Research}\label{sec:research}
+
+TBA
