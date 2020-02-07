@@ -1,0 +1,111 @@
+\chapter[Systems dynamics]{Systems Dynamics}
+
+% Introduction
+\chapterinitial{I}{n} many situations systems are dynamical, in that the state
+or population of a number of entities or classes change according the the
+current state or population of the system. For example population dynamics,
+chemical reactions, and systems of macroeconomics. It is often useful to be able
+to predict how these systems will behave over time, though the rules which
+govern these changes can be complex, and are not necessarily solvable
+analytically. In these cases numerical methods can be used, which is the focus
+of this chapter.
+
+\section{Problem}\label{sec:problem}
+Consider the following scenario, where a population of 3000 people are
+susceptible to infection by some disease. This population can be described by
+the following parameters:
+
+\begin{itemize}
+  \item They have a birth rate $b$ of 0.01 per day;
+  \item They have a death rate $d$ of 0.01 per day;
+  \item For every infectious individual, the infection rate $\alpha$ is 0.3 per
+  day;
+  \item Infectious people recover naturally (and thus gain an immunity from the
+  disease), at a recovery rate $r$ of 0.02 per day;
+  \item For each day an individual is infected, they must take medication which
+  costs a public healthcare system $\pounds 10$ per day.
+\end{itemize}
+
+A vaccine is produced, which allows new born individuals to become recovered
+immediately, and thus gain an immunity. This vaccine costs the public health
+care system a one-off cost of $\pounds 220$ per vaccine. The healthcare
+providers would like to know if achieving a vaccination rate $v$ of $85\%$ would
+be beneficial financially.
+
+\section{Theory}\label{sec:theory}
+% Setup - diagram & equations
+The above scenario can be described is called a compartmental model of disease, and can be shown in the stock and flow diagram in Figure~\ref{fig:stockflow}.
+
+% TODO INCLUDE DIAGRAM
+
+The system has three `stocks' of different types of individuals, those
+susceptible to disease ($S$), those infected with the disease ($I$), and those
+who have recovered from the disease and so have gained immunity ($R$). The
+levels on these stocks change according to the flows in, out, and between them,
+controlled by `taps'. The amount of flow the taps let through are influenced
+multiplicatively (either negatively or positively), by other factors, such as
+external parameters (e.g. birth rate, infection rate) and the stock levels.
+
+In this system the following taps exist, influences by the following parameters:
+
+\begin{itemize}
+  \item \textit{external $\rightarrow S$:} Influenced positively by the birth
+  rate, and negatively by the vaccine rate.
+  \item \textit{$S \rightarrow I$:} Influenced positively by the infection rate,
+  and the number of infected individuals.
+  \item \textit{$S \rightarrow$ external:} Influenced positively by the death
+  rate.
+  \item \textit{$I \rightarrow R$:} Influenced positively by the recovery rate.
+  \item \textit{$I \rightarrow$ external:} Influenced positively by the death
+  rate.
+  \item \textit{$R \rightarrow$ external:} Influenced positively by the birth
+  rate and the vaccine rate.
+  \item \textit{external $\rightarrow R$:} Influenced positively by the death
+  rate.
+\end{itemize}
+
+Mathematically the change in stock levels are written as the derivatives, for
+example the change in the number of susceptible individuals over time is denoted
+by $\frac{dS}{dt}$. This can be equated tot he sum of the taps in or out of that
+stock. Thus the system is described by the following system of differential
+equations:
+
+\begin{align}
+\frac{dS}{dt} &= -\frac{\alpha SI}{N} + (1 - v)bN - dS\\
+\frac{dI}{dt} &= \frac{\alpha SI}{N} - (r + d)I\\
+\frac{dR}{dt} &= rI - dR + vbN
+\end{align}
+
+Notice here some taps need to be scaled by $N$, where $N = S + I + R$ the total
+number of individuals in the system.
+
+We would like to understand the behaviour of the functions $S$, $I$ and $R$
+under these rules, that is we would like to solve this system of differential
+equations. This system contains some non-linear terms, implying that this may be
+difficult to solve analytically. In fact this particular system is very
+difficult to solve analytically, so we will use a numerical method instead.
+
+There are a number of numerical methods, and the solvers we will use in Python
+and R cleverly choose the most appropriate for the problem at hand. In general
+these methods use the principle that the derivative denotes the rate of
+instantaneous change. Thus for a differential equation $\frac{dy}{dt} = f(t,y)$,
+consider the function $y$ as a discrete sequence of points
+$\{y_0, y_1, y_2, y_3, \dots\}$ on $\{t_0, t_0 + h, t_0 + 2h, t_0 + 3h, \dots\}$
+then
+
+\begin{equation}
+y_{n+1} = h \times f(t_0 + nh, y_n).
+\end{equation}
+
+This sequence approaches the true solution $y$ as $h \rightarrow 0$.
+Thus numerical methods, including the Runge-Kutta methods and the Euler method,
+step through this sequence $\{y_n\}$, choosing appropriate values of $h$ and
+employing other methods of error reduction.
+
+
+\section{Solving with Python}\label{sec:solving-with-python}
+
+
+
+\section{Solving with R}\label{sec:solving-with-R}
+\section{Research}\label{sec:research}
