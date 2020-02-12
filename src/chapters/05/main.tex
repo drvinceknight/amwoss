@@ -12,10 +12,11 @@ consider a direct solution approach using symbolic mathematics.
 Consider the following situation: the entire population of a small rural town
 has caught a cold. All 100 individuals will recover at an average rate of 2 per
 day.  The town leadership have noticed that being ill costs approximately
-\pound10 per day, this is due to general lack of productivity, poorer mood and
+\pounds10 per day, this is due to general lack of productivity, poorer mood and
 other intangible aspects. They need to decide whether or not to order cold
 medicine which would \textbf{double} the recover rate. The cost of of the cold
-medicine is a one off cost of \pound5 per person. 
+medicine is a one off cost of \pounds5 per person.
+% TODO Find a more realistic example.
 
 \section{Theory}\label{sec:theory}
 
@@ -193,8 +194,8 @@ Eq(I(t), 100*exp(-2*t))
 Now, to calculate the cost we will write a function to integrate our result:
 
 \begin{pyin}
-def get_cost_without_cure(
-    I_0=I_0, alpha=alpha, cost_per_person=10
+def get_cost(
+    I_0=I_0, alpha=alpha, cost_per_person=10, cost_of_cure=0,
 ):
     """Return the cost.
 
@@ -202,6 +203,7 @@ def get_cost_without_cure(
         I_0: a float (default: symbolic I_0)
         alpha: a float (default: symbolic alpha)
         cost_per_person: a float (default: 10)
+        cost_of_cure: a float (default: 0)
 
     Returns:
         A symbolic expression
@@ -210,44 +212,17 @@ def get_cost_without_cure(
     return (
         sym.integrate(I_sol.rhs, (t, 0, sym.oo))
         * cost_per_person
-    )
-\end{pyin}
-
-The cost with cure can use the above but needs to modify the rate \(\alpha\) and
-include the one off cost per person:
-
-\begin{pyin}
-def get_cost_with_cure(
-    I_0=I_0,
-    alpha=alpha,
-    cost_per_person=10,
-    cost_of_cure_per_person=5,
-):
-    """Return the cost when purchasing the cure.
-
-    Args:
-        I_0: a float (default: symbolic I_0)
-        alpha: a float (default: symbolic alpha)
-        cost_per_person: a float (default: 10)
-        cost_of_cure_per_person: a float (default: 10)
-
-    Returns:
-        A symbolic expression
-    """
-    return (
-        get_cost_without_cure(
-            I_0=I_0,
-            alpha=2 * alpha,
-            cost_per_person=cost_per_person,
-        )
-        + cost_of_cure_per_person * I_0
+        + cost_of_cure * I_0
     )
 \end{pyin}
 
 We can now obtain the cost without purchasing the cure:
 
 \begin{pyin}
-print(get_cost_without_cure(I_0=100, alpha=2))
+I_0 = 100
+alpha = 2
+cost_without_cure = get_cost(I_0=I_0, alpha=alpha)
+print(cost_without_cure)
 \end{pyin}
 
 which gives:
@@ -256,10 +231,16 @@ which gives:
 500
 \end{pyout}
 
-and the cost of purchasing the cure:
+
+The cost with cure can use the above with a modified \(\alpha\) and a non zero
+cost of the cure itself:
 
 \begin{pyin}
-print(get_cost_with_cure(I_0=100, alpha=2))
+cost_of_cure = 5
+cost_with_cure = get_cost(
+    I_0=I_0, alpha=2 * alpha, cost_of_cure=cost_of_cure
+)
+print(cost_with_cure)
 \end{pyin}
 
 which gives:
