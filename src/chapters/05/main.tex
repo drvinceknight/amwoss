@@ -253,7 +253,120 @@ So given the current parameters it is not worth purchasing the cure.
 
 \section{Solving with R}\label{sec:solving-with-R}
 
-% TODO Write R.
+% TODO Discuss this section: the Rsympy package looks un cared for and in fact
+% seems to have dependency issues because of the way it uses java. All of the
+% following code is **NOT TESTED** because I cannot test it without getting a
+% weird IO error from java.
+R does not have a bespoke symbolic mathematics library however it has an
+interface to use Python's \mintinline{python}{sympy} called
+\mintinline{R}{rSymPy}. In general we would recommend to use Python directly
+when needing to carry out symbolic mathematical calculations however this is not
+always possible. Furthermore, the development of \mintinline{R}{rSymPy} seems to
+no longer be active and due to the dependency on Java could be problematic to
+use.
+One of other the difficulties of using \mintinline{R}{rSymPy}
+is that it works by passing string back and forth to Python's
+\mintinline{python}{sympy}. As such, we will need to have more of a manual
+approach and so we will not be able to write the modular code we have written
+throughout the book.
+
+First let us setup and solve the differential equation:
+
+\begin{Rin-no-test}
+library("rSymPy", warn.conflicts = FALSE, quietly = TRUE)
+
+t <- Var("t")
+alpha <- Var("alpha")
+I <- Var("I")
+sympy("dsolve(Derivative(I(t), t) - alpha *I(t), I(t))")
+\end{Rin-no-test}
+
+this will give us:
+
+\begin{Rout-no-test}
+[1] "C1*exp(alpha*t)"
+\end{Rout-no-test}
+
+We can then solve the equation directly to find the initial condition:
+
+\begin{Rin-no-test}
+sympy("solve(C1*exp(alpha*0) - I_0, C1)")
+\end{Rin-no-test}
+
+This gives:
+
+\begin{Rout-no-test}
+[1] "[I_0]"
+\end{Rout-no-test}
+
+Note here that this is in fact using a much older version of Sympy so we cannot
+take advantage of some of the newer commands.
+
+So we now the form of our particular solution, thus we can now write a function
+that will give us the cost:
+
+\begin{Rin-no-test}
+#' Return the cost
+#'
+#' @param I_0 a float (default: symbolic I_0)
+#' @param alpha a float (default: symbolic alpha)
+#' @param cost_per_person a float (default: 10)
+#' @param cost_of_cure a float (default: 0)
+#'
+#' @return A symbolic expression
+get_cost <- function(I_0 = Var("I_0"),
+                     alpha = Var("alpha"),
+                     cost_per_person = 10,
+                     cost_of_cure = 0) {
+  t <- Var("t")
+  solution_cmd <- sprintf(
+    "I_sol = %s * exp(-%s * t)",
+    I_0,
+    alpha
+  )
+  sympy(solution_cmd)
+  cost_cmd <- sprintf(
+    "integrate(I_sol, (t, 0, oo)) * %s + %s * %s",
+    cost_per_person, cost_of_cure,
+    I_0
+  )
+  return(sympy(cost_cmd))
+}
+\end{Rin-no-test}
+
+Using this:
+
+\begin{Rin-no-test}
+I_0 <- 100
+alpha <- 2
+cost_without_cure <- get_cost(I_0 = I_0, alpha = alpha)
+print(cost_without_cure)
+\end{Rin-no-test}
+
+which gives:
+
+\begin{Rout-no-test}
+500
+\end{Rout-no-test}
+
+The cost with cure can use the above with a modified \(\alpha\) and a non zero
+cost of the cure itself:
+
+\begin{Rin-no-test}
+cost_of_cure <- 5
+cost_with_cure <- get_cost(
+    I_0 = I_0, alpha = 2 * alpha, cost_of_cure = cost_of_cure
+)
+print(cost_with_cure)
+\end{Rin-no-test}
+
+which gives:
+
+\begin{Rout-no-test}
+750
+\end{Rout-no-test}
+
+So given the current parameters it is not worth purchasing the cure.
 
 \section{Research}\label{sec:research}
 
