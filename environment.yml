@@ -9,6 +9,7 @@ dependencies:
   - r-essentials
   - r-lintr
   - r-pracma
+  - r-desolve
   - pip:
       - ciw
       - dwys
