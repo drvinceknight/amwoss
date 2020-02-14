@@ -1,799 +1,636 @@
-\chapter[Software]{Software}
+\chapter[Markov Chains]{Markov Chains}
 
-\chapterinitial{T}{his} book will involve using software, the particular
-interface to software we will use is to write code. There are numerous reasons
-why this is the correct way to do things but one of them is reproducibility. %
-%TODO Include a reference here
+% Introduction
+\chapterinitial{M}{any} real world situations have some level of
+unpredictability through randomness: the flip of a coin, the number of orders of
+coffee in a shop, the winning numbers of the lottery. However, mathematics can
+in fact let us make predictions about what we expect to happen. One tool used to
+understand randomness is Markov chains, an area of mathematics sitting at the
+intersection of probability and linear algebra.
 
-This chapter will go over the basics of getting your computer set up to use the
-software discussed in this book: the programming languages R % TODO include reference
-and Python. % TODO include reference.
-It will also briefly discuss using the command line: a particular interface to
-your whole computer. Finally it will give a brief introduction to R and
-Python.
+\section{Problem}\label{sec:problem}
 
-This chapter (and indeed this whole book) is not a place to learn R and
-Python completely. We will cover specific tasks and how to carry them out in each language,
-but we will not cover the every intricacy of each language. There are
-numerous sources (books, websites, courses) that are available to do that.
-A lot of these places would argue that you should not learn multiple
-programming languages from one book, and instead concentrate on a single skill at a
-time. We agree, and the single skill to concentrate on with this book is the use
-of software to solve applied mathematical problems. The particular software itself is not
-the most important component.
-
-\section{Software installation}\label{sec:software-installation}
-
-There are a number of different places from which you can buy your vegetables,
-you can grow them yourself, you can go to a market and pick fresh fruit from
-specific stalls, you can go to a supermarket and buy a bag of a collection of
-vegetables and in some places you can even get a box of vegetables regularly
-posted to you. Software is similar, there are a variety of places from which you
-can get it and a number of different forms in which it can be obtained.
-
-If you're comfortable with using R and Python then you probably do not need to
-read this section and you might even use different so called ``distributions''
-of each piece of software, but for the purpose of this book here is where we will
-be getting what we need:
+Consider a barber shop. The shop owners have noticed that customers will not
+wait if there is no room in their waiting room and will choose to take their
+business elsewhere. The Barber shop would like to make an investment so as to
+avoid this situation. They know the following information:
 
 \begin{itemize}
-    \item Python: we will use the Anaconda distribution:
-        \texttt{https://www.anaconda.com/distribution/}
-    \item R: we will be getting this directly from the Comprehensive R Archive
-        Network (commonly referred to as CRAN):
-        \texttt{https://cran.r-project.org}. We will also use another piece of
-        software called Rstudio: \texttt{https://rstudio.com}.
+    \item They currently have 2 barber chairs (and 2 barbers).
+    \item They have waiting room for 4 people.
+    \item They usually have 10 customers arrive per hour.
+    \item Each Barber takes about 15 minutes to serve a customer so they can
+        serve 4 customers an hour.
 \end{itemize}
 
-\subsection{Installing Python}\label{sec:installing-python}
+This is represented diagrammatically in Figure~\ref{fig:barber-shop}.
 
-Installing Python and all the software we need around it is done by downloading
-and running the installer for the Anaconda distribution.
+\begin{figure}[!hbtp]
+    \begin{center}
+    \includestandalone[width=.6\textwidth]{./assets/barber-shop/main}
+    \end{center}
+    \caption{Diagrammatic representation of the barber shop as a queuing system.}
+    \label{fig:barber-shop}
+\end{figure}
 
-\begin{enumerate}
-    \item Go to this webpage: \texttt{https://www.anaconda.com/download/}.
-    \item Identify and download the version of Python 3 for your operating system
-        (Windows, Mac OSX, Linux). Run the installer.
-\end{enumerate}
 
-\subsection{Installing R}\label{sec:installing-R}
+They are planning on
+reconfiguring space to either have 2 extra waiting chairs or
+another barber's chair and barber.
 
-There are actually two pieces of software we need to install to use R for the
-purposes of this book, first the R language itself and second an application
-with which we will write R code.
+The mathematical tool used to model this situation is a Markov chain.
 
-\begin{enumerate}
-    \item Go to this webpage: \texttt{https://cran.r-project.org}.
-    \item Identify and download the latest version of R for your operating system
-        (Windows, Mac OSX, Linux). Run the installer.
-    \item Go to this webpage: \texttt{https://rstudio.com}.
-    \item Identify and download the latest version of Rstudio for your operating system
-        (Windows, Mac OSX, Linux). Run the installer.
-\end{enumerate}
+\section{Theory}\label{sec:theory}
 
-\section{Using the command line}\label{sec:using-the-command-line}
+A Markov chain is a model of a sequence of random events that is defined by a
+collection of \textbf{states} and rules that define how to move between these
+states.
 
-There are various interfaces to using a computer, the most common one is to use
-a mouse and keyboard and click on programmes we want to use. Another approach is
-to use what is called a command line interface this is where we do not interact
-graphically with a computer but we type in specific commands.
+For example, in the barber shop a single number is sufficient to describe the
+status of the shop. If that number is 1 this implies that 1 customer is
+currently having their hair cut. If that number is 5 this implies that 2
+customers are being served and 3 are waiting. The entire state space is, in this
+case a finite set of integers from 0 to 6. If the system is full (all barbers
+and waiting room occupied) then we are in state 6 and if there is no one at the
+shop then we are in state 0. This is denoted mathematically as:
 
-% TODO Add image of command line on a variety of computer systems.
+\begin{equation}
+    S = \{0, 1, 2, 3, 4, 5, 6\}
+    \label{eqn:barber_shop_state_space}
+\end{equation}
 
-We can use our command line to navigate the various directories on our
-computer.
+As customers arrive and leave the system goes between states as shown in
+Figure~\ref{fig:barber-shop-birth-death-no-rates}.
 
-There are two types of operating systems that we consider here:
+\begin{figure}[!hbtp]
+    \begin{center}
+    \includestandalone[width=.6\textwidth]{./assets/barber-shop-birth-death-no-rates/main}
+    \end{center}
+    \caption{Diagrammatic representation of the state space}
+    \label{fig:barber-shop-birth-death-no-rates}
+\end{figure}
+
+The rules that govern how to move between these states can be defined in two
+ways:
 
 \begin{itemize}
-    \item Windows
-    \item Nix: this includes OSX (the Mac operating system) and Linux
+    \item Using probabilities of changing state (or not) in a well defined time
+        period.  This is called a discrete Markov chain.
+    \item Using rates of change from one state to another. This is called a
+        continuous time Markov chain.
 \end{itemize}
 
-Not all commands are the same on each type of operating system.
+For our barber shop we will consider it as a continuous Markov chain as shown
+in Figure~\ref{fig:barber-shop-continuous-markov-process}
+
+\begin{figure}[!hbtp]
+    \begin{center}
+    \includestandalone[width=.6\textwidth]{./assets/barber-shop-continuous-markov-process/main}
+    \end{center}
+    \caption{Diagrammatic representation of the state space and the transition
+    rates}
+    \label{fig:barber-shop-continuous-markov-process}
+\end{figure}
+
+Note that a Markov chain assumes the rates follow an exponential distribution.
+One interesting property of this distribution is that it is considered
+memoryless which means that if a customer has been having their hair cut for 5
+minutes this does not change the rate at which their service ends.
+This distribution is quite common in the real world and therefore a common
+assumption.
+
+These states and rates can be represented mathematically using a transition
+matrix \(Q\) where \(Q_{ij}\) represents the rate of going from state \(i\) to
+state \(j\). In this case we have:
+
+\begin{equation}
+Q =
+\begin{pmatrix}
+-10 &  10 &   0 &   0 &   0 &   0 &   0\\
+  4 & -14 &  10 &   0 &   0 &   0 &   0\\
+  0 &   8 & -18 &  10 &   0 &   0 &   0\\
+  0 &   0 &   8 & -18 &  10 &   0 &   0\\
+  0 &   0 &   0 &   8 & -18 &  10 &   0\\
+  0 &   0 &   0 &   0 &   8 & -18 &  10\\
+  0 &   0 &   0 &   0 &   0 &   8 &  -8\\
+ \end{pmatrix}
+ \label{eqn:barber_shop_transition_matrix}
+\end{equation}
+
+You will see that \(Q_{ii}\) are negative and ensure the rows of \(Q\) sum to 0.
+This gives the total rate of change leaving state \(i\).
+
+We can use \(Q\) to understand the probability of being in a given state after
+\(t\) time unis. This is can be represented mathematically using a matrix
+\(P_{t}\) where \((P_{t})_{ij}\) is the probability of being in state \(j\)
+after \(t\) time units having started in state \(i\). We can use \(Q\) to
+calculate \(P_{t}\) using the matrix exponential:
+
+\begin{equation}
+    P_t = e^{Qt}
+    \label{eqn:continuous_time_markov_process_matrix_exponential}
+\end{equation}
+
+What is also useful is understanding the long run behaviour of the
+system. This allows us to answer questions such as ``what state are we most
+likely to be in on average?'' or ``what is the probability of being in the last
+state on average?''.
+
+This long run probability distribution over the state can be represented using a
+vector \(\pi\) where \(\pi_i\) represents the probability of being in state
+\(i\). This vector is in fact the solution to the following matrix equation:
+
+\begin{equation}
+    \pi Q = 0
+    \label{eqn:continuous_time_markov_process_steady_state}
+\end{equation}
+
+In the upcoming sections we will demonstrate all of the above concepts.
+
+\section{Solving with Python}\label{sec:solving-with-python}
+
+The first step we will take is to write a function to obtain the transition
+rates between two given states:
 
-So let us start by opening our command line interface:
-
-\begin{itemize}
-    \item Windows: after having installed Anaconda look to open the
-        Anaconda Prompt. There are a number of other command line interfaces
-        available but this is the one we recommend for the purposes of this
-        book.
-    \item Nix: look to open the Terminal.
-\end{itemize}
-
-This should open something that looks like % TODO add screenshot
-and somewhat resembles a black box with some text in it.
-This is where we will write our commands to the computer.
-
-For example to list the contents of the directory we are currently in:
-
-\textbf{On nix:}
-
-\begin{cliin}
-ls
-\end{cliin}
-
-\textbf{On Windows}
-
-\begin{cliin}
-dir
-\end{cliin}
-
-It is also possible to get the name of the directory we are currently in:
-
-\textbf{On nix:}
-
-\begin{cliin}
-pwd
-\end{cliin}
-
-\textbf{On Windows}
-
-\begin{cliin}
-cd
-\end{cliin}
-
-Finally we can also use the command line to move to another directory. The
-command for this are the same on Nix and on Windows.
-
-\begin{cliin}
-cd <name_of_subdirectory>
-\end{cliin}
-
-% TODO Include nice diagram showing cd (and include `..` in there).
-
-The command line is an important tool to learn to use when doing tasks:
-
-\begin{itemize}
-    \item If we want to scale the tasks, a commonly heard phrase is that `mouse
-        clicks do not scale' highlighting that to repeat a task many times when
-        using a graphical interface is inefficient.
-    \item If we want someone else to be able to repeat the tasks, we can use
-        screenshots of graphical interfaces but there will always be a level of
-        ambiguity whereas the commands used in the command line are precise.
-\end{itemize}
-
-We can use our two programming languages right within the command line interface
-(we will actually be using a different tool that we will describe shortly).
-
-To use Python, simply type the following and press Enter:
-
-\begin{cliin}
-python
-\end{cliin}
-
-This should make something like the following appear:
-
-\begin{cliout}
-Python 3.7.1 | packaged by conda-forge | (default, Nov 13 2018, 10:30:07)
-[Clang 4.0.1 (tags/RELEASE_401/final)] :: Anaconda, Inc. on darwin
-Type "help", "copyright", "credits" or "license" for more information.
->>>
-\end{cliout}
-
-The \mintinline{python}{>>>} is a prompt ready to accept a Python command. Let
-us start with the following:
-
-\begin{pyin-no-test}
->>> 2 + 2
-\end{pyin-no-test}
-
-When you press Enter, this will give:
-
-\begin{pyout-no-test}
-4
-\end{pyout-no-test}
-
-This particular way of using Python is called a REPL which stands for: `Read
-Eval Print Loop' which indicates that it takes a command, evaluates it and waits
-for the next one.
-
-To quit Python's REPL type the following (note that \mintinline{python}{()},
-more about that later):
-
-\begin{pyin-no-test}
->>> quit()
-\end{pyin-no-test}
-
-We can do the same for R. To start R's REPL, in your command line type the
-following and press Enter:
-
-\begin{cliin}
-R
-\end{cliin}
-
-This should make something like the following appear:
-
-\begin{cliout}
-R version 3.5.1 (2018-07-02) -- "Feather Spray"
-Copyright (C) 2018 The R Foundation for Statistical Computing
-Platform: x86_64-apple-darwin13.4.0 (64-bit)
-
-R is free software and comes with ABSOLUTELY NO WARRANTY.
-You are welcome to redistribute it under certain conditions.
-Type 'license()' or 'licence()' for distribution details.
-
-  Natural language support but running in an English locale
-
-R is a collaborative project with many contributors.
-Type 'contributors()' for more information and
-'citation()' on how to cite R or R packages in publications.
-
-Type 'demo()' for some demos, 'help()' for on-line help, or
-'help.start()' for an HTML browser interface to help.
-Type 'q()' to quit R.
-
->
-\end{cliout}
-
-The \mintinline{R}{>} is a prompt ready to accept an R command. Let
-us start with the following:
-
-\begin{Rin-no-test}
-> 2 + 2
-\end{Rin-no-test}
-
-When you press Enter, this will give:
-
-\begin{Rout-no-test}
-4
-\end{Rout-no-test}
-
-To quit R's REPL type the following:
-
-\begin{Rin-no-test}
-> q()
-\end{Rin-no-test}
-
-This will bring up a further prompt asking you to save some information about
-what you just did. You can type \mintinline{R}{n} for now:
-
-\begin{Rin-no-test}
-> Save workspace image? [y/n/c]: n
-\end{Rin-no-test}
-
-These two REPLs are not unique and also not the most efficient way of using the
-languages, however they can at times be useful if you just want to type a very
-short command or perhaps check something quickly.
-
-Another approach is to save a collection of commands in a plain text file and
-pass it to the interpreter at the command line.
-
-For example, if we had a number of Python commands in \mintinline{bash}{main.py}
-we could run this at the command line using:
-
-\begin{cliin}
-python main.py
-\end{cliin}
-
-Similarly for a file with a number of R commands \mintinline{bash}{main.R}:
-
-\begin{cliin}
-Rscript main.R
-\end{cliin}
-
-These are just a few of many ways to use Python and R. An important notion to
-understand is that Python and R are not the particular tools that we use to
-interface to them. On a day to day basis the authors of this book will use both
-of the above approaches as well as the next ones, we recommend readers take time
-to experiment and understand the particular use cases for which each tool works
-best for them.
-
-The two tools we recommend to use in this book are:
-
-\begin{itemize}
-    \item For Python: the Jupyter notebook, a tool that behaves similarly to a
-        REPL, runs in the web browser and is very popular in research.
-    \item For R: RStudio, an integrated development environment with a lot of
-        helpful features.
-\end{itemize}
-
-The best way to start the Jupyter notebook is to type the following in your
-command line:
-
-\begin{cliin}
-jupyter notebook
-\end{cliin}
-
-This will create a \textit{notebook server} that runs on your computer and
-should open a page that looks like % TODO include screen shot
-Note that despite running in a web browser this does not need the internet to
-run.
-
-We can create a new notebook and write and run code in the \textit{cells}.
-% TODO  maybe include a screenshot with arrows etc...
-
-To start Rstudio, locate the application on your computer and double click on
-it. This will open an application that looks like % TODO include screen shot
-
-Rstudio includes its on REPL, so we can type and run single commands there but
-we can also write in a file that we can run
-% TODO include a screenshot with arrows etc...
-
-In the next sections we will cover some basics of Python and R.
-
-\section{Basic Python}\label{sec:basic-python}
-
-This section gives a very brief overview of some introductory aspects of Python,
-there are excellent resources available for learning Python and we recommend the
-reader goes there if they feel they need an in depth understanding of the
-language % TODO Cite courses/books etc...
-
-In the previous section, we saw how to get Python to perform a single
-calculation:
 
 \begin{pyin}
-print(3 + 5)
+def get_transition_rate(
+    in_state, out_state, waiting_room=4, num_barbers=2,
+):
+    """Return the transition rate for two given states.
+
+    Args:
+        in_state: an integer
+        out_state: an integer
+        waiting_room: an integer (default: 4)
+        num_barbers:  an integer (default: 2)
+
+    Returns:
+        A real.
+    """
+    arrival_rate = 10
+    service_rate = 4
+
+    capacity = waiting_room + num_barbers
+    delta = out_state - in_state
+
+    if delta == 1 and in_state < capacity:
+        return arrival_rate
+
+    if delta == -1:
+        return min(in_state, num_barbers) * service_rate
+
+    return 0
 \end{pyin}
 
-which will give:
-
-\begin{pyout}
-8
-\end{pyout}
-
-We can also assign values to a variable:
+Next, we write a function that creates an entire transition rate matrix \(Q\)
+for a given problem. We will use the \mintinline{python}{numpy} to handle all
+the linear algebra and the \mintinline{python}{itertools} library for some
+iterations:
 
 \begin{pyin}
-a = 3
-b = 5
-c = a + b
-print(c)
+import itertools
+import numpy as np
+
+
+def get_transition_rate_matrix(waiting_room=4, num_barbers=2):
+    """Return the transition matrix Q.
+
+    Args:
+        waiting_room: an integer (default: 4)
+        num_barbers: an integer (default: 2)
+
+    Returns:
+        A matrix.
+    """
+    capacity = waiting_room + num_barbers
+    state_pairs = itertools.product(
+        range(capacity + 1), repeat=2
+    )
+
+    flat_transition_rates = [
+        get_transition_rate(
+            in_state=in_state,
+            out_state=out_state,
+            waiting_room=waiting_room,
+            num_barbers=num_barbers,
+        )
+        for in_state, out_state in state_pairs
+    ]
+    transition_rates = np.reshape(
+        flat_transition_rates, (capacity + 1, capacity + 1)
+    )
+    np.fill_diagonal(
+        transition_rates, -transition_rates.sum(axis=1)
+    )
+
+    return transition_rates
 \end{pyin}
 
-\begin{explanation}
-This makes a point at 3 etc...  % TODO This is just a placeholder.
-\end{explanation}
-
-which will give:
-
-\begin{pyout}
-8
-\end{pyout}
-
-There are a number of different types of variables in Python, here is a very
-brief list of some of them:
-
-\begin{itemize}
-    \item Integers -- \mintinline{python}{int} -- for example \mintinline{python}{2},
-        \mintinline{python}{4}, \mintinline{python}{-459060}.
-    \item Floats -- \mintinline{python}{float} -- for example \mintinline{python}{2.0},
-        \mintinline{python}{3.4}, \mintinline{python}{-3.459060}.
-    \item Strings -- \mintinline{python}{str} -- for example \mintinline{python}{"two"}, \mintinline{python}{"hello
-        world"}, \mintinline{python}{"3450"}.
-    \item Booleans -- \mintinline{python}{bool} -- for example \mintinline{python}{True} or
-        \mintinline{python}{False}.
-\end{itemize}
-
-Based on the values of a variable it is possible to construct Booleans:
+Using this we can obtain the matrix \(Q\) for our default system:
 
 \begin{pyin}
-is_a_larger_than_b = a > b
-\end{pyin}
-
-The variable \mintinline{python}{is_a_larger_than_b} will be the boolean variable
-\mintinline{python}{False}.
-
-This is an important concept as boolean variable allow us to use conditional
-statements that let us write code that does specific things based on the value
-of variables. For example the following code will add 5 to the smallest
-variable:
-
-\begin{pyin}
-a = 3
-b = 5
-if a < b:
-    a = a + 3
-elif a > b:
-    b = b + 5
-else:
-    a = a + 3
-    b = b + 3
-print(a, b)
+Q = get_transition_rate_matrix()
+print(Q)
 \end{pyin}
 
 which gives:
 
 \begin{pyout}
-6 5
+[[-10  10   0   0   0   0   0]
+ [  4 -14  10   0   0   0   0]
+ [  0   8 -18  10   0   0   0]
+ [  0   0   8 -18  10   0   0]
+ [  0   0   0   8 -18  10   0]
+ [  0   0   0   0   8 -18  10]
+ [  0   0   0   0   0   8  -8]]
 \end{pyout}
 
-If you are experimenting by typing the code as you go change the value of
-\mintinline{python}{a} or \mintinline{python}{b} to see how the behaviour changes.
-What happens if they are equal?
-
-It is also possible to use these conditional statements to repeat code. For
-example the following code will repeatedly add 1 to the smallest variable until
-it becomes equal to the largest one:
-
+We can take the matrix exponential as
+discussed above. To do this, we need to use the \mintinline{python}{scipy}
+library. To see what would happen after .5 time units we obtain:
 \begin{pyin}
-a = 3
-b = 5
-while a != b:
-    if a < b:
-        a = a + 1
-    else:
-        b = b + 1
-\end{pyin}
+import scipy.linalg
 
-It is important to be able to reuse code, this is done using a programming
-concept called a \textit{function}, which acts similarly to a mathematical
-function.
-
-The following code, creates a function that takes two variables as input and
-outputs the largest number and the smallest increased by 3.
-
-\begin{pyin}
-def add_3_to_smallest(a, b):
-    """This function adds 3 to the smallest of a or b."""
-    if a < b:
-        return a + 3, b
-    return a, b + 3
-\end{pyin}
-
-Once we have defined the function, the following is how we use it:
-
-\begin{pyin}
-print(add_3_to_smallest(a=5, b=-42))
+print(scipy.linalg.expm(Q * 0.5).round(5))
 \end{pyin}
 
 which gives:
 
 \begin{pyout}
-(5, -39)
+[[0.10492 0.21254 0.20377 0.17142 0.13021 0.09564 0.0815 ]
+ [0.08501 0.18292 0.18666 0.1708  0.14377 0.1189  0.11194]
+ [0.06521 0.14933 0.16338 0.16478 0.15633 0.14751 0.15346]
+ [0.04388 0.10931 0.13183 0.15181 0.16777 0.18398 0.21142]
+ [0.02667 0.07361 0.10005 0.13422 0.17393 0.2189  0.27262]
+ [0.01567 0.0487  0.07552 0.11775 0.17512 0.24484 0.32239]
+ [0.01068 0.03668 0.06286 0.10824 0.17448 0.25791 0.34914]]
 \end{pyout}
 
-Python has a type of variable that is in fact a collection of pointers to other
-variables. This is called a list. Here for example is a collection of strings:
+To see what would happen after 500 time units we obtain:
 
 \begin{pyin}
-tennis_players = [
-    "Federer",
-    "S. Williams",
-    "V. Williams",
-    "King",
-]
-\end{pyin}
-
-There are a number of things that can be done with lists but one particular
-aspect is that they are a sub type of something called an iterable in Python
-which means we can iterate over them. We do this in Python using a
-\mintinline{python}{for} loop. For example, the following code will iterate over
-the list and print all the values:
-
-\begin{pyin}
-for name in tennis_players:
-    print(name)
+print(scipy.linalg.expm(Q * 500).round(5))
 \end{pyin}
 
 which gives:
 
 \begin{pyout}
-Federer
-S. Williams
-V. Williams
-King
+[[0.03431 0.08577 0.10722 0.13402 0.16752 0.2094  0.26176]
+ [0.03431 0.08577 0.10722 0.13402 0.16752 0.2094  0.26176]
+ [0.03431 0.08577 0.10722 0.13402 0.16752 0.2094  0.26176]
+ [0.03431 0.08577 0.10722 0.13402 0.16752 0.2094  0.26176]
+ [0.03431 0.08577 0.10722 0.13402 0.16752 0.2094  0.26176]
+ [0.03431 0.08577 0.10722 0.13402 0.16752 0.2094  0.26176]
+ [0.03431 0.08577 0.10722 0.13402 0.16752 0.2094  0.26176]]
 \end{pyout}
 
-We will often want to iterate over a set of integers, Python has a
-\mintinline{python}{range} command that can create such a set with ease. The following
-code will print every 3 integers from 30 to 50:
+We see that no matter what state (row) the system is in, after 500 time units
+the probabilities are all the same. We could in fact stop our analysis here,
+however our choice of 500 time units was arbitrary and might not be the correct
+amount for all possible scenarios, as such we will continue to aim to solve the
+underlying equation~\ref{eqn:continuous_time_markov_process_steady_state}
+directly.
 
+To do this we will solve the underlying system using a numerically efficient
+algorithm called least squares optimisation (available from the
+\mintinline{python}{numpy} library):
 
 \begin{pyin}
-for integer in range(30, 50, 3):
-    print(integer)
+def get_steady_state_vector(Q):
+    """Return the steady state vector of any given continuous
+    time transition rate matrix.
+
+    Args:
+       Q: a transition rate matrix
+
+    Returns:
+        A vector
+    """
+    state_space_size, _ = Q.shape
+    A = np.vstack((Q.T, np.ones(state_space_size)))
+    b = np.append(np.zeros(state_space_size), 1)
+    x, _, _, _ = np.linalg.lstsq(A, b, rcond=None)
+    return x
 \end{pyin}
 
-which will give:
+So if we now see the steady state vector for our default system:
+
+\begin{pyin}
+print(get_steady_state_vector(Q).round(5))
+\end{pyin}
+
+we get:
 
 \begin{pyout}
-30
-33
-36
-39
-42
-45
-48
+[0.03431 0.08577 0.10722 0.13402 0.16752 0.2094  0.26176]
 \end{pyout}
 
-A final important aspect of Python is that of libraries. The code examples above
-are from the so called `standard library' but Python has numerous libraries
-specific to given problems. A lot of these libraries came bundled with the
-anaconda distribution but if you want to download one that is not you can always
-do so as long as you have an internet connection.
+We can see that the shop is expected to be empty approximately 3.4\% of the time
+and full 26.2\% of the time.
 
-For example, to download a library for studying queueing systems
-\mintinline{python}{ciw} open your command line interface and type the
-following:
-
-\begin{cliin}
-pip install ciw
-\end{cliin}
-
-Once you restart your python interpreter, for example if you are using a Jupyter
-notebook then restart the Kernel, you can then run the following to make
-\mintinline{python}{ciw} available to you:
+The final function we will write is one that uses all of
+the above to just return the probability of the shop being full.
 
 \begin{pyin}
-import ciw
+def get_probability_of_full_shop(
+    waiting_room=4, num_barbers=2
+):
+    """Return the probability of the barber shop being full.
+
+    Args:
+        waiting_room: an integer (default: 4)
+        num_barbers: an integer (default: 2)
+
+    Returns:
+        A real.
+    """
+    Q = get_transition_rate_matrix(
+        waiting_room=waiting_room, num_barbers=num_barbers,
+    )
+    pi = get_steady_state_vector(Q)
+    return pi[-1]
 \end{pyin}
 
-\section{Basic R}\label{sec:basic-R}
+We can now confirm the previous probability calculated probability of the shop
+being full:
 
-This section gives a very brief overview of some introductory aspects of R,
-there are excellent resources available for learning
-R~\cite{wickham2014advanced} % TODO Modify/add this is just a place holder to
-                             % check the style file.
-and we recommend the
-reader goes there if they feel they need an in depth understanding of the
-language % TODO Cite courses/books etc...
+\begin{pyin}
+print(round(get_probability_of_full_shop(), 6))
+\end{pyin}
 
-In the previous section, we saw how to get R to perform a single
-calculation:
+which gives:
 
-\begin{Rin}
-print(3 + 5)
-\end{Rin}
+\begin{pyout}
+0.261756
+\end{pyout}
 
-which will give:
+If we were too have 2 extra space in the waiting room:
 
-\begin{Rout}
-[1] 8
-\end{Rout}
+\begin{pyin}
+print(round(get_probability_of_full_shop(waiting_room=6), 6))
+\end{pyin}
 
-We can also assign values to a variable:
+which gives:
 
-\begin{Rin}
-a <- 3
-b <- 5
-c <- a + b
-print(c)
-\end{Rin}
+\begin{pyout}
+0.23557
+\end{pyout}
 
-which will give:
+This is a slight improvement however, increasing the number of barbers has a
+substantial effect:
 
-\begin{Rout}
-[1] 8
-\end{Rout}
+\begin{pyin}
+print(round(get_probability_of_full_shop(num_barbers=3), 6))
+\end{pyin}
 
-An important difference between R and Python is that in R the base structure is
-in fact a vector, even if it only contains a single variable. We can use the
-\mintinline{R}{c} command to \textit{concatenate} these base structures
-together:
+\begin{pyout}
+0.078636
+\end{pyout}
+\section{Solving with R}\label{sec:solving-with-R}
+
+The first step we will take is write a function to obtain the transition rates
+between two given states:
 
 \begin{Rin}
-print(c(a, 4))
-\end{Rin}
+#' Return the transition rate for two given states.
+#'
+#' @param in_state an integer
+#' @param out_state an integer
+#' @param waiting_room an integer (default: 4)
+#' @param num_barbers an integer  (default: 2)
+#'
+#' @return A real
+get_transition_rate <- function(in_state,
+                                out_state,
+                                waiting_room = 4,
+                                num_barbers = 2){
+  arrival_rate <- 10
+  service_rate <- 4
 
-giving:
+  capacity <- waiting_room + num_barbers
+  delta <- out_state - in_state
 
-\begin{Rout}
-[1] 3 4
-\end{Rout}
+  if (delta == 1) {
+    if (in_state < capacity) {
+      return(arrival_rate)
+    }
+  }
 
-There are a number of different types of variables in R, here is a very
-brief list of some of them:
-
-\begin{itemize}
-    \item Integers -- \mintinline{R}{integer} -- for example \mintinline{R}{2},
-        \mintinline{R}{4}, \mintinline{R}{-459060}.
-    \item Floats -- \mintinline{R}{double} -- for example \mintinline{R}{2.0},
-        \mintinline{R}{3.4}, \mintinline{R}{-3.459060}.
-    \item Strings -- \mintinline{R}{character} -- for example
-        \mintinline{R}{"two"}, \mintinline{R}{"hello world"}, \mintinline{R}{"3450"}.
-    \item Booleans -- \mintinline{R}{logical} -- for example
-        \mintinline{R}{TRUE} or
-        \mintinline{R}{FALSE}.
-\end{itemize}
-
-Based on the values of a variable it is possible to construct Booleans:
-
-\begin{Rin}
-is_a_larger_than_b <- a > b
-\end{Rin}
-
-The variable \mintinline{R}{is_a_larger_than_b} will be the boolean variable
-\mintinline{R}{FALSE}.
-
-This is an important concept as boolean variable allow us to use conditional
-statements that let us write code that does specific things based on the value
-of variables. For example the following code will add 5 to the smallest
-variable:
-
-\begin{Rin}
-a <- 3
-b <- 5
-if (a < b) {
-  a <- a + 3
-} else if (a > b) {
-  b <- b + 3
-} else {
-  a <- a + 3
-  b <- b + 3
+  if (delta == -1) {
+    return(min(in_state, num_barbers) * service_rate)
+  }
+  return(0)
 }
-print(c(a, b))
+\end{Rin}
+
+We will not actually use this function but a vectorized version of this:
+
+\begin{Rin}
+vectorized_get_transition_rate <- Vectorize(
+  get_transition_rate,
+  vectorize.args = c("in_state", "out_state")
+)
+\end{Rin}
+
+This function can now take a vector of inputs for the \mintinline{R}{in_state}
+and \mintinline{R}{out_state} variables which will allow us to simplify the
+following code that creates the matrices:
+
+\begin{Rin}
+#' Return the transition rate matrix Q
+#'
+#' @param waiting_room an integer (default: 4)
+#' @param num_barbers an integer (default: 2)
+#'
+#' @return A matrix
+get_transition_rate_matrix <- function(waiting_room = 4,
+                                       num_barbers = 2){
+  max_state <- waiting_room + num_barbers
+
+  Q <- outer(0:max_state,
+    0:max_state,
+    vectorized_get_transition_rate,
+    waiting_room = waiting_room,
+    num_barbers = num_barbers
+  )
+  row_sums <- rowSums(Q)
+
+  diag(Q) <- -row_sums
+  Q
+}
+\end{Rin}
+
+Using this we can obtain the matrix \(Q\) for our default system:
+
+\begin{Rin}
+Q <- get_transition_rate_matrix()
+print(Q)
 \end{Rin}
 
 which gives:
 
 \begin{Rout}
-[1] 6 5
+     [,1] [,2] [,3] [,4] [,5] [,6] [,7]
+[1,]  -10   10    0    0    0    0    0
+[2,]    4  -14   10    0    0    0    0
+[3,]    0    8  -18   10    0    0    0
+[4,]    0    0    8  -18   10    0    0
+[5,]    0    0    0    8  -18   10    0
+[6,]    0    0    0    0    8  -18   10
+[7,]    0    0    0    0    0    8   -8
 \end{Rout}
 
-If you are experimenting by typing the code as you go, change the value of
-\mintinline{R}{a} or \mintinline{R}{b} to see how the behaviour changes.
-What happens if they are equal?
+One immediate thing we can do with this matrix is take the matrix exponential
+discussed above. To do this, we need to use an R library call
+\mintinline{R}{expm}.
 
-R is a so called ``vectorized'' language which means that there is often a more
-appropriate approach to doing things repeatedly using vectors. This applies to
-the \mintinline{R}{if} statement in that there exists a \mintinline{R}{ifelse}
-statement that applies to vectors of booleans. For example:
+To be able to make use of the nice \mintinline{R}{%>%} "pipe" operator we are
+also going to load the \mintinline{R}{magrittr} library.
+Now if we wanted to see what would happen after .5 time units we obtain:
 
 \begin{Rin}
-booleans <- c(FALSE, TRUE, FALSE, FALSE)
-print(ifelse(booleans, "cat", "dog"))
+library(expm, warn.conflicts = FALSE, quietly = TRUE)
+library(magrittr, warn.conflicts = FALSE, quietly = TRUE)
+
+print( (Q * .5) %>% expm %>% round(5))
 \end{Rin}
 
 which gives:
 
 \begin{Rout}
-[1] "dog" "cat" "dog" "dog"
+        [,1]    [,2]    [,3]    [,4]    [,5]    [,6]    [,7]
+[1,] 0.10492 0.21254 0.20377 0.17142 0.13021 0.09564 0.08150
+[2,] 0.08501 0.18292 0.18666 0.17080 0.14377 0.11890 0.11194
+[3,] 0.06521 0.14933 0.16338 0.16478 0.15633 0.14751 0.15346
+[4,] 0.04388 0.10931 0.13183 0.15181 0.16777 0.18398 0.21142
+[5,] 0.02667 0.07361 0.10005 0.13422 0.17393 0.21890 0.27262
+[6,] 0.01567 0.04870 0.07552 0.11775 0.17512 0.24484 0.32239
+[7,] 0.01068 0.03668 0.06286 0.10824 0.17448 0.25791 0.34914
 \end{Rout}
 
-It is also possible to use conditional statements to repeat code. For
-example the following code will repeatedly add 1 to the smallest variable until
-it becomes equal to the largest one:
+After 500 time units we obtain:
 
 \begin{Rin}
-a <- 3
-b <- 5
-while (a != b) {
-  if (a < b) {
-    a <- a + 1
-  }
-  else {
-    b <- b + 1
-  }
-}
-\end{Rin}
-
-It is important to be able to reuse code, this is done using a programming
-concept called a \textit{function}, which acts similarly to a mathematical
-function.
-
-The following code creates a function that takes two variables as input and
-outputs the largest number and the smallest increased by 3.
-
-\begin{Rin}
-add_3_to_smallest <- function(a, b) {
-  # This function adds 3 to the smallest of a or b.
-  if (a < b) {
-    return(c(a + 3, b))
-  }
-  else {
-    return(c(a, b + 3))
-  }
-}
-\end{Rin}
-
-Note that R will implicitly return the last computed expression without the need
-for a \mintinline{R}{return} statement. So the above can also be written as:
-
-\begin{Rin}
-add_3_to_smallest <- function(a, b) {
-  # This function adds 3 to the smallest of a or b.
-  if (a < b) {
-    c(a + 3, b)
-  }
-  else {
-    c(a, b + 3)
-  }
-}
-\end{Rin}
-
-Once we have defined the function, the following is how we use it:
-
-\begin{Rin}
-print(add_3_to_smallest(a = 5, b = -42))
+print( (Q * 500) %>% expm %>% round(5))
 \end{Rin}
 
 which gives:
 
 \begin{Rout}
-[1]   5 -39
+        [,1]    [,2]    [,3]    [,4]    [,5]   [,6]    [,7]
+[1,] 0.03431 0.08577 0.10722 0.13402 0.16752 0.2094 0.26176
+[2,] 0.03431 0.08577 0.10722 0.13402 0.16752 0.2094 0.26176
+[3,] 0.03431 0.08577 0.10722 0.13402 0.16752 0.2094 0.26176
+[4,] 0.03431 0.08577 0.10722 0.13402 0.16752 0.2094 0.26176
+[5,] 0.03431 0.08577 0.10722 0.13402 0.16752 0.2094 0.26176
+[6,] 0.03431 0.08577 0.10722 0.13402 0.16752 0.2094 0.26176
+[7,] 0.03431 0.08577 0.10722 0.13402 0.16752 0.2094 0.26176
 \end{Rout}
 
-It is possible to iterate over elements inside R vectors:
+We see that no matter what state (row) we are in, after 500 time units the
+probabilities are all the same. We could in fact stop our analysis here, however
+our choice of 500 time units was arbitrary and might not be the correct amount
+for all possible scenarios, as such we will continue to aim to solve the
+underlying equation~\ref{eqn:continuous_time_markov_process_steady_state}
+directly.
+
+To be able to do this, we will make use of the versatile \mintinline{R}{pracma}
+package which includes a number of numerical analysis functions for efficient
+computations.
 
 \begin{Rin}
-tennis_players <- c("Federer",
-                    "S. Williams",
-                    "V. Williams",
-                    "King")
-\end{Rin}
+library(pracma, warn.conflicts = FALSE, quietly = TRUE)
 
-The following will print all the names contained in the vector:
-
-\begin{Rin}
-for (name in tennis_players) {
-    print(name)
+#' Return the steady state vector of any given continuous time
+#' transition rate matrix
+#'
+#' @param Q a transition rate matrix
+#'
+#' @return A vector
+get_steady_state_vector <- function(Q){
+  state_space_size <- dim(Q)[1]
+  A <- rbind(t(Q), 1)
+  b <- c(integer(state_space_size), 1)
+  mldivide(A, b)
 }
 \end{Rin}
 
-which gives:
+This is making use of \mintinline{R}{pracma}'s \mintinline{R}{mldivide} function
+which chooses the best numerical algorithm to find the solution to a given
+matrix equation \(Ax=b\).
 
-\begin{Rout}
-[1] "Federer"
-[1] "S. Williams"
-[1] "V. Williams"
-[1] "King"
-\end{Rout}
-
-We will often want to iterate over a vector of integers, R has a \mintinline{R}
-{seq}
-command that can create such a vector with ease. The following
-code will print every 3 integers from 30 to 50:
+So if we now see the steady state vector for our default system:
 
 \begin{Rin}
-for (i in seq(30, 50, 3)) {
-  print(i)
+print(get_steady_state_vector(Q))
+\end{Rin}
+
+we get:
+
+\begin{Rout}
+           [,1]
+[1,] 0.03430888
+[2,] 0.08577220
+[3,] 0.10721525
+[4,] 0.13401906
+[5,] 0.16752383
+[6,] 0.20940479
+[7,] 0.26175598
+\end{Rout}
+
+We can see that the shop is expected to be empty approximately 3.4\% of the time
+and full 26.2\% of the time.
+
+The final piece of this puzzle is to create a single function that uses all of
+the above to just return the probability of the shop being full.
+
+\begin{Rin}
+#' Return the probability of the barber shop being full
+#'
+#' @param waiting_room (default: 4)
+#' @param num_barbers (default: 2)
+#'
+#' @return A real
+get_probability_of_full_shop <- function(waiting_room = 4,
+                                         num_barbers = 2){
+  arrival_rate <- 10
+  service_rate <- 4
+  pi <- get_transition_rate_matrix(
+    waiting_room = waiting_room,
+    num_barbers = num_barbers
+    ) %>%
+    get_steady_state_vector()
+
+  capacity <- waiting_room + num_barbers
+  pi[capacity + 1]
 }
 \end{Rin}
 
-which will give:
-
-\begin{Rout}
-[1] 30
-[1] 33
-[1] 36
-[1] 39
-[1] 42
-[1] 45
-[1] 48
-\end{Rout}
-
-A final important aspect of R is that of packages. The code examples above
-are from the so called `base R' but R has numerous packages
-specific to given problems. If you want to download and use one you can always
-do so as long as you have an internet connection.
-
-For example, to download a very common collection of data science tools called
-\mintinline{R}{tidyverse}
-we use the following line of code inside of an R session:
-
-\begin{Rin-no-test}
-install.packages("simmer")
-\end{Rin-no-test}
-
-Once this package is installed it is loaded using
+Now we can run this code efficiently with both scenarios:
 
 \begin{Rin}
-library(simmer)
+print(get_probability_of_full_shop(waiting_room = 6))
 \end{Rin}
 
-\section{A note on how code is displayed in this
-book}\label{sec:a-note-on-how-code-is-displayed-in-this-book}
+which decreases the probability of a full shop to:
 
-% TODO Discuss:
-% - Input/output R/python boxes
-% - Line number throughout
+\begin{Rout}
+[1] 0.2355699
+\end{Rout}
 
-\begin{thefurtherreading}{99}  % TODO This should not be here, it is just an
-                               % example of our further reading sections for
-                               % chapters 3 onwards.
+but adding another barber and chair:
 
-\bibitem{} Becskei, A. and Serrano, L. (2000). Engineering stability in gene
-networks by autoregulation. \textit{Nature, }405: 590--593.
+\begin{Rin}
+print(get_probability_of_full_shop(num_barbers = 3))
+\end{Rin}
 
-\bibitem{} Rosenfeld, N., Elowitz, M.B., and Alon, U. (2002). Negative
-auto-regulation speeds the response time of transcription networks. \textit{J.
-Mol. Biol.}, 323: 785--793.
+gives:
 
-\bibitem{} Savageau, M.A. (1976). \textit{Biochemical Systems Analysis: A study
-of Function and Design in Molecular Biology. }Addison-Wesley. Chap. 16.
+\begin{Rout}
+[1] 0.0786359
+\end{Rout}
 
-\bibitem{} Savageau, M.A. (1974). Comparison of classical and auto-genous
-systems of regulation in inducible operons. \textit{Nature}, 252: 546--549.
-\end{thefurtherreading}
+\section{Research}\label{sec:research}
+
+TBA

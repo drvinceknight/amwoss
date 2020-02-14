@@ -1,635 +1,680 @@
-\chapter[Markov Chains]{Markov Chains}
+\chapter[Discrete Event Simulation]{Discrete Event Simulation}
 
 % Introduction
-\chapterinitial{M}{any} real world situations have some level of
-unpredictability through randomness: the flip of a coin, the number of orders of
-coffee in a shop, the winning numbers of the lottery. However, mathematics can
-in fact let us make predictions about what we expect to happen. One tool used to
-understand randomness is Markov chains, an area of mathematics sitting at the
-intersection of probability and linear algebra.
+\chapterinitial{C}{omplex} situations further compounded by randomness appear
+throughout our daily lives. For example, data flowing through a computer
+network, patients being treated at an emergency services, and daily commutes to
+work.
+Mathematics can be used to understand these complex situations so as to
+make predictions which in turn can be used to make improvements. One tool used
+to do this is to let a computer create a dynamic virtual representation of the
+scenario in question, the particular type we are going to cover here is called
+Discrete Event Simulation.
 
 \section{Problem}\label{sec:problem}
 
-Consider a barber shop. The shop owners have noticed that customers will not
-wait if there is no room in their waiting room and will choose to take their
-business elsewhere. The Barber shop would like to make an investment so as to
-avoid this situation. They know the following information:
+Consider the following situation: a bicycle repair shop would like reconfigure
+their set-up in order to guarantee that all bicycles processed by the repair
+shop take a maximum of 30 minutes.
+Their current set-up is as follows:
 
 \begin{itemize}
-    \item They currently have 2 barber chairs (and 2 barbers).
-    \item They have waiting room for 4 people.
-    \item They usually have 10 customers arrive per hour.
-    \item Each Barber takes about 15 minutes to serve a customer so they can
-        serve 4 customers an hour.
+  \item Bicycles arrive randomly at the shop at a rate of 15 per hour.
+  \item They wait in line to be seen at an inspection counter, manned by one
+  member of staff who can inspect one bicycle at a time. On average an
+  inspection takes around 3 minutes.
+  \item After inspection it is found that around 20\% of bicycles do not need
+  repair, and they are then ready for collection.
+  \item After inspection is is found that around 80\% of bicycles go on to be
+  repaired. These then wait in line outside the repair workshop, which is manned
+  by two members of staff who can each repair one bicycle at a time. On average
+  a repair takes around 6 minutes.
+  \item After repair the bicycles are ready for collection.
 \end{itemize}
 
-This is represented diagrammatically in Figure~\ref{fig:barber-shop}.
+A diagram of the system is shown in Figure~\ref{fig:bike-shop}
 
-\begin{figure}[!hbtp]
-    \begin{center}
-    \includestandalone[width=.6\textwidth]{./assets/barber-shop/main}
-    \end{center}
-    \caption{Diagrammatic representation of the barber shop as a queuing system.}
-    \label{fig:barber-shop}
+\begin{figure}
+\begin{center}
+\includestandalone[width=\textwidth]{./assets/bike-repair-shop}
+\end{center}
+\caption{Diagrammatic representation of the bicycle repair shop as a queuing system.}
+\label{fig:bike-shop}
 \end{figure}
 
+We can also assume that there is infinite capacity at the bicycle repair shop
+for waiting bicycles.
+The shop will hire and extra member of staff in order to meet their target of a
+maximum time in the system of 30 minutes. They would like to know if they
+should work on the inspection counter or in the repair workshop?
 
-They are planning on
-reconfiguring space to either have 2 extra waiting chairs or
-another barber's chair and barber.
-
-The mathematical tool used to model this situation is a Markov chain.
 
 \section{Theory}\label{sec:theory}
 
-A Markov chain is a model of a sequence of random events that is defined by a
-collection of \textbf{states} and rules that define how to move between these
-states.
+A number of the events that govern the behaviour of the bicycle shop above are
+probabilistic. For example the
+times that bicycles arrive at the shop, the duration of the inspection and
+repairs, and whether the bicycle would need to go on to be repaired or not.
+When a number of these probabilistic events are arranged in a complex system
+such as the bicycle shop, using analytical methods to manipulate these
+probabilities can become difficult. One method to deal with this is
+\textit{simulation}.
 
-For example, in the barber shop a single number is sufficient to describe the
-status of the shop. If that number is 1 this implies that 1 customer is
-currently having their hair cut. If that number is 5 this implies that 2
-customers are being served and 3 are waiting. The entire state space is, in this
-case a finite set of integers from 0 to 6. If the system is full (all barbers
-and waiting room occupied) then we are in state 6 and if there is no one at the
-shop then we are in state 0. This is denoted mathematically as:
+Consider one probabilistic event, rolling a die.
+A die has six sides numbered 1 to 6, each side is equally likely to land.
+Therefore the probability of rolling a 1 is $\frac{1}{6}$, the probability of
+rolling a 2 is $\frac{1}{6}$, and so on. This means that that if we roll the die
+a large number of times, we would except $\frac{1}{6}$ of those rolls to be a 1.
+This is called the \textit{law of large numbers}.
+
+Now imagine we have an event in which we do not know the analytical probability
+of it occurring. Consider rolling a weighted die, in this case a
+die in which the probability of obtaining one number is much greater than the
+others. How can we estimate the probability of obtaining a 5 on this die?
+
+Rolling the weighted die once does not give us much information.
+However due to the law of large numbers, we can roll this die a number of times,
+and find the proportion of those rolls which gave a 5. The more times we roll
+the die, the closer this proportion approaches the underlying probability of
+obtaining a 5.
+
+For a complex system such as the bicycle shop, we would like to estimate the
+proportion of bicycles that take longer than 30 minutes to be processed. As it
+is a complex system it is difficult to work this out analytically. So, just
+like the weighted die, we would
+like to observe this system a number of times and record the overall proportions
+of bicycles spending longer than 30 minutes in the shop, which will converge to
+the true underlying proportion.
+However unlike rolling a weighted die, it it costly to observe this shop over a
+number of days with identical conditions. In this case it is costly in terms of
+time, as the repair shop already exists. However some scenarios, for example the
+scenario where the repair shop hires and additional member of staff, do not yet
+exist, so observing this this would be costly in terms of money also.
+We can however build a virtual representation of this complex system on a
+computer, and observe a virtual day of work much more quickly and much less
+costly on the computer, similar to a video game.
+
+% Computers not good at generating random numbers, so use pseudo random numbers. e.g. (formula)
+In order to do this, the computer needs to be able to generate random outcomes
+of each of the smaller events that make up the large complex system. Generating
+random events are essentially doing things to random numbers, that need to be
+generated.
+
+Computers are deterministic, therefore true randomness is not always possible.
+They can however generate pseudorandom numbers: sequences of numbers that look
+like random numbers, but are entirely determined from the
+previous numbers in the sequence. Most programming languages have methods of
+doing this.
+
+In order to simulate an event we can again manipulate the law of large numbers.
+Let $X \sim U(0, 1)$, a uniformly pseudorandom variable between 0 and 1.
+Let $D$ be the outcome of a roll of an unbiased die. Then $D$ can be defined as:
 
 \begin{equation}
-    S = \{0, 1, 2, 3, 4, 5, 6\}
-    \label{eqn:barber_shop_state_space}
+D =
+  \begin{cases}
+    1 & \text{if } 0 \leq X < \frac{1}{6}\\
+    2 & \text{if } \frac{1}{6} \leq X < \frac{2}{6}\\
+    3 & \text{if } \frac{2}{6} \leq X < \frac{3}{6}\\
+    4 & \text{if } \frac{3}{6} \leq X < \frac{4}{6}\\
+    5 & \text{if } \frac{4}{6} \leq X < \frac{5}{6}\\
+    6 & \text{if } \frac{5}{6} \leq X < 1
+  \end{cases}
 \end{equation}
 
-As customers arrive and leave the system goes between states as shown in
-Figure~\ref{fig:barber-shop-birth-death-no-rates}.
+% What we gonna do: use pseudo random numbers to 'simulate' the system. - because law of large number we can simulate many times and smoothe.
+The bicycle repair shop is a system made up of interactions of a number of other
+simpler random events. This can be thought of as many interactions of random
+variables, each generated using pseudorandom numbers.
 
-\begin{figure}[!hbtp]
-    \begin{center}
-    \includestandalone[width=.6\textwidth]{./assets/barber-shop-birth-death-no-rates/main}
-    \end{center}
-    \caption{Diagrammatic representation of the state space}
-    \label{fig:barber-shop-birth-death-no-rates}
-\end{figure}
-
-The rules that govern how to move between these states can be defined in two
-ways:
-
+In this case the fundamental random events that need to be generated are:
 \begin{itemize}
-    \item Using probabilities of changing state (or not) in a well defined time
-        period.  This is called a discrete Markov chain.
-    \item Using rates of change from one state to another. This is called a
-        continuous time Markov chain.
+  \item the time each bicycle arrives to the repair shop,
+  \item the time each bicycle spends at the inspection counter,
+  \item whether each bicycle needs to go on the the repair workshop,
+  \item the time each those bicycles spends at the repair shop.
 \end{itemize}
 
-For our barber shop we will consider it as a continuous Markov chain as shown
-in Figure~\ref{fig:barber-shop-continuous-markov-process}
+As the simulation progresses these events will be generated, and will interact
+together as described in Section~\ref{sec:problem}.
+The proportion of customers spending longer than 30 minutes in the shop can then
+be counted. This proportion itself is a random variable, and so just like the
+weighted die, running this simulation once does not give us much information.
+But we can run the simulation many times and take an average proportion, to
+smooth out any variability.
 
-\begin{figure}[!hbtp]
-    \begin{center}
-    \includestandalone[width=.6\textwidth]{./assets/barber-shop-continuous-markov-process/main}
-    \end{center}
-    \caption{Diagrammatic representation of the state space and the transition
-    rates}
-    \label{fig:barber-shop-continuous-markov-process}
-\end{figure}
+% Two types of DES - event scheduleing in Python, process-based in R.
+The process outlined above is a particular implementation of Monte Carlo
+simulation called \textit{discrete event simulation}, which generates
+pseudorandom numbers and observes their interactions. In practice there are two
+main approaches to simulating complex probabilistic systems such as this one:
+the \textit{event scheduling} approach, and \textit{process based} simulation.
+It just so happens that the main implementations in Python and R use each of
+these approaches, so you will see both approaches used here.
 
-Note that a Markov chain assumes the rates follow an exponential distribution.
-One interesting property of this distribution is that it is considered
-memoryless which means that if a customer has been having their hair cut for 5
-minutes this does not change the rate at which their service ends.
-This distribution is quite common in the real world and therefore a common
-assumption.
 
-These states and rates can be represented mathematically using a transition
-matrix \(Q\) where \(Q_{ij}\) represents the rate of going from state \(i\) to
-state \(j\). In this case we have:
+% Event scheduling
+\subsection{Event Scheduling Approach}
+When using the event scheduling approach, we can think of the `virtual
+representation' of the system as being the facilities that the bicycles use,
+shown in Figure~\ref{fig:bike-shop}. Then we
+let entities (the bicycles) interact with these facilities. It is these
+facilities that determine how the entities behave.
 
-\begin{equation}
-Q =
-\begin{pmatrix}
--10 &  10 &   0 &   0 &   0 &   0 &   0\\
-  4 & -14 &  10 &   0 &   0 &   0 &   0\\
-  0 &   8 & -18 &  10 &   0 &   0 &   0\\
-  0 &   0 &   8 & -18 &  10 &   0 &   0\\
-  0 &   0 &   0 &   8 & -18 &  10 &   0\\
-  0 &   0 &   0 &   0 &   8 & -18 &  10\\
-  0 &   0 &   0 &   0 &   0 &   8 &  -8\\
- \end{pmatrix}
- \label{eqn:barber_shop_transition_matrix}
-\end{equation}
+In a simulation that uses an event scheduling approach, a key concept is that
+events occur that cause further events to occur in the future, either
+immediately or after a delay, such as after some time in service.
+In the bicycle shop examples of such events include a bicycle joining a queue, a
+bicycle beginning service, and a bicycle finishing service. At each event the
+event list is updated, and the clock then jumps forward to the next event in
+this updated list.
 
-You will see that \(Q_{ii}\) are negative and ensure the rows of \(Q\) sum to 0.
-This gives the total rate of change leaving state \(i\).
+% Process based
+\subsection{Process Based Simulation}
+When using process based simulation, we can think of the `virtual
+representation' of the system as being the sequence of actions that each entity
+(the bicycles) must take, and these sequences of actions might contain delays as
+a number of entities seize and release a finite amount of resources. It is the
+sequence of actions that determine how the entities behave.
 
-We can use \(Q\) to understand the probability of being in a given state after
-\(t\) time unis. This is can be represented mathematically using a matrix
-\(P_{t}\) where \((P_{t})_{ij}\) is the probability of being in state \(j\)
-after \(t\) time units having started in state \(i\). We can use \(Q\) to
-calculate \(P_{t}\) using the matrix exponential:
+For the bicycle repair shop an example of one possible sequence of actions would
+be:
 
-\begin{equation}
-    P_t = e^{Qt}
-    \label{eqn:continuous_time_markov_process_matrix_exponential}
-\end{equation}
+\textit{arrive $\rightarrow$ seize inspection counter $\rightarrow$ delay $\rightarrow$ release inspection counter $\rightarrow$ seize repair shop $\rightarrow$ delay $\rightarrow$ release repair shop $\rightarrow$ leave}
 
-What is also useful is understanding the long run behaviour of the
-system. This allows us to answer questions such as ``what state are we most
-likely to be in on average?'' or ``what is the probability of being in the last
-state on average?''.
+The scheduled delays in this sequence of events correspond to the time spend
+being inspected and the time spend being repaired. Waiting in line for service
+at these facilities are not included in the sequence of events; that is implicit
+by the `seize' and `release' actions, as an entity will wait for a free resource
+before seizing one.
+Therefore in process based simulations, in addition to defining a sequence of
+events, resource types and their numbers also need to be defined.
 
-This long run probability distribution over the state can be represented using a
-vector \(\pi\) where \(\pi_i\) represents the probability of being in state
-\(i\). This vector is in fact the solution to the following matrix equation:
-
-\begin{equation}
-    \pi Q = 0
-    \label{eqn:continuous_time_markov_process_steady_state}
-\end{equation}
-
-In the upcoming sections we will demonstrate all of the above concepts.
 
 \section{Solving with Python}\label{sec:solving-with-python}
 
-The first step we will take is to write a function to obtain the transition
-rates between two given states:
+In this book we will use the Ciw library in order to conduct discrete event
+simulation in Python.
+Ciw uses the event scheduling approach, which means we must define the system's
+facilities, and then let customers loose to interact with them.
 
+In this case there are two facilities to define: the inspection desk and the
+repair workshop. Let's order these as so. For each of these we need to define:
+
+\begin{itemize}
+  \item the distribution of times between consecutive bicycles arriving,
+  \item the distribution of times the bicycles spend in service,
+  \item the number of servers available,
+  \item the probability of routing to each of the other facilities after
+  service.
+\end{itemize}
+
+In this case we will assume that the time between consecutive arrivals follow a
+exponential distribution, and that the service times also follow exponential
+distributions. These are common assumptions for this sort of queueing system. % TODO add reference
+
+In Ciw, these are defined in a Network object, created using the
+\mintinline{python}{ciw.create_network} function. The function below
+creates a Network object that defines the for a given set of parameters bicycle
+repair shop:
 
 \begin{pyin}
-def get_transition_rate(
-    in_state, out_state, waiting_room=4, num_barbers=2,
+import ciw
+
+
+def build_network_object(
+    num_inspectors=1, num_repairers=2,
 ):
-    """Return the transition rate for two given states.
+    """Returns a Network object that defines the repair shop.
 
     Args:
-        in_state: an integer
-        out_state: an integer
-        waiting_room: an integer (default: 4)
-        num_barbers:  an integer (default: 2)
+        num_inspectors: a positive integer (default: 1)
+        num_repairers: a positive integer (default: 2)
 
     Returns:
-        A real.
+        a Ciw network object
     """
-    arrival_rate = 10
-    service_rate = 4
-
-    capacity = waiting_room + num_barbers
-    delta = out_state - in_state
-
-    if delta == 1 and in_state < capacity:
-        return arrival_rate
-
-    if delta == -1:
-        return min(in_state, num_barbers) * service_rate
-
-    return 0
+    arrival_rate = 15
+    inspection_rate = 20
+    repair_rate = 10
+    prob_need_repair = 0.8
+    N = ciw.create_network(
+        arrival_distributions=[
+            ciw.dists.Exponential(arrival_rate),
+            ciw.dists.NoArrivals(),
+        ],
+        service_distributions=[
+            ciw.dists.Exponential(inspection_rate),
+            ciw.dists.Exponential(repair_rate),
+        ],
+        number_of_servers=[num_inspectors, num_repairers],
+        routing=[[0.0, prob_need_repair], [0.0, 0.0]],
+    )
+    return N
 \end{pyin}
 
-Next, we write a function that creates an entire transition rate matrix \(Q\)
-for a given problem. We will use the \mintinline{python}{numpy} to handle all
-the linear algebra and the \mintinline{python}{itertools} library for some
-iterations:
+A Network object is used by Ciw to access system parameters. For example one
+piece of information it holds is the number of nodes of the system:
 
 \begin{pyin}
-import itertools
-import numpy as np
+N = build_network_object()
+print(N.number_of_nodes)
+\end{pyin}
 
+which gives:
 
-def get_transition_rate_matrix(waiting_room=4, num_barbers=2):
-    """Return the transition matrix Q.
+\begin{pyout}
+2
+\end{pyout}
+
+Now we have defined the system, we need to use this to build the virtual
+representation of the system: in Ciw this is a Simulation object.
+Once this is built the simulation can be run, that is observe it for one
+virtual day. The following function does this:
+
+\begin{pyin}
+def run_simulation(network, seed=0):
+    """Builds a simulation object and runs it for 8 time units.
 
     Args:
-        waiting_room: an integer (default: 4)
-        num_barbers: an integer (default: 2)
+        network: a Ciw network object
+        seed: a float (default: 0)
 
     Returns:
-        A matrix.
+        a Ciw simulation object after a run of the simulation
     """
-    capacity = waiting_room + num_barbers
-    state_pairs = itertools.product(
-        range(capacity + 1), repeat=2
-    )
-
-    flat_transition_rates = [
-        get_transition_rate(
-            in_state=in_state,
-            out_state=out_state,
-            waiting_room=waiting_room,
-            num_barbers=num_barbers,
-        )
-        for in_state, out_state in state_pairs
-    ]
-    transition_rates = np.reshape(
-        flat_transition_rates, (capacity + 1, capacity + 1)
-    )
-    np.fill_diagonal(
-        transition_rates, -transition_rates.sum(axis=1)
-    )
-
-    return transition_rates
+    max_time = 8
+    ciw.seed(seed)
+    Q = ciw.Simulation(network)
+    Q.simulate_until_max_time(max_time)
+    return Q
 \end{pyin}
 
-Using this we can obtain the matrix \(Q\) for our default system:
+Notice here a random seed is set. This is because there is some element of
+randomness when initialising this object, and much randomness in running
+the simulation, and in order to ensure reproducible
+results we force the pseudorandom number generator to produce the same sequence
+of pseudorandom numbers each time.
+Notice also that the simulation always begins with an empty system, so the first
+bicycle to arrive will never wait for service. Depending on the situation this
+may be an unwanted feature, though not in this case as it is reasonable to
+assume that the bicycle shop will begin the day with no customers.
+
+Now we wish to count the number of bicycles that have finished service, and to
+count the number of those whose entire journey through the system lasted longer
+than 0.5 hours. In order to do so, we'll use the \mintinline{python}{pandas}
+library for efficient manipulation of data frames.
 
 \begin{pyin}
-Q = get_transition_rate_matrix()
-print(Q)
-\end{pyin}
+import pandas as pd
 
-which gives:
 
-\begin{pyout}
-[[-10  10   0   0   0   0   0]
- [  4 -14  10   0   0   0   0]
- [  0   8 -18  10   0   0   0]
- [  0   0   8 -18  10   0   0]
- [  0   0   0   8 -18  10   0]
- [  0   0   0   0   8 -18  10]
- [  0   0   0   0   0   8  -8]]
-\end{pyout}
-
-We can take the matrix exponential as
-discussed above. To do this, we need to use the \mintinline{python}{scipy}
-library. To see what would happen after .5 time units we obtain:
-\begin{pyin}
-import scipy.linalg
-
-print(scipy.linalg.expm(Q * 0.5).round(5))
-\end{pyin}
-
-which gives:
-
-\begin{pyout}
-[[0.10492 0.21254 0.20377 0.17142 0.13021 0.09564 0.0815 ]
- [0.08501 0.18292 0.18666 0.1708  0.14377 0.1189  0.11194]
- [0.06521 0.14933 0.16338 0.16478 0.15633 0.14751 0.15346]
- [0.04388 0.10931 0.13183 0.15181 0.16777 0.18398 0.21142]
- [0.02667 0.07361 0.10005 0.13422 0.17393 0.2189  0.27262]
- [0.01567 0.0487  0.07552 0.11775 0.17512 0.24484 0.32239]
- [0.01068 0.03668 0.06286 0.10824 0.17448 0.25791 0.34914]]
-\end{pyout}
-
-To see what would happen after 500 time units we obtain:
-
-\begin{pyin}
-print(scipy.linalg.expm(Q * 500).round(5))
-\end{pyin}
-
-which gives:
-
-\begin{pyout}
-[[0.03431 0.08577 0.10722 0.13402 0.16752 0.2094  0.26176]
- [0.03431 0.08577 0.10722 0.13402 0.16752 0.2094  0.26176]
- [0.03431 0.08577 0.10722 0.13402 0.16752 0.2094  0.26176]
- [0.03431 0.08577 0.10722 0.13402 0.16752 0.2094  0.26176]
- [0.03431 0.08577 0.10722 0.13402 0.16752 0.2094  0.26176]
- [0.03431 0.08577 0.10722 0.13402 0.16752 0.2094  0.26176]
- [0.03431 0.08577 0.10722 0.13402 0.16752 0.2094  0.26176]]
-\end{pyout}
-
-We see that no matter what state (row) the system is in, after 500 time units
-the probabilities are all the same. We could in fact stop our analysis here,
-however our choice of 500 time units was arbitrary and might not be the correct
-amount for all possible scenarios, as such we will continue to aim to solve the
-underlying equation~\ref{eqn:continuous_time_markov_process_steady_state}
-directly.
-
-To do this we will solve the underlying system using a numerically efficient
-algorithm called least squares optimisation (available from the
-\mintinline{python}{numpy} library):
-
-\begin{pyin}
-def get_steady_state_vector(Q):
-    """Return the steady state vector of any given continuous
-    time transition rate matrix.
+def get_proportion(Q):
+    """Returns the proportion of bicycles spending over a given
+    limit at the repair shop.
 
     Args:
-       Q: a transition rate matrix
+        Q: a Ciw simulation object after a run of the
+           simulation
 
     Returns:
-        A vector
+        a real
     """
-    state_space_size, _ = Q.shape
-    A = np.vstack((Q.T, np.ones(state_space_size)))
-    b = np.append(np.zeros(state_space_size), 1)
-    x, _, _, _ = np.linalg.lstsq(A, b, rcond=None)
-    return x
+    limit = 0.5
+    inds = Q.nodes[-1].all_individuals
+    recs = pd.DataFrame(
+        dr for ind in inds for dr in ind.data_records
+    )
+    recs["total_time"] = (
+        recs["exit_date"] - recs["arrival_date"]
+    )
+    total_times = recs.groupby("id_number")["total_time"].sum()
+    return (total_times > limit).mean()
 \end{pyin}
 
-So if we now see the steady state vector for our default system:
+Altogether these functions can define the system, run one day of our system, and
+then find the proportion of bicycles spending over half an hour in the shop:
 
 \begin{pyin}
-print(get_steady_state_vector(Q).round(5))
+N = build_network_object()
+Q = run_simulation(N)
+p = get_proportion(Q)
+print(round(p, 6))
 \end{pyin}
 
-we get:
+This piece of code gives
 
 \begin{pyout}
-[0.03431 0.08577 0.10722 0.13402 0.16752 0.2094  0.26176]
+0.261261
 \end{pyout}
 
-We can see that the shop is expected to be empty approximately 3.4\% of the time
-and full 26.2\% of the time.
+meaning 26.13\% of all bicycles spent longer than half an hour at the repair
+shop.
 
-The final function we will write is one that uses all of
-the above to just return the probability of the shop being full.
+However this particular day may have contained a number of extreme events.
+For a more accurate proportion this experiment should be repeated, and an
+average proportion taken.
+In order to do so, let's write a function that performs the above experiment
+over a number of trials, then finds an average proportion:
 
 \begin{pyin}
-def get_probability_of_full_shop(
-    waiting_room=4, num_barbers=2
-):
-    """Return the probability of the barber shop being full.
+def get_average_proportion(num_inspectors=1, num_repairers=2):
+    """Returns the average proportion of bicycles spending over
+    a given limit at the repair shop.
 
     Args:
-        waiting_room: an integer (default: 4)
-        num_barbers: an integer (default: 2)
+        num_inspectors: a positive integer (default: 1)
+        num_repairers: a positive integer (default: 2)
 
     Returns:
-        A real.
+        a real
     """
-    Q = get_transition_rate_matrix(
-        waiting_room=waiting_room, num_barbers=num_barbers,
+    num_trials = 100
+    N = build_network_object(
+        num_inspectors=num_inspectors,
+        num_repairers=num_repairers,
     )
-    pi = get_steady_state_vector(Q)
-    return pi[-1]
+    proportions = []
+    for trial in range(num_trials):
+        Q = run_simulation(N, seed=trial)
+        proportion = get_proportion(Q=Q)
+        proportions.append(proportion)
+    return sum(proportions) / num_trials
 \end{pyin}
 
-We can now confirm the previous probability calculated probability of the shop
-being full:
+This can be used to find the average proportion over 100 trials for the current
+system of one inspector and two repair people:
 
 \begin{pyin}
-print(round(get_probability_of_full_shop(), 6))
+p = get_average_proportion(num_inspectors=1, num_repairers=2)
+print(round(p, 6))
 \end{pyin}
 
 which gives:
 
 \begin{pyout}
-0.261756
+0.159354
 \end{pyout}
 
-If we were too have 2 extra space in the waiting room:
+that is, on average 15.94\% of bicycles will spend longer than 30 minutes at the
+repair shop.
+
+Now consider the two possible future scenarios we wish top compare: hiring an
+extra member of staff to serve at the inspection desk, or hiring an extra member
+of staff at the repair workshop. Which scenario yields a smaller proportion of
+bicycles spending over 30 minutes at the shop? Let's investigate. First look at
+the situation where the additional member of staff works at the inspection desk:
 
 \begin{pyin}
-print(round(get_probability_of_full_shop(waiting_room=6), 6))
+p = get_average_proportion(num_inspectors=2, num_repairers=2)
+print(round(p, 6))
 \end{pyin}
 
 which gives:
 
 \begin{pyout}
-0.23557
+0.038477
 \end{pyout}
 
-This is a slight improvement however, increasing the number of barbers has a
-substantial effect:
+that is 3.85\% of bicycles.
+
+Now look at the situation where the additional member of staff works at the
+repair workshop:
 
 \begin{pyin}
-print(round(get_probability_of_full_shop(num_barbers=3), 6))
+p = get_average_proportion(num_inspectors=1, num_repairers=3)
+print(round(p, 6))
 \end{pyin}
 
+which gives:
+
 \begin{pyout}
-0.078636
+0.103591
 \end{pyout}
+
+that is 10.36\% of bicycles.
+
+Therefore an additional member of staff at the inspection desk would be more
+beneficial than an additional member of staff at the repair workshop.
+
+
 \section{Solving with R}\label{sec:solving-with-R}
 
-The first step we will take is write a function to obtain the transition rates
-between two given states:
+In this book we will use the Simmer package in order to conduct discrete event
+simulation in R.
+Simmer uses the process based approach, which means we must define the each
+bicycle's sequence of actions, and then generate a number of bicycles with these
+sequences.
+
+In Simmer these sequences of actions are made up of trajectories. The
+diagram in Figure~\ref{fig:processbased_diagram} shows the branched
+trajectories than a bicycle would take at the repair shop:
+
+\begin{figure}
+\begin{center}
+\includestandalone[width=\textwidth]{./assets/process_based}
+\caption{Diagrammatic representation of the forked trajectories a bicycle can take}
+\label{fig:processbased_diagram}
+\end{center}
+\end{figure}
+
+The function below defines a simmer object that describes these trajectories:
 
 \begin{Rin}
-#' Return the transition rate for two given states.
+library(simmer)
+
+#' Returns a simmer trajectory object outlining the bicycles
+#' path through the repair shop
 #'
-#' @param in_state an integer
-#' @param out_state an integer
-#' @param waiting_room an integer (default: 4)
-#' @param num_barbers an integer  (default: 2)
-#'
-#' @return A real
-get_transition_rate <- function(in_state,
-                                out_state,
-                                waiting_room = 4,
-                                num_barbers = 2){
-  arrival_rate <- 10
-  service_rate <- 4
-
-  capacity <- waiting_room + num_barbers
-  delta <- out_state - in_state
-
-  if (delta == 1) {
-    if (in_state < capacity) {
-      return(arrival_rate)
-    }
-  }
-
-  if (delta == -1) {
-    return(min(in_state, num_barbers) * service_rate)
-  }
-  return(0)
+#' @return A simmer trajectory object
+define_bicycle_trajectories <- function() {
+  inspection_rate <- 20
+  repair_rate <- 10
+  prob_need_repair <- 0.8
+  bicycle <-
+    trajectory("Inspection") %>%
+    seize("Inspector") %>%
+    timeout(function() {
+      rexp(1, inspection_rate)
+    }) %>%
+    release("Inspector") %>%
+    branch(
+      function() (runif(1) < prob_need_repair),
+      continue = c(F),
+      trajectory("Repair") %>%
+        seize("Repairer") %>%
+        timeout(function() {
+          rexp(1, repair_rate)
+        }) %>%
+        release("Repairer"),
+      trajectory("Out")
+    )
+  return(bicycle)
 }
 \end{Rin}
 
-We will not actually use this function but a vectorized version of this:
+These trajectories are not very useful alone, we are yet to define the resources
+used, or a way to generate bicycles with these trajectories. This is done in the
+function below, which begins by defining a \mintinline{R}{repair_shop} with one
+resource labelled ``Inspector'', and two resources labelled ``Repairer''.
+Once this is built the simulation can be run, that is observe it for one
+virtual day. The following function does all this:
 
 \begin{Rin}
-vectorized_get_transition_rate <- Vectorize(
-  get_transition_rate,
-  vectorize.args = c("in_state", "out_state")
+#' Runs one trial of the simulation.
+#'
+#' @param bicycle a simmer trajectory object
+#' @param num_inspectors positive integer (default: 1)
+#' @param num_repairers positive integer (default: 2)
+#' @param seed a float (default: 0)
+#'
+#' @return A simmer simulation object after one run of
+#;         the simulation
+run_simulation <- function(bicycle,
+                           num_inspectors = 1,
+                           num_repairers = 2,
+                           seed = 0) {
+  arrival_rate <- 15
+  max_time <- 8
+  repair_shop <-
+    simmer("Repair Shop") %>%
+    add_resource("Inspector", num_inspectors) %>%
+    add_resource("Repairer", num_repairers) %>%
+    add_generator("Bicycle", bicycle, function() {
+      rexp(1, arrival_rate)
+    })
+
+  set.seed(seed)
+  repair_shop %>% run(until = 8)
+  return(repair_shop)
+}
+\end{Rin}
+
+Notice here a random seed is set. This is because there are elements of
+randomness when running the simulation, and in order to ensure reproducible
+results we force the pseudorandom number generator to produce the same sequence
+of pseudorandom numbers each time.
+Notice also that the simulation always begins with an empty system, so the first
+bicycle to arrive will never wait for service. Depending on the situation this
+may be an unwanted feature, though not in this case as it is reasonable to
+assume that the bicycle shop will begin the day with no customers.
+
+Now we wish to count the number of bicycles that have finished service, and to
+count the number of those whose entire journey through the system lasted longer
+than 0.5 hours. Using Simmer's \mintinline{R}{get_mon_arrivals()} function we
+can get a data frame of records to manipulate.
+
+\begin{Rin}
+#' Returns the proportion of bicycles spending over 30
+#' minutes in the repair shop
+#'
+#' @param repair_shop a simmer simulation object
+#'
+#' @return a float between 0 and 1
+get_proportion <- function(repair_shop) {
+  limit <- 0.5
+  recs <- repair_shop %>% get_mon_arrivals()
+  total_times <- recs$end_time - recs$start_time
+  return(mean(total_times > 0.5))
+}
+\end{Rin}
+
+Altogether these functions can define the system, run one day of our system, and
+then find the proportion of bicycles spending over half an hour in the shop:
+
+\begin{Rin}
+bicycle <- define_bicycle_trajectories()
+repair_shop <- run_simulation(bicycle = bicycle)
+print(get_proportion(repair_shop = repair_shop))
+\end{Rin}
+
+This piece of code gives
+
+\begin{Rout}
+[1] 0.04032258
+\end{Rout}
+
+meaning 4.03\% of all bicycles spent longer than half an hour at the repair
+shop.
+
+However this particular day may have contained a number of extreme events.
+For a more accurate proportion this experiment should be repeated, and an
+average proportion taken.
+In order to do so, let's write a function that performs the above experiment
+over a number of trials, then finds an average proportion:
+
+\begin{Rin}
+#' Returns the average proportion of bicycles spending over
+#' a given limit at the repair shop.
+#'
+#' @param num_inspectors positive integer (default: 1)
+#' @param num_repairers positive integer (default: 2)
+
+#' @return a float between 0 and 1
+get_average_proportion <- function(num_inspectors = 1,
+                                   num_repairers = 2) {
+  num_trials <- 100
+  bicycle <- define_bicycle_trajectories()
+  proportions <- c()
+  for (trial in 1:num_trials) {
+    repair_shop <- run_simulation(
+      bicycle = bicycle,
+      num_inspectors = num_inspectors,
+      num_repairers = num_repairers,
+      seed = trial
+    )
+    proportion <- get_proportion(
+      repair_shop = repair_shop
+    )
+    proportions[trial] <- proportion
+  }
+  return(mean(proportions))
+}
+\end{Rin}
+
+This can be used to find the average proportion over 100 trials:
+
+\begin{Rin}
+print(
+  get_average_proportion(
+    num_inspectors = 1,
+    num_repairers = 2)
 )
 \end{Rin}
 
-This function can now take a vector of inputs for the \mintinline{R}{in_state}
-and \mintinline{R}{out_state} variables which will allow us to simplify the
-following code that creates the matrices:
+which gives:
+
+\begin{Rout}
+[1] 0.1551579
+\end{Rout}
+
+that is, on average 15.52\% of bicycles will spend longer than 30 minutes at the
+repair shop.
+
+Now consider the two possible future scenarios we wish top compare: hiring an
+extra member of staff to serve at the inspection desk, or hiring an extra member
+of staff at the repair workshop. Which scenario yields a smaller proportion of
+bicycles spending over 30 minutes at the shop? Let's investigate. First look at
+the situation where the additional member of staff works at the inspection desk:
 
 \begin{Rin}
-#' Return the transition rate matrix Q
-#'
-#' @param waiting_room an integer (default: 4)
-#' @param num_barbers an integer (default: 2)
-#'
-#' @return A matrix
-get_transition_rate_matrix <- function(waiting_room = 4,
-                                       num_barbers = 2){
-  max_state <- waiting_room + num_barbers
-
-  Q <- outer(0:max_state,
-    0:max_state,
-    vectorized_get_transition_rate,
-    waiting_room = waiting_room,
-    num_barbers = num_barbers
-  )
-  row_sums <- rowSums(Q)
-
-  diag(Q) <- -row_sums
-  Q
-}
-\end{Rin}
-
-Using this we can obtain the matrix \(Q\) for our default system:
-
-\begin{Rin}
-Q <- get_transition_rate_matrix()
-print(Q)
+print(
+  get_average_proportion(
+    num_inspectors = 2,
+    num_repairers = 2)
+)
 \end{Rin}
 
 which gives:
 
 \begin{Rout}
-     [,1] [,2] [,3] [,4] [,5] [,6] [,7]
-[1,]  -10   10    0    0    0    0    0
-[2,]    4  -14   10    0    0    0    0
-[3,]    0    8  -18   10    0    0    0
-[4,]    0    0    8  -18   10    0    0
-[5,]    0    0    0    8  -18   10    0
-[6,]    0    0    0    0    8  -18   10
-[7,]    0    0    0    0    0    8   -8
+[1] 0.04115338
 \end{Rout}
 
-One immediate thing we can do with this matrix is take the matrix exponential
-discussed above. To do this, we need to use an R library call
-\mintinline{R}{expm}.
+that is 4.12\% of bicycles.
 
-To be able to make use of the nice \mintinline{R}{%>%} "pipe" operator we are
-also going to load the \mintinline{R}{magrittr} library.
-Now if we wanted to see what would happen after .5 time units we obtain:
+Now look at the situation where the additional member of staff works at the
+repair workshop:
 
 \begin{Rin}
-library(expm, warn.conflicts = FALSE, quietly = TRUE)
-library(magrittr, warn.conflicts = FALSE, quietly = TRUE)
-
-print( (Q * .5) %>% expm %>% round(5))
+print(
+  get_average_proportion(
+    num_inspectors = 1,
+    num_repairers = 3)
+)
 \end{Rin}
 
 which gives:
 
 \begin{Rout}
-        [,1]    [,2]    [,3]    [,4]    [,5]    [,6]    [,7]
-[1,] 0.10492 0.21254 0.20377 0.17142 0.13021 0.09564 0.08150
-[2,] 0.08501 0.18292 0.18666 0.17080 0.14377 0.11890 0.11194
-[3,] 0.06521 0.14933 0.16338 0.16478 0.15633 0.14751 0.15346
-[4,] 0.04388 0.10931 0.13183 0.15181 0.16777 0.18398 0.21142
-[5,] 0.02667 0.07361 0.10005 0.13422 0.17393 0.21890 0.27262
-[6,] 0.01567 0.04870 0.07552 0.11775 0.17512 0.24484 0.32239
-[7,] 0.01068 0.03668 0.06286 0.10824 0.17448 0.25791 0.34914
+[1] 0.1000899
 \end{Rout}
 
-After 500 time units we obtain:
+that is 10.01\% of bicycles.
 
-\begin{Rin}
-print( (Q * 500) %>% expm %>% round(5))
-\end{Rin}
+Therefore an additional member of staff at the inspection desk would be more
+beneficial than an additional member of staff at the repair workshop.
 
-which gives:
-
-\begin{Rout}
-        [,1]    [,2]    [,3]    [,4]    [,5]   [,6]    [,7]
-[1,] 0.03431 0.08577 0.10722 0.13402 0.16752 0.2094 0.26176
-[2,] 0.03431 0.08577 0.10722 0.13402 0.16752 0.2094 0.26176
-[3,] 0.03431 0.08577 0.10722 0.13402 0.16752 0.2094 0.26176
-[4,] 0.03431 0.08577 0.10722 0.13402 0.16752 0.2094 0.26176
-[5,] 0.03431 0.08577 0.10722 0.13402 0.16752 0.2094 0.26176
-[6,] 0.03431 0.08577 0.10722 0.13402 0.16752 0.2094 0.26176
-[7,] 0.03431 0.08577 0.10722 0.13402 0.16752 0.2094 0.26176
-\end{Rout}
-
-We see that no matter what state (row) we are in, after 500 time units the
-probabilities are all the same. We could in fact stop our analysis here, however
-our choice of 500 time units was arbitrary and might not be the correct amount
-for all possible scenarios, as such we will continue to aim to solve the
-underlying equation~\ref{eqn:continuous_time_markov_process_steady_state}
-directly.
-
-To be able to do this, we will make use of the versatile \mintinline{R}{pracma}
-package which includes a number of numerical analysis functions for efficient
-computations.
-
-\begin{Rin}
-library(pracma, warn.conflicts = FALSE, quietly = TRUE)
-
-#' Return the steady state vector of any given continuous time
-#' transition rate matrix
-#'
-#' @param Q a transition rate matrix
-#'
-#' @return A vector
-get_steady_state_vector <- function(Q){
-  state_space_size <- dim(Q)[1]
-  A <- rbind(t(Q), 1)
-  b <- c(integer(state_space_size), 1)
-  mldivide(A, b)
-}
-\end{Rin}
-
-This is making use of \mintinline{R}{pracma}'s \mintinline{R}{mldivide} function
-which chooses the best numerical algorithm to find the solution to a given
-matrix equation \(Ax=b\).
-
-So if we now see the steady state vector for our default system:
-
-\begin{Rin}
-print(get_steady_state_vector(Q))
-\end{Rin}
-
-we get:
-
-\begin{Rout}
-           [,1]
-[1,] 0.03430888
-[2,] 0.08577220
-[3,] 0.10721525
-[4,] 0.13401906
-[5,] 0.16752383
-[6,] 0.20940479
-[7,] 0.26175598
-\end{Rout}
-
-We can see that the shop is expected to be empty approximately 3.4\% of the time
-and full 26.2\% of the time.
-
-The final piece of this puzzle is to create a single function that uses all of
-the above to just return the probability of the shop being full.
-
-\begin{Rin}
-#' Return the probability of the barber shop being full
-#'
-#' @param waiting_room (default: 4)
-#' @param num_barbers (default: 2)
-#'
-#' @return A real
-get_probability_of_full_shop <- function(waiting_room = 4,
-                                         num_barbers = 2){
-  arrival_rate <- 10
-  service_rate <- 4
-  pi <- get_transition_rate_matrix(
-    waiting_room = waiting_room,
-    num_barbers = num_barbers
-    ) %>%
-    get_steady_state_vector()
-
-  capacity <- waiting_room + num_barbers
-  pi[capacity + 1]
-}
-\end{Rin}
-
-Now we can run this code efficiently with both scenarios:
-
-\begin{Rin}
-print(get_probability_of_full_shop(waiting_room = 6))
-\end{Rin}
-
-which decreases the probability of a full shop to:
-
-\begin{Rout}
-[1] 0.2355699
-\end{Rout}
-
-but adding another barber and chair:
-
-\begin{Rin}
-print(get_probability_of_full_shop(num_barbers = 3))
-\end{Rin}
-
-gives:
-
-\begin{Rout}
-[1] 0.0786359
-\end{Rout}
 
 \section{Research}\label{sec:research}
 
