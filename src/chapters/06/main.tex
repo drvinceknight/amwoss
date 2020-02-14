@@ -401,7 +401,7 @@ derivatives <- function(t, y, parameters){
   death_rate <- 0.01
   with(as.list(c(y, parameters)), {
     N <- S + I + R
-    dSdt <- ( -( (infection_rate * S * I) / N)
+    dSdt <- ( - ( (infection_rate * S * I) / N)
              + ( (1 - vaccine_rate) * birth_rate * N)
              - (death_rate * S))
     dIdt <- ( ( (infection_rate * S * I) / N)
@@ -462,7 +462,10 @@ integrate_ode <- function(times,
                           vaccine_rate = 0.84){
   params <- c(birth_rate = birth_rate,
                   vaccine_rate = vaccine_rate)
-  ode(y = y0, times = times, func = derivatives, parms = params)
+  ode(y = y0,
+      times = times,
+      func = derivatives,
+      parms = params)
 }
 \end{Rin}
 
@@ -498,7 +501,7 @@ dev.off()
 \begin{center}
 \includegraphics[width=0.6\textwidth]{./assets/plot_no_vaccine_R.pdf}
 \end{center}
-\caption{Output of code line 843-847}
+\caption{Output of code line 846-850}
 \label{fig:plot_no_vaccine_R}
 \end{figure}
 
@@ -535,7 +538,7 @@ dev.off()
 \begin{center}
 \includegraphics[width=0.6\textwidth]{./assets/plot_with_vaccine_R.pdf}
 \end{center}
-\caption{Output of code line 850-854}
+\caption{Output of code line 853-857}
 \label{fig:plot_with_vaccine_R}
 \end{figure}
 
@@ -575,7 +578,7 @@ daily_cost <- function(derivative_function = derivatives,
                          * birth_rate
                          * vaccine_rate
                          * vaccine_cost) / time_step
-  daily_medication_cost <- ( (tail(out[, "I"], n=1)
+  daily_medication_cost <- ( (tail(out[, "I"], n = 1)
                              * medication_cost)) / time_step
   daily_vaccine_cost + daily_medication_cost
 }
