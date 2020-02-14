@@ -2,13 +2,15 @@ name: ampwoss
 channels:
   - defaults
 dependencies:
-  - python
   - numpy
-  - scipy
   - pandas
+  - python
+  - scipy
+  - sympy
   - r-essentials
   - r-lintr
   - r-pracma
+  - r-rjava
   - pip:
       - ciw
       - dwys
