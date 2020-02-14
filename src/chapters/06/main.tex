@@ -249,7 +249,7 @@ fig.savefig("plot_no_vaccine_python.pdf")
 \begin{center}
 \includegraphics[width=0.6\textwidth]{./assets/plot_no_vaccine_python.pdf}
 \end{center}
-\caption{Output of code line 724-729}
+\caption{Output of code line 737-742}
 \label{fig:plot_no_vaccine}
 \end{figure}
 
@@ -286,7 +286,7 @@ fig.savefig("plot_with_vaccine_python.pdf")
 \begin{center}
 \includegraphics[width=0.6\textwidth]{./assets/plot_with_vaccine_python.pdf}
 \end{center}
-\caption{Output of code line 732-737}
+\caption{Output of code line 745-750}
 \label{fig:plot_with_vaccine}
 \end{figure}
 
@@ -396,22 +396,22 @@ parameters, respectively.
 #'
 #' @return a list containing dS, dI, and dR
 derivatives <- function(t, y, parameters){
-  infection_rate = 0.3
-  recovery_rate = 0.02
-  death_rate = 0.01
+  infection_rate <- 0.3
+  recovery_rate <- 0.02
+  death_rate <- 0.01
   with(as.list(c(y, parameters)), {
-    N = S + I + R
-    dSdt = (-((infection_rate * S * I) / N)
-           + ((1 - vaccine_rate) * birth_rate * N)
-           - (death_rate * S))
-    dIdt = (((infection_rate * S * I) / N)
-           - (recovery_rate * I)
-           - (death_rate * I))
-    dRdt = ((recovery_rate * I)
-           - (death_rate * R)
-           + (vaccine_rate * birth_rate * N))
+    N <- S + I + R
+    dSdt <- ( -( (infection_rate * S * I) / N)
+             + ( (1 - vaccine_rate) * birth_rate * N)
+             - (death_rate * S))
+    dIdt <- ( ( (infection_rate * S * I) / N)
+            - (recovery_rate * I)
+            - (death_rate * I))
+    dRdt <- ( (recovery_rate * I)
+             - (death_rate * R)
+             + (vaccine_rate * birth_rate * N))
     list(c(dSdt, dIdt, dRdt))
-})
+  })
 }
 \end{Rin}
 
@@ -421,9 +421,10 @@ individuals, 1 infected individual, 0 recovered individuals, a vaccine rate
 of 50\% and a birth rate of 0.01, then:
 
 \begin{Rin}
-derivatives(t=0,
-            y=c(S=4, I=1, R=0),
-            parameters=c(vaccine_rate=0.5, birth_rate=0.01)
+derivatives(t = 0,
+            y = c(S = 4, I = 1, R = 0),
+            parameters = c(vaccine_rate = 0.5,
+                           birth_rate = 0.01)
 )
 \end{Rin}
 
@@ -456,12 +457,12 @@ library(deSolve)
 #'
 #' @return a matrix of times, S, I and R values
 integrate_ode <- function(times,
-                          y0=c(S=2999, I=1, R=0),
-                          birth_rate=0.01,
-                          vaccine_rate=0.84){
-  parameters = c(birth_rate=birth_rate,
-                 vaccine_rate=vaccine_rate)
-  ode(y=y0, times=times, func=derivatives, parms=parameters)
+                          y0 = c(S = 2999, I = 1, R = 0),
+                          birth_rate = 0.01,
+                          vaccine_rate = 0.84){
+  params <- c(birth_rate = birth_rate,
+                  vaccine_rate = vaccine_rate)
+  ode(y = y0, times = times, func = derivatives, parms = params)
 }
 \end{Rin}
 
@@ -473,7 +474,7 @@ Begin with a vaccine rate of 0\%:
 
 \begin{Rin}
 times <- seq(0, 730, by = 0.01)
-out <- integrate_ode(times, vaccine_rate=0.0)
+out <- integrate_ode(times, vaccine_rate = 0.0)
 \end{Rin}
 
 Now \mintinline{R}{out}, is a matrix with four columns,  \mintinline{R}{time},
@@ -485,10 +486,10 @@ The following code gives the plot shown in Figure~\ref{fig:plot_no_vaccine_R}.
 
 
 \begin{Rin-no-test}
-pdf("plot_no_vaccine_R.pdf", width=7, height=5)
-plot(out[, 'time'], out[, 'S'], type='l', col='blue')
-lines(out[, 'time'], out[, 'I'], type='l', col='orange')
-lines(out[, 'time'], out[, 'R'], type='l', col='darkgreen')
+pdf("plot_no_vaccine_R.pdf", width = 7, height = 5)
+plot(out[, "time"], out[, "S"], type = "l", col = "blue")
+lines(out[, "time"], out[, "I"], type = "l", col = "orange")
+lines(out[, "time"], out[, "R"], type = "l", col = "darkgreen")
 dev.off()
 \end{Rin-no-test}
 
@@ -497,7 +498,7 @@ dev.off()
 \begin{center}
 \includegraphics[width=0.6\textwidth]{./assets/plot_no_vaccine_R.pdf}
 \end{center}
-\caption{Output of code line 832-836}
+\caption{Output of code line 843-847}
 \label{fig:plot_no_vaccine_R}
 \end{figure}
 
@@ -515,17 +516,17 @@ Now with a vaccine rate of 85\%:
 
 \begin{Rin}
 times <- seq(0, 730, by = 0.01)
-out <- integrate_ode(times, vaccine_rate=0.85)
+out <- integrate_ode(times, vaccine_rate = 0.85)
 \end{Rin}
 
 And again we can plot these to visualise their behaviour. The following code
 gives the plot shown in Figure~\ref{fig:plot_with_vaccine_R}.
 
 \begin{Rin-no-test}
-pdf("plot_with_vaccine_R.pdf", width=7, height=5) 
-plot(out[, 'time'], out[, 'S'], type='l', col='blue')
-lines(out[, 'time'], out[, 'I'], type='l', col='orange')
-lines(out[, 'time'], out[, 'R'], type='l', col='darkgreen')
+pdf("plot_with_vaccine_R.pdf", width = 7, height = 5) 
+plot(out[, "time"], out[, "S"], type = "l", col = "blue")
+lines(out[, "time"], out[, "I"], type = "l", col = "orange")
+lines(out[, "time"], out[, "R"], type = "l", col = "darkgreen")
 dev.off()
 \end{Rin-no-test}
 
@@ -534,7 +535,7 @@ dev.off()
 \begin{center}
 \includegraphics[width=0.6\textwidth]{./assets/plot_with_vaccine_R.pdf}
 \end{center}
-\caption{Output of code line 839-843}
+\caption{Output of code line 850-854}
 \label{fig:plot_with_vaccine_R}
 \end{figure}
 
@@ -560,21 +561,21 @@ infection and the vaccination costs:
 #' @param vaccine_rate: a positive float <= 1 (default: 0.85)
 #'
 #' @return the daily cost
-daily_cost <- function(derivative_function=derivatives,
-                       vaccine_rate=0.85){
-  max_time = 730
-  time_step = 0.01
-  birth_rate = 0.01
-  vaccine_cost = 220
-  medication_cost = 10
+daily_cost <- function(derivative_function = derivatives,
+                       vaccine_rate = 0.85){
+  max_time <- 730
+  time_step <- 0.01
+  birth_rate <- 0.01
+  vaccine_cost <- 220
+  medication_cost <- 10
   times <- seq(0, max_time, by = time_step)
-  out <- integrate_ode(times, vaccine_rate=vaccine_rate)
-  N = sum(tail(out[, c('S', 'I', 'R')], n=1))
+  out <- integrate_ode(times, vaccine_rate = vaccine_rate)
+  N <- sum(tail(out[, c("S", "I", "R")], n = 1))
   daily_vaccine_cost <- (N
                          * birth_rate
                          * vaccine_rate
                          * vaccine_cost) / time_step
-  daily_medication_cost <- ((tail(out[, 'I'], n=1)
+  daily_medication_cost <- ( (tail(out[, "I"], n=1)
                              * medication_cost)) / time_step
   daily_vaccine_cost + daily_medication_cost
 }
@@ -584,7 +585,7 @@ Now let's compare the total daily cost with and without vaccination. Without
 vaccinations:
 
 \begin{Rin}
-cost <- daily_cost(vaccine_rate=0.0)
+cost <- daily_cost(vaccine_rate = 0.0)
 print(cost)
 \end{Rin}
 
@@ -600,7 +601,7 @@ care system would expect to spend $\pounds 900,000$ a day.
 With a vaccine rate of 85\%:
 
 \begin{Rin}
-cost <- daily_cost(vaccine_rate=0.85)
+cost <- daily_cost(vaccine_rate = 0.85)
 print(cost)
 \end{Rin}
 
