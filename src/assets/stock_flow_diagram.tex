@@ -1,0 +1,105 @@
+\documentclass{standalone}
+
+\usepackage{tikz}
+\usetikzlibrary{arrows}
+
+\begin{document}
+
+\begin{tikzpicture}
+
+% Stock of susceptibles
+\draw (0, 0) rectangle (3, 2);
+\node at (1.5, 1) {\LARGE $S$};
+
+% Stock of Infecteds
+\draw (6, 0) rectangle (9, 2);
+\node at (7.5, 1) {\LARGE $I$};
+
+% Stock of Recoverds
+\draw (12, 0) rectangle (15, 2);
+\node at (13.5, 1) {\LARGE $R$};
+
+% Flow into S
+\draw (1.25, 2.25) -- (1.5, 2) -- (1.75, 2.25); % arrow
+\draw (1.425, 2.075) -- (1.425, 4.5); % pipe left
+\draw (1.575, 2.075) -- (1.575, 4.5); % pipe right
+\draw[fill=white] (1.3, 3.625) -- (1.7, 3.375) -- (1.7, 3.625) -- (1.3, 3.375) -- cycle; % tap
+
+% Flow into R
+\draw (13.25, 2.25) -- (13.5, 2) -- (13.75, 2.25); % arrow
+\draw (13.425, 2.075) -- (13.425, 4.5); % pipe left
+\draw (13.575, 2.075) -- (13.575, 4.5); % pipe right
+\draw[fill=white] (13.3, 3.625) -- (13.7, 3.375) -- (13.7, 3.625) -- (13.3, 3.375) -- cycle; % tap
+
+% Flow out of S
+\draw (1.25, -2.25) -- (1.5, -2.5) -- (1.75, -2.25); % arrow
+\draw (1.425, -2.425) -- (1.425, 0); % pipe left
+\draw (1.575, -2.425) -- (1.575, 0); % pipe right
+\draw[fill=white] (1.3, -0.875) -- (1.7, -1.125) -- (1.7, -0.875) -- (1.3, -1.125) -- cycle; % tap
+
+% Flow out of I
+\draw (7.25, -2.25) -- (7.5, -2.5) -- (7.75, -2.25); % arrow
+\draw (7.425, -2.425) -- (7.425, 0); % pipe left
+\draw (7.575, -2.425) -- (7.575, 0); % pipe right
+\draw[fill=white] (7.3, -0.875) -- (7.7, -1.125) -- (7.7, -0.875) -- (7.3, -1.125) -- cycle; % tap
+
+% Flow out of R
+\draw (13.25, -2.25) -- (13.5, -2.5) -- (13.75, -2.25); % arrow
+\draw (13.425, -2.425) -- (13.425, 0); % pipe left
+\draw (13.575, -2.425) -- (13.575, 0); % pipe right
+\draw[fill=white] (13.3, -0.875) -- (13.7, -1.125) -- (13.7, -0.875) -- (13.3, -1.125) -- cycle; % tap
+
+
+% Flow S-I
+\draw (5.75, 0.75) -- (6, 1) -- (5.75, 1.25); % arrow
+\draw (3, 0.925) -- (5.925, 0.925); % pipe bottom
+\draw (3, 1.075) -- (5.925, 1.075); % pipe top
+\draw[fill=white] (4.6, 1.2) -- (4.4, 1.2) -- (4.6, 0.8) -- (4.4, 0.8) -- cycle; % (4.5, 1)
+
+% Flow I-R
+\draw (11.75, 0.75) -- (12, 1) -- (11.75, 1.25); % arrow
+\draw (9, 0.925) -- (11.925, 0.925); % pipe bottom
+\draw (9, 1.075) -- (11.925, 1.075); % pipe top
+\draw[fill=white] (10.6, 1.2) -- (10.4, 1.2) -- (10.6, 0.8) -- (10.4, 0.8) -- cycle; % (4.5, 1)
+
+
+\node[inner sep=0.35cm] (b) at (7.5, 5) {\LARGE $b$};
+\node[inner sep=0.35cm] (v) at (7.5, 6) {\LARGE $v$};
+\node[inner sep=0.35cm] (d) at (6, -3.5) {\LARGE $d$};
+\node[inner sep=0.35cm] (a) at (3.5, -1.5) {\LARGE $\alpha$};
+\node[inner sep=0.35cm] (r) at (9.5, -1.5) {\LARGE $r$};
+\node[inner sep=0.35cm] (tapinS) at (1.5, 3.5) {};
+\node[inner sep=0.35cm] (tapinR) at (13.5, 3.5) {};
+\node[inner sep=0.35cm] (tapoutS) at (1.5, -1) {};
+\node[inner sep=0.35cm] (tapoutI) at (7.5, -1) {};
+\node[inner sep=0.35cm] (tapoutR) at (13.5, -1) {};
+\node[inner sep=0.35cm] (tapSI) at (4.5, 1) {};
+\node[inner sep=0.35cm] (tapIR) at (10.5, 1) {};
+\node[inner sep=0.35cm] (I) at (6.75, 0) {};
+
+
+\draw[-triangle 90] (v) edge[out=180, in=45] (tapinS);
+\draw[-triangle 90] (v) edge[out=0, in=135] (tapinR);
+\draw[-triangle 90] (b) edge[out=-150, in=0] (tapinS);
+\draw[-triangle 90] (b) edge[out=-30, in=190] (tapinR);
+\draw[-triangle 90] (a) edge[out=100, in=-150] (tapSI);
+\draw[-triangle 90] (r) edge[out=30, in=-80] (tapIR);
+\draw[-triangle 90] (d) edge[out=180, in=-60] (tapoutS);
+\draw[-triangle 90] (d) edge[out=90, in=-150] (tapoutI);
+\draw[-triangle 90] (d) edge[out=0, in=-120] (tapoutR);
+\draw[-triangle 90] (I) edge[out=-150, in=-60] (tapSI);
+
+\node at (5, 6) {\large $-$};
+\node at (5, 4.1) {\large $+$};
+\node at (10, 6) {\large $+$};
+\node at (10, 4.1) {\large $+$};
+\node at (4.5, -3.1) {\large $+$};
+\node at (9.5, -3.1) {\large $+$};
+\node at (6.55, -2) {\large $+$};
+\node at (3.75, 0) {\large $+$};
+\node at (5.3, 0.25) {\large $+$};
+\node at (10.25, -0.25) {\large $+$};
+
+\end{tikzpicture}
+
+\end{document}

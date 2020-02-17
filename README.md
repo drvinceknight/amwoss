@@ -12,7 +12,7 @@ There are some further dependencies that are needed.
 
 Activate the environment:
 
-    $ conda activate amwpwoss
+    $ conda activate ampwoss
     $ inv env
 
 ## Compilation instructions
