@@ -66,7 +66,7 @@ def analyse(c):
         c.run(f"detex {path} | style -L en_gb")
 
 @task
-def doctest(c):
+def doctest(c, style=False):
     """
     Run doctests on all LaTeX documents
 
@@ -135,11 +135,41 @@ def doctest(c):
                 print(subprocess.check_output([execution_command, input_filename]))
                 exit_codes.append(1)
 
+    print("Ensuring column lengths fit book")
+    for path in itertools.chain(
+        pathlib.Path(dir_for_R_input_files).glob("*"),
+        pathlib.Path(dir_for_python_input_files).glob("*"),
+    ):
+        lines = path.read_text().split("\n")
+        for line in lines:
+            if len(line) > max_column_length:
+                print(
+                    f"'{line[:max_column_length]}' is too long ({len(line)} > {max_column_length})"
+                )
+                exit_codes.append(1)
+
+    print("Check spelling")
+    for path in book:
+        latex = path.read_text()
+        aspell_output = subprocess.check_output(
+            ["aspell", "-t", "--list", "--lang=en_GB"], input=latex, text=True
+        )
+        incorrect_words = set(aspell_output.split("\n")) - {""} - known.words
+        if len(incorrect_words) > 0:
+            print(f"In {path} the following words are not known: ")
+            for string in sorted(incorrect_words):
+                print(string)
+            exit_codes.append(1)
+
+    if style is True:
+        check_style(dir_for_python_input_files, dir_for_R_input_files)
+    sys.exit(max(exit_codes))
+
+def check_style(dir_for_python_input_files, dir_for_R_input_files):
     print("Running black")
     ec = subprocess.call(
         ["black", "--check", "--diff", "-l 63", dir_for_python_input_files]
     )
-    exit_codes.append(ec)
 
     print("Running docformatter")
     ec = subprocess.call(
@@ -169,7 +199,6 @@ def doctest(c):
         print(diff.decode("utf-8"))
     else:
         print("Docstrings follow PEP 257 ✅")
-    exit_codes.append(min(ec, 1))
 
     print("Running lintr")
     # This excludes one specific lintr called 'object_usage_linter' as this is a
@@ -184,31 +213,3 @@ def doctest(c):
         )
         if len(output) > 0:
             print(output.decode("utf-8"))
-            exit_codes.append(1)
-
-    print("Ensuring column lengths fit book")
-    for path in itertools.chain(
-        pathlib.Path(dir_for_R_input_files).glob("*"),
-        pathlib.Path(dir_for_python_input_files).glob("*"),
-    ):
-        lines = path.read_text().split("\n")
-        for line in lines:
-            if len(line) > max_column_length:
-                print(
-                    f"'{line[:max_column_length]}' is too long ({len(line)} > {max_column_length})"
-                )
-                exit_codes.append(1)
-
-    print("Check spelling")
-    for path in book:
-        latex = path.read_text()
-        aspell_output = subprocess.check_output(
-            ["aspell", "-t", "--list", "--lang=en_GB"], input=latex, text=True
-        )
-        incorrect_words = set(aspell_output.split("\n")) - {""} - known.words
-        if len(incorrect_words) > 0:
-            print(f"In {path} the following words are not known: ")
-            for string in sorted(incorrect_words):
-                print(string)
-            exit_codes.append(1)
-    sys.exit(max(exit_codes))
