@@ -27,5 +27,6 @@ install:
   - inv env  # Finish install of environment
 
 script:
-  - inv doctest  # Test all code
+  - inv doctest --style  # Test all code and also check style
+                         # (style does not cause CI to fail)
   - cd src; pdflatex -shell-escape main.tex  # Check LaTeX Compiles

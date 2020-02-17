@@ -27,6 +27,11 @@ Run:
 
     $ inv doctest
 
+To also display the output of running `black` on the python code and `lintr` on
+the R code:
+
+    $ inv doctest --style
+
 ## Analysing the document
 
 Run:
