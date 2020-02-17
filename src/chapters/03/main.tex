@@ -283,7 +283,7 @@ def run_simulation(network, seed=0):
     Returns:
         a Ciw simulation object after a run of the simulation
     """
-    max_time=8
+    max_time = 8
     ciw.seed(seed)
     Q = ciw.Simulation(network)
     Q.simulate_until_max_time(max_time)
