@@ -27,7 +27,7 @@ Run:
 
     $ inv doctest
 
-To also display the output of running `black` on the python code and `lintr` on
+To also check the style with `black` on the python code and `lintr` on
 the R code:
 
     $ inv doctest --style

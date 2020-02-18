@@ -401,16 +401,16 @@ derivatives <- function(t, y, parameters){
   death_rate <- 0.01
   with(as.list(c(y, parameters)), {
     N <- S + I + R
-    dSdt <- ( - ( (infection_rate * S * I) / N)
+    dSdt <- ( - ( (infection_rate * S * I) / N)  # nolint
              + ( (1 - vaccine_rate) * birth_rate * N)
              - (death_rate * S))
-    dIdt <- ( ( (infection_rate * S * I) / N)
+    dIdt <- ( ( (infection_rate * S * I) / N)  # nolint
             - (recovery_rate * I)
             - (death_rate * I))
-    dRdt <- ( (recovery_rate * I)
+    dRdt <- ( (recovery_rate * I)  # nolint
              - (death_rate * R)
              + (vaccine_rate * birth_rate * N))
-    list(c(dSdt, dIdt, dRdt))
+    list(c(dSdt, dIdt, dRdt))  # nolint
   })
 }
 \end{Rin}
@@ -446,7 +446,7 @@ using the \mintinline{R}{deSolve} library to numerically solve the system of
 differential equations:
 
 \begin{Rin}
-library(deSolve)
+library(deSolve)  # nolint
 
 #' Numerically solve the system of differential equations
 #'
