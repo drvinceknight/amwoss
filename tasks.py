@@ -162,14 +162,22 @@ def doctest(c, style=False):
             exit_codes.append(1)
 
     if style is True:
-        check_style(dir_for_python_input_files, dir_for_R_input_files)
-    sys.exit(max(exit_codes))
+        exit_codes += check_style(dir_for_python_input_files, dir_for_R_input_files)
+
+    exit_code = max(exit_codes)
+    if exit_code == 0:
+        print("✅✅✅ ALL TESTS HAVE PASSED! ✅✅✅")
+    else:
+        print("❌❌❌ A test has failed. ❌❌❌")
+    sys.exit(exit_code)
 
 def check_style(dir_for_python_input_files, dir_for_R_input_files):
+    exit_codes = []
     print("Running black")
     ec = subprocess.call(
         ["black", "--check", "--diff", "-l 63", dir_for_python_input_files]
     )
+    exit_codes.append(ec)
 
     print("Running docformatter")
     ec = subprocess.call(
@@ -199,6 +207,7 @@ def check_style(dir_for_python_input_files, dir_for_R_input_files):
         print(diff.decode("utf-8"))
     else:
         print("Docstrings follow PEP 257 ✅")
+    exit_codes.append(min(ec, 1))
 
     print("Running lintr")
     # This excludes one specific lintr called 'object_usage_linter' as this is a
@@ -213,3 +222,5 @@ def check_style(dir_for_python_input_files, dir_for_R_input_files):
         )
         if len(output) > 0:
             print(output.decode("utf-8"))
+            exit_codes.append(1)
+    return exit_codes
