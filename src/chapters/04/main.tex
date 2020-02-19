@@ -318,11 +318,12 @@ get_cost <- function(
 
   stopifnot(out[number_of_observations, "I"] < step_size)
 
-  number_of_daily_infections <- sum(
-    diff(out[, "time"]) *
+  time_between_steps <- diff(out[, "time"])
+  area_under_curve <- sum(
+    time_between_steps *
       out[-number_of_observations, "I"]
   )
-  number_of_daily_infections *
+  area_under_curve *
     cost_per_person + cost_of_cure *
       I_0
 }
