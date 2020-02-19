@@ -11,25 +11,23 @@ from invoke import task
 
 import known
 
+@task
+def delenv(c):
+    """
+    Delete the conda environment created by `inv env`.
+    """
+    c.run("conda remove --name ampwoss --all")
 
 @task
 def env(c):
     """
-    Finish the installation of any libraries and packages need for the
-    environment.
-
-    These are installation steps that are not able to be included in the
-    anaconda environment file `environment.yml` (for example some R packages do
-    not have anaconda binaries).
+    Create a conda environment with all packages needed in book.
     """
     c.run(
         """Rscript -e 'install.packages("simmer", repos="http://cran.us.r-project.org")'"""
     )
     c.run(
         """Rscript -e 'install.packages("expm", repos="http://cran.us.r-project.org")'"""
-    )
-    c.run(
-        """Rscript -e 'install.packages("rSymPy", repos="http://cran.us.r-project.org")'"""
     )
 
 
