@@ -264,7 +264,7 @@ First we write a function to give us the derivative for a given value of \(I\).
 derivative <- function(t, y, parameters) {
   with(as.list(c(y, parameters)), {
     dIdt <- -alpha * I  # nolint
-    list(dIdt)
+    list(dIdt)  # nolint
   })
 }
 \end{Rin}
@@ -283,7 +283,7 @@ This gives:
 
 \end{Rout}
 
-We will now make use of the \mintinline{R}{desolve} library for solving
+We will now make use of the \mintinline{R}{deSolve} library for solving
 differential equations numerically:
 
 \begin{Rin}
@@ -332,7 +332,7 @@ Using this we can compute the costs:
 
 \begin{Rin}
 alpha <- 2
-cost_without_cure = get_cost(alpha = alpha)
+cost_without_cure <- get_cost(alpha = alpha)
 print(round(cost_without_cure))
 \end{Rin}
 
