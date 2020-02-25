@@ -1,0 +1,204 @@
+\chapter[Linear programming]{Linear Programming}
+
+% Introduction
+\chapterinitial{F}{inding} the best configuration of some system can be
+challenging, especially when there is a seemingly endless amount of possible
+solutions. Optimisation techniques are a way to mathematically derive solutions
+that maximise or minimise some objective function, subject to a number of
+feasibility constraints. When all components of the problem can be written in a
+linear way, then linear programming is one technique that can be used to find
+the solution.
+
+\section{Problem}\label{sec:problem}
+A university runs 26 modules over four subjects: Art, Biology, Chemistry, and
+Dutch. Each subject runs core modules and optional modules.
+Table~\ref{tab:modules} gives the module numbers for each of these.
+
+\begin{table}
+\begin{center}
+\begin{tabular}{llll}
+\toprule
+\textbf{Art Core} & \textbf{Biology Core} & \textbf{Chemistry Core} & \textbf{Dutch Core}\\
+\midrule
+M00 & M08 & M16 & M22 \\
+M01 & M09 & M17 & M23 \\
+M02 & M10 & M18 &     \\
+    & M11 & M19 &     \\
+    & M12 &     &     \\
+\midrule
+\textbf{Art Optional} & \textbf{Biology Optional} & \textbf{Chemistry Optional} & \textbf{Dutch Optional}\\
+\midrule
+M03 & M13 & M20 & M24 \\
+M04 & M14 & M21 & M25 \\
+M05 & M15 &     &     \\
+M06 &     &     &     \\
+M07 &     &     &     \\
+\bottomrule
+\end{tabular}
+\end{center}
+\caption{List of modules on offer at the university.}
+\label{tab:modules}
+\end{table}
+
+The university is required to schedule examinations for each of these modules.
+The university would like the exams to be schedules using the least amount of
+time slots possible. However not all modules can be scheduled at the same time
+as they share some students:
+
+\begin{itemize}
+  \item All art modules share students,
+  \item All biology modules share students,
+  \item All chemistry modules share students,
+  \item All Dutch modules share students,
+  \item Art students have the option of taking the core Dutch modules, and so
+  all art modules may share students with core Dutch modules,
+  \item Biology students have the option of taking optional modules from
+  chemistry, so all biology modules may share students with optional chemistry
+  modules,
+  \item Chemistry students have the option of taking optional modules from
+  biology, so all chemistry modules may share students with optional biology
+  modules,
+  \item Biology students have the option of taking core art modules, and so all
+  biology modules may share students with core art modules.
+\end{itemize}
+
+What is the least number of exam time slots required to hold all 26 exams with
+no clashes?
+
+
+\section{Theory}\label{sec:theory}
+Linear programming is a method that solves an optimisation problem of $n$
+variables by defining all constraints as planes in $n$-dimensional space. These
+planes combine to create a convex region where all feasible solutions (those
+that satisfy the constrains) lie within the convex region, and all infeasible
+solutions (those that break at least one constraint) lie outside this convex
+region.
+
+As we are interested in optimising some linear function, that is either
+minimising or maximising some function, the solution must lie at the very edge
+of the feasible convex region. That is we have improved so much that if we were
+to improve any further we would lie outside the feasible region - hence the
+optimum lies on the edge.
+
+Linear programming employs algorithms such as the Simplex method to
+mathematically traverse the edges of the feasible convex region, and stops at
+the optimum. Therefore we only need to define out objective function and
+constraints in a linear fashion, and then apply appropriate algorithms.
+
+Consider a 2-dimensional example: I am able to make $\pounds 50$ profit on each
+tonne of paint A I produce, and $\pounds 60$ profit on each tonne of paint B I
+produce. A tonne of paint A needs 4 tonnes of ingredient X and 5 tonnes of
+ingredient Y. A tonne of paint B needs 6 tonnes of ingredient X and 4 tonnes of
+ingredient Y. Only 24 tonnes of X and 20 tonnes of Y available per day. How much
+of paint A and paint B should I produce daily to maximise profit?
+
+This is formulated as a linear objective function (total profit) to maximise,
+and two linear constraints (availability of ingredients X and Y). They are
+written as:
+
+\begin{align}
+\text{Maximise: } 50 A + 60 B & \\\label{eqn:objective}
+\text{Subject to: } & \nonumber \\
+4 A + 6 B &\leq 24 \\\label{eqn:ingredientX}
+5 A + 4 B &\leq 20 \label{eqn:ingredientY}
+\end{align}
+
+Now we have a linear system in 2-dimensional space with coordinates A and B.
+These are called the decision variables, whose values we wish to find that
+optimises the objective given by expression~\ref{eqn:objective}.
+Inequalities~\ref{eqn:ingredientX} and~\ref{eqn:ingredientY} correspond to the
+amount of ingredient X and Y available per day. These, along with the additional
+constraints that we cannot produce a negative amount of paint
+($A \geq 0$ and $B \geq 0$), form the convex feasible region shown in
+Figure~\ref{fig:paint_lp}.
+
+\begin{figure}
+\begin{center}
+\includestandalone[width=\textwidth]{assets/paint_LP}
+\end{center}
+\caption{Visual representation of the paint linear program. The feasible convex
+region is shaded in grey; the objective function with arbitrary value is shown
+in a dashed line.}
+\label{fig:paint_lp}
+\end{figure}
+
+Expression~\ref{eqn:objective} corresponds to the total profit, which is the
+expression we are trying to maximise. As a line in the 2-dimensional space, this
+expression fixes its gradient, but its value determines the size of the
+$y$-intercept. Therefore optimising this function corresponds to pushing a line
+with that gradient to its furthest extreme within the feasible region,
+demonstrated in Figure~\ref{paint_lp}.
+Therefore for this problem the optimum occurs in a particular vertex of the
+feasible region, at $A = \frac{12}{7}$ and $B = \frac{20}{7}$.
+
+This works well is $A$ and $B$ can take any real value in the feasible region.
+It is common however to formulate Integer Linear Programmes where the decision
+variables are restricted to integers. There are a number of methods that can
+help us adapt a real solution to an integer solution. These include cutting
+planes, which introduce new constraints around the real solution to force an
+integer value; and branch and bound methods, where we iteratively convert
+decision variables to their closest two integers and remove any infeasible
+solutions.
+
+Both Python and R have libraries that carry out the linear and integer
+programming algorithms for us. When solving these kinds of problems, formulating
+them as linear systems is the most important challenge.
+
+Consider again the exam scheduling problem from Section~\ref{sec:problem}.
+There are eight distinct sets of modules in which exams cannot be scheduled
+simultaneously: $A_c$, $A_o$ representing core and optional art modules
+respectively; $B_c$, $B_o$ representing core and optional biology modules
+respectively; $C_c$, $C_o$ representing core and optional chemistry modules
+respectively; and $D_c$, $D_o$ representing core and optional Dutch modules
+respectively.
+
+\begin{figure}
+\begin{center}
+\includestandalone[width=0.75\textwidth]{assets/clashes}
+\end{center}
+\caption{Visualisation of sets of modules with shared students.}
+\label{fig:clashes}
+\end{figure}
+
+Additionally there are further clashes between these sets, this can be
+visualised as a graph, shown in Figure~\ref{fig:clashes} where edges between
+sets represent shared students.
+This shows there are five cliques (shown in red, blue, green, orange and
+yellow), that is five larger sets of modules that may share students:
+$C_o \cup C_c \cup B_o$, $C_o \cup B_o \cup B_c$, $B_c \cup B_o \cup A_c$,
+$A_c \cup A_o \cup D_c$, and $D_c \cup D_o$. These sets of modules will form the
+basis for out constraints, Inequalities~\ref{eqn:clique1} to~\ref{eqn:clique5}.
+
+Define $M$ as the set of all modules to be schedules, that is
+$M = A_c \cup A_o \cup B_c \cup B_o \cup C_c \cup C_o \cup D_c \cup D_o$.
+Define also $T$ as the set of possible time slots. At worst each exam is
+scheduled for a different day, thus $|T| = |M| = 26$ in this case.
+Let $\{X_{mt} \text{ for } m \in M \text{ and } t \in T\}$ be a set of binary
+decision variables, that is $X_{mt}$ is 1 if module $m$ is scheduled for time
+$t$, and 0 otherwise.
+Let's also define $\{Y_t \text{ for } t \in T\}$ as a set of auxiliary binary
+decision variables, where $Y_t$ is 1 if time slot $t$ is being used. This is
+enforced by Inequality~\ref{eqn:auxiliary}.
+
+Finally we have one final constraint, Inequality~\ref{eqn:schedule_all_modules},
+which ensures all modules are scheduled once and once only.
+Thus altogether our integer program becomes:
+
+\begin{align}
+\text{Minimise: } \sum_{t \in T} Y_j & \\
+\text{Subject to: } & \nonumber \\
+\frac{1}{|M|} \sum_{m \in M} X_{mt} &\leq Y_j \text{ for all } j \in T\\\label{eqn:auxiliary}
+\sum_{t \in T} X_{mt} &= 1 \text{ for all } m \in M\\\label{eqn:schedule_all_modules}
+\sum_{m \in C_o \cup C_c \cup B_o} X_{mt} &\leq 1 \text{ for all } t \in T\\\label{eqn:clique1}
+\sum_{m \in C_o \cup B_o \cup B_c} X_{mt} &\leq 1 \text{ for all } t \in T\\\label{eqn:clique2}
+\sum_{m \in B_c \cup B_o \cup A_c} X_{mt} &\leq 1 \text{ for all } t \in T\\\label{eqn:clique3}
+\sum_{m \in A_c \cup A_o \cup D_c} X_{mt} &\leq 1 \text{ for all } t \in T\\\label{eqn:clique4}
+\sum_{m \in D_c \cup D_o} X_{mt} & \leq 1 \text{ for all } t \in T\\\label{eqn:clique5}
+\end{align}
+
+
+\section{Solving with Python}\label{sec:solving-with-python}
+
+\section{Solving with R}\label{sec:solving-with-R}
+
+\section{Research}\label{sec:research}
