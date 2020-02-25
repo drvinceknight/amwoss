@@ -1,0 +1,30 @@
+\documentclass{standalone}
+\usepackage{tikz}
+\begin{document}
+\begin{tikzpicture}
+
+\node (cc) at (0, 0) {$C_c$};
+\node (co) at (0, 1.5) {$C_o$};
+\node (bo) at (1.5, 0) {$B_o$};
+\node (bc) at (1.5, 1.5) {$B_c$};
+\node (ao) at (3, 0) {$A_o$};
+\node (ac) at (3, 1.5) {$A_c$};
+\node (do) at (4.5, 0) {$D_o$};
+\node (dc) at (4.5, 1.5) {$D_c$};
+
+\draw[thick, draw=red] (co) -- (cc);
+\draw[thick, draw=blue] (co) -- (bc);
+\draw[thick, draw=red] (co) -- (bo);
+\draw[thick, dashed, draw=blue] (co) -- (bo);
+\draw[thick, draw=red] (cc) -- (bo);
+\draw[thick, draw=blue] (bc) -- (bo);
+\draw[thick, dashed, draw=green!80!black] (bc) -- (bo);
+\draw[thick, draw=green!80!black] (bc) -- (ac);
+\draw[thick, draw=green!80!black] (bo) -- (ac);
+\draw[thick, draw=orange] (ac) -- (ao);
+\draw[thick, draw=orange] (ac) -- (dc);
+\draw[thick, draw=orange] (ao) -- (dc);
+\draw[thick, draw=yellow!80!orange] (dc) -- (do);
+
+\end{tikzpicture}
+\end{document}
