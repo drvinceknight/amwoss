@@ -198,6 +198,164 @@ Thus altogether our integer program becomes:
 
 
 \section{Solving with Python}\label{sec:solving-with-python}
+In this book we will use the Python library \mintinline{python}{PuLP} to
+formulate and solve the integer program. First let's define all the sets we
+will use to formulate the problem.
+
+\begin{pyin}
+Ac = [0, 1, 2]
+Ao = [3, 4, 5, 6, 7]
+Bc = [8, 9, 10, 11, 12]
+Bo = [13, 14, 15]
+Cc = [16, 17, 18, 19]
+Co = [20, 21]
+Dc = [22, 23]
+Do = [24, 25]
+modules = Ac + Ao + Bc + Bo + Cc + Co + Dc + Do
+time_slots = range(26)
+\end{pyin}
+
+Now let's begin by defining an empty problem:
+
+\begin{pyin}
+import pulp
+prob = pulp.LpProblem("ExamScheduling", pulp.LpMinimize)
+\end{pyin}
+
+We also need to define our sets of binary decision variables:
+
+\begin{pyin}
+x = pulp.LpVariable.dicts("X", (modules, time_slots), cat=pulp.LpBinary)
+y = pulp.LpVariable.dicts('Y', time_slots, cat=pulp.LpBinary)
+\end{pyin}
+
+Now \mintinline{python}{y} is a dictionary of binary decision variables, with
+keys as elements of the list \mintinline{python}{time_slots}. Let's look at
+$Y_3$ corresponding to the third day:
+
+\begin{pyin}
+print(y[3])
+\end{pyin}
+
+\begin{pyout}
+Y_3
+\end{pyout}
+
+While \mintinline{python}{x} is a dictionary of dictionaries of binary decision
+variables, with keys as elements of the lists \mintinline{python}{modules} and
+\mintinline{python}{time_slots}. Let's look at $X_{2,5}$, the variable
+corresponing to module 2 being scheduled on day 5:
+
+\begin{pyin}
+print(x[2][5])
+\end{pyin}
+
+\begin{pyout}
+X_2_5
+\end{pyout}
+
+Now we have an empty problem, all relevant sets, and all decision variables
+defined, we can go ahead and add the objective function and constraints to the
+problem.
+
+For the objective function:
+
+\begin{pyin}
+objective_function = sum([y[day] for day in time_slots])
+prob += objective_function
+\end{pyin}
+
+Now the constraints:
+
+\begin{pyin}
+for day in time_slots:
+    prob += (1/len(modules)) * sum([x[module][day] for module in modules]) <= y[day]
+    prob += sum([x[module][day] for module in Ac+Ao+Dc]) <= 1
+    prob += sum([x[module][day] for module in Bc+Bo+Co]) <= 1
+    prob += sum([x[module][day] for module in Bc+Bo+Ac]) <= 1
+    prob += sum([x[module][day] for module in Cc+Co+Bo]) <= 1
+    prob += sum([x[module][day] for module in Dc+Do]) <= 1
+
+for module in modules:
+    prob += sum([x[module][day] for day in time_slots]) == 1
+\end{pyin}
+
+At this stage we could print the \mintinline{python}{prob} object, which would
+explicitly give all constraints written out fully. This can be used to error
+check is the need arises.
+
+Now we can go ahead and solve the problem:
+
+\begin{pyin}
+prob.solve()
+\end{pyin}
+
+This returns a status code: 1 for `optimal', 0 for `not solved', -1 for
+`infeasible', -2 for `unbounded', or -3 for `undefined'. A problem is
+successfully solved is this methods returns 1:
+
+\begin{pyout}
+1
+\end{pyout}
+
+This method has also assigned values to our decision variables. These can be
+inspected, lets check if module 2 was scheduled for day 5:
+
+\begin{pyin}
+print(x[2][5])
+\end{pyin}
+
+\begin{pyout}
+0.0
+\end{pyout}
+
+This was assigned the value 0, and so module 2 was not scheduled for that day.
+Let's check if module 2 was scheduled for day 14:
+
+\begin{pyin}
+print(x[2][14])
+\end{pyin}
+
+\begin{pyout}
+1.0
+\end{pyout}
+
+This was assigned a value of 1, and so module 2 was scheduled for that day.
+
+We can iterate through all decision variables and make a print solutions in
+order to read off the schedule easier:
+
+\begin{pyin}
+for day in time_slots:
+    if y[day].value() == 1:
+        schedule = f"Day {day}: "
+        for module in modules:
+            if x[module][day].value() == 1:
+                 schedule += f"{module}, "
+        print(schedule)
+\end{pyin}
+
+giving:
+
+\begin{pyout}
+Day 0: 7, 9, 25,
+Day 1: 6, 12, 17, 24,
+Day 3: 3, 14,
+Day 4: 10, 19,
+Day 10: 4, 8, 16,
+Day 11: 13, 22,
+Day 12: 11, 23,
+Day 13: 5, 15,
+Day 14: 2, 20,
+Day 17: 0, 18,
+Day 18: 1, 21,
+\end{pyout}
+
+Now the order of the days do not matter here, but we can see that 11 days are
+required in order to schedule all exams with no clashes. Most days (8) have two
+exams scheduled, 2 days have 3 exams scheduled, and it was possible on 1 day to
+have 4 exams scheduled simultaneously.
+
 
 \section{Solving with R}\label{sec:solving-with-R}
 
