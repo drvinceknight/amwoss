@@ -27,6 +27,10 @@ Run:
 
     $ inv doctest
 
+To doctest a specific chapter:
+
+    $ inv doctest --path="src/chapters/06/main.tex"
+
 To also check the style with `black` on the python code and `lintr` on
 the R code:
 

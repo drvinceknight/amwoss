@@ -66,7 +66,7 @@ def analyse(c):
         c.run(f"detex {path} | style -L en_gb")
 
 @task
-def doctest(c, style=False):
+def doctest(c, style=False, path=None):
     """
     Run doctests on all LaTeX documents
 
@@ -82,12 +82,15 @@ def doctest(c, style=False):
     pyexecution_command = "python"
     Rexecution_command = "Rscript"
 
-    book = list(pathlib.Path("./src/").glob("**/*.tex"))
+    if path is None:
+        paths = list(pathlib.Path("./src/").glob("**/*.tex"))
+    else:
+        paths = [pathlib.Path(path)]
     dir_for_python_input_files = tempfile.mkdtemp()
     dir_for_R_input_files = tempfile.mkdtemp()
 
     exit_codes = []
-    for i, p in enumerate(book):
+    for i, p in enumerate(paths):
         print(f"Testing {p}")
         text = p.read_text()
 
@@ -149,7 +152,7 @@ def doctest(c, style=False):
                 exit_codes.append(1)
 
     print("Check spelling")
-    for path in book:
+    for path in paths:
         latex = path.read_text()
         aspell_output = subprocess.check_output(
             ["aspell", "-t", "--list", "--lang=en_GB"], input=latex, text=True
