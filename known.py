@@ -165,6 +165,7 @@ words = {
     "screenshots",
     "sep",
     "sprintf",
+    "stopifnot",
     "str",
     "subdirectory",
     "sym",

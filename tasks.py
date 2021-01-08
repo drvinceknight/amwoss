@@ -11,6 +11,12 @@ from invoke import task
 
 import known
 
+@task
+def delenv(c):
+    """
+    Delete the conda environment created by `inv env`.
+    """
+    c.run("conda remove --name ampwoss --all")
 
 @task
 def env(c):
@@ -27,9 +33,6 @@ def env(c):
     )
     c.run(
         """Rscript -e 'install.packages("expm", repos="http://cran.us.r-project.org")'"""
-    )
-    c.run(
-        """Rscript -e 'install.packages("rSymPy", repos="http://cran.us.r-project.org")'"""
     )
 
 

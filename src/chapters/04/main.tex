@@ -253,118 +253,113 @@ So given the current parameters it is not worth purchasing the cure.
 
 \section{Solving with R}\label{sec:solving-with-R}
 
-% TODO Discuss this section: the Rsympy package looks un cared for and in fact
-% seems to have dependency issues because of the way it uses java. All of the
-% following code is **NOT TESTED** because I cannot test it without getting a
-% weird IO error from java.
-R does not have a bespoke symbolic mathematics library however it has an
-interface to use Python's \mintinline{python}{sympy} called
-\mintinline{R}{rSymPy}. In general we would recommend to use Python directly
-when needing to carry out symbolic mathematical calculations however this is not
-always possible. Furthermore, the development of \mintinline{R}{rSymPy} seems to
-no longer be active and due to the dependency on Java could be problematic to
-use.
-One of other the difficulties of using \mintinline{R}{rSymPy}
-is that it works by passing string back and forth to Python's
-\mintinline{python}{sympy}. As such, we will need to have more of a manual
-approach and so we will not be able to write the modular code we have written
-throughout the book.
+R has some capability for symbolic mathematics, however at the time of writing
+the options available are somewhat limited and/or not reliable. As such, we will
+actually solve the problem with R using a numerical integration approach. For an
+outline of the theory behind this approach see Chapter % TODO Add reference to chapter
 
-First let us setup and solve the differential equation:
+First we write a function to give us the derivative for a given value of \(I\).
 
-\begin{Rin-no-test}
-library("rSymPy", warn.conflicts = FALSE, quietly = TRUE)
+\begin{Rin}
+derivative <- function(t, y, parameters) {
+  with(as.list(c(y, parameters)), {
+    dIdt <- -alpha * I  # nolint
+    list(dIdt)  # nolint
+  })
+}
+\end{Rin}
 
-t <- Var("t")
-alpha <- Var("alpha")
-I <- Var("I")
-sympy("dsolve(Derivative(I(t), t) - alpha *I(t), I(t))")
-\end{Rin-no-test}
+For example, to see the value of the derivative when \(I=0\) we have:
 
-this will give us:
-
-\begin{Rout-no-test}
-[1] "C1*exp(alpha*t)"
-\end{Rout-no-test}
-
-We can then solve the equation directly to find the initial condition:
-
-\begin{Rin-no-test}
-sympy("solve(C1*exp(alpha*0) - I_0, C1)")
-\end{Rin-no-test}
+\begin{Rin}
+derivative(t = 0, y = c(I = 100), parameters = c(alpha = 2))
+\end{Rin}
 
 This gives:
 
-\begin{Rout-no-test}
-[1] "[I_0]"
-\end{Rout-no-test}
+\begin{Rout}
+[[1]]
+[1] -200
 
-Note here that this is in fact using a much older version of Sympy so we cannot
-take advantage of some of the newer commands.
+\end{Rout}
 
-So we now the form of our particular solution, thus we can now write a function
-that will give us the cost:
+We will now make use of the \mintinline{R}{deSolve} library for solving
+differential equations numerically:
 
-\begin{Rin-no-test}
-#' Return the cost
-#'
-#' @param I_0 a float (default: symbolic I_0)
-#' @param alpha a float (default: symbolic alpha)
-#' @param cost_per_person a float (default: 10)
-#' @param cost_of_cure a float (default: 0)
-#'
-#' @return A symbolic expression
-get_cost <- function(I_0 = Var("I_0"),
-                     alpha = Var("alpha"),
-                     cost_per_person = 10,
-                     cost_of_cure = 0) {
-  t <- Var("t")
-  solution_cmd <- sprintf(
-    "I_sol = %s * exp(-%s * t)",
-    I_0,
-    alpha
-  )
-  sympy(solution_cmd)
-  cost_cmd <- sprintf(
-    "integrate(I_sol, (t, 0, oo)) * %s + %s * %s",
-    cost_per_person, cost_of_cure,
-    I_0
-  )
-  return(sympy(cost_cmd))
+\begin{Rin}
+library(deSolve)  # nolint
+integrate_ode <- function(times,
+                          y0 = c(I = 100),
+                          alpha = 2) {
+  params <- c(alpha = alpha)
+  ode(y = y0, times = times, func = derivative, parms = params)
 }
-\end{Rin-no-test}
+\end{Rin}
 
-Using this:
+This will return a sequence of time point and values of \(I\) at those time
+points. Using this we can compute the cost. Note that this function uses
+\mintinline{R}{stopifnot} to make sure our differential equation has been solved
+for a long enough time period.
 
-\begin{Rin-no-test}
-I_0 <- 100
+\begin{Rin}
+get_cost <- function(
+                     I_0 = 100,
+                     alpha = 2,
+                     cost_per_person = 10,
+                     cost_of_cure = 0,
+                     step_size = 0.0001,
+                     max_time = 10) {
+  times <- seq(0, max_time, by = step_size)
+  out <- integrate_ode(times,
+    y0 = c(I = I_0),
+    alpha = alpha
+  )
+  number_of_observations <- length(out[, "I"])
+
+  stopifnot(out[number_of_observations, "I"] < step_size)
+
+  time_between_steps <- diff(out[, "time"])
+  area_under_curve <- sum(
+    time_between_steps *
+      out[-number_of_observations, "I"]
+  )
+  area_under_curve *
+    cost_per_person + cost_of_cure *
+      I_0
+}
+\end{Rin}
+
+Using this we can compute the costs:
+
+\begin{Rin}
 alpha <- 2
-cost_without_cure <- get_cost(I_0 = I_0, alpha = alpha)
-print(cost_without_cure)
-\end{Rin-no-test}
+cost_without_cure <- get_cost(alpha = alpha)
+print(round(cost_without_cure))
+\end{Rin}
+
 
 which gives:
 
-\begin{Rout-no-test}
-500
-\end{Rout-no-test}
+\begin{Rout}
+[1] 500
+\end{Rout}
 
 The cost with cure can use the above with a modified \(\alpha\) and a non zero
 cost of the cure itself:
 
-\begin{Rin-no-test}
+\begin{Rin}
 cost_of_cure <- 5
 cost_with_cure <- get_cost(
-    I_0 = I_0, alpha = 2 * alpha, cost_of_cure = cost_of_cure
+    alpha = 2 * alpha, cost_of_cure = cost_of_cure
 )
-print(cost_with_cure)
-\end{Rin-no-test}
+print(round(cost_with_cure))
+\end{Rin}
 
 which gives:
 
-\begin{Rout-no-test}
-750
-\end{Rout-no-test}
+\begin{Rout}
+[1] 750
+\end{Rout}
 
 So given the current parameters it is not worth purchasing the cure.
 

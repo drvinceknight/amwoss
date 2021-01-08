@@ -15,6 +15,10 @@ Activate the environment:
     $ conda activate ampwoss
     $ inv env
 
+To delete the environment:
+
+    $ inv delenv
+
 ## Compilation instructions
 
 Run:
