@@ -1,6 +1,7 @@
 \chapter[Game Theory]{Game Theory}
 
 % Introduction
+% TODO Fix this section (language and missing step)
 \chapterinitial{M}{ost} when modelling certain situations two approaches are
 valid: to make assumptions about the overall behaviour or to make assumptions
 about the detailed behaviour. The later falls is akin to measuring
@@ -50,10 +51,76 @@ The mathematical tool used to find the expected behaviour is Game Theory.
 
 \section{Theory}\label{sec:theory}
 
-\begin{itemize}
-    \item What is a game.
-    \item What is a Nash equilibrium.
-\end{itemize]
+In the case of this City, the interaction can be modelled using a mathematical
+object called a game which in the field of game theory is defined as follows.
+There are a number of games, the ones we will consider here require:
+
+\begin{enumerate}
+    \item A given collection of actors that make decisions (players).
+    \item Options available to each player (actions).
+    \item A numerical value associated to each player for every possible
+        choice of action made by all the players. This is the utility or reward.
+\end{enumerate}
+
+There are called normal form games and are formally defined by:
+
+\begin{enumerate}
+    \item A finite set of \(N\) players;
+    \item Action spaces for each player: \(\{A_1, A_2, A_3, \dots, A_N\}\);
+    \item Utility functions that for each player \(u_1, u_2, u_3, \dots, u_N\)
+        where \(u_i:A_1\times A_2 \times A_3 \dots A_N \to \mathbb{R}\).
+\end{enumerate}
+
+When \(N=2\) the utility function is often represented by a pair of matrices (1
+for each player) of with the same number of rows and columns. The rows
+correspond to the actions available to the first player and the columns to the
+actions available to the second player.
+
+Given a pair of actions (a row and column) we can read the utilities to both
+player by looking at the corresponding entry of the corresponding matrix.
+
+% TODO Include diagram here
+
+A strategy corresponds to an way of choosing actions, this is represented by a
+probability vector. For the \(i\)th player, this vector \(v\) would be of size
+\(|A_i|\) (the size of the action space) and \(v_i\) corresponds to the
+probability of choosing the \(i\)th action.
+
+For the example of our City, the two matrices would be:
+
+\[
+   A =
+        \begin{pmatrix}
+            1     & 1 / 2   & 1 / 3 \\
+            3 / 2 & 19 / 20 & 1 / 2 \\
+            5 / 3 & 4 / 5   & 17 / 20\\
+        \end{pmatrix}
+
+   \qquad
+
+   B = A ^T =
+        \begin{pmatrix}
+            1     & 3 / 2   & 5 / 3 \\
+            1 / 2 & 19 / 20 & 4 / 5 \\
+            1 / 3 & 1 / 2   & 17 / 20\\
+        \end{pmatrix}
+\]
+
+Both taxis always choosing to use 2 taxis (the second row/column) would
+correspond to the strategy: \((0, 1, 0)\).
+If the both companies use this strategy and the row player (who controls the
+rows) wants to
+improve their outcome it's evident by inspecting the second column that the
+highest number is \(19 / 20\): thus the row player has no reason to change what
+they are doing.
+
+This is in fact called a Nash equilibrium: when both players are playing a
+strategy that is the best response against the other.
+
+Whilst a Nash equilibria is not necessarily a set of strategies that players
+will converge towards, once they are there they have no reason to move away from
+it. It is the particular concept we will use to understand the emergent
+behaviour in our city.
 
 \section{Solving with Python}\label{sec:solving-with-python}
 
