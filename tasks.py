@@ -34,6 +34,9 @@ def env(c):
     c.run(
         """Rscript -e 'install.packages("expm", repos="http://cran.us.r-project.org")'"""
     )
+    c.run(
+        """Rscript -e 'install.packages("Recon", repos="http://cran.us.r-project.org")'"""
+    )
 
 
 @task
