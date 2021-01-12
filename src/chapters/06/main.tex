@@ -79,8 +79,6 @@ actions available to the second player.
 Given a pair of actions (a row and column) we can read the utilities to both
 player by looking at the corresponding entry of the corresponding matrix.
 
-% TODO Include diagram here
-
 A strategy corresponds to an way of choosing actions, this is represented by a
 probability vector. For the \(i\)th player, this vector \(v\) would be of size
 \(|A_i|\) (the size of the action space) and \(v_i\) corresponds to the
@@ -89,22 +87,31 @@ probability of choosing the \(i\)th action.
 For the example of our City, the two matrices would be:
 
 \[
-   A =
+   M =
         \begin{pmatrix}
             1     & 1 / 2   & 1 / 3 \\
             3 / 2 & 19 / 20 & 1 / 2 \\
             5 / 3 & 4 / 5   & 17 / 20\\
         \end{pmatrix}
-
    \qquad
-
-   B = A ^T =
+   N = M ^T =
         \begin{pmatrix}
             1     & 3 / 2   & 5 / 3 \\
             1 / 2 & 19 / 20 & 4 / 5 \\
             1 / 3 & 1 / 2   & 17 / 20\\
         \end{pmatrix}
 \]
+
+A diagram of the system is shown in Figure~\ref{fig:taxi-firm-game}
+
+\begin{figure}
+\begin{center}
+\includestandalone[width=.8\textwidth]{./assets/taxi-firm-game/main}
+\end{center}
+\caption{Diagrammatic representation of the action sets and payoff matrices for
+    the game.}
+\label{fig:taxi-firm-game}
+\end{figure}
 
 Both taxis always choosing to use 2 taxis (the second row/column) would
 correspond to the strategy: \((0, 1, 0)\).
