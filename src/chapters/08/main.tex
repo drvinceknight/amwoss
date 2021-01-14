@@ -212,7 +212,7 @@ Co = [20, 21]
 Dc = [22, 23]
 Do = [24, 25]
 modules = Ac + Ao + Bc + Bo + Cc + Co + Dc + Do
-time_slots = range(26)
+times = range(26)
 \end{pyin}
 
 Now let's begin by defining an empty problem:
@@ -225,12 +225,12 @@ prob = pulp.LpProblem("ExamScheduling", pulp.LpMinimize)
 We also need to define our sets of binary decision variables:
 
 \begin{pyin}
-x = pulp.LpVariable.dicts("X", (modules, time_slots), cat=pulp.LpBinary)
-y = pulp.LpVariable.dicts('Y', time_slots, cat=pulp.LpBinary)
+x = pulp.LpVariable.dicts("X", (modules, times), cat=pulp.LpBinary)
+y = pulp.LpVariable.dicts('Y', times, cat=pulp.LpBinary)
 \end{pyin}
 
 Now \mintinline{python}{y} is a dictionary of binary decision variables, with
-keys as elements of the list \mintinline{python}{time_slots}. Let's look at
+keys as elements of the list \mintinline{python}{times}. Let's look at
 $Y_3$ corresponding to the third day:
 
 \begin{pyin}
@@ -243,7 +243,7 @@ Y_3
 
 While \mintinline{python}{x} is a dictionary of dictionaries of binary decision
 variables, with keys as elements of the lists \mintinline{python}{modules} and
-\mintinline{python}{time_slots}. Let's look at $X_{2,5}$, the variable
+\mintinline{python}{times}. Let's look at $X_{2,5}$, the variable
 corresponing to module 2 being scheduled on day 5:
 
 \begin{pyin}
@@ -261,23 +261,24 @@ problem.
 For the objective function:
 
 \begin{pyin}
-objective_function = sum([y[day] for day in time_slots])
+objective_function = sum([y[day] for day in times])
 prob += objective_function
 \end{pyin}
 
 Now the constraints:
 
 \begin{pyin}
-for day in time_slots:
-    prob += (1/len(modules)) * sum([x[module][day] for module in modules]) <= y[day]
-    prob += sum([x[module][day] for module in Ac+Ao+Dc]) <= 1
-    prob += sum([x[module][day] for module in Bc+Bo+Co]) <= 1
-    prob += sum([x[module][day] for module in Bc+Bo+Ac]) <= 1
-    prob += sum([x[module][day] for module in Cc+Co+Bo]) <= 1
-    prob += sum([x[module][day] for module in Dc+Do]) <= 1
+M = 1 / len(modules)
+for day in times:
+    prob += M * sum(x[mod][day] for mod in modules) <= y[day]
+    prob += sum(x[mod][day] for mod in Ac + Ao + Dc) <= 1
+    prob += sum(x[mod][day] for mod in Bc + Bo + Co) <= 1
+    prob += sum(x[mod][day] for mod in Bc + Bo + Ac) <= 1
+    prob += sum(x[mod][day] for mod in Cc + Co + Bo) <= 1
+    prob += sum(x[mod][day] for mod in Dc + Do) <= 1
 
-for module in modules:
-    prob += sum([x[module][day] for day in time_slots]) == 1
+for mod in modules:
+    prob += sum(x[mod][day] for day in times) == 1
 \end{pyin}
 
 At this stage we could print the \mintinline{python}{prob} object, which would
@@ -302,7 +303,7 @@ This method has also assigned values to our decision variables. These can be
 inspected, lets check if module 2 was scheduled for day 5:
 
 \begin{pyin}
-print(x[2][5])
+print(x[2][5].value())
 \end{pyin}
 
 \begin{pyout}
@@ -313,7 +314,7 @@ This was assigned the value 0, and so module 2 was not scheduled for that day.
 Let's check if module 2 was scheduled for day 14:
 
 \begin{pyin}
-print(x[2][14])
+print(x[2][14].value())
 \end{pyin}
 
 \begin{pyout}
@@ -326,12 +327,12 @@ We can iterate through all decision variables and make a print solutions in
 order to read off the schedule easier:
 
 \begin{pyin}
-for day in time_slots:
+for day in times:
     if y[day].value() == 1:
         schedule = f"Day {day}: "
-        for module in modules:
-            if x[module][day].value() == 1:
-                 schedule += f"{module}, "
+        for mod in modules:
+            if x[mod][day].value() == 1:
+                 schedule += f"{mod}, "
         print(schedule)
 \end{pyin}
 
@@ -396,7 +397,7 @@ Which gives the following array, corresponding the the coefficients of the array
 [1] 0 0 0 0 0 0 0 0 0 1 1 1
 \end{Rout}
 
-Now the constraints have three components: the coefficients matrix, the right hand side array, and the array of directions.
+The constraints have three components: the coefficients matrix, the right hand side array, and the array of directions.
 The coefficients matrix is a matrix of the coefficients of the left hand side of inequalities, where again columns represent the coefficients of the array $Z$, and rows represent each separate constraint.
 The following function is used to write one row of that coefficients matrix, for a given day, for a given set of clashes, corresponding to Inequalities~\ref{eqn:clique1} to \ref{eqn:clique5}:
 
@@ -473,8 +474,8 @@ It returns all three components:
 #         that cannot be scheduled at the same time
 #'
 #' @return f.con the LHS of the constraints as a matrix
-#' @return f.dir a vector of directions of the inequalities
-#' @return f.rhs a vector of the values of the RHS of the inequalities
+#' @return f.dir the directions of the inequalities
+#' @return f.rhs the values of the RHS of the inequalities
 write_constraints <- function(list_clashes, n_days, n_modules){
   all_rows <- c()
   all_dirs <- c()
@@ -578,7 +579,7 @@ f.rhs <- constraints[[3]]
 f.obj <- write_objective(n_modules = n_modules, n_days = n_days)
 \end{Rin}
 
-Finally, once these objects are in place, we can use the \mintinline{ROI} library to construct an optimisation problem object:
+Finally, once these objects are in place, we can use the \mintinline{R}{ROI} library to construct an optimisation problem object:
 
 \begin{Rin}
 library(ROI)
@@ -600,7 +601,7 @@ Now to solve:
 sol <- ROI_solve(milp)
 \end{Rin}
 
-The solver will not output information about the solve process and runtime.
+The solver will output information about the solve process and runtime.
 We can now print the solution:
 
 \begin{Rin}
@@ -641,7 +642,7 @@ The following code prints a readable schedule:
 
 \begin{Rin}
 for (day in 1:n_days){
-  if (sol$solution[(n_days*n_modules) + day] == 1){
+  if (sol$solution[(n_days * n_modules) + day] == 1){
     schedule <- paste("Day", day, ":")
     for (module in 1:n_modules){
       var <- ((day - 1) * n_modules) + module
@@ -668,6 +669,6 @@ for (day in 1:n_days){
 [1] "Day 25 : 1 18"
 \end{Rout}
 
-Giving that 11 days are the minimum required to schedule the 26 exams without clashes.
+This gives that 11 days are the minimum required to schedule the 26 exams without clashes, with either 1, 2 or 3 exams scheduled on each day.
 
 \section{Research}\label{sec:research}
