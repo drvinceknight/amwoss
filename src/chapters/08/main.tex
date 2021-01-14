@@ -41,7 +41,7 @@ M07 &     &     &     \\
 \end{table}
 
 The university is required to schedule examinations for each of these modules.
-The university would like the exams to be schedules using the least amount of
+The university would like the exams to be scheduled using the least amount of
 time slots possible. However not all modules can be scheduled at the same time
 as they share some students:
 
@@ -131,7 +131,7 @@ demonstrated in Figure~\ref{paint_lp}.
 Therefore for this problem the optimum occurs in a particular vertex of the
 feasible region, at $A = \frac{12}{7}$ and $B = \frac{20}{7}$.
 
-This works well is $A$ and $B$ can take any real value in the feasible region.
+This works well as $A$ and $B$ can take any real value in the feasible region.
 It is common however to formulate Integer Linear Programmes where the decision
 variables are restricted to integers. There are a number of methods that can
 help us adapt a real solution to an integer solution. These include cutting
@@ -169,7 +169,7 @@ $C_o \cup C_c \cup B_o$, $C_o \cup B_o \cup B_c$, $B_c \cup B_o \cup A_c$,
 $A_c \cup A_o \cup D_c$, and $D_c \cup D_o$. These sets of modules will form the
 basis for out constraints, Inequalities~\ref{eqn:clique1} to~\ref{eqn:clique5}.
 
-Define $M$ as the set of all modules to be schedules, that is
+Define $M$ as the set of all modules to be scheduled, that is
 $M = A_c \cup A_o \cup B_c \cup B_o \cup C_c \cup C_o \cup D_c \cup D_o$.
 Define also $T$ as the set of possible time slots. At worst each exam is
 scheduled for a different day, thus $|T| = |M| = 26$ in this case.
@@ -185,7 +185,7 @@ which ensures all modules are scheduled once and once only.
 Thus altogether our integer program becomes:
 
 \begin{align}
-\text{Minimise: } \sum_{t \in T} Y_j & \\
+\text{Minimise: } \sum_{t \in T} Y_j & \\\label{eqn:objective}
 \text{Subject to: } & \nonumber \\
 \frac{1}{|M|} \sum_{m \in M} X_{mt} &\leq Y_j \text{ for all } j \in T\\\label{eqn:auxiliary}
 \sum_{t \in T} X_{mt} &= 1 \text{ for all } m \in M\\\label{eqn:schedule_all_modules}
@@ -358,5 +358,316 @@ have 4 exams scheduled simultaneously.
 
 
 \section{Solving with R}\label{sec:solving-with-R}
+
+In R we will use the R package \mintinline{R}{ROI}, the R Optimization Infrastructure.
+This is a library of code that acts as a front end to a number of other solvers that need to be installed externally, allowing a range of optimisation problems to be solved with a number of different solvers, using similar problem structures and syntax.
+The solver that we will use here is called the CBC MILP Solver, which needs to be installed as well as \mintinline{R}{rcbc} package.
+
+In Section~\ref{sec:theory} the exam scheduling problem was formulated with two arrays of decision variables, a one-dimensional array $Y$ and a two dimensional array $X$.
+In \mintinline{R}{ROI} we need our decision variables to be a one-dimensional array, so we `flatten' these by first ordering by $X$ then $Y$, within that ordering by time slot, then within that ordering by module number.
+Call these variables $Z_i$ for $i \in 1, 2, ... 702$.
+For example $Z_{29}$ would correspond to $X_{3, 2}$, the decision variable representing whether module number 3 is scheduled on day 2; $Z_{700}$ would correspond to $Y_{24}$, the decision variable representing whether there's an exam scheduled for day 24.
+
+Once this array is defined, then the objective function is an ordered array of the coefficients of each of these variables:
+
+\begin{Rin}
+#' Writes the row of coefficients for the objective function
+#'
+#' @param n_modules: the number of modules to schedule
+#' @param n_days: the maximum number of days to schedule
+#'
+#' @return the objective function row to minimise
+write_objective <- function(n_modules, n_days){
+  all_days <- rep(0, n_modules * n_days)
+  Ys <- rep(1, n_days)
+  append(all_days, Ys)
+}
+\end{Rin}
+
+For 3 modules and 3 days:
+
+\begin{Rin}
+write_objective(3, 3)
+\end{Rin}
+
+Which gives the following array, corresponding the the coefficients of the array $Z$ for Equation~\ref{eqn:objective}.
+
+\begin{Rout}
+[1] 0 0 0 0 0 0 0 0 0 1 1 1
+\end{Rout}
+
+Now the constraints have three components: the coefficients matrix, the right hand side array, and the array of directions.
+The coefficients matrix is a matrix of the coefficients of the left hand side of inequalities, where again columns represent the coefficients of the array $Z$, and rows represent each separate constraint.
+The following function is used to write one row of that coefficients matrix, for a given day, for a given set of clashes, corresponding to Inequalities~\ref{eqn:clique1} to \ref{eqn:clique5}:
+
+\begin{Rin}
+#' Writes the constraint row dealing with clashes
+#'
+#' @param clashes: a vector of module indices that all cannot
+#'                 be scheduled at the same time
+#' @param day: an integer representing the day
+#'
+#' @return the constraint row corresponding to that set of
+#'         clashes on that day
+write_X_clashes <- function(clashes, day, n_days, n_modules){
+  today <- rep(0, n_modules)
+  today[clashes] = 1
+  before_today <- rep(0, n_modules * (day - 1))
+  after_today <- rep(0, n_modules * (n_days - day))
+  all_days <- c(before_today, today, after_today)
+  full_coeffs <- c(all_days, rep(0, n_days))
+  full_coeffs
+}
+\end{Rin}
+
+where \mintinline{clashes} is an array containing the module numbers of a set of modules that may all share students.
+The following function is used to write one row of the coefficients matrix, for each module, ensuring that each module is scheduled on one day and one day only, corresponding to Equation~\ref{eqn:schedule_all_modules}:
+
+\begin{Rin}
+#' Writes the constraint row to ensure that every module is
+#' scheduled once and only one
+#'
+#' @param module: an integer representing the module
+#'
+#' @return the constraint row corresponding to scheduling a
+#'         module on only one day
+write_X_requirements <- function(module, n_days, n_modules){
+  today <- rep(0, n_modules)
+  today[module] = 1
+  all_days <- rep(today, n_days)
+  full_coeffs <- c(all_days, rep(0, n_days))
+  full_coeffs
+}
+\end{Rin}
+
+The following function is used to write one row of the coefficients matrix corresponding to the auxiliary constraints of Inequalities~\ref{ref:auxiliary}:
+
+\begin{Rin}
+#' Writes the constraint row representing the Y variable,
+#' whether at least one exam is scheduled on that day
+#'
+#' @param day: an integer representing the day
+#'
+#' @return the constraint row corresponding to creating Y
+write_Y_constraints <- function(day, n_days, n_modules){
+  today <- rep(1, n_modules)
+  before_today <- rep(0, n_modules * (day - 1))
+  after_today <- rep(0, n_modules * (n_days - day))
+  all_days <- c(before_today, today, after_today)
+  all_Ys <- rep(0, n_days)
+  all_Ys[day] = -n_modules
+  full_coeffs <- append(all_days, all_Ys)
+  full_coeffs
+}
+\end{Rin}
+
+Finally the following function uses them all to assemble a coefficients matrix.
+It loops though the parameters for each constraint row required, uses the appropriate function to create the row of the coefficients matrix, sets the appropriate inequality direction ($\leq$, $=$, $\geq$), and the value of the right hand side.
+It returns all three components:
+
+\begin{Rin}
+#' Writes all the constraints as a matrix, column of
+#' inequalities, and right hand side column.
+#'
+#' @param list_clashes: a list of vectors with sets of modules
+#         that cannot be scheduled at the same time
+#'
+#' @return f.con the LHS of the constraints as a matrix
+#' @return f.dir a vector of directions of the inequalities
+#' @return f.rhs a vector of the values of the RHS of the inequalities
+write_constraints <- function(list_clashes, n_days, n_modules){
+  all_rows <- c()
+  all_dirs <- c()
+  all_rhss <- c()
+  n_rows <- 0
+  
+  for (clash in list_clashes){
+    for (day in 1:n_days){
+      clashes <- write_X_clashes(clash, day, n_days, n_modules)
+      all_rows <- append(all_rows, clashes)
+      all_dirs <- append(all_dirs, "<=")
+      all_rhss <- append(all_rhss, 1)
+      n_rows <- n_rows + 1
+    }
+  }
+  
+  for (module in 1:n_modules){
+    reqs <- write_X_requirements(module, n_days, n_modules)
+    all_rows <- append(all_rows, reqs)
+    all_dirs <- append(all_dirs, "==")
+    all_rhss <- append(all_rhss, 1)
+    n_rows <- n_rows + 1
+  }
+  
+  for (day in 1:n_days){
+    Yconstraints <- write_Y_constraints(day, n_days, n_modules)
+    all_rows <- append(all_rows, Yconstraints)
+    all_dirs <- append(all_dirs, "<=")
+    all_rhss <- append(all_rhss, 0)
+    n_rows <- n_rows + 1
+  }
+  
+  f.con <- matrix(all_rows, nrow = n_rows, byrow = TRUE)
+  f.dir <- all_dirs
+  f.rhs <- all_rhss
+  list(f.con, f.dir, f.rhs)
+}
+\end{Rin}
+
+For demonstration, if we had two modules and two possible days, with the single constraint that both modules cannot be scheduled at the same time, then:
+
+\begin{Rin}
+write_constraints(list_clashes = list(c(1, 2)),
+                  n_days = 2,
+                  n_modules = 2)
+\end{Rin}
+
+This would give three components, a coefficient matrix of the left hand side of the constraints (rows 1 and 2 corresponding to the clash on days 1 and 2, row 3 ensuring module 1 is scheduled on one day only, row 4 ensuring module 2 is scheduled on one day only, and rows 5 and 5 defining the Y decision variables), an array of direction of the constraint inequalities, and an array of the right hand side values of the constraints.
+
+\begin{Rout}
+[[1]]
+     [,1] [,2] [,3] [,4] [,5] [,6]
+[1,]    1    1    0    0    0    0
+[2,]    0    0    1    1    0    0
+[3,]    1    0    1    0    0    0
+[4,]    0    1    0    1    0    0
+[5,]    1    1    0    0   -2    0
+[6,]    0    0    1    1    0   -2
+
+[[2]]
+[1] "<=" "<=" "==" "==" "<=" "<="
+
+[[3]]
+[1] 1 1 1 1 0 0
+\end{Rout}
+
+Now we are ready to use these to solve the exam scheduling problem.
+First we define some parameters, including the sets of modules that all share students, that is the list of clashes:
+
+\begin{Rin}
+n_modules = 26
+n_days = 26
+
+Ac <- c(1, 2, 3)
+Ao <- c(4, 5, 6, 7, 8)
+Bc <- c(9, 10, 11, 12, 13)
+Bo <- c(14, 15, 16)
+Cc <- c(17, 18, 19, 20)
+Co <- c(21, 22)
+Dc <- c(23, 24)
+Do <- c(25, 26)
+
+list_clashes <- list(
+  c(Ac, Ao, Dc),
+  c(Bc, Bo, Co),
+  c(Bc, Bo, Ac),
+  c(Cc, Co, Bo),
+  c(Dc, Do)
+)
+\end{Rin}
+
+Then we can use the functions defined above to create the objective function and the three elements of the constraints:
+
+\begin{Rin}
+constraints <- write_constraints(list_clashes = list_clashes,
+                                 n_days = n_days,
+                                 n_modules = n_modules)
+f.con <- constraints[[1]]
+f.dir <- constraints[[2]]
+f.rhs <- constraints[[3]]
+f.obj <- write_objective(n_modules = n_modules, n_days = n_days)
+\end{Rin}
+
+Finally, once these objects are in place, we can use the \mintinline{ROI} library to construct an optimisation problem object:
+
+\begin{Rin}
+library(ROI)
+
+milp <- OP(objective = L_objective(f.obj),
+           constraints = L_constraint(L = f.con,
+                                      dir = f.dir,
+                                      rhs = f.rhs),
+           types = rep("B", length(f.obj)), 
+           maximum = FALSE)
+\end{Rin}
+
+This creates an \mintinline{R}{OP} object from our objective row \mintinline{R}{f.obj}, and our constraints which are made up from the three components \mintinline{R}{f.con}, \mintinline{R}{f.dir} and \mintinline{R}{f.rhs}.
+When creating this object we also denote the \mintinline{R}{types} as binary variables (an array o \mintinline{R}{"B"} for each decision variable), and we want to minimise out objective function so we set \mintinline{R}{maximum = FALSE}.
+
+Now to solve:
+
+\begin{Rin}
+sol <- ROI_solve(milp)
+\end{Rin}
+
+The solver will not output information about the solve process and runtime.
+We can now print the solution:
+
+\begin{Rin}
+print(sol$solution)
+\end{Rin}
+
+\begin{Rout}
+  [1] 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0
+ [30] 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0
+ [59] 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0
+ [88] 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0
+[117] 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 1 0 0 0 0 0 0 0 0 0 0 0 0 0
+[146] 0 0 0 0 0 0 1 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0
+[175] 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 1 1 0 0 0 0 0 0 0 0 0 1 0 0
+[204] 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0
+[233] 0 0 0 0 0 0 1 0 0 0 0 0 0 0 1 0 0 0 0 0 0 1 0 0 0 0 0 0 0
+[262] 0 1 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 1 0 0 0 0 1 0 0 0 0
+[291] 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0
+[320] 0 0 0 0 0 0 0 0 1 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 1 0 0 0 0
+[349] 0 0 0 0 1 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0
+[378] 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0
+[407] 0 0 0 0 0 0 0 0 0 0 0 0 0 1 0 0 0 0 0 0 0 0 0 1 0 0 0 0 0
+[436] 0 0 0 0 0 1 0 0 0 0 0 0 0 1 0 0 0 1 0 0 0 0 0 0 0 0 0 0 0
+[465] 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0
+[494] 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0
+[523] 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0
+[552] 0 0 0 0 0 0 1 0 0 0 0 1 0 0 0 0 0 0 1 0 0 0 0 0 0 0 0 0 0
+[581] 0 1 0 0 0 0 0 0 0 0 0 0 0 0 1 0 0 0 0 0 0 0 0 0 0 0 0 0 0
+[610] 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 1 0 0 0 0 0 0 0 0 0 0 0 0 0
+[639] 0 0 0 1 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0
+[668] 0 0 0 0 0 0 0 0 0 0 0 0 0 0 1 0 1 0 1 1 0 1 1 0 0 1 1 0 0
+[697] 0 1 1 0 1 0
+\end{Rout}
+
+This gives the values of each of the $Z$ decision variables.
+We know the structure of this, that is the first 26 variables are the modules scheduled for day 1, and so on.
+The following code prints a readable schedule:
+
+\begin{Rin}
+for (day in 1:n_days){
+  if (sol$solution[(n_days*n_modules) + day] == 1){
+    schedule <- paste("Day", day, ":")
+    for (module in 1:n_modules){
+      var <- ((day - 1) * n_modules) + module
+      if (sol$solution[var] == 1){
+        schedule <- paste(schedule, module)
+      }
+    }
+    print(schedule)
+  }
+}
+\end{Rin}
+
+\begin{Rout}
+[1] "Day 6 : 2 22"
+[1] "Day 8 : 8 9 19"
+[1] "Day 10 : 5 13 20"
+[1] "Day 11 : 3 21 26"
+[1] "Day 13 : 16"
+[1] "Day 14 : 6 15"
+[1] "Day 17 : 4 14 25"
+[1] "Day 18 : 7 11"
+[1] "Day 22 : 12 17 24"
+[1] "Day 23 : 10 23"
+[1] "Day 25 : 1 18"
+\end{Rout}
+
+Giving that 11 days are the minimum required to schedule the 26 exams without clashes.
 
 \section{Research}\label{sec:research}
