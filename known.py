@@ -78,6 +78,7 @@ words = {
     "bool",
     "boolean",
     "booleans",
+    "calc",
     "ccc",
     "cd",
     "ciw",

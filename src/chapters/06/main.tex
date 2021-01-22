@@ -140,7 +140,7 @@ import nashpy as nash
 
 
 def get_game(profits):
-    """Return the game object
+    """Return the game object.
 
     Args:
         profits: a matrix with expected profits
@@ -160,7 +160,7 @@ profits = np.array(
     (
         (1, 1 / 2, 1 / 3),
         (3 / 2, 19 / 20, 1 / 2),
-        (5 / 3, 4 / 5, 17 / 20)
+        (5 / 3, 4 / 5, 17 / 20),
     )
 )
 game = get_game(profits=profits)
@@ -211,8 +211,8 @@ involves modifying the \mintinline{python}{get_game} function as follows:
 
 \begin{pyin}
 def get_game(profits, offset):
-    """Return the game object with a given offset
-    when 3 taxis are provided
+    """Return the game object with a given offset when 3 taxis
+    are provided.
 
     Args:
         profits: a matrix with expected profits
@@ -231,8 +231,8 @@ compute the equilibria:
 
 \begin{pyin}
 def get_equilibria(profits, offset):
-    """Return the equilibria for a given offset
-    when 3 taxis are provided
+    """Return the equilibria for a given offset when 3 taxis
+    are provided.
 
     Args:
         profits: a matrix with expected profits
@@ -308,7 +308,7 @@ profits <- rbind(
         c(3 / 2, 19 / 20, 1 / 2),
         c(5 / 3, 4 / 5, 17 / 20)
     )
-eqs <- get_equilibria(profits=profits)
+eqs <- get_equilibria(profits = profits)
 print(eqs)
 \end{Rin}
 
@@ -336,7 +336,7 @@ involves modifying the \mintinline{R}{get_equilibria} function as follows:
 
 
 \begin{Rin}
-#' Returns the equilibria in pure strategies 
+#' Returns the equilibria in pure strategies
 #' for a given offset
 #'
 #' @param profits: a matrix with expected profits
@@ -345,8 +345,8 @@ involves modifying the \mintinline{R}{get_equilibria} function as follows:
 #' @return a list of equilibria
 get_equilibria <- function(profits, offset){
     new_profits <- rbind(
-                profits[c(1,2),], 
-                profits[3,] + offset)
+                profits[c(1, 2), ],
+                profits[3, ] + offset)
     sim_nasheq(new_profits, t(new_profits))
 }
 \end{Rin}
@@ -357,7 +357,7 @@ when there is a single equilibria:
 \begin{Rin}
 offset <- 0
 while (length(
-            get_equilibria(profits=profits, offset=offset)
+            get_equilibria(profits = profits, offset = offset)
             ) > 1){
     offset <- offset + 0.01
 }
@@ -377,7 +377,7 @@ and we can confirm that the Nash equilibria is where both taxi firms provide
 three vehicles:
 
 \begin{Rin}
-print(get_equilibria(profits=profits, offset=offset))
+print(get_equilibria(profits = profits, offset = offset))
 \end{Rin}
 
 giving:
