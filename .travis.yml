@@ -25,6 +25,11 @@ install:
   - conda env create -f environment.yml
   - source activate ampwoss
   - inv env  # Finish install of environment
+  # Install ROI and cbc TODO Find a better waym of doing this
+  - sudo apt-get install coinor-libcbc-dev coinor-libclp-dev
+  - Rscript -e 'install.packages("ROI")'
+  - Rscript -e 'remotes::install_github("dirkschumacher/rcbc")'
+  - Rscript -e 'remotes::install_github("dirkschumacher/ROI.plugin.cbc")'
 
 script:
   - inv doctest --style  # Test all code and also check style
