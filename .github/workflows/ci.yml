@@ -12,23 +12,11 @@ jobs:
   test:
     runs-on: ubuntu-latest
     steps:
-    # Install environment
-    - name: Install environment
-      run: |
-        sudo apt-get update
-        #LaTeX packages
-        sudo apt-get install -y texlive-latex-extra
-        sudo apt-get install -y texlive-xetex
-        sudo apt-get install -y texlive-lang-greek
-        sudo apt-get install -y latexmk
-        sudo apt-get install lmodern
-        #To check spelling
-        sudo apt-get install aspell aspell-en
-        Conda
-        wget https://repo.continuum.io/miniconda/Miniconda3-latest-Linux-x86_64.sh -O miniconda.sh;
-        bash miniconda.sh -b -p $HOME/miniconda
-        export PATH="$HOME/miniconda/bin:$PATH"
-        hash -r
+    - name: Install Conda
+    - uses: actions/checkout@v2
+    - uses: s-weigand/setup-conda@v1
+    - run: conda --version
+    - run: which python   # Install environment
         conda config --set always_yes yes --set changeps1 no
         conda update -q conda
         #Useful for debugging any issues with conda
@@ -41,6 +29,17 @@ jobs:
       run: |
         inv doctest --style  # Test all code and also check style
 
+    - name: Install LaTeX
+      run: |
+        sudo apt-get update
+        #LaTeX packages
+        sudo apt-get install -y texlive-latex-extra
+        sudo apt-get install -y texlive-xetex
+        sudo apt-get install -y texlive-lang-greek
+        sudo apt-get install -y latexmk
+        sudo apt-get install lmodern
+        #To check spelling
+        sudo apt-get install aspell aspell-en
     - name: Check LaTeX compiles
       run: |
         cd src; pdflatex -shell-escape main.tex  # Check LaTeX Compiles
