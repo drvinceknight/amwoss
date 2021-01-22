@@ -44,4 +44,5 @@ jobs:
         sudo apt-get install aspell aspell-en
     - name: Check LaTeX compiles
       run: |
+        source activate ampwoss
         cd src; inv compile # Check LaTeX Compiles
