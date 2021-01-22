@@ -27,6 +27,7 @@ jobs:
 
     - name: Doctest
       run: |
+        source activate ampwoss
         inv doctest --style  # Test all code and also check style
 
     - name: Install LaTeX
@@ -42,4 +43,4 @@ jobs:
         sudo apt-get install aspell aspell-en
     - name: Check LaTeX compiles
       run: |
-        cd src; pdflatex -shell-escape main.tex  # Check LaTeX Compiles
+        cd src; inv compile # Check LaTeX Compiles
