@@ -9,7 +9,7 @@ on:
 
 # This job installs dependencies, build the site, and pushes it to `gh-pages``
 jobs:
-  deploy:
+  test:
     runs-on: ubuntu-latest
     steps:
     # Install environment
