@@ -1,13 +1,11 @@
 name: CI
 
-# Only run this when the main branch changes
 on:
   push:
-    branches:
-    - main
-    paths:
-    - src/**
-    - assets/**
+  pull_request:
+  # Run weakly at 00:00 on Sunday.
+  schedule:
+  - cron:  '0 0 * * 0'
 
 # This job installs dependencies, build the site, and pushes it to `gh-pages``
 jobs:
