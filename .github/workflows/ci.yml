@@ -12,11 +12,10 @@ jobs:
   test:
     runs-on: ubuntu-latest
     steps:
-    - name: Install Conda
     - uses: actions/checkout@v2
-    - uses: s-weigand/setup-conda@v1
-    - run: conda --version
-    - run: |
+    - name: Install Conda
+      uses: s-weigand/setup-conda@v1
+      run: |
         conda config --set always_yes yes --set changeps1 no
         conda update -q conda
         #Useful for debugging any issues with conda
