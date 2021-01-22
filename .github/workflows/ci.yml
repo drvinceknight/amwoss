@@ -10,7 +10,7 @@ on:
 # This job installs dependencies, build the site, and pushes it to `gh-pages``
 jobs:
   test:
-    runs-on: ubuntu-latest
+    runs-on: [ubuntu-latest, macOS-latest]
     steps:
     - uses: actions/checkout@v2
     - name: Install Conda
