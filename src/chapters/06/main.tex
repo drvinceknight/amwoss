@@ -201,6 +201,14 @@ which gives:
 We see that there are 3 Nash equilibria: 3 possible pairs of behaviour that the
 two companies might converge to.
 
+\begin{itemize}
+    \item The first equilibria \(((0, 1, 0), (0, 1, 0))\) corresponds to both firms always using 2 taxis.
+    \item The second equilibria \(((0, 0, 1), (0, 0, 1))\) corresponds to both
+        firms always using 3 taxis.
+    \item The third equilibria \(((0, 0.7, 0.3), (0, 0.7, 0.3))\) corresponds to
+        both firms using 2 taxis 70\% of the time and 3 taxis otherwise.
+\end{itemize}
+
 A good thing to note is that the two taxi
 companies will never only provide a single taxi (which would be harmful to the
 customers).
@@ -325,6 +333,21 @@ $`Equilibrium 2`
 
 We see that there are 2 pure Nash equilibria: 2 possible pairs of behaviour that the
 two companies might converge to.
+
+\begin{itemize}
+    \item The first equilibria \(((0, 1, 0), (0, 1, 0))\) corresponds to both firms always using 2 taxis.
+    \item The second equilibria \(((0, 0, 1), (0, 0, 1))\) corresponds to both
+        firms always using 3 taxis.
+\end{itemize}
+
+There is in fact a third Nash equilibria where both taxi firms use 2 taxis 70\%
+of the time and 3 taxis the rest of the time but \mintinline{R}{Recon} is unable
+to find Nash equilibria with mixed behaviour for games with more than two
+strategies.
+
+As an aside, if we remove the option of using a single taxi then
+\mintinline{R}{Recon} can give us all three equilibria by passing the
+\mintinline{R}{type = "mixed"} argument to \mintinline{R}{sim_nasheq}.
 
 A good thing to note is that the two taxi
 companies will not only provide a single taxi (which would be harmful to the
