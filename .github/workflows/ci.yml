@@ -1,0 +1,48 @@
+name: CI
+
+on:
+  push:
+  pull_request:
+  # Run weakly at 00:00 on Sunday.
+  schedule:
+  - cron:  '0 0 * * 0'
+
+# This job installs dependencies, build the site, and pushes it to `gh-pages``
+jobs:
+  test:
+    #runs-on: [ubuntu-latest, macOS-latest]  # TODO Add check for macOS
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v2
+    - name: Install Conda
+      uses: s-weigand/setup-conda@v1
+    - name: Install environment
+      run: |
+        conda config --set always_yes yes --set changeps1 no
+        conda update -q conda
+        #Useful for debugging any issues with conda
+        conda info -a
+        conda env create -f environment.yml
+        source activate ampwoss
+        inv env  # Finish install of environment
+
+    - name: Doctest
+      run: |
+        source activate ampwoss
+        inv doctest --style  # Test all code and also check style
+
+    - name: Install LaTeX
+      run: |
+        sudo apt-get update
+        #LaTeX packages
+        sudo apt-get install -y texlive-latex-extra
+        sudo apt-get install -y texlive-xetex
+        sudo apt-get install -y texlive-lang-greek
+        sudo apt-get install -y latexmk
+        sudo apt-get install lmodern
+        #To check spelling
+        sudo apt-get install aspell aspell-en
+    - name: Check LaTeX compiles
+      run: |
+        source activate ampwoss
+        cd src; inv compile # Check LaTeX Compiles

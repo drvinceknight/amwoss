@@ -11,9 +11,11 @@ dependencies:
   - r-essentials
   - r-lintr
   - r-pracma
+  - r-rootSolve
   - pip:
       - ciw
       - dwys
       - invoke
       - black
       - docformatter
+      - nashpy

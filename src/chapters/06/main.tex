@@ -1,0 +1,416 @@
+\chapter[Game Theory]{Game Theory}
+
+% Introduction
+% TODO Fix this section (language and missing step)
+\chapterinitial{M}{ost} when modelling certain situations two approaches are
+valid: to make assumptions about the overall behaviour or to make assumptions
+about the detailed behaviour. The later falls is akin to measuring
+emergent behaviour. One tool used to do this is the study of interactive
+decision making: Game Theory.
+
+\section{Problem}\label{sec:problem}
+
+Consider a city council. Two electric taxi companies are going to move in to
+the city and the city wants to ensure that the customers are best served by this
+new duopoly. The two taxi firms will be deciding how many vehicles to deploy:
+one, two or three. The city wants to encourage them to both use three as this
+ensures the highest level of availability to the population.
+
+Some exploratory data analysis gives the following insights:
+
+\begin{itemize}
+    \item If both companies use the same number of taxis then they make the same
+        profit which will go down slightly as the number of taxis goes up.
+    \item If one company uses more taxis than the other then they make more
+        profit.
+\end{itemize}
+
+The expected profits are given in Table~\ref{tbl:profit-of-taxi-companies}.
+
+\begin{table}[!hbtp]
+    \begin{center}
+    \begin{tabular}{l|ccc}
+        \diagbox{Taxi numbers}{Other company taxi numbers} & 1     & 2      & 3\\
+        \toprule
+        1                                                  & 1     & \(\frac{1}{2}\) & \(\frac{1}{3}\)\\
+        2                                                  & \(\frac{3}{2}\)   & \(\frac{19}{20}\)& \(\frac{1}{2}\)\\
+        3                                                  & \(\frac{5}{3}\) & \(\frac{4}{5}\)  & \(\frac{17}{20}\)\\
+    \end{tabular}
+    \end{center}
+    \caption{Profits (in GBP per hour) of a given company based on
+    their vehicle numbers and the other companies vehicle numbers.}
+    \label{tbl:profit-of-taxi-companies}
+\end{table}
+
+
+Given these expected profits, the council wants to understand what is likely to
+happen and potentially give a financial incentive to each company to ensure
+their behaviour is in the population's interest.
+
+The mathematical tool used to find the expected behaviour is Game Theory.
+
+\section{Theory}\label{sec:theory}
+
+In the case of this City, the interaction can be modelled using a mathematical
+object called a game which in the field of game theory is defined as follows.
+There are a number of games, the ones we will consider here require:
+
+\begin{enumerate}
+    \item A given collection of actors that make decisions (players).
+    \item Options available to each player (actions).
+    \item A numerical value associated to each player for every possible
+        choice of action made by all the players. This is the utility or reward.
+\end{enumerate}
+
+There are called normal form games and are formally defined by:
+
+\begin{enumerate}
+    \item A finite set of \(N\) players;
+    \item Action spaces for each player: \(\{A_1, A_2, A_3, \dots, A_N\}\);
+    \item Utility functions that for each player \(u_1, u_2, u_3, \dots, u_N\)
+        where \(u_i:A_1\times A_2 \times A_3 \dots A_N \to \mathbb{R}\).
+\end{enumerate}
+
+When \(N=2\) the utility function is often represented by a pair of matrices (1
+for each player) of with the same number of rows and columns. The rows
+correspond to the actions available to the first player and the columns to the
+actions available to the second player.
+
+Given a pair of actions (a row and column) we can read the utilities to both
+player by looking at the corresponding entry of the corresponding matrix.
+
+A strategy corresponds to an way of choosing actions, this is represented by a
+probability vector. For the \(i\)th player, this vector \(v\) would be of size
+\(|A_i|\) (the size of the action space) and \(v_i\) corresponds to the
+probability of choosing the \(i\)th action.
+
+For the example of our City, the two matrices would be:
+
+\[
+   M =
+        \begin{pmatrix}
+            1     & 1 / 2   & 1 / 3 \\
+            3 / 2 & 19 / 20 & 1 / 2 \\
+            5 / 3 & 4 / 5   & 17 / 20\\
+        \end{pmatrix}
+   \qquad
+   N = M ^T =
+        \begin{pmatrix}
+            1     & 3 / 2   & 5 / 3 \\
+            1 / 2 & 19 / 20 & 4 / 5 \\
+            1 / 3 & 1 / 2   & 17 / 20\\
+        \end{pmatrix}
+\]
+
+A diagram of the system is shown in Figure~\ref{fig:taxi-firm-game}
+
+\begin{figure}
+\begin{center}
+\includestandalone[width=.8\textwidth]{./assets/taxi-firm-game/main}
+\end{center}
+\caption{Diagrammatic representation of the action sets and payoff matrices for
+    the game.}
+\label{fig:taxi-firm-game}
+\end{figure}
+
+Both taxis always choosing to use 2 taxis (the second row/column) would
+correspond to the strategy: \((0, 1, 0)\).
+If the both companies use this strategy and the row player (who controls the
+rows) wants to
+improve their outcome it's evident by inspecting the second column that the
+highest number is \(19 / 20\): thus the row player has no reason to change what
+they are doing.
+
+This is in fact called a Nash equilibrium: when both players are playing a
+strategy that is the best response against the other.
+
+Whilst a Nash equilibria is not necessarily a set of strategies that players
+will converge towards, once they are there they have no reason to move away from
+it. It is the particular concept we will use to understand the emergent
+behaviour in our city.
+
+\section{Solving with Python}\label{sec:solving-with-python}
+
+The first step we will take is to write a function to create a game using the
+matrix expected profits. We will use the \mintinline{python}{nashpy} library for
+this.
+
+\begin{pyin}
+import nashpy as nash
+
+
+def get_game(profits):
+    """Return the game object.
+
+    Args:
+        profits: a matrix with expected profits
+
+    Returns:
+        A nashpy game object
+    """
+    return nash.Game(profits, profits.T)
+\end{pyin}
+
+Using this we can obtain the game for the our problem:
+
+\begin{pyin}
+import numpy as np
+
+profits = np.array(
+    (
+        (1, 1 / 2, 1 / 3),
+        (3 / 2, 19 / 20, 1 / 2),
+        (5 / 3, 4 / 5, 17 / 20),
+    )
+)
+game = get_game(profits=profits)
+print(game)
+\end{pyin}
+
+which gives:
+
+\begin{pyout}
+Bi matrix game with payoff matrices:
+
+Row player:
+[[1.         0.5        0.33333333]
+ [1.5        0.95       0.5       ]
+ [1.66666667 0.8        0.85      ]]
+
+Column player:
+[[1.         1.5        1.66666667]
+ [0.5        0.95       0.8       ]
+ [0.33333333 0.5        0.85      ]]
+\end{pyout}
+
+We can now use this to investigate what stable behaviours might emerge:
+
+\begin{pyin}
+for eq in game.support_enumeration():
+    print(eq)
+\end{pyin}
+
+which gives:
+
+\begin{pyout}
+(array([0., 1., 0.]), array([0., 1., 0.]))
+(array([0., 0., 1.]), array([0., 0., 1.]))
+(array([0. , 0.7, 0.3]), array([0. , 0.7, 0.3]))
+\end{pyout}
+
+We see that there are 3 Nash equilibria: 3 possible pairs of behaviour that the
+two companies might converge to.
+
+\begin{itemize}
+    \item The first equilibria \(((0, 1, 0), (0, 1, 0))\) corresponds to both firms always using 2 taxis.
+    \item The second equilibria \(((0, 0, 1), (0, 0, 1))\) corresponds to both
+        firms always using 3 taxis.
+    \item The third equilibria \(((0, 0.7, 0.3), (0, 0.7, 0.3))\) corresponds to
+        both firms using 2 taxis 70\% of the time and 3 taxis otherwise.
+\end{itemize}
+
+A good thing to note is that the two taxi
+companies will never only provide a single taxi (which would be harmful to the
+customers).
+
+However, the Council would like to offset the cost of 3
+taxis so as to encourage the taxi company to provide a better service. This
+involves modifying the \mintinline{python}{get_game} function as follows:
+
+\begin{pyin}
+def get_game(profits, offset):
+    """Return the game object with a given offset when 3 taxis
+    are provided.
+
+    Args:
+        profits: a matrix with expected profits
+        offset: a float
+
+    Returns:
+        A nashpy game object
+    """
+    new_profits = np.array(profits)
+    new_profits[2] += offset
+    return nash.Game(new_profits, new_profits.T)
+\end{pyin}
+
+we will write a function \mintinline{python}{get_equilibria} which will directly
+compute the equilibria:
+
+\begin{pyin}
+def get_equilibria(profits, offset):
+    """Return the equilibria for a given offset when 3 taxis
+    are provided.
+
+    Args:
+        profits: a matrix with expected profits
+        offset: a float
+
+    Returns:
+        A nashpy game object
+    """
+    game = get_game(profits=profits, offset=offset)
+    return tuple(game.support_enumeration())
+\end{pyin}
+
+
+Using this we can obtain the number of equilibria for a given offset and stop
+when there is a single equilibria:
+
+\begin{pyin}
+offset = 0
+while len(get_equilibria(profits=profits, offset=offset)) > 1:
+    offset += 0.01
+\end{pyin}
+
+This gives a final offset value of:
+
+\begin{pyin}
+print(round(offset, 2))
+\end{pyin}
+
+
+\begin{pyout}
+0.15
+\end{pyout}
+
+and we can confirm that the Nash equilibria is where both taxi firms provide
+three vehicles:
+
+\begin{pyin}
+print(tuple(get_equilibria(profits=profits, offset=offset)))
+\end{pyin}
+
+giving:
+
+\begin{pyout}
+((array([0., 0., 1.]), array([0., 0., 1.])),)
+\end{pyout}
+
+\section{Solving with R}\label{sec:solving-with-R}
+
+R does not have a single appropriate library for the game considered here, we
+will choose to use \mintinline{R}{Recon} which has functionality for finding the
+Nash equilibria for two player games when only considering pure strategies (
+where the players only choose to use a single action at a time).
+
+\begin{Rin}
+library(Recon)
+
+#' Returns the equilibria in pure strategies
+#'
+#' @param profits: a matrix with expected profits
+#'
+#' @return a list of equilibria
+get_equilibria <- function(profits){
+    sim_nasheq(profits, t(profits))
+}
+\end{Rin}
+
+Using this we can obtain the pure Nash equilibria:
+
+\begin{Rin}
+
+profits <- rbind(
+        c(1, 1 / 2, 1 / 3),
+        c(3 / 2, 19 / 20, 1 / 2),
+        c(5 / 3, 4 / 5, 17 / 20)
+    )
+eqs <- get_equilibria(profits = profits)
+print(eqs)
+\end{Rin}
+
+which gives:
+
+\begin{Rout}
+$`Equilibrium 1`
+[1] "2" "2"
+
+$`Equilibrium 2`
+[1] "3" "3"
+
+\end{Rout}
+
+We see that there are 2 pure Nash equilibria: 2 possible pairs of behaviour that the
+two companies might converge to.
+
+\begin{itemize}
+    \item The first equilibria \(((0, 1, 0), (0, 1, 0))\) corresponds to both firms always using 2 taxis.
+    \item The second equilibria \(((0, 0, 1), (0, 0, 1))\) corresponds to both
+        firms always using 3 taxis.
+\end{itemize}
+
+There is in fact a third Nash equilibria where both taxi firms use 2 taxis 70\%
+of the time and 3 taxis the rest of the time but \mintinline{R}{Recon} is unable
+to find Nash equilibria with mixed behaviour for games with more than two
+strategies.
+
+As an aside, if we remove the option of using a single taxi then
+\mintinline{R}{Recon} can give us all three equilibria by passing the
+\mintinline{R}{type = "mixed"} argument to \mintinline{R}{sim_nasheq}.
+
+A good thing to note is that the two taxi
+companies will not only provide a single taxi (which would be harmful to the
+customers).
+
+As discussed, the Council would like to offset the cost of 3
+taxis so as to encourage the taxi company to provide a better service. This
+involves modifying the \mintinline{R}{get_equilibria} function as follows:
+
+
+\begin{Rin}
+#' Returns the equilibria in pure strategies
+#' for a given offset
+#'
+#' @param profits: a matrix with expected profits
+#' @param offset: a float
+#'
+#' @return a list of equilibria
+get_equilibria <- function(profits, offset){
+    new_profits <- rbind(
+                profits[c(1, 2), ],
+                profits[3, ] + offset)
+    sim_nasheq(new_profits, t(new_profits))
+}
+\end{Rin}
+
+Using this we can obtain the number of equilibria for a given offset and stop
+when there is a single equilibria:
+
+\begin{Rin}
+offset <- 0
+while (length(
+            get_equilibria(profits = profits, offset = offset)
+            ) > 1){
+    offset <- offset + 0.01
+}
+\end{Rin}
+
+This gives a final offset value of:
+
+\begin{Rin}
+print(round(offset, 2))
+\end{Rin}
+
+\begin{Rout}
+[1] 0.15
+\end{Rout}
+
+and we can confirm that the Nash equilibria is where both taxi firms provide
+three vehicles:
+
+\begin{Rin}
+print(get_equilibria(profits = profits, offset = offset))
+\end{Rin}
+
+giving:
+
+\begin{Rout}
+$`Equilibrium 1`
+[1] "3" "3"
+\end{Rout}
+
+
+\section{Research}\label{sec:research}
+
+TBA
