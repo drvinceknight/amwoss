@@ -1,0 +1,55 @@
+\chapter[Heuristics]{Heuristics}
+
+% Introduction
+\chapterinitial{I}{t} is often necessary to find the most desirable choice from
+a large, or indeed, infinite set of options. Sometimes this can be done using
+exact techniques but often this is not possible and we finding an almost perfect
+choice quickly is just as good. This is where the field of heuristics comes in
+to play.
+
+\section{Problem}\label{sec:problem}
+
+Consider a delivery company that needs to find itineraries for its 3 drivers. In
+the past, the management team has noticed that drivers will often drive to
+whichever next stop is closest but this often makes for longer deliveries.
+
+The stops of each driver are represented in Figure~\ref{fig:tsp}.
+
+\begin{figure}
+\begin{center}
+\includegraphics[width=.8\textwidth]{./assets/tsp/main.pdf}
+\end{center}
+\caption{Diagrammatic representation of the action sets and payoff matrices for
+    the game.}
+\label{fig:tsp}
+\end{figure}
+
+The distance matrices are given in equations (\ref{eqn:tsp-0}-\ref{eqn:tsp-2}).
+
+\begin{landscape}
+    \footnotesize{
+        \input{./assets/tsp/main.tex}
+    }
+\end{landscape}
+
+The value \(d^{(k)}_{ij}\) gives the travel distance for itinerary \(k\) between
+stops \(i\) and \(j\). For example, \(d^{2}_{23}=103.3\) % TODO If the distance matrix changes, this value need to be updated
+indicates that the distance between the 2nd and 3rd stop in the third itinerary
+is given 103.3. % TODO If the distance matrix changes, this value need to be updated
+
+Given these parameters, we aim to find a \emph{sufficiently good} set of
+itineraries that gives a low total amount of travel.
+
+The emphasis on needing a good solution, but not necessarily the best one,
+prioritising computational efficiency is where the field of heuristics comes in
+to its own.
+
+\section{Theory}\label{sec:theory}
+
+\section{Solving with Python}\label{sec:solving-with-python}
+
+\section{Solving with R}\label{sec:solving-with-R}
+
+\section{Research}\label{sec:research}
+
+TBA
