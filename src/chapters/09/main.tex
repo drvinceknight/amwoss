@@ -46,6 +46,42 @@ to its own.
 
 \section{Theory}\label{sec:theory}
 
+The heuristic approach take here will be to use a neighborhood search algorithm.
+This algorithm works by considering a given potential solution, evaluating it
+and then trying another potential solution \emph{close} to it. What \emph{close}
+means depends on different approaches and problems: it is referred to as the
+neighbourhood. As a new solution is evaluated if it is \emph{good} (this is
+again a term that depends on the approach and problem) then the search
+continues from the neighbourhood of this new solution.
+
+For our problem,
+the first aspect of this is to represent a given trajectory between all the
+potential stops as a \emph{tour}. If we have 3 total stops and require that the
+tour starts and stops at the first one then there are two possible tours:
+
+\[
+    t \in \{(1, 2, 3, 1), (1, 3, 2, 1)\}
+\]
+
+Given a distance matrix \(d\) such that \(d_{ij}\) is the distance between stop
+\(i\) and \(j\) the total cost of a tour is given by:
+
+\[
+    C(t)=...  % TODO Add cost function
+\]
+
+% TODO Add example
+
+Using this framework, the neighbourhood search can be written down as:
+
+\begin{enumerate}
+    \item Start with a given tour: \(t\).
+    \item Evaluate \(C(t)\).
+    \item Identify a new \(\tilde t\) from \(t\) and accept it if \(C(\tilde t)<
+        C(t)\).
+\end{enumerate}
+
+This is shown diagrammatically in Figure ... % TODO Draw figure.
 \section{Solving with Python}\label{sec:solving-with-python}
 
 \section{Solving with R}\label{sec:solving-with-R}
