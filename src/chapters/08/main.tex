@@ -179,6 +179,45 @@ Thus altogether our integer program becomes:
 \sum_{m \in B_o \cup C_c \cup C_o} X_{mt} &\leq 1 \text{ for all } t \in T\\\label{eqn:clique4}
 \end{align}
 
+Another common way to define this linear program is by representing the
+coefficients of the constraints as a matrix.
+That is:
+
+\begin{align}
+\text{Minimise: } c^T Z & \\
+\text{Subject to: } & \nonumber \\
+A Z & \star b
+\end{align}
+
+where $Z$ is a vector representing the decision variables, $c$ is the
+coefficients of the $Z$ in the objective function, $A$ is the matrix of
+the coefficients of $Z$ in the constraints, $b$ is the vector of the
+right hand side of the constraints, and $\star$ represents either $\leq$, $=$ or
+$\geq$ as required.
+
+As $Z$ is a one-dimensional vector of decisions variables, we `flatten'
+the matrix $X$ and the vector $Y$ together to form this new variable.
+We can do this by first ordering by $X$ then $Y$, within that
+ordering by time slot, then within that ordering by module number.
+Therefore:
+
+\begin{align}
+Z_{|M|t + m} &= X_{mt}\\
+Z_{|M|^2 + m} &= Y_m\\
+\end{align}
+
+where $t$ and $m$ are indicies starting at 0.
+For example $Z_{17}$ would correspond to $X_{3, 2}$, the decision variable
+representing whether module number 4 is scheduled on day 3; $Z_{208}$ would
+correspond to $Y_{12}$, the decision variable representing whether there's an
+exam scheduled for day 12.
+
+Parameters $c$, $A$, and $b$ can be determined by using this same conversion
+from the model in Equations~\ref{eqn:objective} to \ref{eqn:clique4}.
+The vector $c$ would be $|M|^2$ zeroes follwed by $|M|$ ones.
+The vector $b$ would be zeroes for all the rows representing
+Equation~\ref{eqn:auxiliary}, and ones for all other constraints.
+
 
 \section{Solving with Python}\label{sec:solving-with-python}
 In this book we will use the Python library \mintinline{python}{PuLP} to
@@ -344,20 +383,15 @@ structures and syntax.
 The solver that we will use here is called the CBC MILP Solver, which needs to
 be installed as well as the \mintinline{R}{rcbc} package.
 
-In Section~\ref{sec:theory} the exam scheduling problem was formulated with two
-arrays of decision variables, a one-dimensional array $Y$ and a two dimensional
-array $X$.
-In \mintinline{R}{ROI} we need our decision variables to be a one-dimensional
-array, so we `flatten' these by first ordering by $X$ then $Y$, within that
-ordering by time slot, then within that ordering by module number.
-Call these variables $Z_i$ for $i \in 1, 2, ... 210$.
-For example $Z_{17}$ would correspond to $X_{3, 2}$, the decision variable
-representing whether module number 3 is scheduled on day 2; $Z_{208}$ would
-correspond to $Y_{12}$, the decision variable representing whether there's an
-exam scheduled for day 12.
+The \mintinline{R}{ROI} packages requires that the linear programme is
+represented in its matrix form, with a one-dimensional array of decision
+variables. Therefore we will use the form of the model described at the end of
+Section~\ref{sec:theory}.
+We will write functions that define the objective function $c$, the coefficient
+matrix $A$, the vector of the right hand side of the constraints $b$, and the
+vector of equality or inequalities directions $\star$.
 
-Once this array is defined, then the objective function is an ordered array of
-the coefficients of each of these variables:
+First we consider the objective function:
 
 \begin{Rin}
 #' Writes the row of coefficients for the objective function
@@ -386,11 +420,6 @@ array $Z$ for Equation~\ref{eqn:objective}.
 [1] 0 0 0 0 0 0 0 0 0 1 1 1
 \end{Rout}
 
-The constraints have three components: the coefficients matrix, the right hand
-side array, and the array of directions.
-The coefficients matrix is a matrix of the coefficients of the left hand side of
-inequalities, where again columns represent the coefficients of the array $Z$,
-and rows represent each separate constraint.
 The following function is used to write one row of that coefficients matrix, for
 a given day, for a given set of clashes, corresponding to
 Inequalities~\ref{eqn:clique1} to \ref{eqn:clique4}:
@@ -528,12 +557,12 @@ write_constraints(list_clashes = list(c(1, 2)),
 
 This would give three components:
 \begin{itemize}
-  \item a coefficient matrix of the left hand side of the constraints (rows 1
+  \item a coefficient matrix of the left hand side of the constraints, $A$, (rows 1
   and 2 corresponding to the clash on days 1 and 2, row 3 ensuring module 1 is
   scheduled on one day only, row 4 ensuring module 2 is scheduled on one day
   only, and rows 5 and 6 defining the Y decision variables),
-  \item an array of direction of the constraint inequalities,
-  \item and an array of the right hand side values of the constraints.
+  \item an array of direction of the constraint inequalities, $b$,
+  \item and an array of the right hand side values of the constraints, $\star$.
 \end{itemize}
 
 \begin{Rout}
