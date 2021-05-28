@@ -37,20 +37,23 @@ def env(c):
     c.run(
         """Rscript -e 'install.packages("Recon", repos="http://cran.us.r-project.org")'"""
     )
-    if sys.platform == "darwin":
-        c.run("brew tap coin-or-tools/coinor")
-        c.run("brew install cbc")
-    else:
-        c.run("sudo apt-get install coinor-libcbc-dev coinor-libclp-dev")
-    c.run(
-        """Rscript -e 'install.packages("ROI", repos="http://cran.us.r-project.org")'"""
-    )
-    c.run(
-        """Rscript -e 'remotes::install_github("dirkschumacher/rcbc")'"""
-    )
-    c.run(
-        """Rscript -e 'remotes::install_github("dirkschumacher/ROI.plugin.cbc")'"""
-    )
+    # TODO Reintroduce this environment when aiming to test the R linear
+    # programming chapter.
+    # See: https://github.com/drvinceknight/amwoss/issues/60
+    # if sys.platform == "darwin":
+    #     c.run("brew tap coin-or-tools/coinor")
+    #     c.run("brew install cbc")
+    # else:
+    #     c.run("sudo apt-get install coinor-libcbc-dev coinor-libclp-dev")
+    # c.run(
+    #     """Rscript -e 'install.packages("ROI", repos="http://cran.us.r-project.org")'"""
+    # )
+    # c.run(
+    #     """Rscript -e 'remotes::install_github("dirkschumacher/rcbc")'"""
+    # )
+    # c.run(
+    #     """Rscript -e 'remotes::install_github("dirkschumacher/ROI.plugin.cbc")'"""
+    # )
 
 @task
 def compile(c):
