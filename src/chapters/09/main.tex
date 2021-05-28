@@ -77,8 +77,10 @@ Using this framework, the neighbourhood search can be written down as:
 \begin{enumerate}
     \item Start with a given tour: \(t\).
     \item Evaluate \(C(t)\).
-    \item Identify a new \(\tilde t\) from \(t\) and accept it if \(C(\tilde t)<
+    \item Identify a new \(\tilde t\) from \(t\) and accept it as a replacement
+        for \(t\) if \(C(\tilde t)<
         C(t)\).
+    \item Repeat the 3rd step until some condition is met.
 \end{enumerate}
 
 This is shown diagrammatically in Figure ... % TODO Draw figure.
