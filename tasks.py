@@ -37,7 +37,20 @@ def env(c):
     c.run(
         """Rscript -e 'install.packages("Recon", repos="http://cran.us.r-project.org")'"""
     )
-
+    if sys.platform == "darwin":
+        c.run("brew tap coin-or-tools/coinor")
+        c.run("brew install cbc")
+    else:
+        c.run("sudo apt-get install coinor-libcbc-dev coinor-libclp-dev")
+    c.run(
+        """Rscript -e 'install.packages("ROI")'"""
+    )
+    c.run(
+        """Rscript -e 'remotes::install_github("dirkschumacher/rcbc")'"""
+    )
+    c.run(
+        """Rscript -e 'remotes::install_github("dirkschumacher/ROI.plugin.cbc")'"""
+    )
 
 @task
 def compile(c):
