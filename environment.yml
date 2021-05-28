@@ -7,11 +7,11 @@ dependencies:
   - python
   - scipy
   - sympy
-  - pulp
   - r-desolve
   - r-essentials
   - r-lintr
   - r-pracma
+  - r-remotes
   - r-rootSolve
   - pip:
       - ciw
@@ -20,3 +20,4 @@ dependencies:
       - black
       - docformatter
       - nashpy
+      - pulp
