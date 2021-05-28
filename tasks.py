@@ -28,9 +28,9 @@ def env(c):
     anaconda environment file `environment.yml` (for example some R packages do
     not have anaconda binaries).
     """
-#    c.run(
-#        """Rscript -e 'install.packages("simmer", repos="http://cran.us.r-project.org")'"""
-#    )
+    c.run(
+        """Rscript -e 'install.packages("simmer", repos="http://cran.us.r-project.org")'"""
+    )
     c.run(
         """Rscript -e 'install.packages("expm", repos="http://cran.us.r-project.org")'"""
     )
