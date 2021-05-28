@@ -24,18 +24,17 @@ The stops of each driver are represented in Figure~\ref{fig:tsp}.
 \label{fig:tsp}
 \end{figure}
 
-The distance matrices are given in equations (\ref{eqn:tsp-0}-\ref{eqn:tsp-2}).
+The distance matrix is given in equation (\ref{eqn:tsp}).
 
-\begin{landscape}
-    \footnotesize{
-        \input{./assets/tsp/main.tex}
-    }
-\end{landscape}
+\tiny{
+    \input{./assets/tsp/main.tex}
+}
+\normalsize
 
-The value \(d^{(k)}_{ij}\) gives the travel distance for itinerary \(k\) between
-stops \(i\) and \(j\). For example, \(d^{2}_{23}=103.3\) % TODO If the distance matrix changes, this value need to be updated
+The value \(d\) gives the travel distance between
+stops \(i\) and \(j\). For example, \(d_{23}=60\) % TODO If the distance matrix changes, this value need to be updated
 indicates that the distance between the 2nd and 3rd stop in the third itinerary
-is given 103.3. % TODO If the distance matrix changes, this value need to be updated
+is given 60. % TODO If the distance matrix changes, this value need to be updated
 
 Given these parameters, we aim to find a \emph{sufficiently good} set of
 itineraries that gives a low total amount of travel.
@@ -67,10 +66,25 @@ Given a distance matrix \(d\) such that \(d_{ij}\) is the distance between stop
 \(i\) and \(j\) the total cost of a tour is given by:
 
 \[
-    C(t)=...  % TODO Add cost function
+    C(t)=\sum_{i=1}^{n} d_{t_i, t_{i + 1}}
 \]
 
-% TODO Add example
+Thus, with:
+
+\[
+    d = \begin{pmatrix}
+        0 & 1 & 3\\
+        1 & 0 & 15\\
+        3 & 3 & 7
+        \end{pmatrix}
+\]
+
+We have:
+
+\begin{eqnarray*}
+    c((1, 2, 3, 1)) = d_{12} + d_{23} + d_{31} = 1 + 15 + 3 = 19\\
+    c((1, 3, 2, 1)) = d_{13} + d_{32} + d_{21} = 3 + 3 + 1 = 7
+\end{eqnarray*}
 
 Using this framework, the neighbourhood search can be written down as:
 
