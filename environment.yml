@@ -5,6 +5,7 @@ dependencies:
   - numpy
   - pandas
   - python
+  - pip
   - scipy
   - sympy
   - r-desolve
