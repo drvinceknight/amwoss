@@ -26,6 +26,7 @@ jobs:
         conda env create -f environment.yml
         source activate ampwoss
         inv env  # Finish install of environment
+        sudo apt-get install aspell aspell-en
 
     - name: Doctest
       run: |
@@ -42,7 +43,6 @@ jobs:
         sudo apt-get install -y latexmk
         sudo apt-get install lmodern
         #To check spelling
-        sudo apt-get install aspell aspell-en
     - name: Check LaTeX compiles
       run: |
         source activate ampwoss
