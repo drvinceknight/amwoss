@@ -243,6 +243,7 @@ Now let's begin by defining an empty problem:
 
 \begin{pyin}
 import pulp
+
 prob = pulp.LpProblem("ExamScheduling", pulp.LpMinimize)
 \end{pyin}
 
@@ -295,11 +296,11 @@ Now the constraints, Inequalities~\ref{eqn:auxiliary}-\ref{eqn:clique4}:
 \begin{pyin}
 M = 1 / len(modules)
 for day in times:
-    prob += M * sum(x[mod][day] for mod in modules) <= y[day]
-    prob += sum([x[module][day] for module in Ac+Ao]) <= 1
-    prob += sum([x[module][day] for module in Bc+Bo+Co]) <= 1
-    prob += sum([x[module][day] for module in Bc+Bo+Ac]) <= 1
-    prob += sum([x[module][day] for module in Cc+Co+Bo]) <= 1
+    prob += M * sum(x[m][day] for m in modules) <= y[day]
+    prob += sum([x[mod][day] for mod in Ac + Ao]) <= 1
+    prob += sum([x[mod][day] for mod in Bc + Bo + Co]) <= 1
+    prob += sum([x[mod][day] for mod in Bc + Bo + Ac]) <= 1
+    prob += sum([x[mod][day] for mod in Cc + Co + Bo]) <= 1
 
 for mod in modules:
     prob += sum(x[mod][day] for day in times) == 1
@@ -311,6 +312,7 @@ check is the need arises.
 
 Now we can go ahead and solve the problem:
 
+%% TODO remove message supressor
 \begin{pyin}
 prob.solve(pulp.apis.PULP_CBC_CMD(msg=False))
 \end{pyin}
