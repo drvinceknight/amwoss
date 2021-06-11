@@ -5,6 +5,7 @@ dependencies:
   - numpy
   - pandas
   - python
+  - pip
   - scipy
   - sympy
   - r-desolve
@@ -13,9 +14,10 @@ dependencies:
   - r-pracma
   - r-rootSolve
   - pip:
+      - black
       - ciw
+      - docformatter
       - dwys
       - invoke
-      - black
-      - docformatter
       - nashpy
+      - pulp

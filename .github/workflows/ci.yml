@@ -1,4 +1,5 @@
-name: CI
+name: CI-ubuntu
+
 
 on:
   push:
@@ -25,24 +26,9 @@ jobs:
         conda env create -f environment.yml
         source activate ampwoss
         inv env  # Finish install of environment
+        sudo apt-get install aspell aspell-en #To check spelling
 
     - name: Doctest
       run: |
         source activate ampwoss
         inv doctest --style  # Test all code and also check style
-
-    - name: Install LaTeX
-      run: |
-        sudo apt-get update
-        #LaTeX packages
-        sudo apt-get install -y texlive-latex-extra
-        sudo apt-get install -y texlive-xetex
-        sudo apt-get install -y texlive-lang-greek
-        sudo apt-get install -y latexmk
-        sudo apt-get install lmodern
-        #To check spelling
-        sudo apt-get install aspell aspell-en
-    - name: Check LaTeX compiles
-      run: |
-        source activate ampwoss
-        cd src; inv compile # Check LaTeX Compiles
