@@ -251,7 +251,7 @@ We also need to define our sets of binary decision variables:
 \begin{pyin}
 xshape = (modules, times)
 x = pulp.LpVariable.dicts("X", xshape, cat=pulp.LpBinary)
-y = pulp.LpVariable.dicts('Y', times, cat=pulp.LpBinary)
+y = pulp.LpVariable.dicts("Y", times, cat=pulp.LpBinary)
 \end{pyin}
 
 Now \mintinline{python}{y} is a dictionary of binary decision variables, with
@@ -348,7 +348,7 @@ for day in times:
         schedule = f"Day {day}: "
         for mod in modules:
             if x[mod][day].value() == 1:
-                 schedule += f"{mod}, "
+                schedule += f"{mod}, "
         print(schedule)
 \end{pyin}
 
