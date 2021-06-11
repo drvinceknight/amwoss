@@ -32,17 +32,3 @@ jobs:
       run: |
         source activate ampwoss
         inv doctest --style  # Test all code and also check style
-
-    - name: Install LaTeX
-      run: |
-        sudo apt-get update
-        #LaTeX packages
-        sudo apt-get install -y texlive-latex-extra
-        sudo apt-get install -y texlive-xetex
-        sudo apt-get install -y texlive-lang-greek
-        sudo apt-get install -y latexmk
-        sudo apt-get install lmodern
-    - name: Check LaTeX compiles
-      run: |
-        source activate ampwoss
-        cd src; inv compile # Check LaTeX Compiles
