@@ -45,4 +45,4 @@ jobs:
     - name: Check LaTeX compiles
       run: |
         source activate ampwoss
-        cd src; xelatex -shell-escape main.tex
+        cd src; xelatex -interaction=nonstopmode -shell-escape main.tex
