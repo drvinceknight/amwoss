@@ -9,11 +9,11 @@ to play.
 
 \section{Problem}\label{sec:problem}
 
-Consider a delivery company that needs to find itineraries for its 3 drivers. In
+Consider a delivery company that needs to find itineraries for a driver. In
 the past, the management team has noticed that drivers will often drive to
 whichever next stop is closest but this often makes for longer deliveries.
 
-The stops of each driver are represented in Figure~\ref{fig:tsp}.
+The stops are represented in Figure~\ref{fig:tsp}.
 
 \begin{figure}
 \begin{center}
@@ -102,6 +102,90 @@ This is shown diagrammatically in Figure ... % TODO Draw figure.
 
 To solve this problem using Python we will write functionality that matches the
 first three steps in the Section~\ref{sec:theory}.
+
+The first step is to write a function that creates an initial tour:
+
+\begin{pyin}
+import numpy as np
+
+
+def get_initial_candidate(number_of_stops, seed=None):
+    """Return an initial tour.
+
+    Args:
+        number_of_stops: The number of stops
+        seed: An integer seed. If an integer value is
+              passed it will create a random tour.
+
+    Returns:
+        A tour starting an ending at stop with index 0.
+    """
+    internal_stops = list(range(1, number_of_stops))
+    if seed is not None:
+        np.random.seed(seed)
+        np.random.shuffle(internal_stops)
+    return [0] + internal_stops + [0]
+\end{pyin}
+
+Using this we can get a random tour on 18 stops:
+
+\begin{pyin}
+number_of_stops = 18
+seed = 0
+initial_candidate = get_initial_candidate(
+    number_of_stops=number_of_stops, 
+    seed=seed,
+)
+print(initial_candidate)
+\end{pyin}
+
+\begin{pyout}
+[0, 2, 7, 9, 10, 14, 5, 3, 15, 11, 8, 17, 12, 4, 1, 6, 16, 13, 0]
+\end{pyout}
+
+To be able to evaluate any given tour we see that we must also be able to
+evaluate its cost. Here we define a function to do that:
+
+\begin{pyin}
+def get_cost(tour, distance_matrix):
+    return sum(
+        distance_matrix[current_stop, next_stop]
+        for current_stop, next_stop in
+        zip(tour[:-1], tour[1:])
+    )
+\end{pyin}
+
+\begin{pyin}
+distance_matrix = np.array(
+    (
+    (0, 30, 39, 28, 54, 65, 87, 81, 86, 92, 85, 34, 31, 13, 54, 53, 22, 66),
+    (30, 0, 60, 14, 67, 41, 89, 79, 66, 69, 86, 61, 20, 25, 52, 34, 8, 78),
+    (39, 60, 0, 65, 21, 78, 58, 59, 86, 98, 57, 16, 69, 52, 40, 61, 54, 30),
+    (28, 14, 65, 0, 75, 54, 101, 91, 80, 82, 98, 62, 6, 17, 64, 48, 12, 86),
+    (54, 67, 21, 75, 0, 72, 37, 39, 74, 87, 36, 37, 80, 66, 28, 56, 64, 11),
+    (65, 41, 78, 54, 72, 0, 76, 62, 28, 28, 73, 86, 59, 64, 45, 17, 48, 80),
+    (87, 89, 58, 101, 37, 76, 0, 15, 63, 79, 3, 74, 107, 97, 38, 64, 89, 30),
+    (81, 79, 59, 91, 39, 62, 15, 0, 49, 64, 12, 74, 97, 89, 28, 51, 80, 36),
+    (86, 66, 86, 80, 74, 28, 63, 49, 0, 15, 61, 98, 86, 87, 46, 33, 72, 77),
+    (92, 69, 98, 82, 87, 28, 79, 64, 15, 0, 76, 109, 87, 92, 59, 40, 76, 92),
+    (85, 86, 57, 98, 36, 73, 3, 12, 61, 76, 0, 73, 104, 94, 35, 61, 86, 30),
+    (34, 61, 16, 62, 37, 86, 74, 74, 98, 109, 73, 0, 65, 46, 54, 70, 54, 46),
+    (31, 20, 69, 6, 80, 59, 107, 97, 86, 87, 104, 65, 0, 19, 70, 54, 18, 92),
+    (13, 25, 52, 17, 66, 64, 97, 89, 87, 92, 94, 46, 19, 0, 61, 54, 17, 77),
+    (54, 52, 40, 64, 28, 45, 38, 28, 46, 59, 35, 54, 70, 61, 0, 30, 52, 35),
+    (53, 34, 61, 48, 56, 17, 64, 51, 33, 40, 61, 70, 54, 54, 30, 0, 39, 64),
+    (22, 8, 54, 12, 64, 48, 89, 80, 72, 76, 86, 54, 18, 17, 52, 39, 0, 75),
+    (66, 78, 30, 86, 11, 80, 30, 36, 77, 92, 30, 46, 92, 77, 35, 64, 75, 0)
+    )
+)
+cost = get_cost(tour=initial_candidate, distance_matrix=distance_matrix)
+print(cost)
+\end{pyin}
+
+\begin{pyout}
+1112
+\end{pyout}
+
 
 \section{Solving with R}\label{sec:solving-with-R}
 
