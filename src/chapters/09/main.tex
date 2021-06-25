@@ -16,12 +16,12 @@ whichever next stop is closest but this often makes for longer deliveries.
 The stops are represented in Figure~\ref{fig:tsp}.
 
 \begin{figure}
-\begin{center}
-\includegraphics[width=.8\textwidth]{./assets/tsp/main.pdf}
-\end{center}
-\caption{Diagrammatic representation of the action sets and payoff matrices for
+    \begin{center}
+        \includegraphics[width=.8\textwidth]{./assets/tsp/main.pdf}
+    \end{center}
+    \caption{Diagrammatic representation of the action sets and payoff matrices for
     the game.}
-\label{fig:tsp}
+    \label{fig:tsp}
 \end{figure}
 
 The distance matrix is given in equation (\ref{eqn:tsp}).
@@ -94,16 +94,62 @@ Using this framework, the neighbourhood search can be written down as:
     \item Identify a new \(\tilde t\) from \(t\) and accept it as a replacement
         for \(t\) if \(C(\tilde t)<
         C(t)\).
-    \item Repeat the 3rd step until some condition is met.
+    \item Repeat the 3rd step until some stopping condition is met.
 \end{enumerate}
 
-This is shown diagrammatically in Figure ... % TODO Draw figure.
+This is shown diagrammatically in Figure~\ref{fig:tsp}.
+
+\begin{figure}[!hbtp]
+    \begin{center}
+        \includestandalone[width=.8\textwidth]{./assets/neighbourhood_search_flow_diagram/main}
+    \end{center}
+    \caption{The general neighbourhood search algorithm. \(N(t)\) refers to some
+    neighbourhood of \(t\).}
+    \label{fig:tsp}
+\end{figure}
+
+A number of different stopping conditions can be used including some specific
+overall cost or a number of total iterations of the algorithm.
+
+The neighbourhood of a tour \(t\) is taken as some set of tours that can be
+obtained from \(t\).
+
+To illustrate two such neighbourhoods, consider the following tour on 18 stops:
+% TODO If the number of stops changes this needs to be changed.
+
+\[
+    t = (0, 2, 7, 9, 10, 14, 5, 3, 15, 11, 8, 17, 12, 4, 1, 6, 16, 13, 0)
+\]
+
+One possible neighbourhood is to choose 2 stops at random and swap. For
+example, the tour \(t^{(1)}\in N(t)\) is obtained by swapping the 3rd and 8th
+stops.
+
+\[
+    t^{(1)} = (0, 2, 3, 9, 10, 14, 5, 7, 15, 11, 8, 17, 12, 4, 1, 6, 16, 13, 0)
+\]
+
+Another possible neighbourhood is to choose 2 stops at random and reversing the
+order
+of all stops between (including) those two stops. For example, the tour
+\(t^{(2)} \in N(t)\) is obtained by reversing the order of all stops between
+the 9th and the 15th stop.
+
+
+\[
+    t = (0, 2, 7, 9, 10, 14, 5, 3, 6, 1, 4, 12, 17, 8, 11, 15, 16, 13, 0)
+\]
+
+These tours are shown in Figure~\ref{fig:tsp_example_tours}.
+% TODO figure
+
 \section{Solving with Python}\label{sec:solving-with-python}
 
 To solve this problem using Python we will write functionality that matches the
 first three steps in the Section~\ref{sec:theory}.
 
-The first step is to write a function that creates an initial tour:
+The first step is to write the \mintinline{python}{get_initial_candidate}
+function that creates an initial tour:
 
 \begin{pyin}
 import numpy as np
@@ -133,7 +179,7 @@ Using this we can get a random tour on 18 stops:
 number_of_stops = 18
 seed = 0
 initial_candidate = get_initial_candidate(
-    number_of_stops=number_of_stops, 
+    number_of_stops=number_of_stops,
     seed=seed,
 )
 print(initial_candidate)
@@ -144,7 +190,7 @@ print(initial_candidate)
 \end{pyout}
 
 To be able to evaluate any given tour we see that we must also be able to
-evaluate its cost. Here we define a function to do that:
+evaluate its cost. Here we define \mintinline{python}{get_cost} to do this:
 
 \begin{pyin}
 def get_cost(tour, distance_matrix):
@@ -186,6 +232,155 @@ print(cost)
 1112
 \end{pyout}
 
+We will now define two different neighbourhood functions:
+
+\begin{itemize}
+    \item \mintinline{python}{swap_stops}: this swaps two steps in a given tour.
+    \item \mintinline{python}{swap_paths}: this swaps two steps and reverts the
+        stops in between them.
+\end{itemize}
+
+\begin{pyin}
+def swap_stops(tour):
+    number_of_stops = len(tour) - 1
+    i, j = sorted(np.random.choice(range(1, number_of_stops), 2))
+    new_tour = list(tour)
+    new_tour[i], new_tour[j] = tour[j], tour[i]
+    return new_tour
+
+def swap_paths(tour):
+    number_of_stops = len(tour) - 1
+    i, j = sorted(np.random.choice(range(1, number_of_stops), 2))
+    new_tour = tour[:i] + tour[i:j + 1][::-1] + tour[j + 1:]
+    return new_tour
+\end{pyin}
+
+If we apply these two neighbourhood functions to our initial candidate we can
+see the effects:
+
+\begin{pyin}
+print(swap_stops(initial_candidate))
+\end{pyin}
+
+which swaps the 3rd and 8th stops:
+
+\begin{pyout}
+[0, 2, 3, 9, 10, 14, 5, 7, 15, 11, 8, 17, 12, 4, 1, 6, 16, 13, 0]
+\end{pyout}
+
+\begin{pyin}
+print(swap_paths(initial_candidate))
+\end{pyin}
+
+which swaps the order between the 8th and the 15th stop:
+
+\begin{pyout}
+[0, 2, 7, 9, 10, 14, 5, 3, 6, 1, 4, 12, 17, 8, 11, 15, 16, 13, 0]
+\end{pyout}
+
+
+Now we have all the tools in place to build a tool to carry out the
+neighbourhood search \mintinline{python}{run_neighbourhood_search}.
+
+\begin{pyin}
+def run_neighbourhood_search(
+    distance_matrix,
+    number_of_stops,
+    iterations,
+    seed=None,
+    get_cost=get_cost,
+    get_initial_candidate=get_initial_candidate,
+    get_neighbour=swap_paths,
+):
+    np.random.seed(seed)
+
+    candidate = get_initial_candidate(
+        number_of_stops=number_of_stops,
+    )
+
+    best_cost = get_cost(
+        tour=candidate,
+        distance_matrix=distance_matrix,
+    )
+
+    for _ in range(iterations):
+        new_candidate = get_neighbour(candidate)
+        if (cost:=get_cost(
+                    tour=new_candidate,
+                    distance_matrix=distance_matrix,
+                  )
+            ) <= best_cost:
+            best_cost = cost
+            candidate = new_candidate
+
+    return candidate
+\end{pyin}
+
+Using this we can see the effect of running 1000 iterations using different
+neighbourhood functions:
+
+
+\begin{pyin}
+number_of_iterations = 1000
+
+solution_with_swap_stops = run_neighbourhood_search(
+    distance_matrix=distance_matrix,
+    number_of_stops=number_of_stops,
+    iterations=number_of_iterations,
+    seed=seed,
+    get_neighbour=swap_stops,
+)
+print(solution_with_swap_stops)
+\end{pyin}
+
+giving:
+
+\begin{pyout}
+[0, 2, 4, 17, 6, 10, 7, 14, 8, 9, 5, 15, 1, 16, 3, 12, 13, 11, 0]
+\end{pyout}
+
+\begin{pyin}
+solution_with_swap_paths = run_neighbourhood_search(
+    distance_matrix=distance_matrix,
+    number_of_stops=number_of_stops,
+    iterations=number_of_iterations,
+    seed=seed,
+    get_neighbour=swap_paths,
+)
+print(solution_with_swap_paths)
+\end{pyin}
+
+giving:
+
+\begin{pyout}
+[0, 13, 12, 3, 16, 1, 5, 9, 8, 15, 14, 7, 10, 6, 17, 4, 2, 11, 0]
+\end{pyout}
+
+Importantly the costs differ substantially:
+
+\begin{pyin}
+print(get_cost(tour=solution_with_swap_stops, distance_matrix=distance_matrix))
+\end{pyin}
+
+which gives:
+
+\begin{pyout}
+409
+\end{pyout}
+
+Whereas using the entire swapping of paths % TODO Refer to name of algorithm.
+
+\begin{pyin}
+print(get_cost(tour=solution_with_swap_paths, distance_matrix=distance_matrix))
+\end{pyin}
+
+which gives:
+
+\begin{pyout}
+360
+\end{pyout}
+
+% TODO initial, swap stops and swap paths
 
 \section{Solving with R}\label{sec:solving-with-R}
 
