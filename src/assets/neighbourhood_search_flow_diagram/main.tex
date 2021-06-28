@@ -1,5 +1,6 @@
 \documentclass{standalone}
 
+\usepackage{amsmath}
 \usepackage{tikz}
 \usetikzlibrary{shapes,arrows, calc}
 
@@ -7,32 +8,30 @@
 
 
 % Define block styles
-\tikzstyle{decision} = [diamond, draw, fill=blue!20, 
+\tikzstyle{decision} = [diamond, draw, fill=blue!20,
     text width=4.5em, text badly centered, node distance=3cm, inner sep=0pt]
-\tikzstyle{block} = [rectangle, draw, fill=blue!20, 
+\tikzstyle{block} = [rectangle, draw, fill=blue!20,
     text width=5em, text centered, rounded corners, minimum height=4em]
 \tikzstyle{line} = [draw, -latex']
 \tikzstyle{cloud} = [draw, ellipse,fill=red!20, node distance=4cm,
     minimum height=2em]
-    
+
 \begin{tikzpicture}[node distance = 2cm, auto]
     % Place nodes
     \node [block] (init) {Obtain initial tour \(t\)};
     \node [cloud, left of=init] (distance) {distance matrix};
     \node [block, below of=init] (neighbour) {Obtain \(\tilde t\in N(t)\)};
-    \node [decision, below of=neighbour] (decide) {\tiny \(C(t) < C(\tilde t)\)?};
-    \node [block, left of=neighbour, node distance=3cm] (update) {Set \(t \leftarrow \tilde t\)};
-    \node [decision, right of=neighbour] (stop?) {Stop?};
-    \node [block, right of=stop?, node distance=3.5cm] (stop) {stop};
+    \node [decision, below of=neighbour] (stop?) {Stop?};
+    \node [block, left of=neighbour, text width=3cm, node distance=3cm] (update)
+    {\(t \leftarrow \text{argmin}_{t, \tilde t}(C)\)};
+    \node [block, below of=stop?, node distance=3cm] (stop) {Stop.};
     % Draw edges
-    \path [line] (decide) -| node [near start] {yes} (update);
+    \path [line] (stop?) -| node [near start] {no} (update);
     \path [line] (update) |- (neighbour);
-    \path [line] (decide) -| node [near start] {no} (stop?);
-    \path [line] (stop?) -- node [near start] {no} (neighbour);
     \path [line] (stop?) -- node [near start] {yes} (stop);
 
     \path [line] (init) -- (neighbour);
-    \path [line] (neighbour) -- (decide);
+    \path [line] (neighbour) -- (stop?);
     \path [line,dashed] (distance) -- (init);
 \end{tikzpicture}
 

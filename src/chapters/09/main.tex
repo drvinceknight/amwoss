@@ -114,19 +114,18 @@ overall cost or a number of total iterations of the algorithm.
 The neighbourhood of a tour \(t\) is taken as some set of tours that can be
 obtained from \(t\).
 
-To illustrate two such neighbourhoods, consider the following tour on 18 stops:
-% TODO If the number of stops changes this needs to be changed.
+To illustrate two such neighbourhoods, consider the following tour on 7 stops:
 
 \[
-    t = (0, 2, 7, 9, 10, 14, 5, 3, 15, 11, 8, 17, 12, 4, 1, 6, 16, 13, 0)
+    t = (0, 1, 2, 3, 4, 5, 6, 0)
 \]
 
 One possible neighbourhood is to choose 2 stops at random and swap. For
-example, the tour \(t^{(1)}\in N(t)\) is obtained by swapping the 3rd and 8th
+example, the tour \(t^{(1)}\in N(t)\) is obtained by swapping the 3rd and 5th
 stops.
 
 \[
-    t^{(1)} = (0, 2, 3, 9, 10, 14, 5, 7, 15, 11, 8, 17, 12, 4, 1, 6, 16, 13, 0)
+    t^{(1)} = (0, 1, 5, 3, 4, 2, 6, 0)
 \]
 
 Another possible neighbourhood is to choose 2 stops at random and reversing the
@@ -135,13 +134,21 @@ of all stops between (including) those two stops. For example, the tour
 \(t^{(2)} \in N(t)\) is obtained by reversing the order of all stops between
 the 9th and the 15th stop.
 
-
 \[
-    t = (0, 2, 7, 9, 10, 14, 5, 3, 6, 1, 4, 12, 17, 8, 11, 15, 16, 13, 0)
+    t^{(2)} = (0, 1, 5, 4, 3, 2, 6, 0)
 \]
 
-These tours are shown in Figure~\ref{fig:tsp_example_tours}.
-% TODO figure
+These tours are shown in Figure~\ref{fig:tsp-effect-of-neighbourhood-operators}.
+
+\begin{figure}[!hbtp]
+    \begin{center}
+        \includegraphics[width=\textwidth]{./assets/tsp-effect-of-neighbourhood-operators/main.pdf}
+    \end{center}
+    \caption{The effect of two neighborhood operators on \(t\). \(t^{(1)}\) is
+    obtained by swapping stops 3 and 5. \(t^{(2)}\) is obtained by reversing the
+    path between stops 3 and 5.}
+    \label{fig:tsp}
+\end{figure}
 
 \section{Solving with Python}\label{sec:solving-with-python}
 
