@@ -32,9 +32,9 @@ The distance matrix is given in equation (\ref{eqn:tsp}).
 \normalsize
 
 The value \(d\) gives the travel distance between
-stops \(i\) and \(j\). For example, \(d_{23}=60\) % TODO If the distance matrix changes, this value need to be updated
+stops \(i\) and \(j\). For example, \(d_{23}=89\) % TODO If the distance matrix changes, this value need to be updated
 indicates that the distance between the 2nd and 3rd stop in the third itinerary
-is given 60. % TODO If the distance matrix changes, this value need to be updated
+is given 89. % TODO If the distance matrix changes, this value need to be updated
 
 Given these parameters, we aim to find a \emph{sufficiently good} set of
 itineraries that gives a low total amount of travel.
@@ -92,8 +92,7 @@ Using this framework, the neighbourhood search can be written down as:
     \item Start with a given tour: \(t\).
     \item Evaluate \(C(t)\).
     \item Identify a new \(\tilde t\) from \(t\) and accept it as a replacement
-        for \(t\) if \(C(\tilde t)<
-        C(t)\).
+        for \(t\) if \(C(\tilde t)< C(t)\).
     \item Repeat the 3rd step until some stopping condition is met.
 \end{enumerate}
 
@@ -108,13 +107,15 @@ This is shown diagrammatically in Figure~\ref{fig:tsp}.
     \label{fig:tsp}
 \end{figure}
 
-A number of different stopping conditions can be used including some specific
+A number of stopping conditions can be used including some specific
 overall cost or a number of total iterations of the algorithm.
 
 The neighbourhood of a tour \(t\) is taken as some set of tours that can be
-obtained from \(t\).
+obtained from \(t\) using a specific and computationally efficient \textbf{neighbourhood
+operator}.
 
-To illustrate two such neighbourhoods, consider the following tour on 7 stops:
+To illustrate two such neighbourhoods operators, consider the following tour on
+7 stops:
 
 \[
     t = (0, 1, 2, 3, 4, 5, 6, 0)
@@ -132,13 +133,14 @@ Another possible neighbourhood is to choose 2 stops at random and reversing the
 order
 of all stops between (including) those two stops. For example, the tour
 \(t^{(2)} \in N(t)\) is obtained by reversing the order of all stops between
-the 9th and the 15th stop.
+the 3rd and the 5th stop.
 
 \[
     t^{(2)} = (0, 1, 5, 4, 3, 2, 6, 0)
 \]
 
-These tours are shown in Figure~\ref{fig:tsp-effect-of-neighbourhood-operators}.
+Examples of these tours are shown in
+Figure~\ref{fig:tsp-effect-of-neighbourhood-operators}.
 
 \begin{figure}[!hbtp]
     \begin{center}
@@ -147,7 +149,7 @@ These tours are shown in Figure~\ref{fig:tsp-effect-of-neighbourhood-operators}.
     \caption{The effect of two neighborhood operators on \(t\). \(t^{(1)}\) is
     obtained by swapping stops 3 and 5. \(t^{(2)}\) is obtained by reversing the
     path between stops 3 and 5.}
-    \label{fig:tsp}
+    \label{fig:tsp-effect-of-neighbourhood-operators}
 \end{figure}
 
 \section{Solving with Python}\label{sec:solving-with-python}
@@ -180,10 +182,11 @@ def get_initial_candidate(number_of_stops, seed=None):
     return [0] + internal_stops + [0]
 \end{pyin}
 
-Using this we can get a random tour on 18 stops:
+Using this we can get a random tour on 13 stops:
+% TODO If the number of stops changes this needs to be changed.
 
 \begin{pyin}
-number_of_stops = 18
+number_of_stops = 13
 seed = 0
 initial_candidate = get_initial_candidate(
     number_of_stops=number_of_stops,
@@ -193,7 +196,7 @@ print(initial_candidate)
 \end{pyin}
 
 \begin{pyout}
-[0, 2, 7, 9, 10, 14, 5, 3, 15, 11, 8, 17, 12, 4, 1, 6, 16, 13, 0]
+[0, 7, 12, 5, 11, 3, 9, 2, 8, 10, 4, 1, 6, 0]
 \end{pyout}
 
 To be able to evaluate any given tour we see that we must also be able to
@@ -201,6 +204,15 @@ evaluate its cost. Here we define \mintinline{python}{get_cost} to do this:
 
 \begin{pyin}
 def get_cost(tour, distance_matrix):
+    """Return the cost of a tour
+
+    Args:
+        tour: A given tuple of successive stops.
+        distance_matrix: The distance matrix of the problem.
+
+    Returns:
+        The cost
+    """
     return sum(
         distance_matrix[current_stop, next_stop]
         for current_stop, next_stop in
@@ -211,58 +223,78 @@ def get_cost(tour, distance_matrix):
 \begin{pyin}
 distance_matrix = np.array(
     (
-    (0, 30, 39, 28, 54, 65, 87, 81, 86, 92, 85, 34, 31, 13, 54, 53, 22, 66),
-    (30, 0, 60, 14, 67, 41, 89, 79, 66, 69, 86, 61, 20, 25, 52, 34, 8, 78),
-    (39, 60, 0, 65, 21, 78, 58, 59, 86, 98, 57, 16, 69, 52, 40, 61, 54, 30),
-    (28, 14, 65, 0, 75, 54, 101, 91, 80, 82, 98, 62, 6, 17, 64, 48, 12, 86),
-    (54, 67, 21, 75, 0, 72, 37, 39, 74, 87, 36, 37, 80, 66, 28, 56, 64, 11),
-    (65, 41, 78, 54, 72, 0, 76, 62, 28, 28, 73, 86, 59, 64, 45, 17, 48, 80),
-    (87, 89, 58, 101, 37, 76, 0, 15, 63, 79, 3, 74, 107, 97, 38, 64, 89, 30),
-    (81, 79, 59, 91, 39, 62, 15, 0, 49, 64, 12, 74, 97, 89, 28, 51, 80, 36),
-    (86, 66, 86, 80, 74, 28, 63, 49, 0, 15, 61, 98, 86, 87, 46, 33, 72, 77),
-    (92, 69, 98, 82, 87, 28, 79, 64, 15, 0, 76, 109, 87, 92, 59, 40, 76, 92),
-    (85, 86, 57, 98, 36, 73, 3, 12, 61, 76, 0, 73, 104, 94, 35, 61, 86, 30),
-    (34, 61, 16, 62, 37, 86, 74, 74, 98, 109, 73, 0, 65, 46, 54, 70, 54, 46),
-    (31, 20, 69, 6, 80, 59, 107, 97, 86, 87, 104, 65, 0, 19, 70, 54, 18, 92),
-    (13, 25, 52, 17, 66, 64, 97, 89, 87, 92, 94, 46, 19, 0, 61, 54, 17, 77),
-    (54, 52, 40, 64, 28, 45, 38, 28, 46, 59, 35, 54, 70, 61, 0, 30, 52, 35),
-    (53, 34, 61, 48, 56, 17, 64, 51, 33, 40, 61, 70, 54, 54, 30, 0, 39, 64),
-    (22, 8, 54, 12, 64, 48, 89, 80, 72, 76, 86, 54, 18, 17, 52, 39, 0, 75),
-    (66, 78, 30, 86, 11, 80, 30, 36, 77, 92, 30, 46, 92, 77, 35, 64, 75, 0)
+        (0, 35, 35, 29, 70, 35, 42, 27, 24, 44, 58, 71, 69),
+        (35, 0, 67, 32, 72, 40, 71, 56, 36, 11, 66, 70, 37),
+        (35, 67, 0, 63, 64, 68, 11, 12, 56, 77, 48, 67, 94),
+        (29, 32, 63, 0, 93, 8, 71, 56, 8, 33, 84, 93, 69),
+        (70, 72, 64, 93, 0, 101, 56, 56, 92, 81, 16, 5, 69),
+        (35, 40, 68, 8, 101, 0, 76, 62, 11, 39, 91, 101, 76),
+        (42, 71, 11, 71, 56, 76, 0, 15, 65, 81, 40, 60, 94),
+        (27, 56, 12, 56, 56, 62, 15, 0, 50, 66, 41, 58, 82),
+        (24, 36, 56, 8, 92, 11, 65, 50, 0, 39, 81, 91, 74),
+        (44, 11, 77, 33, 81, 39, 81, 66, 39, 0, 77, 79, 37),
+        (58, 66, 48, 84, 16, 91, 40, 41, 81, 77, 0, 20, 73),
+        (71, 70, 67, 93, 5, 101, 60, 58, 91, 79, 20, 0, 65),
+        (69, 37, 94, 69, 69, 76, 94, 82, 74, 37, 73, 65, 0),
     )
 )
-cost = get_cost(tour=initial_candidate, distance_matrix=distance_matrix)
+cost = get_cost(
+    tour=initial_candidate,
+    distance_matrix=distance_matrix,
+)
 print(cost)
 \end{pyin}
 
 \begin{pyout}
-1112
+827
 \end{pyout}
 
-We will now define two different neighbourhood functions:
+We will now define two different neighbourhood operators:
 
 \begin{itemize}
-    \item \mintinline{python}{swap_stops}: this swaps two steps in a given tour.
-    \item \mintinline{python}{swap_paths}: this swaps two steps and reverts the
+    \item \mintinline{python}{swap_stops}: this swaps two stops in a given tour.
+    \item \mintinline{python}{reverse_path}: this swaps two stops and reverts the
         stops in between them.
 \end{itemize}
 
 \begin{pyin}
 def swap_stops(tour):
+    """
+    Return a new tour by swapping two stops
+
+    Args:
+        tour: A given tuple of successive stops.
+
+    Returns:
+        A tour
+    """
     number_of_stops = len(tour) - 1
-    i, j = sorted(np.random.choice(range(1, number_of_stops), 2))
+    i, j = sorted(
+        np.random.choice(range(1, number_of_stops), 2)
+    )
     new_tour = list(tour)
     new_tour[i], new_tour[j] = tour[j], tour[i]
     return new_tour
 
-def swap_paths(tour):
+def reverse_path(tour):
+    """
+    Return a new tour by reversing the path between two stops
+
+    Args:
+        tour: A given tuple of successive stops.
+
+    Returns:
+        A tour
+    """
     number_of_stops = len(tour) - 1
-    i, j = sorted(np.random.choice(range(1, number_of_stops), 2))
+    i, j = sorted(
+        np.random.choice(range(1, number_of_stops), 2)
+    )
     new_tour = tour[:i] + tour[i:j + 1][::-1] + tour[j + 1:]
     return new_tour
 \end{pyin}
 
-If we apply these two neighbourhood functions to our initial candidate we can
+If we apply these two neighbourhood operators to our initial candidate we can
 see the effects:
 
 \begin{pyin}
@@ -272,19 +304,18 @@ print(swap_stops(initial_candidate))
 which swaps the 3rd and 8th stops:
 
 \begin{pyout}
-[0, 2, 3, 9, 10, 14, 5, 7, 15, 11, 8, 17, 12, 4, 1, 6, 16, 13, 0]
+[0, 7, 12, 5, 11, 3, 9, 2, 8, 1, 4, 10, 6, 0]
 \end{pyout}
 
 \begin{pyin}
-print(swap_paths(initial_candidate))
+print(reverse_path(initial_candidate))
 \end{pyin}
 
-which swaps the order between the 8th and the 15th stop:
+which reverses the order between the 3rd and the 8th stop:
 
 \begin{pyout}
-[0, 2, 7, 9, 10, 14, 5, 3, 6, 1, 4, 12, 17, 8, 11, 15, 16, 13, 0]
+[0, 7, 2, 9, 3, 11, 5, 12, 8, 10, 4, 1, 6, 0]
 \end{pyout}
-
 
 Now we have all the tools in place to build a tool to carry out the
 neighbourhood search \mintinline{python}{run_neighbourhood_search}.
@@ -297,8 +328,22 @@ def run_neighbourhood_search(
     seed=None,
     get_cost=get_cost,
     get_initial_candidate=get_initial_candidate,
-    get_neighbour=swap_paths,
+    neighbourhood_operator=reverse_path,
 ):
+    """Returns a tour by carrying out a neighbourhood search.
+
+    Args:
+        distance_matrix: the distance matrix
+        number_of_stops: the number of stops
+        iterations: the number of iterations for which to
+                    run the algorithm
+        seed: a random seed (default: None)
+        neighbourhood_operator: the neighbourhood operator
+                                (default: swap_paths)
+
+    Returns:
+        A tour
+    """
     np.random.seed(seed)
 
     candidate = get_initial_candidate(
@@ -311,7 +356,7 @@ def run_neighbourhood_search(
     )
 
     for _ in range(iterations):
-        new_candidate = get_neighbour(candidate)
+        new_candidate = neighbourhood_operator(candidate)
         if (cost:=get_cost(
                     tour=new_candidate,
                     distance_matrix=distance_matrix,
@@ -335,7 +380,7 @@ solution_with_swap_stops = run_neighbourhood_search(
     number_of_stops=number_of_stops,
     iterations=number_of_iterations,
     seed=seed,
-    get_neighbour=swap_stops,
+    neighbourhood_operator=swap_stops,
 )
 print(solution_with_swap_stops)
 \end{pyin}
@@ -343,7 +388,7 @@ print(solution_with_swap_stops)
 giving:
 
 \begin{pyout}
-[0, 2, 4, 17, 6, 10, 7, 14, 8, 9, 5, 15, 1, 16, 3, 12, 13, 11, 0]
+[0, 7, 6, 2, 8, 5, 3, 1, 9, 12, 11, 4, 10, 0]
 \end{pyout}
 
 \begin{pyin}
@@ -352,7 +397,7 @@ solution_with_swap_paths = run_neighbourhood_search(
     number_of_stops=number_of_stops,
     iterations=number_of_iterations,
     seed=seed,
-    get_neighbour=swap_paths,
+    neighbourhood_operator=reverse_path,
 )
 print(solution_with_swap_paths)
 \end{pyin}
@@ -360,34 +405,50 @@ print(solution_with_swap_paths)
 giving:
 
 \begin{pyout}
-[0, 13, 12, 3, 16, 1, 5, 9, 8, 15, 14, 7, 10, 6, 17, 4, 2, 11, 0]
+[0, 7, 2, 6, 10, 4, 11, 12, 9, 1, 3, 5, 8, 0]
 \end{pyout}
 
 Importantly the costs differ substantially:
 
 \begin{pyin}
-print(get_cost(tour=solution_with_swap_stops, distance_matrix=distance_matrix))
+cost = get_cost(
+    tour=solution_with_swap_stops,
+    distance_matrix=distance_matrix,
+)
+print(cost)
 \end{pyin}
 
 which gives:
 
 \begin{pyout}
-409
+352
 \end{pyout}
 
-Whereas using the entire swapping of paths % TODO Refer to name of algorithm.
+Whereas using the the reverse path operator, which corresponds to an algorithm
+called the ``2 opt'' algorithm, gives a lower cost:
 
 \begin{pyin}
-print(get_cost(tour=solution_with_swap_paths, distance_matrix=distance_matrix))
+cost = get_cost(
+    tour=solution_with_swap_paths,
+    distance_matrix=distance_matrix,
+)
+print(cost)
 \end{pyin}
 
 which gives:
 
 \begin{pyout}
-360
+299
 \end{pyout}
 
-% TODO initial, swap stops and swap paths
+\begin{figure}
+    \begin{center}
+        \includegraphics[width=\textwidth]{./assets/final-tsp-tours/main.pdf}
+    \end{center}
+    \caption{The final tours obtained by using the neighbourhood search.}
+    \label{fig:final-tsp-tours}
+\end{figure}
+
 
 \section{Solving with R}\label{sec:solving-with-R}
 

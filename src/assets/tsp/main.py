@@ -5,7 +5,7 @@ import sklearn.metrics.pairwise
 import sympy as sym
 
 seed = 1
-number_of_stops = 18
+number_of_stops = 13
 np.random.seed(seed)
 xs = np.random.randint(0, 100, number_of_stops)
 ys = np.random.randint(0, 100, number_of_stops)
