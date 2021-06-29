@@ -1,0 +1,103 @@
+\chapter[Agent Based Simulation]{Agent Based Simulation}
+
+% Introduction
+\chapterinitial{S}{ometimes} we can know a lot about individuals' behaviours and
+interactions, and would like to know about how a whole population of such
+individuals might behave. For example psychologists and economists may know a
+lot about how individual spenders and vendors behave in response to given
+stimuli, and we'd like to know how these stimuli might effect the macro-economy.
+Animal behaviour experts may understand individual animals' predator, prey and
+mating habits, and would like know overall species population trends. Engineers
+may write explicit individual instructions for self-driving cars, and would like
+to investigate traffic and congestion behaviour for a city filled with such
+vehicles. Agent based simulation (or agent based modelling, or ABM) is a
+paradigm of thinking that allows such emergent population level behaviour to be
+investigated from individual rules and interactions.
+
+\section{Problem}\label{sec:problem}
+Consider a city populated by two kinds of household, for example a household
+might be fans of Cardiff City FC or Swansea City AFC. Each household has a
+preference for living close to households of the same kind, and will move houses
+around the city while their preferences are not satisfied.
+In this situation we are interested in how segregated does the city naturally
+get under these sorts of preferences.
+
+\section{Theory}\label{sec:theory}
+The model considered here is considered a `classic' one for the paradigm of
+agent based simulation, and is usually called Schelling's segregation model.
+It features in Thomas Schelling's book `Micromotives and Macrobehaviours', whose
+title neatly summarises the world view of agent based modelling: we know,
+understand, determine, or can control individual micromotives; and from this
+we'd like to observe and understand macrobehaviours.
+
+As a simplification we will model the city as a 50x50 grid.
+Each box is a house that can either contain a household of Cardiff City FC
+supporters, or contain a household of Swansea City AFC supporters.
+Define a house's neighbours by the grid locations adjacent to it, horizontally,
+vertically, and diagonally.
+For mathematical simplicity, also assume that the grid is a torus, where houses
+in the top row are vertically adjacent to the bottom row, and houses in the
+rightmost column are horizontally adjacent to the leftmost column.
+
+Next let's consider each household's behaviour.
+Every household has a preference $p$.
+This corresponds to the minimum proportion of neighbours they are happy to live
+next to who support the same team as themselves.
+Figure~\ref{fig:schelling_happyunhappy} shows a household of Cardiff City FC
+supporters that are happy with their neighbours, and not happy with their
+neighbours, when $p=0.5$. Households supporting Cardiff City FC are shaded grey,
+while households supporting Swansea City AFC are white.
+
+\begin{figure}
+\begin{center}
+\subfigure[A happy household, with 6 similar neighbours ($\frac{6}{8} > p = 0.5$)]{\includestandalone[width=0.4\textwidth]{./assets/schelling_happy}}
+\subfigure[An unhappy household, with 2 similar neighbours ($\frac{2}{8} < p = 0.5$)]{\includestandalone[width=0.4\textwidth]{./assets/schelling_unhappy}}
+\end{center}
+\caption{Example of a household happy and unhappy with its neighbours, when
+$p=0.5$. Households supporting Cardiff City FC are shaded grey, households
+supporting Swansea City AFc are white.}
+\label{fig:schelling_happyunhappy}
+\end{figure}
+
+The original problem stated that households randomly move around the city
+whenever they are unhappy with their neighbours.
+This long process of selling, searching for, and buying houses can be simplified
+to randomly pairing two unhappy households and swapping their houses.
+Let this happen to all unhappy households.
+
+Therefore our model logic is:
+
+\begin{enumerate}
+  \item Initialise the model. Fill each house in the grid with either a
+  household of Cardiff City FC or Swansea City AFC supporters with
+  probability $0.5$ each.
+  \item At each discrete time step, for every household:
+  \begin{enumerate}
+    \item Consider their neighbours, determine if the household is happy.
+    \item If unhappy, swap houses with another randomly chosen unhappy
+    household.
+  \end{enumerate}
+\end{enumerate}
+
+After a number of time steps we can observe the overall structure of the city
+and any population level behaviour that may have emerged without explicit
+defining.
+
+The above is an agent based model.
+It is a model as it is an abstraction of the real system.
+It is agent based as it only explicitly defines individual behaviours and
+interactions, but we wish to observe overall population level behaviours not
+explicitly defined.
+Note that this does not require code to analyse: in fact this model was
+originally run by placing and manually swapping silver and copper coins on a
+chessboard.
+A model isn't agent-based simply from the manner in which it is coded.
+Coding the model does however allow it to be run efficiently, scaled, and allows
+ease of analysis.
+
+
+\section{Solving with Python}\label{sec:solving-with-python}
+
+\section{Solving with R}\label{sec:solving-with-R}
+
+\section{Research}\label{sec:research}
