@@ -126,7 +126,7 @@ Now let's define the \mintinline{python}{City}:
 \begin{pyin}
 class City:
     def __init__(self, size, threshold):
-        """Initialises the City object
+        """Initialises the City object.
 
         Args:
             size: an integer number of rows and columns
@@ -139,10 +139,11 @@ class City:
         self.coords = itertools.product(sides, sides)
         self.houses = {
             (x, y): House(x, y, threshold, self)
-            for x, y in self.coords}
-    
+            for x, y in self.coords
+        }
+
     def run(self, n_steps):
-        """Runs the simulation of a number of time steps
+        """Runs the simulation of a number of time steps.
 
         Args:
             n_steps: an integer number of steps
@@ -151,16 +152,16 @@ class City:
             self.take_turn()
 
     def take_turn(self):
-        """Swaps all sad households"""
+        """Swaps all sad households."""
         sad = [h for h in self.houses.values() if h.sad()]
         random.shuffle(sad)
         i = 0
         while i <= len(sad) / 2:
             sad[i].swap(sad[-i])
             i += 1
-                
+
     def mean_satisfaction(self):
-        """Finds the average household satisfaction
+        """Finds the average household satisfaction.
 
         Returns:
             The average city's household satisfaction
@@ -210,7 +211,7 @@ a \mintinline{python}{House} class:
 \begin{pyin}
 class House:
     def __init__(self, x, y, threshold, city):
-        """Initialises the House object
+        """Initialises the House object.
 
         Args:
             x: the integer x-coordinate
@@ -225,9 +226,9 @@ class House:
         self.threshold = threshold
         self.kind = random.choice(["Cardiff", "Swansea"])
         self.city = city
-    
+
     def satisfaction(self):
-        """Determines the household's satisfaction level
+        """Determines the household's satisfaction level.
 
         Returns:
             A proportion
@@ -238,17 +239,17 @@ class House:
             ay = (self.y + y) % self.city.size
             same += self.city.houses[ax, ay].kind == self.kind
         return (same - 1) / 8
-    
+
     def sad(self):
-        """Determines if the household is sad
+        """Determines if the household is sad.
 
         Returns:
             a Boolean
         """
         return self.satisfaction() < self.threshold
-    
+
     def swap(self, house):
-        """Swaps two households
+        """Swaps two households.
 
         Args:
             house: the house object to swap household with
