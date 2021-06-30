@@ -64,6 +64,8 @@ whenever they are unhappy with their neighbours.
 This long process of selling, searching for, and buying houses can be simplified
 to randomly pairing two unhappy households and swapping their houses.
 Let this happen to all unhappy households.
+In fact, we can simplify further and consider the houses themselves as agents,
+and who swap households with another house.
 
 Therefore our model logic is:
 
@@ -71,11 +73,12 @@ Therefore our model logic is:
   \item Initialise the model. Fill each house in the grid with either a
   household of Cardiff City FC or Swansea City AFC supporters with
   probability $0.5$ each.
-  \item At each discrete time step, for every household:
+  \item At each discrete time step, for every house:
   \begin{enumerate}
-    \item Consider their neighbours, determine if the household is happy.
-    \item If unhappy, swap houses with another randomly chosen unhappy
-    household.
+    \item Consider their household's neighbours, determine if the household is
+    happy.
+    \item If unhappy, swap household with another randomly chosen house with an
+    unhappy household.
   \end{enumerate}
 \end{enumerate}
 
@@ -97,6 +100,240 @@ ease of analysis.
 
 
 \section{Solving with Python}\label{sec:solving-with-python}
+In agent based modelling we consider individual agents as their own entities,
+with their own rules and behaviours.
+This world view lends itself well to object-orientated programming.
+Here we build a number of \textit{objects} from a set of instructions called a
+\text{class}.
+These objects can both store information (in Python we call these
+\textit{attributes}), and do things (in Python we call these \textit{methods}).
+
+Python itself is written this way, and also allows users to define their own.
+
+For this problem we will define two classes (types of object): a
+\mintinline{python}{House} and a \mintinline{python}{City} for them to live in.
+
+First let's import some useful libraries:
+
+\begin{pyin}
+import random
+import itertools
+import numpy as np
+\end{pyin}
+
+Now let's define the \mintinline{python}{City}:
+
+\begin{pyin}
+class City:
+    def __init__(self, size, threshold):
+        """Initialises the City object
+
+        Args:
+            size: an integer number of rows and columns
+            threshold: a number between 0 and 1 representing
+              the minimum acceptable proportion of similar
+              neighbours
+        """
+        self.size = size
+        sides = range(size)
+        self.coords = itertools.product(sides, sides)
+        self.houses = {
+            (x, y): House(x, y, threshold, self)
+            for x, y in self.coords}
+    
+    def run(self, n_steps):
+        """Runs the simulation of a number of time steps
+
+        Args:
+            n_steps: an integer number of steps
+        """
+        for turn in range(n_steps):
+            self.take_turn()
+
+    def take_turn(self):
+        """Swaps all sad households"""
+        sad = [h for h in self.houses.values() if h.sad()]
+        random.shuffle(sad)
+        i = 0
+        while i <= len(sad) / 2:
+            sad[i].swap(sad[-i])
+            i += 1
+                
+    def mean_satisfaction(self):
+        """Finds the average household satisfaction
+
+        Returns:
+            The average city's household satisfaction
+        """
+        return np.mean(
+            [h.satisfaction() for h in self.houses.values()]
+        )
+\end{pyin}
+
+This defines a class, a template or a set of instructions that can be used to
+create instances of it, called objects.
+For our model we only need one instance of the \mintinline{python}{City} class,
+however it is useful to be able to produce more in order to run multiple trials
+with different random seeds.
+This class contains four methods: \mintinline{python}{__init__},
+\mintinline{python}{run}, \mintinline{python}{take_turn} and
+\mintinline{python}{mean_satisfaction}.
+
+The \mintinline{python}{__init__} method is run whenever the object is first
+created, and initialises the object.
+In this case it sets a number of attributes.
+First the square grid's \mintinline{python}{size} is defined, which is the
+number of rows and columns of houses it contains.
+Next we define \mintinline{python}{coords}, a list of tuples representing all
+the possible coordinates of the grid, this uses the
+\mintinline{python}{itertools} library for efficient looping.
+Finally \mintinline{python}{houses} is defined, a dictionary with grid
+coordinates as keys, and instances of the, yet to be defined,
+\mintinline{python}{House} class representing the houses themselves.
+
+The \mintinline{python}{run} method runs the simulation. For each discrete time
+step from 0 to \mintinline{python}{n_steps}, the world runs the method
+\mintinline{python}{take_turn}.
+In this method, we first create a list of all the houses with households that
+are unhappy with their neighbours; these are put in a random order using the
+\mintinline{python}{random} library; and then working inwards from the end,
+houses with sad households are paired up and swap households.
+
+The last method defined here is the \mintinline{python}{mean_satisfaction}
+method, which is only used to observe any emergent behaviour.
+This calculates the average satisfaction of all the houses in the grid, using
+the \mintinline{python}{numpy} library for convenience.
+
+In order to be able to create and instance of the above class, we need to define
+a \mintinline{python}{House} class:
+
+\begin{pyin}
+class House:
+    def __init__(self, x, y, threshold, city):
+        """Initialises the House object
+
+        Args:
+            x: the integer x-coordinate
+            y: the integer y-coordinate
+            threshold: a number between 0 and 1 representing
+              the minimum acceptable proportion of similar
+              neighbours
+            city: an instance of the City class
+        """
+        self.x = x
+        self.y = y
+        self.threshold = threshold
+        self.kind = random.choice(["Cardiff", "Swansea"])
+        self.city = city
+    
+    def satisfaction(self):
+        """Determines the household's satisfaction level
+
+        Returns:
+            A proportion
+        """
+        same = 0
+        for x, y in itertools.product([-1, 0, 1], [-1, 0, 1]):
+            ax = (self.x + x) % self.city.size
+            ay = (self.y + y) % self.city.size
+            same += self.city.houses[ax, ay].kind == self.kind
+        return (same - 1) / 8
+    
+    def sad(self):
+        """Determines if the household is sad
+
+        Returns:
+            a Boolean
+        """
+        return self.satisfaction() < self.threshold
+    
+    def swap(self, house):
+        """Swaps two households
+
+        Args:
+            house: the house object to swap household with
+        """
+        self.kind, house.kind = house.kind, self.kind
+\end{pyin}
+
+It contains four methods: \mintinline{python}{__init__},
+\mintinline{python}{satisfaction}, \mintinline{python}{happy} and
+\mintinline{python}{swap}.
+
+The \mintinline{python}{__init__} methods sets a number of attributes at the
+time the object is created: the house's \mintinline{python}{x} and
+\mintinline{python}{y} coordinates (its column and row numbers on the grid);
+its \mintinline{python}{threshold} which corresponds to $p$; its
+\mintinline{python}{kind} which is randomly chosen between having a Cardiff City
+FC supporting household or a Swansea City AFC supporting household; and finally
+its \mintinline{python}{city}, an instance of the \mintinline{python}{City}
+class, shared by all the houses.
+
+The \mintinline{python}{satisfaction} method loops though each of the house's
+neighbouring cells in the world grid, counts the number of neighbours that are
+of the same kind as itself, and returns this as a proportion.
+Then the \mintinline{python}{sad} method returns a boolean indicating of the
+household's satisfaction is below the minimum threshold.
+
+Finally the \mintinline{python}{swap} method takes another house object, and
+swaps their household kinds.
+
+Now let's create an instance of the world:
+
+\begin{pyin}
+random.seed(0)
+C = City(50, 0.65)
+\end{pyin}
+
+Here we have set a random seed from reproducibility, the grid size is 50x50, and
+the threshold of each household is $p = 0.65$.
+The world initialises randomly, so let's check this initial average
+satisfaction:
+
+\begin{pyin}
+print(C.mean_satisfaction())
+\end{pyin}
+
+\begin{pyout}
+0.4998
+\end{pyout}
+
+This is well below the minimum threshold of $0.65$, and so on average most
+households are unhappy here.
+Let's run the simulation for 100 generations and see how this changes:
+
+\begin{pyin}
+C.run(100)
+print(C.mean_satisfaction())
+\end{pyin}
+
+\begin{pyout}
+0.9078
+\end{pyout}
+
+After 100 time steps the average satisfaction level is much higher.
+In fact, is it much higher that each individual household's threshold.
+Now consider that this satisfaction level is really a level of how similar
+each households' neighbours are, it is actually a level of segregation.
+This was the central premise of Schelling's original model, that overall
+emergent segregation levels are much higher than any individuals' personal
+preference for segregation.
+
+More analysis methods can be added, including plotting functions.
+Figure~\ref{fig:schelling_python_plot} shows the grid at the beginning, after 20
+time steps, and after 100 time steps, with households supporting Cardiff City FC
+in grey, and those supporting Swansea City AFC in white.
+It visually shows the households naturally segregating over time.
+
+\begin{figure}
+\begin{center}
+\subfigure[At the beginning.]{\includegraphics[width=0.32\textwidth]{./assets/python_schelling_0}}
+\subfigure[After 20 time steps.]{\includegraphics[width=0.32\textwidth]{./assets/python_schelling_20}}
+\subfigure[After 100 time steps.]{\includegraphics[width=0.32\textwidth]{./assets/python_schelling_100}}
+\end{center}
+\caption{Plotted results from the Python code.}
+\label{fig:schelling_python_plot}
+\end{figure}
 
 \section{Solving with R}\label{sec:solving-with-R}
 
