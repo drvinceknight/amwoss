@@ -70,7 +70,7 @@ and who swap households with another house.
 Therefore our model logic is:
 
 \begin{enumerate}
-  \item Initialise the model. Fill each house in the grid with either a
+  \item Initialise the model: fill each house in the grid with either a
   household of Cardiff City FC or Swansea City AFC supporters with
   probability $0.5$ each.
   \item At each discrete time step, for every house:
@@ -104,7 +104,7 @@ In agent based modelling we consider individual agents as their own entities,
 with their own rules and behaviours.
 This world view lends itself well to object-orientated programming.
 Here we build a number of \textit{objects} from a set of instructions called a
-\text{class}.
+\textit{class}.
 These objects can both store information (in Python we call these
 \textit{attributes}), and do things (in Python we call these \textit{methods}).
 
@@ -192,12 +192,12 @@ Finally \mintinline{python}{houses} is defined, a dictionary with grid
 coordinates as keys, and instances of the, yet to be defined,
 \mintinline{python}{House} class representing the houses themselves.
 
-The \mintinline{python}{run} method runs the simulation. For each discrete time
-step from 0 to \mintinline{python}{n_steps}, the world runs the method
-\mintinline{python}{take_turn}.
+The \mintinline{python}{run} method runs the simulation. For each
+\mintinline{python}{n_steps} number of discrete time steps, the city runs the
+method \mintinline{python}{take_turn}.
 In this method, we first create a list of all the houses with households that
 are unhappy with their neighbours; these are put in a random order using the
-\mintinline{python}{random} library; and then working inwards from the end,
+\mintinline{python}{random} library; and then working inwards from the ends,
 houses with sad households are paired up and swap households.
 
 The last method defined here is the \mintinline{python}{mean_satisfaction}
@@ -205,7 +205,7 @@ method, which is only used to observe any emergent behaviour.
 This calculates the average satisfaction of all the houses in the grid, using
 the \mintinline{python}{numpy} library for convenience.
 
-In order to be able to create and instance of the above class, we need to define
+In order to be able to create an instance of the above class, we need to define
 a \mintinline{python}{House} class:
 
 \begin{pyin}
@@ -258,7 +258,7 @@ class House:
 \end{pyin}
 
 It contains four methods: \mintinline{python}{__init__},
-\mintinline{python}{satisfaction}, \mintinline{python}{happy} and
+\mintinline{python}{satisfaction}, \mintinline{python}{sad} and
 \mintinline{python}{swap}.
 
 The \mintinline{python}{__init__} methods sets a number of attributes at the
@@ -271,7 +271,7 @@ its \mintinline{python}{city}, an instance of the \mintinline{python}{City}
 class, shared by all the houses.
 
 The \mintinline{python}{satisfaction} method loops though each of the house's
-neighbouring cells in the world grid, counts the number of neighbours that are
+neighbouring cells in the city grid, counts the number of neighbours that are
 of the same kind as itself, and returns this as a proportion.
 Then the \mintinline{python}{sad} method returns a boolean indicating of the
 household's satisfaction is below the minimum threshold.
@@ -279,15 +279,15 @@ household's satisfaction is below the minimum threshold.
 Finally the \mintinline{python}{swap} method takes another house object, and
 swaps their household kinds.
 
-Now let's create an instance of the world:
+Now let's create an instance of a city of size 50x50, with each household's
+threshold 0.65:
 
 \begin{pyin}
 random.seed(0)
 C = City(50, 0.65)
 \end{pyin}
 
-Here we have set a random seed from reproducibility, the grid size is 50x50, and
-the threshold of each household is $p = 0.65$.
+Here we have set a random seed for reproducibility.
 The world initialises randomly, so let's check this initial average
 satisfaction:
 
@@ -337,5 +337,217 @@ It visually shows the households naturally segregating over time.
 \end{figure}
 
 \section{Solving with R}\label{sec:solving-with-R}
+In agent based modelling we consider individual agents as their own entities,
+with their own rules and behaviours.
+This world view lends itself well to object-orientated programming.
+Here we build a number of \textit{objects} from a set of instructions called a
+\textit{class}.
+These objects can both store information (in the R library we will use we call
+these \textit{fields}), and do things (called \textit{methods}).
+
+There are a number of ways of doing object orientated programming in R.
+In this chapter, we will use a package called \mintinline{R}{R6}.
+
+For this problem we will define two classes (types of object): a
+\mintinline{R}{House} and a \mintinline{R}{City} for them to live in.
+
+Now let's define the \mintinline{R}{City}:
+
+\begin{Rin}
+library(R6)
+City <- R6Class("City", list(
+  size = NA,
+  houses = NA,
+  initialize = function(size, threshold) {
+    self$size <- size
+    self$houses <- c()
+    for (x in 1:size) {
+      row <- c()
+      for (y in 1:size) {
+        row <- c(row, House$new(x, y, threshold, self))
+      }
+      self$houses <- rbind(self$houses, row)
+    }
+  },
+  run = function(n_steps) {
+    for (turn in 1:n_steps) {
+      self$take_turn()
+    }
+  },
+  take_turn = function() {
+    sad <- c()
+    for (house in self$houses) {
+      if (house$sad()) {
+        sad <- c(sad, house)
+      }
+    }
+    sad <- sample(sad)
+    num_sad <- length(sad)
+    i <- 1
+    while (i <= num_sad / 2) {
+      sad[[i]]$swap(sad[[num_sad - i]])
+      i <- i + 1
+    }
+  },
+  mean_satisfaction = function() {
+    mean(sapply(self$houses, function(x) x$satisfaction()))
+  })
+)
+\end{Rin}
+
+This defines an R6 class, a template or a set of instructions that can be used
+to create instances of it, called objects.
+For our model we only need one instance of the \mintinline{R}{City} class,
+although it may be useful to be able to produce more in order to run multiple
+trials with different random seeds.
+This class contains four methods: \mintinline{R}{initialize},
+\mintinline{R}{run}, \mintinline{R}{take_turn} and
+\mintinline{R}{mean_satisfaction}.
+
+The \mintinline{R}{initialize} method is run at the time the object is first
+created.
+It initialises the object by setting a number of its fields.
+First the square grid's \mintinline{R}{size} is defined, which is the
+number of rows and columns of houses it contains.
+Then it's \mintinline{R}{houses} is defined by iteratively repeating the
+\mintinline{R}{rbind} function to create a two-dimensional vector of instances
+of the, yet to be defined, \mintinline{R}{House} class, representing the houses
+themselves.
+
+The \mintinline{R}{run} method runs the simulation. For each discrete time
+step from 1 to \mintinline{R}{n_steps}, the world runs the method
+\mintinline{R}{take_turn}.
+In this method, we first create a list of all the houses with households that
+are unhappy with their neighbours; these are put in a random order using the
+\mintinline{R}{sample} function; and then working inwards from the ends,
+houses with sad households are paired up and swap households.
+
+The last method defined here is the \mintinline{R}{mean_satisfaction}
+method, which is used to observe any emergent behaviour.
+This calculates the average satisfaction of all the houses in the grid, using
+the the \mintinline{R}{sapply} function to create a vector of all the houses'
+satisfaction levels.
+
+In order to be able to create an instance of the above class, we need to define
+a \mintinline{R}{House} class:
+
+\begin{Rin}
+House <- R6Class("House", list(
+  x = NA,
+  y = NA,
+  threshold = NA,
+  city = NA,
+  kind = NA,
+  initialize = function(x = NA,
+                        y = NA,
+                        threshold = NA,
+                        city = NA) {
+    self$x <- x
+    self$y <- y
+    self$threshold <- threshold
+    self$city <- city
+    self$kind <- sample(c('Cardiff', 'Swansea'), 1)
+  },
+  satisfaction = function() {
+    same <- 0
+    for (x in -1:1) {
+      for (y in -1:1) {
+        ax <- ((self$x + x - 1) %% self$city$size) + 1
+        ay <- ((self$y + y - 1) %% self$city$size) + 1
+        if (self$city$houses[[ax, ay]]$kind == self$kind) {
+          same <- same + 1
+        }
+      }
+    }
+    (same - 1) / 8
+  },
+  sad = function() {
+     self$satisfaction() < self$threshold
+  },
+  swap = function(house) {
+    old <- self$kind
+    self$kind <- house$kind
+    house$kind <- old
+  })
+)
+\end{Rin}
+
+It contains four methods: \mintinline{R}{initialize},
+\mintinline{R}{satisfaction}, \mintinline{R}{sad} and \mintinline{R}{swap}.
+
+The \mintinline{R}{initialize} methods sets a number of the class' fields when
+the object is created: the house's \mintinline{r}{x} and \mintinline{R}{y}
+coordinates (its column and row numbers on the grid); its
+\mintinline{R}{threshold} which corresponds to $p$; its \mintinline{R}{kind}
+which is randomly chosen between having a Cardiff City
+FC supporting household or a Swansea City AFC supporting household; and finally
+its \mintinline{R}{city}, an instance of the \mintinline{R}{City} class, shared
+by all the houses.
+
+The \mintinline{R}{satisfaction} method loops though each of the house's
+neighbouring cells in the city grid, counts the number of neighbours that are of
+the same kind as itself, and returns this as a proportion.
+The \mintinline{R}{sad} method returns a boolean indicating of the
+household's satisfaction is below its minimum threshold.
+
+Finally the \mintinline{R}{swap} method takes another house object, and
+swaps their household kinds.
+
+Now let's create an instance of a city of size 50x50, with each household's
+threshold 0.65:
+
+\begin{Rin}
+set.seed(0)
+C <- City$new(50, 0.65)
+\end{Rin}
+
+Here we have set a random seed for reproducibility.
+The world initialises randomly, so let's check this initial average
+satisfaction:
+
+\begin{Rin}
+print(C$mean_satisfaction())
+\end{Rin}
+
+\begin{Rout}
+[1] 0.4956
+\end{Rout}
+
+This is well below the minimum threshold of $0.65$, and so on average most
+households are unhappy here.
+Let's run the simulation for 100 generations and see how this changes:
+
+\begin{Rin}
+C$run(100)
+print(C$mean_satisfaction())
+\end{Rin}
+
+\begin{Rout}
+[1] 0.9338
+\end{Rout}
+
+After 100 time steps the average satisfaction has increased.
+It is now actually much higher that each individual household's threshold.
+We can consider this satisfaction level as a level of how similar each
+households' neighbours are, and so it is actually a level of segregation.
+This was the central premise of Schelling's original model, that overall
+emergent segregation levels are much higher than any individuals' personal
+preference for segregation.
+
+More analysis methods can be added, including plotting functions.
+Figure~\ref{fig:schelling_R_plot} shows the grid at the beginning, after 20
+time steps, and after 100 time steps, with households supporting Cardiff City FC
+in grey, and those supporting Swansea City AFC in white.
+It visually shows the households naturally segregating over time.
+
+\begin{figure}
+\begin{center}
+\subfigure[At the beginning.]{\includegraphics[width=0.32\textwidth]{./assets/schelling_R_0}}
+\subfigure[After 20 time steps.]{\includegraphics[width=0.32\textwidth]{./assets/schelling_R_20}}
+\subfigure[After 100 time steps.]{\includegraphics[width=0.32\textwidth]{./assets/schelling_R_100}}
+\end{center}
+\caption{Plotted results from the R code.}
+\label{fig:schelling_R_plot}
+\end{figure}
 
 \section{Research}\label{sec:research}
