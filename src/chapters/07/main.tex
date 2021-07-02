@@ -355,7 +355,7 @@ Now let's define the \mintinline{R}{City}:
 
 \begin{Rin}
 library(R6)
-City <- R6Class("City", list(
+city <- R6Class("City", list(
   size = NA,
   houses = NA,
   initialize = function(size, threshold) {
@@ -364,7 +364,7 @@ City <- R6Class("City", list(
     for (x in 1:size) {
       row <- c()
       for (y in 1:size) {
-        row <- c(row, House$new(x, y, threshold, self))
+        row <- c(row, house$new(x, y, threshold, self))
       }
       self$houses <- rbind(self$houses, row)
     }
@@ -372,8 +372,7 @@ City <- R6Class("City", list(
   run = function(n_steps) {
     for (turn in 1:n_steps) {
       self$take_turn()
-    }
-  },
+    } },
   take_turn = function() {
     sad <- c()
     for (house in self$houses) {
@@ -432,7 +431,7 @@ In order to be able to create an instance of the above class, we need to define
 a \mintinline{R}{House} class:
 
 \begin{Rin}
-House <- R6Class("House", list(
+house <- R6Class("House", list(
   x = NA,
   y = NA,
   threshold = NA,
@@ -446,7 +445,7 @@ House <- R6Class("House", list(
     self$y <- y
     self$threshold <- threshold
     self$city <- city
-    self$kind <- sample(c('Cardiff', 'Swansea'), 1)
+    self$kind <- sample(c("Cardiff", "Swansea"), 1)
   },
   satisfaction = function() {
     same <- 0
@@ -462,7 +461,7 @@ House <- R6Class("House", list(
     (same - 1) / 8
   },
   sad = function() {
-     self$satisfaction() < self$threshold
+    self$satisfaction() < self$threshold
   },
   swap = function(house) {
     old <- self$kind
@@ -498,7 +497,7 @@ threshold 0.65:
 
 \begin{Rin}
 set.seed(0)
-C <- City$new(50, 0.65)
+C <- city$new(50, 0.65)
 \end{Rin}
 
 Here we have set a random seed for reproducibility.
