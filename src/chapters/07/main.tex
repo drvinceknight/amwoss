@@ -497,7 +497,7 @@ threshold 0.65:
 
 \begin{Rin}
 set.seed(0)
-C <- city$new(50, 0.65)
+our_city <- city$new(50, 0.65)
 \end{Rin}
 
 Here we have set a random seed for reproducibility.
@@ -505,7 +505,7 @@ The world initialises randomly, so let's check this initial average
 satisfaction:
 
 \begin{Rin}
-print(C$mean_satisfaction())
+print(our_city$mean_satisfaction())
 \end{Rin}
 
 \begin{Rout}
@@ -517,8 +517,8 @@ households are unhappy here.
 Let's run the simulation for 100 generations and see how this changes:
 
 \begin{Rin}
-C$run(100)
-print(C$mean_satisfaction())
+our_city$run(100)
+print(our_city$mean_satisfaction())
 \end{Rin}
 
 \begin{Rout}
