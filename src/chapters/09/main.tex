@@ -326,8 +326,6 @@ def run_neighbourhood_search(
     number_of_stops,
     iterations,
     seed=None,
-    get_cost=get_cost,
-    get_initial_candidate=get_initial_candidate,
     neighbourhood_operator=reverse_path,
 ):
     """Returns a tour by carrying out a neighbourhood search.
@@ -344,10 +342,9 @@ def run_neighbourhood_search(
     Returns:
         A tour
     """
-    np.random.seed(seed)
-
     candidate = get_initial_candidate(
         number_of_stops=number_of_stops,
+        seed=seed,
     )
 
     best_cost = get_cost(
@@ -388,7 +385,7 @@ print(solution_with_swap_stops)
 giving:
 
 \begin{pyout}
-[0, 7, 6, 2, 8, 5, 3, 1, 9, 12, 11, 4, 10, 0]
+[0, 7, 2, 8, 5, 3, 1, 9, 12, 11, 4, 10, 6, 0]
 \end{pyout}
 
 \begin{pyin}
@@ -405,7 +402,7 @@ print(solution_with_swap_paths)
 giving:
 
 \begin{pyout}
-[0, 7, 2, 6, 10, 4, 11, 12, 9, 1, 3, 5, 8, 0]
+[0, 8, 5, 3, 1, 9, 12, 11, 4, 10, 6, 2, 7, 0]
 \end{pyout}
 
 Importantly the costs differ substantially:
@@ -421,7 +418,7 @@ print(cost)
 which gives:
 
 \begin{pyout}
-352
+362
 \end{pyout}
 
 Whereas using the the reverse path operator, which corresponds to an algorithm
@@ -449,8 +446,221 @@ which gives:
     \label{fig:final-tsp-tours}
 \end{figure}
 
-
 \section{Solving with R}\label{sec:solving-with-R}
+
+To solve this problem using R we will write functionality that matches the
+first three steps in the Section~\ref{sec:theory}.
+
+The first step is to write the \mintinline{R}{get_initial_candidate}
+function that creates an initial tour:
+
+\begin{Rin}
+get_initial_candidate <- function(number_of_stops, seed = NA){
+    internal_stops <- 1:(number_of_stops - 1)
+    if (!is.na(seed)) {
+      set.seed(seed)
+      internal_stops <- sample(internal_stops)
+    }
+    c(0, internal_stops, 0)
+}
+\end{Rin}
+
+Using this we can get a random tour on 13 stops:
+
+\begin{Rin}
+number_of_stops <- 13
+seed <- 0
+initial_candidate <- get_initial_candidate(
+    number_of_stops = number_of_stops,
+    seed = seed)
+print(initial_candidate)
+\end{Rin}
+
+\begin{Rout}
+ [1]  0  9  4  7  1  2  5  3  8  6 11 12 10  0
+\end{Rout}
+
+To be able to evaluate any given tour we see that we must also be able to
+evaluate its cost. Here we define \mintinline{R}{get_cost} to do this:
+
+\begin{Rin}
+get_cost <- function(tour, distance_matrix){
+    pairs <-  cbind(tour[-length(tour)], tour[-1])
+    sum(distance_matrix[pairs])
+}
+\end{Rin}
+
+\begin{Rin}
+distance_matrix <- rbind(
+        c(0, 35, 35, 29, 70, 35, 42, 27, 24, 44, 58, 71, 69),
+        c(35, 0, 67, 32, 72, 40, 71, 56, 36, 11, 66, 70, 37),
+        c(35, 67, 0, 63, 64, 68, 11, 12, 56, 77, 48, 67, 94),
+        c(29, 32, 63, 0, 93, 8, 71, 56, 8, 33, 84, 93, 69),
+        c(70, 72, 64, 93, 0, 101, 56, 56, 92, 81, 16, 5, 69),
+        c(35, 40, 68, 8, 101, 0, 76, 62, 11, 39, 91, 101, 76),
+        c(42, 71, 11, 71, 56, 76, 0, 15, 65, 81, 40, 60, 94),
+        c(27, 56, 12, 56, 56, 62, 15, 0, 50, 66, 41, 58, 82),
+        c(24, 36, 56, 8, 92, 11, 65, 50, 0, 39, 81, 91, 74),
+        c(44, 11, 77, 33, 81, 39, 81, 66, 39, 0, 77, 79, 37),
+        c(58, 66, 48, 84, 16, 91, 40, 41, 81, 77, 0, 20, 73),
+        c(71, 70, 67, 93, 5, 101, 60, 58, 91, 79, 20, 0, 65),
+        c(69, 37, 94, 69, 69, 76, 94, 82, 74, 37, 73, 65, 0)
+)
+cost <- get_cost(
+    tour = initial_candidate,
+    distance_matrix = distance_matrix)
+print(cost)
+\end{Rin}
+
+\begin{Rout}
+[1] 556
+\end{Rout}
+
+We will now define two different neighbourhood operators:
+
+\begin{itemize}
+    \item \mintinline{R}{swap_stops}: this swaps two stops in a given tour.
+    \item \mintinline{R}{reverse_path}: this swaps two stops and reverts the
+        stops in between them.
+\end{itemize}
+
+\begin{Rin}
+swap_stops <- function(tour){
+    number_of_stops <- length(tour) - 1
+    stops_to_swap <- sort(sample(2:number_of_stops, 2))
+    new_tour <- replace(x=tour,
+                        list=stops_to_swap,
+                        values=rev(tour[stops_to_swap]))
+    }
+
+reverse_path <- function(tour){
+    number_of_stops <- length(tour) - 1
+    stops_to_swap <- sort(sample(2:number_of_stops, 2))
+    i <- stops_to_swap[1]
+    j <- stops_to_swap[2]
+    new_order <- c(
+            c(1: (i - 1)),
+            c(j:i),
+            c((j+1): length(tour))
+            )
+    tour[new_order]
+    }
+\end{Rin}
+
+\begin{Rin}
+print(swap_stops(initial_candidate))
+\end{Rin}
+
+\begin{Rout}
+ [1]  0  9  4  7  1 11  5  3  8  6  2 12 10  0
+\end{Rout}
+
+\begin{Rin}
+print(reverse_path(initial_candidate))
+\end{Rin}
+
+\begin{Rout}
+ [1]  0  9  4  7  1  2 11  6  8  3  5 12 10  0
+\end{Rout}
+
+\begin{Rin}
+run_neighbourhood_search <- function(
+  distance_matrix,
+  number_of_stops,
+  iterations,
+  seed = NA,
+  neighbourhood_operator = reverse_path
+){
+  candidate <- get_initial_candidate(
+    number_of_stops = number_of_stops,
+    seed = seed
+    )
+
+  best_cost <- get_cost(
+    tour = candidate,
+    distance_matrix = distance_matrix
+    )
+
+  for (repetition in 1:iterations) {
+    new_candidate <- neighbourhood_operator(candidate)
+    cost = get_cost(
+        tour = new_candidate,
+        distance_matrix = distance_matrix)
+
+    if (cost <= best_cost) {
+      best_cost <- cost
+      candidate <- new_candidate
+    }
+
+  }
+  candidate
+}
+\end{Rin}
+
+\begin{Rin}
+number_of_iterations <- 1000
+solution_with_swap_stops = run_neighbourhood_search(
+    distance_matrix=distance_matrix,
+    number_of_stops=number_of_stops,
+    iterations=number_of_iterations,
+seed=seed,
+    neighbourhood_operator=swap_stops
+)
+print(solution_with_swap_stops)
+\end{Rin}
+
+\begin{Rout}
+ [1]  0  6  9  4 10  2  1  8  3  7 11  5 12  0
+\end{Rout}
+
+\begin{Rin}
+number_of_iterations <- 1000
+solution_with_reverse_path = run_neighbourhood_search(
+    distance_matrix=distance_matrix,
+    number_of_stops=number_of_stops,
+    iterations=number_of_iterations,
+seed=seed,
+    neighbourhood_operator=reverse_path
+)
+print(solution_with_reverse_path)
+\end{Rin}
+
+\begin{Rout}
+ [1]  0 10  2  4  6  9  1  8  3  7 11  5 12  0
+\end{Rout}
+
+\begin{Rin}
+cost <- get_cost(
+    tour=solution_with_swap_stops,
+    distance_matrix=distance_matrix
+)
+print(cost)
+\end{Rin}
+
+\begin{Rout}
+[1] 209
+\end{Rout}
+
+\begin{Rin}
+cost <- get_cost(
+    tour=solution_with_reverse_path,
+    distance_matrix=distance_matrix
+)
+print(cost)
+\end{Rin}
+
+\begin{Rout}
+[1] 197
+\end{Rout}
+
+
+\begin{figure}
+    \begin{center}
+        \includegraphics[width=\textwidth]{./assets/final-tsp-tours-with-R/main.pdf}
+    \end{center}
+    \caption{The final tours obtained by using the neighbourhood search.}
+    \label{fig:final-tsp-tours}
+\end{figure}
 
 \section{Research}\label{sec:research}
 
