@@ -440,7 +440,7 @@ which gives:
 
 \begin{figure}
     \begin{center}
-        \includegraphics[width=\textwidth]{./assets/final-tsp-tours/main.pdf}
+        \includegraphics[width=\textwidth]{./assets/final-tsp-tours-with-python/main.pdf}
     \end{center}
     \caption{The final tours obtained by using the neighbourhood search.}
     \label{fig:final-tsp-tours}
@@ -485,7 +485,7 @@ evaluate its cost. Here we define \mintinline{R}{get_cost} to do this:
 
 \begin{Rin}
 get_cost <- function(tour, distance_matrix){
-    pairs <-  cbind(tour[-length(tour)], tour[-1])
+    pairs <-  cbind(tour[-length(tour)], tour[-1]) + 1
     sum(distance_matrix[pairs])
 }
 \end{Rin}
@@ -513,7 +513,7 @@ print(cost)
 \end{Rin}
 
 \begin{Rout}
-[1] 556
+[1] 709
 \end{Rout}
 
 We will now define two different neighbourhood operators:
@@ -610,7 +610,7 @@ print(solution_with_swap_stops)
 \end{Rin}
 
 \begin{Rout}
- [1]  0  6  9  4 10  2  1  8  3  7 11  5 12  0
+ [1]  0 11  4 10  6  2  7  8  5  3  1  9 12  0
 \end{Rout}
 
 \begin{Rin}
@@ -626,7 +626,7 @@ print(solution_with_reverse_path)
 \end{Rin}
 
 \begin{Rout}
- [1]  0 10  2  4  6  9  1  8  3  7 11  5 12  0
+ [1]  0  8  5  3  1  9 12 11  4 10  6  2  7  0
 \end{Rout}
 
 \begin{Rin}
@@ -638,7 +638,7 @@ print(cost)
 \end{Rin}
 
 \begin{Rout}
-[1] 209
+[1] 373
 \end{Rout}
 
 \begin{Rin}
@@ -650,7 +650,7 @@ print(cost)
 \end{Rin}
 
 \begin{Rout}
-[1] 197
+[1] 299
 \end{Rout}
 
 

@@ -19,8 +19,8 @@ np.random.seed(seed)
 xs = np.random.randint(0, 100, number_of_stops)
 ys = np.random.randint(0, 100, number_of_stops)
 
-initial_candidate = [0, 7, 12, 5, 11, 3, 9, 2, 8, 10, 4, 1, 6, 0]
-swap_stops_solution = [0, 7, 2, 8, 5, 3, 1, 9, 12, 11, 4, 10, 6, 0]
+initial_candidate = [0, 9, 4, 7, 1, 2, 5, 3, 8, 6, 11, 12, 10, 0]
+swap_stops_solution = [0, 11, 4, 10, 6, 2, 7, 8, 5, 3, 1, 9, 12, 0]
 swap_paths_solution = [0, 8, 5, 3, 1, 9, 12, 11, 4, 10, 6, 2, 7, 0]
 
 # Draw plot
