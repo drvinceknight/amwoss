@@ -405,7 +405,7 @@ giving:
 [0, 8, 5, 3, 1, 9, 12, 11, 4, 10, 6, 2, 7, 0]
 \end{pyout}
 
-Importantly the costs differ substantially:
+Importantly, the costs differ substantially:
 
 \begin{pyin}
 cost = get_cost(
@@ -442,7 +442,8 @@ which gives:
     \begin{center}
         \includegraphics[width=\textwidth]{./assets/final-tsp-tours-with-python/main.pdf}
     \end{center}
-    \caption{The final tours obtained by using the neighbourhood search.}
+    \caption{The final tours obtained by using the neighbourhood search in
+    Python.}
     \label{fig:final-tsp-tours}
 \end{figure}
 
@@ -570,9 +571,14 @@ reverse_path <- function(tour){
     }
 \end{Rin}
 
+If we apply these two neighbour operators to our initial candidate we can see
+the effects:
+
 \begin{Rin}
 print(swap_stops(initial_candidate))
 \end{Rin}
+
+which swaps the 6th and 11th stops:
 
 \begin{Rout}
  [1]  0  9  4  7  1 11  5  3  8  6  2 12 10  0
@@ -582,9 +588,15 @@ print(swap_stops(initial_candidate))
 print(reverse_path(initial_candidate))
 \end{Rin}
 
+which reverses the order
+between the 7th and the 11th stop:
+
 \begin{Rout}
  [1]  0  9  4  7  1  2 11  6  8  3  5 12 10  0
 \end{Rout}
+
+Now we have all the tools in place to build a tool to carry out the
+neighbourhood search \mintinline{R}{run_neighbourhood_search}.
 
 \begin{Rin}
 #' Returns a tour by carrying out a neighbourhood search
@@ -631,6 +643,9 @@ run_neighbourhood_search <- function(
 }
 \end{Rin}
 
+Using this we can see the effect of running 1000 iterations using different
+neighbourhood functions:
+
 \begin{Rin}
 number_of_iterations <- 1000
 solution_with_swap_stops <- run_neighbourhood_search(
@@ -642,6 +657,8 @@ solution_with_swap_stops <- run_neighbourhood_search(
 )
 print(solution_with_swap_stops)
 \end{Rin}
+
+giving:
 
 \begin{Rout}
  [1]  0 11  4 10  6  2  7  8  5  3  1  9 12  0
@@ -659,9 +676,13 @@ solution_with_reverse_path <- run_neighbourhood_search(
 print(solution_with_reverse_path)
 \end{Rin}
 
+giving:
+
 \begin{Rout}
  [1]  0  8  5  3  1  9 12 11  4 10  6  2  7  0
 \end{Rout}
+
+Importantly, the costs differ substantially:
 
 \begin{Rin}
 cost <- get_cost(
@@ -671,9 +692,14 @@ cost <- get_cost(
 print(cost)
 \end{Rin}
 
+which gives:
+
 \begin{Rout}
 [1] 373
 \end{Rout}
+
+Whereas using the reverse path operator, which corresponds to an algorithm
+called the ``2 opt'' algorithm, gives a lower cost:
 
 \begin{Rin}
 cost <- get_cost(
@@ -682,6 +708,8 @@ cost <- get_cost(
 )
 print(cost)
 \end{Rin}
+
+which gives:
 
 \begin{Rout}
 [1] 299
@@ -692,7 +720,7 @@ print(cost)
     \begin{center}
         \includegraphics[width=\textwidth]{./assets/final-tsp-tours-with-R/main.pdf}
     \end{center}
-    \caption{The final tours obtained by using the neighbourhood search.}
+    \caption{The final tours obtained by using the neighbourhood search in R}
     \label{fig:final-tsp-tours}
 \end{figure}
 
