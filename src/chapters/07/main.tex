@@ -451,8 +451,8 @@ house <- R6Class("House", list(
     same <- 0
     for (x in -1:1) {
       for (y in -1:1) {
-        ax <- ((self$x + x - 1) %% self$city$size) + 1
-        ay <- ((self$y + y - 1) %% self$city$size) + 1
+        ax <- ( (self$x + x - 1) %% self$city$size) + 1
+        ay <- ( (self$y + y - 1) %% self$city$size) + 1
         if (self$city$houses[[ax, ay]]$kind == self$kind) {
           same <- same + 1
         }
