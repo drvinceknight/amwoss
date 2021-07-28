@@ -6,13 +6,9 @@ interactions, and would like to know about how a whole population of such
 individuals might behave. For example psychologists and economists may know a
 lot about how individual spenders and vendors behave in response to given
 stimuli, and we'd like to know how these stimuli might effect the macro-economy.
-Animal behaviour experts may understand individual animals' predator, prey and
-mating habits, and would like know overall species population trends. Engineers
-may write explicit individual instructions for self-driving cars, and would like
-to investigate traffic and congestion behaviour for a city filled with such
-vehicles. Agent based simulation (or agent based modelling, or ABM) is a
-paradigm of thinking that allows such emergent population level behaviour to be
-investigated from individual rules and interactions.
+Agent based simulation (or agent based modelling, or ABM) is a paradigm of
+thinking that allows such emergent population level behaviour to be investigated
+from individual rules and interactions.
 
 \section{Problem}\label{sec:problem}
 Consider a city populated by two kinds of household, for example a household
@@ -30,6 +26,54 @@ title neatly summarises the world view of agent based modelling: we know,
 understand, determine, or can control individual micromotives; and from this
 we'd like to observe and understand macrobehaviours.
 
+In general an agent based model consists of two components, agents, and an
+environment:
+\begin{itemize}
+  \item Agents are autonomous entities that will periodically choose to take one
+  of a number of actions (including the option not to take an action). These are
+  chosen in order to maximise that agent's own utility function.
+  \item An environment contains a number of agents and defines how they are
+  interconnected. The agents may be homogeneous or heterogeneous, and the
+  interconnections may change over time, possibly due to the actions taken by
+  the agents.
+\end{itemize}
+
+In general, an agent will first observe a subset of it's environment, for
+example it will consider some information about the agents it is currently
+interconnected with.
+Then it will update some information about itself based on these observations.
+This could be recording relevant information from the observations, but could
+also include some learning technique, maybe considering its own previous
+actions.
+It will then decide on an action to take, and carry out this action. This
+decision may be deterministic and rules-based, random, based on its own
+attributes from some learning process, or anything else; with the ultimate aim of
+maximising its own utility function.
+This process happens to all agents in the environment, possibly simultaneously.
+This is summarised in Figure~\ref{fig:abm_diagram}
+
+\begin{figure}
+\begin{center}
+\includestandalone[width=\textwidth]{./assets/abm-diagram}
+\end{center}
+\caption{Representation of an agent interacting with its environment.}
+\label{fig:abm_diagram}
+\end{figure}
+
+Notably, each agent is only behaving in a way that maximises its own utility
+function. Also, as each agent is part of every other agent's environment, then
+when the agents update themselves, and when the agents take actions, it can
+effect the behaviour of all other agents.
+
+Let's consider the football team supporters problem.
+Each household is an agent.
+The environment is the city.
+Each household's utility function is to satisfy their preference of living next
+to at least a given number of households supporting the same team as themselves.
+Their action choices are to move house or not to move house.
+The subset of the environment they observe is their own neighbours.
+
+In order to investigate the system's behaviour, we will simulate the system.
 As a simplification we will model the city as a 50x50 grid.
 Each box is a house that can either contain a household of Cardiff City FC
 supporters, or contain a household of Swansea City AFC supporters.
@@ -75,10 +119,10 @@ Therefore our model logic is:
   probability $0.5$ each.
   \item At each discrete time step, for every house:
   \begin{enumerate}
-    \item Consider their household's neighbours, determine if the household is
-    happy.
-    \item If unhappy, swap household with another randomly chosen house with an
-    unhappy household.
+    \item Consider their household's neighbours (\textit{observe}).
+    \item Determine if the household is happy (\textit{update}).
+    \item If unhappy (\textit{decide}), swap household with another randomly
+    chosen house with an unhappy household (\textit{action}).
   \end{enumerate}
 \end{enumerate}
 
@@ -279,20 +323,38 @@ household's satisfaction is below the minimum threshold.
 Finally the \mintinline{python}{swap} method takes another house object, and
 swaps their household kinds.
 
-Now let's create an instance of a city of size 50x50, with each household's
-threshold 0.65:
+Let's write a function that will let us create and run one of these simulations
+with a given random seed, threshold, and number of steps, and return the
+resulting mean happiness:
 
 \begin{pyin}
-random.seed(0)
-C = City(50, 0.65)
+def find_mean_happiness(seed, size, threshold, n_steps):
+    """Create and run an instance of the simulation.
+
+    Args:
+        seed: the random seed to use
+        size: an integer number of rows and columns
+        threshold: a number between 0 and 1 representing
+            the minimum acceptable proportion of similar
+            neighbours
+        n_steps: an integer number of steps
+
+    Returns:
+        The average city's household satisfaction after
+        n_steps
+    """
+    random.seed(0)
+    C = City(size, threshold)
+    C.run(n_steps)
+    return C.mean_satisfaction()
 \end{pyin}
 
-Here we have set a random seed for reproducibility.
-The world initialises randomly, so let's check this initial average
-satisfaction:
+Now let's run this for a city of size 50x50, with each household's threshold
+0.65, and compare the mean happiness after 0 steps and 100 steps.
+First 0 steps:
 
 \begin{pyin}
-print(C.mean_satisfaction())
+print(find_mean_happiness(0, 50, 0.65, 0))
 \end{pyin}
 
 \begin{pyout}
@@ -301,11 +363,10 @@ print(C.mean_satisfaction())
 
 This is well below the minimum threshold of $0.65$, and so on average most
 households are unhappy here.
-Let's run the simulation for 100 generations and see how this changes:
+Let's run it again for 100 generations and see how this changes:
 
 \begin{pyin}
-C.run(100)
-print(C.mean_satisfaction())
+print(find_mean_happiness(0, 50, 0.65, 100))
 \end{pyin}
 
 \begin{pyout}
@@ -367,27 +428,25 @@ city <- R6Class("City", list(
         row <- c(row, house$new(x, y, threshold, self))
       }
       self$houses <- rbind(self$houses, row)
-    }
-  },
-  run = function(n_steps) {
-    for (turn in 1:n_steps) {
-      self$take_turn()
     } },
+  run = function(n_steps) {
+    if (n_steps > 0) {
+      for (turn in 1:n_steps) {
+        self$take_turn()
+    } } },
   take_turn = function() {
     sad <- c()
     for (house in self$houses) {
       if (house$sad()) {
         sad <- c(sad, house)
-      }
-    }
+      } }
     sad <- sample(sad)
     num_sad <- length(sad)
     i <- 1
     while (i <= num_sad / 2) {
       sad[[i]]$swap(sad[[num_sad - i]])
       i <- i + 1
-    }
-  },
+    } },
   mean_satisfaction = function() {
     mean(sapply(self$houses, function(x) x$satisfaction()))
   })
@@ -455,9 +514,7 @@ house <- R6Class("House", list(
         ay <- ((self$y + y - 1) %% self$city$size) + 1
         if (self$city$houses[[ax, ay]]$kind == self$kind) {
           same <- same + 1
-        }
-      }
-    }
+        } } }
     (same - 1) / 8
   },
   sad = function() {
@@ -492,20 +549,37 @@ household's satisfaction is below its minimum threshold.
 Finally the \mintinline{R}{swap} method takes another house object, and
 swaps their household kinds.
 
-Now let's create an instance of a city of size 50x50, with each household's
-threshold 0.65:
+Let's write a function that will let us create and run one of these simulations
+with a given random seed, threshold, and number of steps, and return the
+resulting mean happiness:
 
 \begin{Rin}
-set.seed(0)
-our_city <- city$new(50, 0.65)
+#' Create and run an instance of the simulation.
+#'
+#' @param seed: the random seed to use
+#' @param size: an integer number of rows and columns
+#' @param threshold: a number between 0 and 1 representing
+#'   the minimum acceptable proportion of similar neighbours
+#' @param n_steps: an integer number of steps
+#'
+#' @return The average city's household satisfaction
+#'   after n_steps
+find_mean_happiness <- function(seed, size,
+                                threshold, n_steps){
+  set.seed(seed)
+  our_city <- city$new(size, threshold)
+  our_city$run(n_steps)
+  our_city$mean_satisfaction()
+}
 \end{Rin}
 
-Here we have set a random seed for reproducibility.
-The world initialises randomly, so let's check this initial average
-satisfaction:
+
+Now let's run this for a city of size 50x50, with each household's threshold
+0.65, and compare the mean happiness after 0 steps and 100 steps.
+First 0 steps:
 
 \begin{Rin}
-print(our_city$mean_satisfaction())
+print(find_mean_happiness(0, 50, 0.65, 0))
 \end{Rin}
 
 \begin{Rout}
@@ -517,8 +591,7 @@ households are unhappy here.
 Let's run the simulation for 100 generations and see how this changes:
 
 \begin{Rin}
-our_city$run(100)
-print(our_city$mean_satisfaction())
+print(find_mean_happiness(0, 50, 0.65, 100))
 \end{Rin}
 
 \begin{Rout}
