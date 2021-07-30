@@ -343,7 +343,7 @@ def find_mean_happiness(seed, size, threshold, n_steps):
         The average city's household satisfaction after
         n_steps
     """
-    random.seed(0)
+    random.seed(seed)
     C = City(size, threshold)
     C.run(n_steps)
     return C.mean_satisfaction()
