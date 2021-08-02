@@ -39,6 +39,7 @@ reconfiguring space to either have 2 extra waiting chairs or
 another barber's chair and barber.
 
 The mathematical tool used to model this situation is a Markov chain.
+%%% "The mathematical tool we will use to model this situation..." (This reads like it's the only tool to model this situation)
 
 \section{Theory}\label{sec:theory}
 
@@ -47,9 +48,11 @@ collection of \textbf{states} and rules that define how to move between these
 states.
 
 For example, in the barber shop a single number is sufficient to describe the
-status of the shop. If that number is 1 this implies that 1 customer is
+status of the shop. %% Le this number denote the number of customers present in the barber shop
+If that number is 1 this implies that 1 customer is
 currently having their hair cut. If that number is 5 this implies that 2
-customers are being served and 3 are waiting. The entire state space is, in this
+customers are being served and 3 are waiting. The entire state space %%% We don't know what a 'state space' is yet: "The set of all values that this can take is...., we call this the state space."
+is, in this
 case a finite set of integers from 0 to 6. If the system is full (all barbers
 and waiting room occupied) then we are in state 6 and if there is no one at the
 shop then we are in state 0. This is denoted mathematically as:
@@ -61,6 +64,10 @@ shop then we are in state 0. This is denoted mathematically as:
 
 As customers arrive and leave the system goes between states as shown in
 Figure~\ref{fig:barber-shop-birth-death-no-rates}.
+
+%%% There's a big jump here. Why can't we go directly from state 4 to state 1? We haven't explained.
+%%% We need to explain somewhere that we can go from one state to the other by 1 custoemr arriving or 1 customer leaving.
+%%% In fact, where the rates of change come from is not explained at all!
 
 \begin{figure}[!hbtp]
     \begin{center}
@@ -96,6 +103,8 @@ Note that a Markov chain assumes the rates follow an exponential distribution.
 One interesting property of this distribution is that it is considered
 memoryless which means that if a customer has been having their hair cut for 5
 minutes this does not change the rate at which their service ends.
+%%% This is incorrect.
+%%% "the probability of a customer finishing service within the next 5 minutes does not change if we know they have been having their hair cut for 3 minutes already"
 This distribution is quite common in the real world and therefore a common
 assumption.
 
@@ -125,6 +134,7 @@ We can use \(Q\) to understand the probability of being in a given state after
 \(P_{t}\) where \((P_{t})_{ij}\) is the probability of being in state \(j\)
 after \(t\) time units having started in state \(i\). We can use \(Q\) to
 calculate \(P_{t}\) using the matrix exponential:
+%%% A matrix exponential is not a standard concept. Should this be explained? Or at least talked about like it doesn't matter if you don't know. (again: who is this book for?)
 
 \begin{equation}
     P_t = e^{Qt}
@@ -144,6 +154,8 @@ vector \(\pi\) where \(\pi_i\) represents the probability of being in state
     \pi Q = 0
     \label{eqn:continuous_time_markov_process_steady_state}
 \end{equation}
+
+%%% Along with $$\sum \pi = 1$$.
 
 In the upcoming sections we will demonstrate all of the above concepts.
 
@@ -289,7 +301,9 @@ which gives:
 \end{pyout}
 
 We see that no matter what state (row) the system is in, after 500 time units
-the probabilities are all the same. We could in fact stop our analysis here,
+the probabilities are all the same.
+%%% Can this sentence be clearer? "We see that, after 500 time units, the probability of ending up in each state (columns) are the same regardless of the state the system began in (row)."
+We could in fact stop our analysis here,
 however our choice of 500 time units was arbitrary and might not be the correct
 amount for all possible scenarios, as such we will continue to aim to solve the
 underlying equation~\ref{eqn:continuous_time_markov_process_steady_state}
@@ -369,6 +383,7 @@ which gives:
 0.261756
 \end{pyout}
 
+%%% Can we add an extra sentence here, for navigation. E.g. "Now we have defined the models, let's use them to compare the two possible scenarios."
 If we were too have 2 extra space in the waiting room:
 
 \begin{pyin}
@@ -391,6 +406,9 @@ print(round(get_probability_of_full_shop(num_barbers=3), 6))
 \begin{pyout}
 0.078636
 \end{pyout}
+
+%%% Concluding remarks? "Therefore, is we see that it would be more beneficial to increase the number of barbers by one than to increase the waiting room capacity by two."
+
 \section{Solving with R}\label{sec:solving-with-R}
 
 The first step we will take is write a function to obtain the transition rates
@@ -489,9 +507,11 @@ One immediate thing we can do with this matrix is take the matrix exponential
 discussed above. To do this, we need to use an R library call
 \mintinline{R}{expm}.
 
-To be able to make use of the nice \mintinline{R}{%>%} "pipe" operator we are
+To be able to make use of the nice \mintinline{R}{%>%} ``pipe'' operator we are
 also going to load the \mintinline{R}{magrittr} library.
 Now if we wanted to see what would happen after .5 time units we obtain:
+
+%%% Very very minor point. But the %>% is not required right? I'm just wondering if this is too many new throwaway concepts for one chapter? It is nice though.
 
 \begin{Rin}
 library(expm, warn.conflicts = FALSE, quietly = TRUE)
@@ -611,6 +631,9 @@ get_probability_of_full_shop <- function(waiting_room = 4,
 }
 \end{Rin}
 
+%%% In the Python section you run this for the base scenario too, to be able to see the improvements.
+%%% I also suggested a "filler" sentence for navigation, to break up the 'model' from the scenarios.
+
 Now we can run this code efficiently with both scenarios:
 
 \begin{Rin}
@@ -634,6 +657,9 @@ gives:
 \begin{Rout}
 [1] 0.0786359
 \end{Rout}
+
+%%% Concluding remarks? "Therefore, is we see that it would be more beneficial to increase the number of barbers by one than to increase the waiting room capacity by two."
+
 
 \section{Research}\label{sec:research}
 
