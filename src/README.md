@@ -44,3 +44,8 @@ problem.
 - Itemized, enumerated lists have `,` at the end and `.` at the end of the last
   item.
 - In text: Names of libraries are in plain text and capitalized.
+
+## Research highlights
+
+> If I was undertaking a research project in this field, reading these three
+> papers would be a good starting point to build the literature.
