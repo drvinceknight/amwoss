@@ -39,7 +39,7 @@ reconfiguring space to either have 2 extra waiting chairs or
 another barber's chair and barber.
 
 The mathematical tool used to model this situation is a Markov chain.
-%%% "The mathematical tool we will use to model this situation..." (This reads like it's the only tool to model this situation)
+% TODO "The mathematical tool we will use to model this situation..." (This reads like it's the only tool to model this situation)
 
 \section{Theory}\label{sec:theory}
 
@@ -48,12 +48,13 @@ collection of \textbf{states} and rules that define how to move between these
 states.
 
 For example, in the barber shop a single number is sufficient to describe the
-status of the shop. %% Le this number denote the number of customers present in the barber shop
+status of the shop: the number of customers present.
 If that number is 1 this implies that 1 customer is
 currently having their hair cut. If that number is 5 this implies that 2
-customers are being served and 3 are waiting. The entire state space %%% We don't know what a 'state space' is yet: "The set of all values that this can take is...., we call this the state space."
-is, in this
-case a finite set of integers from 0 to 6. If the system is full (all barbers
+customers are being served and 3 are waiting. The entire set of values that this value can take
+is
+a finite set of integers from 0 to 6, this set, in general, is called the \textit{state space}. 
+If the system is full (all barbers
 and waiting room occupied) then we are in state 6 and if there is no one at the
 shop then we are in state 0. This is denoted mathematically as:
 
@@ -101,12 +102,10 @@ in Figure~\ref{fig:barber-shop-continuous-markov-process}
 
 Note that a Markov chain assumes the rates follow an exponential distribution.
 One interesting property of this distribution is that it is considered
-memoryless which means that if a customer has been having their hair cut for 5
-minutes this does not change the rate at which their service ends.
-%%% This is incorrect.
-%%% "the probability of a customer finishing service within the next 5 minutes does not change if we know they have been having their hair cut for 3 minutes already"
-This distribution is quite common in the real world and therefore a common
-assumption.
+memoryless which means the probability of a customer finishing service 
+within the next 5 minutes does not change if we know they have been 
+having their hair cut for 3 minutes already.
+
 
 These states and rates can be represented mathematically using a transition
 matrix \(Q\) where \(Q_{ij}\) represents the rate of going from state \(i\) to
@@ -133,7 +132,7 @@ We can use \(Q\) to understand the probability of being in a given state after
 \(t\) time unis. This is can be represented mathematically using a matrix
 \(P_{t}\) where \((P_{t})_{ij}\) is the probability of being in state \(j\)
 after \(t\) time units having started in state \(i\). We can use \(Q\) to
-calculate \(P_{t}\) using the matrix exponential:
+calculate \(P_{t}\) using a value that can be calculated numerically called the matrix exponential. % TODO Add footnote pointing at reference texts.
 %%% A matrix exponential is not a standard concept. Should this be explained? Or at least talked about like it doesn't matter if you don't know. (again: who is this book for?)
 
 \begin{equation}
@@ -384,7 +383,7 @@ which gives:
 \end{pyout}
 
 %%% Can we add an extra sentence here, for navigation. E.g. "Now we have defined the models, let's use them to compare the two possible scenarios."
-If we were too have 2 extra space in the waiting room:
+If we were to have 2 extra space in the waiting room:
 
 \begin{pyin}
 print(round(get_probability_of_full_shop(waiting_room=6), 6))
