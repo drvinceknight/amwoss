@@ -4,7 +4,7 @@
 \chapterinitial{M}{any} real world situations have some level of
 unpredictability through randomness: the flip of a coin, the number of orders of
 coffee in a shop, the winning numbers of the lottery. However, mathematics can
-in fact let us make predictions about what we expect to happen. One tool used to
+in fact let us make predictions about what can be expected to happen. One tool used to
 understand randomness is Markov chains, an area of mathematics sitting at the
 intersection of probability and linear algebra.
 
@@ -38,8 +38,7 @@ They are planning on
 reconfiguring space to either have 2 extra waiting chairs or
 another barber's chair and barber.
 
-The mathematical tool used to model this situation is a Markov chain.
-% TODO "The mathematical tool we will use to model this situation..." (This reads like it's the only tool to model this situation)
+The mathematical tool used here to model this situation is a Markov chain.
 
 \section{Theory}\label{sec:theory}
 
@@ -53,42 +52,32 @@ If that number is 1 this implies that 1 customer is
 currently having their hair cut. If that number is 5 this implies that 2
 customers are being served and 3 are waiting. The entire set of values that this value can take
 is
-a finite set of integers from 0 to 6, this set, in general, is called the \textit{state space}. 
+a finite set of integers from 0 to 6, this set, in general, is called the \textit{state space}.
 If the system is full (all barbers
-and waiting room occupied) then we are in state 6 and if there is no one at the
-shop then we are in state 0. This is denoted mathematically as:
+and waiting room occupied) then the Markov chain is in state 6 and if there is no one at the
+shop then it is in state 0. This is denoted mathematically as:
 
 \begin{equation}
     S = \{0, 1, 2, 3, 4, 5, 6\}
     \label{eqn:barber_shop_state_space}
 \end{equation}
 
-As customers arrive and leave the system goes between states as shown in
-Figure~\ref{fig:barber-shop-birth-death-no-rates}.
+The state increases when people arrive and this happens at a rate of change of
+10. The state decrease when people are served and this happens at a rate of 4
+per active server. In both cases it is assumed that no 2 events can occur at
+the same time.
 
-%%% There's a big jump here. Why can't we go directly from state 4 to state 1? We haven't explained.
-%%% We need to explain somewhere that we can go from one state to the other by 1 custoemr arriving or 1 customer leaving.
-%%% In fact, where the rates of change come from is not explained at all!
-
-\begin{figure}[!hbtp]
-    \begin{center}
-    \includestandalone[width=.6\textwidth]{./assets/barber-shop-birth-death-no-rates/main}
-    \end{center}
-    \caption{Diagrammatic representation of the state space}
-    \label{fig:barber-shop-birth-death-no-rates}
-\end{figure}
-
-The rules that govern how to move between these states can be defined in two
+The rules that govern how to move between these states can be defined in 2
 ways:
 
 \begin{itemize}
     \item Using probabilities of changing state (or not) in a well defined time
-        period.  This is called a discrete Markov chain.
+        interval. This is called a discrete Markov chain.
     \item Using rates of change from one state to another. This is called a
         continuous time Markov chain.
 \end{itemize}
 
-For our barber shop we will consider it as a continuous Markov chain as shown
+The barber shop will be considered as a continuous Markov chain as shown
 in Figure~\ref{fig:barber-shop-continuous-markov-process}
 
 \begin{figure}[!hbtp]
@@ -102,14 +91,13 @@ in Figure~\ref{fig:barber-shop-continuous-markov-process}
 
 Note that a Markov chain assumes the rates follow an exponential distribution.
 One interesting property of this distribution is that it is considered
-memoryless which means the probability of a customer finishing service 
-within the next 5 minutes does not change if we know they have been 
+memoryless which means the probability of a customer finishing service
+within the next 5 minutes does not change if they have been
 having their hair cut for 3 minutes already.
-
 
 These states and rates can be represented mathematically using a transition
 matrix \(Q\) where \(Q_{ij}\) represents the rate of going from state \(i\) to
-state \(j\). In this case we have:
+state \(j\). In this case:
 
 \begin{equation}
 Q =
@@ -128,12 +116,12 @@ Q =
 You will see that \(Q_{ii}\) are negative and ensure the rows of \(Q\) sum to 0.
 This gives the total rate of change leaving state \(i\).
 
-We can use \(Q\) to understand the probability of being in a given state after
+The matrix \(Q\) can be used to understand the probability of being in a given state after
 \(t\) time unis. This is can be represented mathematically using a matrix
 \(P_{t}\) where \((P_{t})_{ij}\) is the probability of being in state \(j\)
-after \(t\) time units having started in state \(i\). We can use \(Q\) to
-calculate \(P_{t}\) using a value that can be calculated numerically called the matrix exponential. % TODO Add footnote pointing at reference texts.
-%%% A matrix exponential is not a standard concept. Should this be explained? Or at least talked about like it doesn't matter if you don't know. (again: who is this book for?)
+after \(t\) time units having started in state \(i\). Using a mathematical tool
+called the matrix exponential % TODO Add footnote pointing at texts on matrix exponential
+the value of \(P_{t}\) can be calculated numerically.
 
 \begin{equation}
     P_t = e^{Qt}
@@ -141,7 +129,7 @@ calculate \(P_{t}\) using a value that can be calculated numerically called the 
 \end{equation}
 
 What is also useful is understanding the long run behaviour of the
-system. This allows us to answer questions such as ``what state are we most
+system. This allows us to answer questions such as ``what state is the system most
 likely to be in on average?'' or ``what is the probability of being in the last
 state on average?''.
 
@@ -154,14 +142,18 @@ vector \(\pi\) where \(\pi_i\) represents the probability of being in state
     \label{eqn:continuous_time_markov_process_steady_state}
 \end{equation}
 
-%%% Along with $$\sum \pi = 1$$.
+with the following constraint:
 
-In the upcoming sections we will demonstrate all of the above concepts.
+\begin{equation}
+    \sum_{i=1}^{n}\pi_i = 1
+\end{equation}
+
+In the upcoming sections all of the above concepts will be demonstrate.
 
 \section{Solving with Python}\label{sec:solving-with-python}
 
-The first step we will take is to write a function to obtain the transition
-rates between two given states:
+The first step is to write a function to obtain the transition
+rates between 2 given states:
 
 
 \begin{pyin}
@@ -171,7 +163,7 @@ def get_transition_rate(
     waiting_room=4,
     num_barbers=2,
 ):
-    """Return the transition rate for two given states.
+    """Return the transition rate for 2 given states.
 
     Args:
         in_state: an integer
@@ -197,10 +189,10 @@ def get_transition_rate(
     return 0
 \end{pyin}
 
-Next, we write a function that creates an entire transition rate matrix \(Q\)
-for a given problem. We will use the \mintinline{python}{numpy} to handle all
-the linear algebra and the \mintinline{python}{itertools} library for some
-iterations:
+Next, a function that creates an entire transition rate matrix \(Q\) for a given
+problem is written. The \mintinline{python}{numpy} library will be used to
+handle all the linear algebra and the \mintinline{python}{itertools} library for
+some iterations:
 
 \begin{pyin}
 import itertools
@@ -241,7 +233,7 @@ def get_transition_rate_matrix(waiting_room=4, num_barbers=2):
     return transition_rates
 \end{pyin}
 
-Using this we can obtain the matrix \(Q\) for our default system:
+Using this the matrix \(Q\) for the default system can be obtained:
 
 \begin{pyin}
 Q = get_transition_rate_matrix()
@@ -260,9 +252,10 @@ which gives:
  [  0   0   0   0   0   8  -8]]
 \end{pyout}
 
-We can take the matrix exponential as
-discussed above. To do this, we need to use the \mintinline{python}{scipy}
-library. To see what would happen after .5 time units we obtain:
+Here, the matrix exponential will be used as
+discussed above, using the \mintinline{python}{scipy}
+library. To see what would happen after .5 time units:
+
 \begin{pyin}
 import scipy.linalg
 
@@ -281,7 +274,7 @@ which gives:
  [0.01068 0.03668 0.06286 0.10824 0.17448 0.25791 0.34914]]
 \end{pyout}
 
-To see what would happen after 500 time units we obtain:
+To see what would happen after 500 time units:
 
 \begin{pyin}
 print(scipy.linalg.expm(Q * 500).round(5))
@@ -299,16 +292,17 @@ which gives:
  [0.03431 0.08577 0.10722 0.13402 0.16752 0.2094  0.26176]]
 \end{pyout}
 
-We see that no matter what state (row) the system is in, after 500 time units
-the probabilities are all the same.
-%%% Can this sentence be clearer? "We see that, after 500 time units, the probability of ending up in each state (columns) are the same regardless of the state the system began in (row)."
-We could in fact stop our analysis here,
-however our choice of 500 time units was arbitrary and might not be the correct
-amount for all possible scenarios, as such we will continue to aim to solve the
+No matter what state (row) the system is in,
+after 500 time units, the probability of ending up in each state (columns) is
+the same regardless of the state the system began in (row).
+
+The analysis can in fact be stopped here
+however the choice of 500 time units was arbitrary and might not be the correct
+amount for all possible scenarios, as such the
 underlying equation~\ref{eqn:continuous_time_markov_process_steady_state}
 directly.
 
-To do this we will solve the underlying system using a numerically efficient
+The underlying linear system will be solved using a numerically efficient
 algorithm called least squares optimisation (available from the
 \mintinline{python}{numpy} library):
 
@@ -330,23 +324,23 @@ def get_steady_state_vector(Q):
     return x
 \end{pyin}
 
-So if we now see the steady state vector for our default system:
+The steady state vector for the default system is given by:
 
 \begin{pyin}
 print(get_steady_state_vector(Q).round(5))
 \end{pyin}
 
-we get:
+giving:
 
 \begin{pyout}
 [0.03431 0.08577 0.10722 0.13402 0.16752 0.2094  0.26176]
 \end{pyout}
 
-We can see that the shop is expected to be empty approximately 3.4\% of the time
+This shows that the shop is expected to be empty approximately 3.4\% of the time
 and full 26.2\% of the time.
 
-The final function we will write is one that uses all of
-the above to just return the probability of the shop being full.
+The final function written is one that uses all of
+the above to return the probability of the shop being full.
 
 \begin{pyin}
 def get_probability_of_full_shop(
@@ -369,7 +363,7 @@ def get_probability_of_full_shop(
     return pi[-1]
 \end{pyin}
 
-We can now confirm the previous probability calculated probability of the shop
+This can now confirm the previous probability calculated probability of the shop
 being full:
 
 \begin{pyin}
@@ -382,8 +376,10 @@ which gives:
 0.261756
 \end{pyout}
 
-%%% Can we add an extra sentence here, for navigation. E.g. "Now we have defined the models, let's use them to compare the two possible scenarios."
-If we were to have 2 extra space in the waiting room:
+Now that the models have been defined, they will be used to compare the 2
+possible scenarios.
+
+Having 2 extra space in the waiting room corresponds to:
 
 \begin{pyin}
 print(round(get_probability_of_full_shop(waiting_room=6), 6))
@@ -406,15 +402,16 @@ print(round(get_probability_of_full_shop(num_barbers=3), 6))
 0.078636
 \end{pyout}
 
-%%% Concluding remarks? "Therefore, is we see that it would be more beneficial to increase the number of barbers by one than to increase the waiting room capacity by two."
+Therefore, it would be better to increase the number of barbers by 1
+than to increase the waiting room capacity by 2.
 
 \section{Solving with R}\label{sec:solving-with-R}
 
-The first step we will take is write a function to obtain the transition rates
-between two given states:
+The first step taken is to write a function to obtain the transition rates
+between 2 given states:
 
 \begin{Rin}
-#' Return the transition rate for two given states.
+#' Return the transition rate for 2 given states.
 #'
 #' @param in_state an integer
 #' @param out_state an integer
@@ -445,7 +442,8 @@ get_transition_rate <- function(in_state,
 }
 \end{Rin}
 
-We will not actually use this function but a vectorized version of this:
+This actual function will not be used but instead a vectorized version of this
+makes calculations more efficient:  % TODO Add footnote reference on vectorization
 
 \begin{Rin}
 vectorized_get_transition_rate <- Vectorize(
@@ -482,7 +480,7 @@ get_transition_rate_matrix <- function(waiting_room = 4,
 }
 \end{Rin}
 
-Using this we can obtain the matrix \(Q\) for our default system:
+Using this the matrix \(Q\) for the default system can be used:
 
 \begin{Rin}
 Q <- get_transition_rate_matrix()
@@ -502,15 +500,13 @@ which gives:
 [7,]    0    0    0    0    0    8   -8
 \end{Rout}
 
-One immediate thing we can do with this matrix is take the matrix exponential
-discussed above. To do this, we need to use an R library call
-\mintinline{R}{expm}.
+One immediate thing that can be done with this matrix is to take the matrix exponential
+discussed above. To do this, an R library called
+\mintinline{R}{expm} will be used.
 
-To be able to make use of the nice \mintinline{R}{%>%} ``pipe'' operator we are
-also going to load the \mintinline{R}{magrittr} library.
-Now if we wanted to see what would happen after .5 time units we obtain:
-
-%%% Very very minor point. But the %>% is not required right? I'm just wondering if this is too many new throwaway concepts for one chapter? It is nice though.
+To be able to make use of the nice \mintinline{R}{%>%}
+``pipe'' operator the \mintinline{R}{magrittr} library will be loaded.
+Now if to see what would happen after .5 time units:
 
 \begin{Rin}
 library(expm, warn.conflicts = FALSE, quietly = TRUE)
@@ -532,7 +528,7 @@ which gives:
 [7,] 0.01068 0.03668 0.06286 0.10824 0.17448 0.25791 0.34914
 \end{Rout}
 
-After 500 time units we obtain:
+After 500 time units:
 
 \begin{Rin}
 print( (Q * 500) %>% expm %>% round(5))
@@ -551,15 +547,18 @@ which gives:
 [7,] 0.03431 0.08577 0.10722 0.13402 0.16752 0.2094 0.26176
 \end{Rout}
 
-We see that no matter what state (row) we are in, after 500 time units the
-probabilities are all the same. We could in fact stop our analysis here, however
-our choice of 500 time units was arbitrary and might not be the correct amount
-for all possible scenarios, as such we will continue to aim to solve the
+No matter what state (row) the system is in,
+after 500 time units, the probability of ending up in each state (columns) is
+the same regardless of the state the system began in (row).
+
+The analysis can in fact be stopped here
+however the choice of 500 time units was arbitrary and might not be the correct
+amount for all possible scenarios, as such the
 underlying equation~\ref{eqn:continuous_time_markov_process_steady_state}
 directly.
 
-To be able to do this, we will make use of the versatile \mintinline{R}{pracma}
-package which includes a number of numerical analysis functions for efficient
+To be able to do this, the versatile \mintinline{R}{pracma} package will be used
+which includes a number of numerical analysis functions for efficient
 computations.
 
 \begin{Rin}
@@ -583,13 +582,13 @@ This is making use of \mintinline{R}{pracma}'s \mintinline{R}{mldivide} function
 which chooses the best numerical algorithm to find the solution to a given
 matrix equation \(Ax=b\).
 
-So if we now see the steady state vector for our default system:
+The steady state vector for the default system is now given by:
 
 \begin{Rin}
 print(get_steady_state_vector(Q))
 \end{Rin}
 
-we get:
+giving:
 
 \begin{Rout}
            [,1]
@@ -602,11 +601,11 @@ we get:
 [7,] 0.26175598
 \end{Rout}
 
-We can see that the shop is expected to be empty approximately 3.4\% of the time
+The shop is expected to be empty approximately 3.4\% of the time
 and full 26.2\% of the time.
 
 The final piece of this puzzle is to create a single function that uses all of
-the above to just return the probability of the shop being full.
+the above to return the probability of the shop being full.
 
 \begin{Rin}
 #' Return the probability of the barber shop being full
@@ -630,10 +629,23 @@ get_probability_of_full_shop <- function(waiting_room = 4,
 }
 \end{Rin}
 
-%%% In the Python section you run this for the base scenario too, to be able to see the improvements.
-%%% I also suggested a "filler" sentence for navigation, to break up the 'model' from the scenarios.
+This confirms the previous probability calculated probability of the shop
+being full:
 
-Now we can run this code efficiently with both scenarios:
+\begin{Rin}
+print(get_probability_of_full_shop())
+\end{Rin}
+
+which gives:
+
+\begin{Rout}
+[1] 0.261756
+\end{Rout}
+
+Now that the models have been defined, they will be used to compare the 2
+possible scenarios.
+
+Adding 2 extra spaces in the waiting rooms corresponds to:
 
 \begin{Rin}
 print(get_probability_of_full_shop(waiting_room = 6))
@@ -657,7 +669,8 @@ gives:
 [1] 0.0786359
 \end{Rout}
 
-%%% Concluding remarks? "Therefore, is we see that it would be more beneficial to increase the number of barbers by one than to increase the waiting room capacity by two."
+Therefore, it would be better to increase the number of barbers by 1
+than to increase the waiting room capacity by 2.
 
 
 \section{Research}\label{sec:research}
