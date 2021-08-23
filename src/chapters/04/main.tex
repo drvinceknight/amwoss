@@ -11,12 +11,11 @@ consider a direct solution approach using symbolic mathematics.
 
 Consider the following situation: the entire population of a small rural town
 has caught a cold. All 100 individuals will recover at an average rate of 2 per
-day.  The town leadership have noticed that being ill costs approximately
+day. The town leadership have noticed that being ill costs approximately
 \pounds10 per day, this is due to general lack of productivity, poorer mood and
 other intangible aspects. They need to decide whether or not to order cold
 medicine which would \textbf{double} the recovery rate. The cost of of the cold
 medicine is a one off cost of \pounds5 per person.
-% TODO Find a more realistic example.
 
 \section{Theory}\label{sec:theory}
 
@@ -53,7 +52,8 @@ In this particular case, one such function is:
     I(t) = e ^ {-\alpha t}
 \end{equation}
 
-% TODO Is it worth 'showing' that this is indeed a solution, e.g. \(\frac{dI}{dt} = -\alpha e ^ {-\alpha y} = -\alpha I). It's something our first year students need to be shown.
+This is a solution because:
+\(\frac{dI}{dt} = -\alpha e ^ {-\alpha y} = -\alpha I\).
 
 However here \(I(0) = 1\), whereas for this problem we know that at time \(t=0\)
 there are 100 infected individuals. In general there are many such functions
@@ -276,6 +276,7 @@ derivative <- function(t, y, parameters) {
   })
 }
 \end{Rin}
+% TODO remove # nolint
 
 For example, to see the value of the derivative when \(I=0\):
 
@@ -296,7 +297,7 @@ numerically:
 
 \begin{Rin}
 library(deSolve)  # nolint
-integrate_ode <- function(times,
+get_solution <- function(times,
                           y0 = c(I = 100),
                           alpha = 2) {
   params <- c(alpha = alpha)
@@ -304,9 +305,7 @@ integrate_ode <- function(times,
 }
 \end{Rin}
 
-% TODO a very minor point: why is this not called `get_solution` like the Python code? For a casual reader, especially without the background given in the next chapter, the word 'integrate' might be confusing, because we're integrating again when caluclating the costs, which here we are just calling `area under the curve`.
-
-% TODO is #noline functional? It's showing in the pdf.
+% TODO remove # nolint
 
 This will return a sequence of time point and values of \(I\) at those time
 points. Using this we can compute the cost.
@@ -320,13 +319,11 @@ get_cost <- function(
                      step_size = 0.0001,
                      max_time = 10) {
   times <- seq(0, max_time, by = step_size)
-  out <- integrate_ode(times,
+  out <- get_solution(times,
     y0 = c(I = I_0),
     alpha = alpha
   )
   number_of_observations <- length(out[, "I"])
-
-  stopifnot(out[number_of_observations, "I"] < step_size)
 
   time_between_steps <- diff(out[, "time"])
   area_under_curve <- sum(
@@ -338,10 +335,6 @@ get_cost <- function(
       I_0
 }
 \end{Rin}
-
-Note that this function uses \mintinline{R}{stopifnot} to make sure the
-differential equation has been solved for a long enough time period.
-% TODO Is this needed? I dont use it in Chapter 5. If it is needed, this explanation isn't clear enough.
 
 The cost without purchasing the cure is:
 
