@@ -269,6 +269,13 @@ outline of the theory behind this approach see Chapter 5. % TODO Add reference t
 First write a function to give the derivative for a given value of \(I\).
 
 \begin{Rin}
+#' Returns the numerical value of the derivative.
+#'
+#' @param t a set of time points
+#' @param y a function
+#' @param parameters the set of all parameters passed to y
+
+#' @return a float
 derivative <- function(t, y, parameters) {
   with(as.list(c(y, parameters)), {
     dIdt <- -alpha * I  # nolint
@@ -297,6 +304,13 @@ numerically:
 
 \begin{Rin}
 library(deSolve)  # nolint
+#' Return the solution to the differential equation.
+#'
+#' @param times: a vector of time points
+#' @param y_0: a float (default: 100)
+#' @param alpha: a float (default: 2)
+
+#' @return A vector of numerical values
 get_solution <- function(times,
                           y0 = c(I = 100),
                           alpha = 2) {
@@ -311,6 +325,16 @@ This will return a sequence of time point and values of \(I\) at those time
 points. Using this we can compute the cost.
 
 \begin{Rin}
+#' Return the cost.
+#'
+#' @param I_0: a float (default: symbolic I_0)
+#' @param alpha: a float (default: symbolic alpha)
+#' @param cost_per_person: a float (default: 10)
+#' @param cost_of_cure: a float (default: 0)
+#' @param step_size: a float (default: 0.0001)
+#' @param max_time: an integer (default: 10)
+
+#' @return A numeric value
 get_cost <- function(
                      I_0 = 100,
                      alpha = 2,
