@@ -12,7 +12,7 @@ of this chapter.
 
 \section{Problem}\label{sec:problem}
 Consider the following scenario, where a population of 3000 people are
-susceptible to infection by some disease. This population can be described by
+susceptible to infection by some illness. This population can be described by
 the following parameters:
 
 \begin{itemize}
@@ -21,7 +21,7 @@ the following parameters:
   \item For every infectious individual, the infection rate $\alpha$ is 0.3 per
   day;
   \item Infectious people recover naturally (and thus gain an immunity from the
-  disease), at a recovery rate $r$ of 0.02 per day;
+  illness), at a recovery rate $r$ of 0.02 per day;
   \item For each day an individual is infected, they must take medication which
   costs a public healthcare system $\pounds 10$ per day.
 \end{itemize}
@@ -33,7 +33,7 @@ achieving a vaccination rate $v$ of $85\%$ would be beneficial financially.
 
 \section{Theory}\label{sec:theory}
 % Setup - diagram & equations
-The above scenario is called a compartmental model of disease, and can be shown
+The above scenario is called a compartmental model of illness, and can be shown
 in the stock and flow diagram in Figure~\ref{fig:stockflow}.
 
 \begin{figure}
@@ -45,8 +45,8 @@ in the stock and flow diagram in Figure~\ref{fig:stockflow}.
 \end{figure}
 
 The system has three `stocks' of different types of individuals, those
-susceptible to disease ($S$), those infected with the disease ($I$), and those
-who have recovered from the disease and so have gained immunity ($R$). The
+susceptible to illness ($S$), those infected with the illness ($I$), and those
+who have recovered from the illness and so have gained immunity ($R$). The
 levels on these stocks change according to the flows in, out, and between them,
 controlled by `taps'. The amount of flow the taps let through are influenced in
 a multiplicative way (either negatively or positively), by other factors, such
@@ -259,8 +259,8 @@ this growth slows down as there are fewer susceptible individuals to infect. Due
 to the equal birth and death rates the overall population size remains constant;
 but we also see after some time period (around 300 time units) the levels of
 susceptible, infected, and recovered individuals becomes seemingly steady, and
-the disease becomes endemic. We can estimate once this steadiness occurs, around
-10\% of the population remain susceptible to the disease, 30\% are infected, and
+the illness becomes endemic. We can estimate once this steadiness occurs, around
+10\% of the population remain susceptible to the illness, 30\% are infected, and
 60\% are recovered and immune.
 
 Now with a vaccine rate of 85\%:
@@ -290,9 +290,9 @@ fig.savefig("plot_with_vaccine_python.pdf")
 \label{fig:plot_with_vaccine}
 \end{figure}
 
-With vaccination the disease remains endemic, however now we estimate that once,
+With vaccination the illness remains endemic, however now we estimate that once,
 steadiness occurs, around 10\% of the population remain susceptible to the
-disease, 1.7\% are infected, and 88.3\% are immune or recovered and immune.
+illness, 1.7\% are infected, and 88.3\% are immune or recovered and immune.
 
 We've seen that vaccination lowers the percentage of the population living with
 the infection, which will lower the public healthcare system's medication costs.
@@ -511,8 +511,8 @@ this growth slows down as there are fewer susceptible individuals to infect. Due
 to the equal birth and death rates the overall population size remains constant;
 but we also see after some time period (around 300 time units) the levels of
 susceptible, infected, and recovered individuals becomes seemingly steady, and
-the disease becomes endemic. We can estimate once this steadiness occurs, around
-10\% of the population remain susceptible to the disease, 30\% are infected, and
+the illness becomes endemic. We can estimate once this steadiness occurs, around
+10\% of the population remain susceptible to the illness, 30\% are infected, and
 60\% are recovered and immune.
 
 Now with a vaccine rate of 85\%:
@@ -542,9 +542,9 @@ dev.off()
 \label{fig:plot_with_vaccine_R}
 \end{figure}
 
-With vaccination the disease remains endemic, however now we estimate that once,
+With vaccination the illness remains endemic, however now we estimate that once,
 steadiness occurs, around 10\% of the population remain susceptible to the
-disease, 1.7\% are infected, and 88.3\% are immune or recovered and immune.
+illness, 1.7\% are infected, and 88.3\% are immune or recovered and immune.
 
 We've seen that vaccination lowers the percentage of the population living with
 the infection, which will lower the public healthcare system's medication costs.
