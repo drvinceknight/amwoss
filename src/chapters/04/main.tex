@@ -25,8 +25,8 @@ mathematically using a differential equation which is a way of relating the rate
 of change of a system to the state of the system itself.
 
 In general the objects of interest are the variable \(x\) over time \(t\), and
-the rate at which \(x\) changes with \(t\), its derivative $\frac{dx}{dt}$.
-The differential function equation describing this will be of the form:
+the rate at which \(x\) changes with \(t\), its derivative \(\frac{dx}{dt}\).
+The differential equation describing this will be of the form:
 
 \begin{equation}
     \frac{dx}{dt} = f(x)
@@ -36,7 +36,7 @@ for some function \(f\).
 In this case,
 the number of infected individuals will be denoted as \(I\), which will
 implicitly mean that \(I\) is a function of time: \(I=I(t)\), and the rate at
-which individuals recover by will be denoted by \(\alpha\), then the
+which individuals recover will be denoted by \(\alpha\), then the
 differential equation that describes the above situation is:
 
 \begin{equation}
@@ -135,7 +135,7 @@ print(eq)
 Eq(Derivative(I(t), t), -I(t))
 \end{pyout}
 
-Now function will be written to obtain the solution to this differential with
+Now a function will be written to obtain the solution to this differential with
 initial condition \(I(0) = I_0\):
 
 \begin{pyin}
