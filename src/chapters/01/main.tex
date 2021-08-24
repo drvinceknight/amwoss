@@ -150,7 +150,64 @@ For a given reader, not all sections of a chapter will be of interest.
 Perhaps a reader is only interested in R and finding out more about the
 research. Please do take from the book what you find useful.
 
-% TODO Discuss:
-% - Input/output R/python boxes
-% - Line number throughout
-% - Discussion about code format (modular, documented and testable).
+\section{How code is written in this book}\label{sec:how-to-get-the-most-out-of-this-book}
+
+Throughout this book, there are going to be various pieces of code written. Code
+is a series of instructions that usually give some sort of output when submitted
+to a computer.
+
+This book will show both the set of instructions (referred to as the input) and
+the output.
+
+You will see Python input as follows:
+
+\begin{py-in}
+print(2 + 2)
+\end{py-in}
+
+and you will see Python output as follows:
+
+\begin{py-out}
+4
+\end{py-out}
+
+You will see R input as follows:
+
+\begin{R-in}
+print(2 + 2)
+\end{R-in}
+
+and you will see R output as follows:
+
+\begin{R-out}
+4
+\end{R-out}
+
+As well as this, a continuous line numbering across all code sections is used so
+that if the reader needs to refer to a given set of input or output this can be
+done.
+
+The code itself is written using 3 principles:
+
+\begin{itemize}
+        \item Modularity: code is written as a
+              series of smaller sections of code. These correspond to smaller,
+              simpler, individual tasks (modules) that can be used together to carry out
+              a particular larger task.
+        \item Documentation: readable variable names as
+              well as
+              text describing the functionality of each module of code are used
+              throughout. This ensures that code is not only usable but also
+              understandable.
+          \item Tests: there are places where each module of code is
+              used independently to check the output. This can be thought of as a
+              test of functionality which readers can use to check they are
+              getting expected results.
+\end{itemize}
+
+These are best practice principles in research software development % TODO Add a footnote reference
+that ensure usable, reproducible and reliable code.
+Interested readers might want to see Figure~\ref{fig:rsd-triangle} which shows
+how the 3 principles interact with each other.
+
+% TODO Add rsd triangle diagram.
