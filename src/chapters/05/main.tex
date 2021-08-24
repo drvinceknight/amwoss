@@ -170,7 +170,7 @@ print(derivatives(y=(4, 1, 0), t=0.0, vaccine_rate=0.5))
 (-0.255, 0.21, 0.045)
 \end{pyout}
 
-this means thati the number of susceptible individuals is expected to reduce by
+this means that the number of susceptible individuals is expected to reduce by
 around 0.255
 per time unit, the number of infected individuals to increase by 0.21 per time
 unit, and the number of recovered individuals to increase by 0.045 per time
@@ -421,7 +421,7 @@ derivatives <- function(t, y, parameters){
 This function returns the instantaneous rate of change for each of the
 three stocks, $S$, $I$ and $R$. Starting at time 0.0, with 4 susceptible
 individuals, 1 infected individual, 0 recovered individuals, a vaccine rate
-of 50\% and a birth rate of 0.01, gives::
+of 50\% and a birth rate of 0.01, gives:
 
 \begin{Rin}
 derivatives(t = 0,
@@ -473,7 +473,7 @@ integrate_ode <- function(times,
 
 This function can be used to investigate the difference in behaviour between
 a vaccination rate of 0\% and a vaccination rate of 85\%. The system will be
-ovserved
+observed
 for two years, that is 730 days, in time steps of 0.01 days.
 
 Begin with a vaccine rate of 0\%:
