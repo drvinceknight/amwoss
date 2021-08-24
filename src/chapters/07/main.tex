@@ -204,7 +204,7 @@ class City:
 
 This defines a class, a template or a set of instructions that can be used to
 create instances of it, called objects.
-For the considered problem onlye one instance of the \mintinline{python}{City}
+For the considered problem only one instance of the \mintinline{python}{City}
 class will be needed.
 However, it is useful to be able to produce more in order to run multiple trials
 with different random seeds.
@@ -426,7 +426,7 @@ city <- R6Class("City", list(
       for (y in 1:size) {
         row <- c(row, house$new(x, y, threshold, self))
       }
-      self\(houses <- rbind(self\)houses, row)
+      self$houses <- rbind(self$houses, row)
     } },
   run = function(n_steps) {
     if (n_steps > 0) {
@@ -447,7 +447,7 @@ city <- R6Class("City", list(
       i <- i + 1
     } },
   mean_satisfaction = function() {
-    mean(sapply(self\(houses, function(x) x\)satisfaction()))
+    mean(sapply(self$houses, function(x) x$satisfaction()))
   })
 )
 \end{Rin}
@@ -510,19 +510,19 @@ house <- R6Class("House", list(
     same <- 0
     for (x in -1:1) {
       for (y in -1:1) {
-        ax <- ( (self\(x + x - 1) %% self$city\)size) + 1
-        ay <- ( (self\(y + y - 1) %% self$city\)size) + 1
-        if (self\(city$houses[[ax, ay]]$kind == self\)kind) {
+        ax <- ( (self$x + x - 1) %% self$city$size) + 1
+        ay <- ( (self$y + y - 1) %% self$city$size) + 1
+        if (self$city$houses[[ax, ay]]$kind == self$kind) {
           same <- same + 1
         } } }
     (same - 1) / 8
   },
   sad = function() {
-    self\(satisfaction() < self\)threshold
+    self$satisfaction() < self$threshold
   },
   swap = function(house) {
     old <- self$kind
-    self\(kind <- house\)kind
+    self$kind <- house$kind
     house$kind <- old
   })
 )
