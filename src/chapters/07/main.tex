@@ -37,7 +37,7 @@ environment:
   \item Agents are autonomous entities that will periodically choose to take one
         of a number of actions (including the option not to take an action).
         These are chosen in order to maximise that agent's own given utility
-        function.
+        function;
   \item An environment contains a number of agents and defines how their
         interactions affect each other.
         The agents may be homogeneous or heterogeneous, and the
@@ -316,7 +316,7 @@ Finally the \mintinline{python}{swap} method takes another house object, and
 swaps their household kinds.
 
 A function to create and run one of these simulations will now be written
-with a given random seed, threshold, and number of steps. This function return
+with a given random seed, threshold, and number of steps. This function returns
 the resulting mean happiness:
 
 \begin{pyin}
@@ -461,7 +461,7 @@ This class contains four methods: \mintinline{R}{initialize},
 \mintinline{R}{run}, \mintinline{R}{take_turn} and
 \mintinline{R}{mean_satisfaction}.
 
-The \mintinline{R}{initialise} method is run at the time the object is first
+The \mintinline{R}{initialize} method is run at the time the object is first
 created.
 It initialises the object by setting a number of its fields:
 
@@ -532,7 +532,7 @@ It contains four methods: \mintinline{R}{initialize},
 \mintinline{R}{satisfaction}, \mintinline{R}{sad} and \mintinline{R}{swap}.
 
 The \mintinline{R}{initialize} methods sets a number of the class' fields when
-the object is created: the house's \mintinline{r}{x} and \mintinline{R}{y}
+the object is created: the house's \mintinline{R}{x} and \mintinline{R}{y}
 coordinates (its column and row numbers on the grid); its
 \mintinline{R}{threshold} which corresponds to \(p\); its \mintinline{R}{kind}
 which is randomly chosen between having a Cardiff City
