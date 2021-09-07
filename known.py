@@ -183,6 +183,7 @@ words = {
     "nash",
     "nasheq",
     "nashpy",
+    "Nashpy",
     "nd",
     "neighborhood",
     "nh",
