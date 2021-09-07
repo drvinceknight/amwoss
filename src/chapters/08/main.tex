@@ -228,15 +228,26 @@ Equation~\ref{eqn:auxiliary}, and ones for all other constraints.
 
 \section{Solving with Python}\label{sec:solving-with-python}
 
-In this book the Python library \mintinline{python}{PuLP} will be used to
+In this book the Python library \mintinline{python}{pulp} will be used to
 formulate and solve the integer program. First a function to create the
-binary problem variables for a given set of times and modules.
+binary problem variables for a given set of times and modules is needed:
 
 \begin{pyin}
 import pulp
 
 
 def get_variables(modules, times):
+    """Returns the binary variables for a given timetabling
+    problem.
+
+    Args:
+        modules: The complete collection of modules to be
+                 timetabled.
+        times: The collection of available time slots.
+
+    Returns:
+        A tuple containing the decision variables x and y.
+    """
     xshape = (modules, times)
     x = pulp.LpVariable.dicts("X", xshape, cat=pulp.LpBinary)
     y = pulp.LpVariable.dicts("Y", times, cat=pulp.LpBinary)
@@ -285,12 +296,28 @@ X_2_5
 \end{pyout}
 
 
-The next step is to create a specific problem with the corresponding variables,
-objective function, constraints and solve it.
+The next step is to create a specific program with the corresponding variables,
+objective function, constraints and solve it. This is done with the following
+function:
 
 %% TODO remove message supressor
 \begin{pyin}
 def get_solution(Ac, Ao, Bc, Bo, Cc, Co, times):
+    """Returns the binary variables corresponding to the
+    solution of given timetabling problem.
+
+    Args:
+        Ac: The set of core art modules
+        Ao: The set of optional art modules
+        Bc: The set of core biology modules
+        Bo: The set of optional biology modules
+        Cc: The set of core chemistry modules
+        Co: The set of optional chemistry modules
+        times: The collection of available time slots.
+
+    Returns:
+        A tuple containing the decision variables x and y.
+    """
     modules = Ac + Ao + Bc + Bo + Cc + Co
     x, y = get_variables(modules=modules, times=times)
 
@@ -315,11 +342,7 @@ def get_solution(Ac, Ao, Bc, Bo, Cc, Co, times):
     return x, y
 \end{pyin}
 
-At this stage we could print the \mintinline{python}{prob} object, which would
-explicitly give all constraints written out fully. This can be used to error
-check is the need arises.
-
-Now we can go ahead and solve the problem:
+Using this, the solution \(x\) of the original problem can be obtained:
 
 %% TODO remove message supressor
 \begin{pyin}
@@ -328,8 +351,9 @@ x, y = get_solution(
 )
 \end{pyin}
 
-This method has also assigned values to our decision variables. These can be
-inspected, lets check if module 2 was scheduled for day 5:
+These can be
+inspected, for example \(x_{25}\) is a boolean variable relating to if module 2
+is scheduled on the 5th day.
 
 \begin{pyin}
 print(x[2][5].value())
@@ -340,7 +364,7 @@ print(x[2][5].value())
 \end{pyout}
 
 This was assigned the value 0, and so module 2 was not scheduled for that day.
-Let's check if module 2 was scheduled for day 9:
+However, module 2 was scheduled for day 9:
 
 \begin{pyin}
 print(x[2][9].value())
@@ -352,26 +376,38 @@ print(x[2][9].value())
 
 This was assigned a value of 1, and so module 2 was scheduled for that day.
 
-We can iterate through all decision variables and make a print solutions in
-order to read off the schedule easier:
+The following function creates a readable schedule:
 
 \begin{pyin}
-def print_solution(x, y, Ac, Ao, Bc, Bo, Cc, Co, times):
+def get_schedule(x, y, Ac, Ao, Bc, Bo, Cc, Co, times):
+    """Returns a human readable schedule corresponding to the
+    solution of given timetabling problem.
+
+    Args:
+        Ac: The set of core art modules
+        Ao: The set of optional art modules
+        Bc: The set of core biology modules
+        Bo: The set of optional biology modules
+        Cc: The set of core chemistry modules
+        Co: The set of optional chemistry modules
+        times: The collection of available time slots.
+
+    Returns:
+        A string with the schedule
+    """
     modules = Ac + Ao + Bc + Bo + Cc + Co
 
+    schedule = ""
     for day in times:
         if y[day].value() == 1:
-            schedule = f"Day {day}: "
+            schedule += f"\nDay {day}: "
             for mod in modules:
                 if x[mod][day].value() == 1:
                     schedule += f"{mod}, "
-            print(schedule)
+    return schedule
 
 
-x, y = get_solution(
-    Ac=Ac, Ao=Ao, Bc=Bc, Bo=Bo, Cc=Cc, Co=Co, times=times
-)
-print_solution(
+schedule = get_schedule(
     x=x,
     y=y,
     times=times,
@@ -382,11 +418,13 @@ print_solution(
     Cc=Cc,
     Co=Co,
 )
+print(schedule)
 \end{pyin}
 
 giving:
 
 \begin{pyout}
+
 Day 0: 1, 12, 
 Day 5: 0, 13, 
 Day 6: 11, 
@@ -396,31 +434,29 @@ Day 9: 2, 7,
 Day 13: 8,
 \end{pyout}
 
-Now the order of the days do not matter here, but we can see that 7 days are
-required in order to schedule all exams with no clashes, with two exams
-scheduled each day.
-
+The order of the days do not matter here, but we 7 days are required in order to
+schedule all exams with no clashes, with at most three exams scheduled each day.
 
 \section{Solving with R}\label{sec:solving-with-R}
 
-In R we will use the R package \mintinline{R}{ROI}, the R Optimization
-Infrastructure.
+The R package \mintinline{R}{ROI}, the R Optimization
+Infrastructure will be used here.
 This is a library of code that acts as a front end to a number of other solvers
 that need to be installed externally, allowing a range of optimisation problems
-to be solved with a number of different solvers, using similar problem
-structures and syntax.
-The solver that we will use here is called the CBC MILP Solver, which needs to
-be installed as well as the \mintinline{R}{rcbc} package.
+to be solved with a number of different solvers.
+The solver that will be used here is called the CBC MILP Solver, which needs to
+be installed as well as the R \mintinline{R}{rcbc} package.
+% TODO Do we need to point at installation documentation for this?
 
-The \mintinline{R}{ROI} package requires that the linear programme is
+The \mintinline{R}{ROI} package requires that the linear program is
 represented in its matrix form, with a one-dimensional array of decision
-variables. Therefore we will use the form of the model described at the end of
-Section~\ref{sec:theory}.
-We will write functions that define the objective function \(c\), the coefficient
+variables. Therefore the form of the model described at the end of
+Section~\ref{sec:theory} will be used.
+Functions that define the objective function \(c\), the coefficient
 matrix \(A$, the vector of the right hand side of the constraints $b\), and the
-vector of equality or inequalities directions \(\star\).
+vector of equality or inequalities directions \(\star\) are needed.
 
-First we consider the objective function:
+First the objective function:
 
 \begin{Rin-no-test}
 #' Writes the row of coefficients for the objective function
@@ -439,10 +475,10 @@ write_objective <- function(n_modules, n_days){
 For 3 modules and 3 days:
 
 \begin{Rin-no-test}
-write_objective(3, 3)
+write_objective(n_modules = 3, n_days = 3)
 \end{Rin-no-test}
 
-Which gives the following array, corresponding the the coefficients of the
+Which gives the following array, corresponding to the coefficients of the
 array \(Z\) for Equation~\ref{eqn:objective_modules}.
 
 \begin{Rout-no-test}
@@ -473,8 +509,8 @@ write_X_clashes <- function(clashes, day, n_days, n_modules){
 }
 \end{Rin-no-test}
 
-where \mintinline{R}{clashes} is an array containing the module numbers of a set of
-modules that may all share students.
+where \mintinline{R}{clashes} is an array containing the module numbers of a set
+of modules that may all share students.
 
 The following function is used to write one row of the coefficients matrix, for
 each module, ensuring that each module is scheduled on one day and one day only,
@@ -519,7 +555,8 @@ write_Y_constraints <- function(day, n_days, n_modules){
 }
 \end{Rin-no-test}
 
-Finally the following function uses them all to assemble a coefficients matrix.
+Finally the following function uses all previous functions
+to assemble a coefficients matrix.
 It loops though the parameters for each constraint row required, uses the
 appropriate function to create the row of the coefficients matrix, sets the
 appropriate inequality direction (\(\leq$, $=$, $\geq\)), and the value of the
@@ -575,7 +612,7 @@ write_constraints <- function(list_clashes, n_days, n_modules){
 }
 \end{Rin-no-test}
 
-For demonstration, if we had two modules and two possible days, with the single
+For demonstration, with 2 modules and 2 possible days, with the single
 constraint that both modules cannot be scheduled at the same time, then:
 
 \begin{Rin-no-test}
@@ -584,7 +621,8 @@ write_constraints(list_clashes = list(c(1, 2)),
                   n_modules = 2)
 \end{Rin-no-test}
 
-This would give three components:
+This would give 3 components:
+
 \begin{itemize}
   \item a coefficient matrix of the left hand side of the constraints, \(A\), (rows 1
   and 2 corresponding to the clash on days 1 and 2, row 3 ensuring module 1 is
@@ -611,9 +649,9 @@ This would give three components:
 [1] 1 1 1 1 0 0
 \end{Rout-no-test}
 
-Now we are ready to use these to solve the exam scheduling problem.
-First we define some parameters, including the sets of modules that all share
-students, that is the list of clashes:
+Now, the problem will be solved.
+First some parameters, including the sets of modules that all share
+students, that is the list of clashes are needed:
 
 \begin{Rin-no-test}
 n_modules = 14
@@ -634,8 +672,8 @@ list_clashes <- list(
 )
 \end{Rin-no-test}
 
-Then we can use the functions defined above to create the objective function and
-the three elements of the constraints:
+Then, the functions defined above are used to create the objective function and
+the 3 elements of the constraints:
 
 \begin{Rin-no-test}
 constraints <- write_constraints(list_clashes = list_clashes,
@@ -647,8 +685,8 @@ f.rhs <- constraints[[3]]
 f.obj <- write_objective(n_modules = n_modules, n_days = n_days)
 \end{Rin-no-test}
 
-Finally, once these objects are in place, we can use the
-\mintinline{R}{ROI} library to construct an optimisation problem object:
+Finally, once these objects are in place, the
+\mintinline{R}{ROI} library is used to construct an optimisation problem object:
 
 \begin{Rin-no-test}
 library(ROI)
@@ -665,10 +703,11 @@ This creates an \mintinline{R}{OP} object from our objective row
 \mintinline{R}{f.obj}, and our constraints which are made up from the three
 components \mintinline{R}{f.con}, \mintinline{R}{f.dir} and
 \mintinline{R}{f.rhs}.
-When creating this object we also denote the \mintinline{R}{types} as binary
-variables (an array of \mintinline{R}{"B"} for each decision variable), and we
-want to minimise the objective function so we set
-\mintinline{R}{maximum = FALSE}.
+When creating this object the \mintinline{R}{types} as binary
+variables are indicated (an array of \mintinline{R}{"B"} for each decision
+variable).
+The objective function is to be minimised so
+\mintinline{R}{maximum = FALSE} is used.
 
 Now to solve:
 
@@ -677,7 +716,6 @@ sol <- ROI_solve(milp)
 \end{Rin-no-test}
 
 The solver will output information about the solve process and runtime.
-We can now print the solution:
 
 \begin{Rin-no-test}
 print(sol$solution)
@@ -700,18 +738,32 @@ scheduled for day 1, and so on.
 The following code prints a readable schedule:
 
 \begin{Rin-no-test}
-for (day in 1:n_days){
-  if (sol$solution[(n_days * n_modules) + day] == 1){
-    schedule <- paste("Day", day, ":")
-    for (module in 1:n_modules){
-      var <- ((day - 1) * n_modules) + module
-      if (sol$solution[var] == 1){
-        schedule <- paste(schedule, module)
+#' Gives a human readable schedule corresponding to the
+#' solution of a given timetable problem.
+#'
+#' @param sol: a solution to the timetabling problem
+#' @param n_modules: the number of modules to schedule
+#' @param n_days: the maximum number of days to schedule
+#'
+#' @return A string with the schedule
+get_schedule <- function(sol, n_days, n_modules){
+    schedule = ""
+    for (day in 1:n_days){
+      if (sol$solution[(n_days * n_modules) + day] == 1){
+        schedule <- paste(schedule, "\n", "Day", day, ":")
+        for (module in 1:n_modules){
+          var <- ((day - 1) * n_modules) + module
+          if (sol$solution[var] == 1){
+            schedule <- paste(schedule, module)
+          }
+        }
       }
     }
-    print(schedule)
-  }
+    schedule
 }
+
+schedule <- get_schedule(sol = sol, n_days = n_days, n_modules = n_modules)
+print(schedule)
 \end{Rin-no-test}
 
 \begin{Rout-no-test}
@@ -723,6 +775,7 @@ for (day in 1:n_days){
 [1] "Day 12 : 2 6 9 14"
 [1] "Day 14 : 5 10"
 \end{Rout-no-test}
+% TODO IMPORTANT Test that this is correct.
 
 This gives that 7 days are the minimum required to schedule the 14 exams without
 clashes, with either 1, 2 or 4 exams scheduled on each day.
