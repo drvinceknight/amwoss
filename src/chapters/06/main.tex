@@ -1,7 +1,6 @@
 \chapter[Game Theory]{Game Theory}
 
 % Introduction
-% TODO Fix this section (language and missing step)
 \chapterinitial{M}{ost} of the time when modelling certain situations two
 approaches are valid: to make assumptions about the overall behaviour or to make
 assumptions about the detailed behaviour. The later can be thought of as
@@ -145,37 +144,36 @@ to change what they are doing.
 This is called a Nash equilibrium: when both players are playing a
 strategy that is the best response against the other.
 
-Whilst a Nash equilibrium is not necessarily a set of strategies that players
-will converge towards, once they are there they have no reason to move away from
-it. It is the particular concept that will be used to understand the emergent
-behaviour in the city.
-
-% TODO I don't thnk this last paragraph is needed, or makes sense in this context. We don't yet know what you mean by 'converge', we don't have any concept of repeating a game and learning from the outcomes etc.
-
 % TODO Having said that, I don't think there is enough theory here, especially compared to other chapters, e.g. the LP chapter or the DES chapter. We do not know how to find a Nash equilibrium. We don't know if a Nash equilibrium necessarily exists. Can something else be added?
 
 \section{Solving with Python}\label{sec:solving-with-python}
 
 The first step we will take is to write a function to create a game using the
-matrix expected profits. The Nashpy library will be used for this.
+matrix expected profits and any offset. The Nashpy library will be used for this.
 
 \begin{pyin}
 import nashpy as nash
+import numpy as np
 
 
-def get_game(profits):
-    """Return the game object.
+def get_game(profits, offset=0):
+    """Return the game object with a given offset when 3 taxis
+    are provided.
 
     Args:
         profits: a matrix with expected profits
+        offset: a float
 
     Returns:
         A nashpy game object
     """
-    return nash.Game(profits, profits.T)
+    new_profits = np.array(profits)
+    new_profits[2] += offset
+    return nash.Game(new_profits, new_profits.T)
 \end{pyin}
 
-This gives the game for the the considered problem:
+
+This gives the game for the considered problem:
 
 \begin{pyin}
 import numpy as np
@@ -207,68 +205,11 @@ Column player:
  [0.33333333 0.5        0.85      ]]
 \end{pyout}
 
-Now any Nash equilibria of this game can be found, showing what stable
-behaviours might emerge:
-
-\begin{pyin}
-for eq in game.support_enumeration():
-    print(eq)
-\end{pyin}
-
-% TODO should this be a function?
-% edit: it is below. I think the two functions below should be defined first, and used to show the case with no offset.
-
-which gives:
-
-\begin{pyout}
-(array([0., 1., 0.]), array([0., 1., 0.]))
-(array([0., 0., 1.]), array([0., 0., 1.]))
-(array([0. , 0.7, 0.3]), array([0. , 0.7, 0.3]))
-\end{pyout}
-
-There are 3 Nash equilibria: 3 possible pairs of behaviour that the two
-companies might converge to.
-
-\begin{itemize}
-    \item The first equilibrium \(((0, 1, 0), (0, 1, 0))\) corresponds to both
-          firms always using 2 taxis;
-    \item The second equilibrium \(((0, 0, 1), (0, 0, 1))\) corresponds to both
-          firms always using 3 taxis;
-    \item The third equilibrium \(((0, 0.7, 0.3), (0, 0.7, 0.3))\) corresponds to
-          both firms using 2 taxis 70\% of the time and 3 taxis otherwise.
-\end{itemize}
-
-A good thing to note is that the two taxi companies will never only provide a
-single taxi (which would be harmful to the customers).
-
-However, the council would like to offset the cost of using 3 taxis in order to
-encourage the taxi company to provide a better service. This involves modifying
-the \mintinline{python}{get_game} function as follows:
-
-\begin{pyin}
-def get_game(profits, offset):
-    """Return the game object with a given offset when 3 taxis
-    are provided.
-
-    Args:
-        profits: a matrix with expected profits
-        offset: a float
-
-    Returns:
-        A nashpy game object
-    """
-    new_profits = np.array(profits)
-    new_profits[2] += offset
-    return nash.Game(new_profits, new_profits.T)
-\end{pyin}
-
-% TODO why don't we use this function from the beginning, setting offset=0? This saves having two different functions doing the same thing, and seems neater. It also follows what we've done in other chapters, e.g. vaccinations.
-
 The function \mintinline{python}{get_equilibria} which will directly compute the
 equilibria:
 
 \begin{pyin}
-def get_equilibria(profits, offset):
+def get_equilibria(profits, offset=0):
     """Return the equilibria for a given offset when 3 taxis
     are provided.
 
@@ -282,6 +223,42 @@ def get_equilibria(profits, offset):
     game = get_game(profits=profits, offset=offset)
     return tuple(game.support_enumeration())
 \end{pyin}
+
+This can be used to obtain the equilibria in the game.
+
+\begin{pyin}
+equilibria = get_equilibria(profits=profits)
+\end{pyin}
+
+The equilibria are:
+
+\begin{pyin}
+for eq in equilibria:
+    print(eq)
+\end{pyin}
+
+giving:
+
+\begin{pyout}
+(array([0., 1., 0.]), array([0., 1., 0.]))
+(array([0., 0., 1.]), array([0., 0., 1.]))
+(array([0. , 0.7, 0.3]), array([0. , 0.7, 0.3]))
+\end{pyout}
+
+There are 3 Nash equilibria: 3 possible pairs of behaviour that the 2
+companies could stabilise at:
+
+\begin{itemize}
+    \item The first equilibrium \(((0, 1, 0), (0, 1, 0))\) corresponds to both
+          firms always using 2 taxis;
+    \item The second equilibrium \(((0, 0, 1), (0, 0, 1))\) corresponds to both
+          firms always using 3 taxis;
+    \item The third equilibrium \(((0, 0.7, 0.3), (0, 0.7, 0.3))\) corresponds to
+          both firms using 2 taxis 70\% of the time and 3 taxis otherwise.
+\end{itemize}
+
+A good thing to note is that the two taxi companies will never only provide a
+single taxi (which would be harmful to the customers).
 
 This can be used to find the number of Nash equilibria for a given offset and
 stop when there is a single equilibrium:
@@ -307,7 +284,7 @@ and now confirm that the Nash equilibrium is where both taxi firms provide
 three vehicles:
 
 \begin{pyin}
-print(tuple(get_equilibria(profits=profits, offset=offset)))
+print(get_equilibria(profits=profits, offset=offset))
 \end{pyin}
 
 giving:
@@ -331,14 +308,20 @@ Nash equilibria for two player games when only considering pure strategies
 library(Recon)
 
 #' Returns the equilibria in pure strategies
+#' for a given offset
 #'
 #' @param profits: a matrix with expected profits
+#' @param offset: a float
 #'
 #' @return a list of equilibria
-get_equilibria <- function(profits){
-    sim_nasheq(profits, t(profits))
+get_equilibria <- function(profits, offset = 0){
+    new_profits <- rbind(
+                profits[c(1, 2), ],
+                profits[3, ] + offset)
+    sim_nasheq(new_profits, t(new_profits))
 }
 \end{Rin}
+
 
 This gives the pure Nash equilibria:
 
@@ -379,41 +362,10 @@ of the time and 3 taxis the rest of the time but \mintinline{R}{Recon} is unable
 to find Nash equilibria with mixed behaviour for games with more than two
 strategies.
 
-As an aside, if the option of using a single taxi is removed then
-\mintinline{R}{Recon} can give all three equilibria by passing the
-\mintinline{R}{type = "mixed"} argument to \mintinline{R}{sim_nasheq}.
-
-A good thing to note is that the two taxi
-companies will not only provide a single taxi (which would be harmful to the
-customers).
-
-% TODO I don't like these two paragraphs. They only make sense if you have read the Python section. Without reading the Python section, we do not know that no mixed equilibria use a single taxi, so removing that column feels like a stretch.
-% Can we just note that another mixed equilibrium exists but that it cannot be computed with this library? Maybe we can add the rest as a footnote? But here it feels forced.
-
 As discussed, the council would like to offset the cost of 3
-taxis so as to encourage the taxi company to provide a better service. This
-involves modifying the \mintinline{R}{get_equilibria} function as follows:
+taxis so as to encourage the taxi company to provide a better service.
 
-
-\begin{Rin}
-#' Returns the equilibria in pure strategies
-#' for a given offset
-#'
-#' @param profits: a matrix with expected profits
-#' @param offset: a float
-#'
-#' @return a list of equilibria
-get_equilibria <- function(profits, offset){
-    new_profits <- rbind(
-                profits[c(1, 2), ],
-                profits[3, ] + offset)
-    sim_nasheq(new_profits, t(new_profits))
-}
-\end{Rin}
-
-% TODO Similar to Python, can't we use this from the start, and set offset=0?
-
-This gives the number of equilibria for a given offset and stop when there is a
+This gives the number of equilibria for a given offset and stops when there is a
 single equilibrium:
 
 \begin{Rin}
@@ -435,7 +387,7 @@ print(round(offset, 2))
 [1] 0.15
 \end{Rout}
 
-and now confirm that the Nash equilibrium is where both taxi firms provide
+now confirm that the Nash equilibrium is where both taxi firms provide
 three vehicles:
 
 \begin{Rin}
