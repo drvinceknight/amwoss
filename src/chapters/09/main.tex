@@ -3,28 +3,28 @@
 % Introduction
 \chapterinitial{I}{t} is often necessary to find the most desirable choice from
 a large, or indeed, infinite set of options. Sometimes this can be done using
-exact techniques but often this is not possible and we finding an almost perfect
+exact techniques but often this is not possible and finding an almost perfect
 choice quickly is just as good. This is where the field of heuristics comes in
 to play.
 
 \section{Problem}\label{sec:problem}
 
-Consider a delivery company that needs to find itineraries for a driver. In
-the past, the management team has noticed that drivers will often drive to
-whichever next stop is closest but this often makes for longer deliveries.
+Consider a delivery company needs to deliver goods to 13 different stops.
+They needs to find a route for a driver to traverse that stops at each of stops
+once only, then returns to the first stop, the depot.
 
-The stops are represented in Figure~\ref{fig:tsp}.
+The stops are represented spatially in Figure~\ref{fig:tsp}.
 
 \begin{figure}
     \begin{center}
         \includegraphics[width=.8\textwidth]{./assets/tsp/main.pdf}
     \end{center}
-    \caption{Diagrammatic representation of the action sets and payoff matrices for
-    the game.}
+    \caption{Spacial representation of the required stops.}
     \label{fig:tsp}
 \end{figure}
 
-The distance matrix is given in equation (\ref{eqn:tsp}).
+The relevant information is the pairwise distances between each of the stops,
+which is given by the distance matrix in equation (\ref{eqn:tsp}).
 
 \tiny{
     \input{./assets/tsp/main.tex}
@@ -32,31 +32,42 @@ The distance matrix is given in equation (\ref{eqn:tsp}).
 \normalsize
 
 The value \(d\) gives the travel distance between
-stops \(i\) and \(j\). For example, \(d_{23}=89\) % TODO If the distance matrix changes, this value need to be updated
-indicates that the distance between the 2nd and 3rd stop in the third itinerary
-is given 89. % TODO If the distance matrix changes, this value need to be updated
+stops \(i\) and \(j\). For example, \(d_{23}=67\) % TODO If the distance matrix changes, this value need to be updated
+indicates that the distance between the 2nd and 3rd stop in the route is 67. % TODO If the distance matrix changes, this value need to be updated
 
-Given these parameters, we aim to find a \emph{sufficiently good} set of
-itineraries that gives a low total amount of travel.
+% Given these parameters, we aim to find a \emph{sufficiently good} set of
+% itineraries that gives a low total amount of travel.
 
-The emphasis on needing a good solution, but not necessarily the best one,
-prioritising computational efficiency is where the field of heuristics comes in
-to its own.
+% The emphasis on needing a good solution, but not necessarily the best one,
+% prioritising computational efficiency is where the field of heuristics comes in
+% to its own.
+
+% These paragraphs are not relevant to the problem, they comment on the solution method. I have moved them and reworded them slightly into the next section.
+
+The delivery company would like to find the route around the 13 stops that gives
+the smallest overall travel distance.
+
 
 \section{Theory}\label{sec:theory}
 
-The heuristic approach take here will be to use a neighborhood search algorithm.
+This is an example of what is known as the Travelling Salesman Problem, %TODO add footnote reference
+and can be considered too complex to solve using exact methods.
+Heuristics are a family of methods that can be used to find a find a
+\emph{sufficiently good} solution, though not necessarily the optimal solution,
+where the emphasis is on prioritising computational efficiency.
+
+The heuristic approach taken here will be to use a neighbourhood search algorithm.
 This algorithm works by considering a given potential solution, evaluating it
 and then trying another potential solution \emph{close} to it. What \emph{close}
 means depends on different approaches and problems: it is referred to as the
-neighbourhood. As a new solution is evaluated if it is \emph{good} (this is
+neighbourhood. When new solution is considered \emph{good} (this is
 again a term that depends on the approach and problem) then the search
 continues from the neighbourhood of this new solution.
 
-For our problem,
-the first aspect of this is to represent a given trajectory between all the
-potential stops as a \emph{tour}. If we have 3 total stops and require that the
-tour starts and stops at the first one then there are two possible tours:
+For this problem, first represent a possible solution, that is a given route
+between all the potential stops as a \emph{tour}. If there are 3 total stops
+and require that the tour starts and stops at the first one then there are two
+possible tours:
 
 \[
     t \in \{(1, 2, 3, 1), (1, 3, 2, 1)\}
@@ -82,8 +93,8 @@ Thus, with:
 We have:
 
 \begin{eqnarray*}
-    c((1, 2, 3, 1)) = d_{12} + d_{23} + d_{31} = 1 + 15 + 3 = 19\\
-    c((1, 3, 2, 1)) = d_{13} + d_{32} + d_{21} = 3 + 3 + 1 = 7
+    C((1, 2, 3, 1)) &= d_{12} + d_{23} + d_{31} = 1 + 15 + 3 = 19\\
+    C((1, 3, 2, 1)) &= d_{13} + d_{32} + d_{21} = 3 + 3 + 1 = 7
 \end{eqnarray*}
 
 Using this framework, the neighbourhood search can be written down as:
@@ -100,7 +111,7 @@ This is shown diagrammatically in Figure~\ref{fig:tsp}.
 
 \begin{figure}[!hbtp]
     \begin{center}
-        \includestandalone[width=.8\textwidth]{./assets/neighbourhood_search_flow_diagram/main}
+        \includestandalone[width=.7\textwidth]{./assets/neighbourhood_search_flow_diagram/main}
     \end{center}
     \caption{The general neighbourhood search algorithm. \(N(t)\) refers to some
     neighbourhood of \(t\).}
@@ -111,8 +122,8 @@ A number of stopping conditions can be used including some specific
 overall cost or a number of total iterations of the algorithm.
 
 The neighbourhood of a tour \(t\) is taken as some set of tours that can be
-obtained from \(t\) using a specific and computationally efficient \textbf{neighbourhood
-operator}.
+obtained from \(t\) using a specific and computationally efficient
+\textbf{neighbourhood operator}.
 
 To illustrate two such neighbourhoods operators, consider the following tour on
 7 stops:
@@ -122,7 +133,7 @@ To illustrate two such neighbourhoods operators, consider the following tour on
 \]
 
 One possible neighbourhood is to choose 2 stops at random and swap. For
-example, the tour \(t^{(1)}\in N(t)\) is obtained by swapping the 3rd and 5th
+example, the tour \(t^{(1)}\in N(t)\) is obtained by swapping the 2rd and 5th
 stops.
 
 \[
@@ -130,10 +141,9 @@ stops.
 \]
 
 Another possible neighbourhood is to choose 2 stops at random and reversing the
-order
-of all stops between (including) those two stops. For example, the tour
+order of all stops between (including) those two stops. For example, the tour
 \(t^{(2)} \in N(t)\) is obtained by reversing the order of all stops between
-the 3rd and the 5th stop.
+the 2rd and the 5th stop.
 
 \[
     t^{(2)} = (0, 1, 5, 4, 3, 2, 6, 0)
@@ -146,15 +156,15 @@ Figure~\ref{fig:tsp-effect-of-neighbourhood-operators}.
     \begin{center}
         \includegraphics[width=\textwidth]{./assets/tsp-effect-of-neighbourhood-operators/main.pdf}
     \end{center}
-    \caption{The effect of two neighborhood operators on \(t\). \(t^{(1)}\) is
+    \caption{The effect of two neighbourhood operators on \(t\). \(t^{(1)}\) is
     obtained by swapping stops 3 and 5. \(t^{(2)}\) is obtained by reversing the
-    path between stops 3 and 5.}
+    path between stops 2 and 5.}
     \label{fig:tsp-effect-of-neighbourhood-operators}
 \end{figure}
 
 \section{Solving with Python}\label{sec:solving-with-python}
 
-To solve this problem using Python we will write functionality that matches the
+To solve this problem using Python functions will be written that match the
 first three steps in the Section~\ref{sec:theory}.
 
 The first step is to write the \mintinline{python}{get_initial_candidate}
@@ -182,8 +192,9 @@ def get_initial_candidate(number_of_stops, seed=None):
     return [0] + internal_stops + [0]
 \end{pyin}
 
-Using this we can get a random tour on 13 stops:
+This gives a random tour on 13 stops:
 % TODO If the number of stops changes this needs to be changed.
+% TODO Why give the option to not pass a seed? This adds extra lines/complexity to the code that is not used.
 
 \begin{pyin}
 number_of_stops = 13
@@ -199,8 +210,8 @@ print(initial_candidate)
 [0, 7, 12, 5, 11, 3, 9, 2, 8, 10, 4, 1, 6, 0]
 \end{pyout}
 
-To be able to evaluate any given tour we see that we must also be able to
-evaluate its cost. Here we define \mintinline{python}{get_cost} to do this:
+To be able to evaluate any given tour its cost must be found. Here
+\mintinline{python}{get_cost} does this:
 
 \begin{pyin}
 def get_cost(tour, distance_matrix):
@@ -248,13 +259,8 @@ print(cost)
 827
 \end{pyout}
 
-We will now define two different neighbourhood operators:
-
-\begin{itemize}
-    \item \mintinline{python}{swap_stops}: this swaps two stops in a given tour.
-    \item \mintinline{python}{reverse_path}: this swaps two stops and reverts the
-        stops in between them.
-\end{itemize}
+Now a function for neighbourhood operator will now be written,
+\mintinline{python}{swap_stops}, that swaps two stops in a given tour.
 
 \begin{pyin}
 def swap_stops(tour):
@@ -273,50 +279,21 @@ def swap_stops(tour):
     new_tour = list(tour)
     new_tour[i], new_tour[j] = tour[j], tour[i]
     return new_tour
-
-
-def reverse_path(tour):
-    """Return a new tour by reversing the path between two
-    stops.
-
-    Args:
-        tour: A given tuple of successive stops.
-
-    Returns:
-        A tour
-    """
-    number_of_stops = len(tour) - 1
-    i, j = sorted(
-        np.random.choice(range(1, number_of_stops), 2)
-    )
-    new_tour = tour[:i] + tour[i : j + 1][::-1] + tour[j + 1 :]
-    return new_tour
 \end{pyin}
 
-If we apply these two neighbourhood operators to our initial candidate we can
-see the effects:
+Applying this neighbourhood operator to the initial candidate gives:
 
 \begin{pyin}
 print(swap_stops(initial_candidate))
 \end{pyin}
 
-which swaps the 3rd and 8th stops:
+which swaps the 10th and 12th stops:
 
 \begin{pyout}
 [0, 7, 12, 5, 11, 3, 9, 2, 8, 1, 4, 10, 6, 0]
 \end{pyout}
 
-\begin{pyin}
-print(reverse_path(initial_candidate))
-\end{pyin}
-
-which reverses the order between the 3rd and the 8th stop:
-
-\begin{pyout}
-[0, 7, 2, 9, 3, 11, 5, 12, 8, 10, 4, 1, 6, 0]
-\end{pyout}
-
-Now we have all the tools in place to build a tool to carry out the
+Now all the tools are in place to build a tool to carry out the
 neighbourhood search \mintinline{python}{run_neighbourhood_search}.
 
 \begin{pyin}
@@ -325,7 +302,7 @@ def run_neighbourhood_search(
     number_of_stops,
     iterations,
     seed=None,
-    neighbourhood_operator=reverse_path,
+    neighbourhood_operator=swap_stops,
 ):
     """Returns a tour by carrying out a neighbourhood search.
 
@@ -336,7 +313,7 @@ def run_neighbourhood_search(
                     run the algorithm
         seed: a random seed (default: None)
         neighbourhood_operator: the neighbourhood operator
-                                (default: reverse_path)
+                                (default: swap_stops)
 
     Returns:
         A tour
@@ -364,10 +341,9 @@ def run_neighbourhood_search(
 
     return candidate
 \end{pyin}
+% TODO `number_of_stops` is just len(distance_matrix).
 
-Using this we can see the effect of running 1000 iterations using different
-neighbourhood functions:
-
+Now running this for 1000 iterations:
 
 \begin{pyin}
 number_of_iterations = 1000
@@ -382,11 +358,69 @@ solution_with_swap_stops = run_neighbourhood_search(
 print(solution_with_swap_stops)
 \end{pyin}
 
-giving:
+gives:
 
 \begin{pyout}
 [0, 7, 2, 8, 5, 3, 1, 9, 12, 11, 4, 10, 6, 0]
 \end{pyout}
+
+This has a cost:
+
+\begin{pyin}
+cost = get_cost(
+    tour=solution_with_swap_stops,
+    distance_matrix=distance_matrix,
+)
+print(cost)
+\end{pyin}
+
+\begin{pyout}
+362
+\end{pyout}
+
+Therefore, using this particular algorithm, a pretty good route it found, with a
+total distance of 362.
+
+It is important to note that this may not be the optimal route, and tweaking the
+algorithm slightly may produce better solutions.
+For example, one way to do this is to use a different neighbourhood operator.
+One example is instead of swapping two stop, revering the path between those two
+stops. The \mintinline{python}{reverse_path} function does this:
+
+\begin{pyin}
+def reverse_path(tour):
+    """Return a new tour by reversing the path between two
+    stops.
+
+    Args:
+        tour: A given tuple of successive stops.
+
+    Returns:
+        A tour
+    """
+    number_of_stops = len(tour) - 1
+    i, j = sorted(
+        np.random.choice(range(1, number_of_stops), 2)
+    )
+    new_tour = tour[:i] + tour[i : j + 1][::-1] + tour[j + 1 :]
+    return new_tour
+\end{pyin}
+
+Applying this neighbourhood operator to the initial candidate gives:
+
+\begin{pyin}
+print(reverse_path(initial_candidate))
+\end{pyin}
+
+which reverses the order between the 3rd and the 11th stop:
+
+\begin{pyout}
+[0, 7, 4, 10, 8, 2, 9, 3, 11, 5, 12, 1, 6, 0]
+\end{pyout}
+
+Now running the neighbourhood search for 1000 iterations using the
+\mintinline{python}{reverse_path} neighbourhood operator, which corresponds to
+an algorithm called the ``2 opt'' algorithm: %TODO add footnote reference
 
 \begin{pyin}
 solution_with_reverse_path = run_neighbourhood_search(
@@ -399,30 +433,14 @@ solution_with_reverse_path = run_neighbourhood_search(
 print(solution_with_reverse_path)
 \end{pyin}
 
-giving:
+gives:
 
 \begin{pyout}
 [0, 8, 5, 3, 1, 9, 12, 11, 4, 10, 6, 2, 7, 0]
 \end{pyout}
 
+This is now gives a different route.
 Importantly, the costs differ substantially:
-
-\begin{pyin}
-cost = get_cost(
-    tour=solution_with_swap_stops,
-    distance_matrix=distance_matrix,
-)
-print(cost)
-\end{pyin}
-
-which gives:
-
-\begin{pyout}
-362
-\end{pyout}
-
-Whereas using the the reverse path operator, which corresponds to an algorithm
-called the ``2 opt'' algorithm, gives a lower cost:
 
 \begin{pyin}
 cost = get_cost(
@@ -438,18 +456,25 @@ which gives:
 299
 \end{pyout}
 
+an improvement on the solution found using the \mintinline{python}{swap_stops}
+operator. Figure~\ref{fig:final-tsp-tours-python} shows the final obtained
+routes given by both approaches.
+
 \begin{figure}
     \begin{center}
         \includegraphics[width=\textwidth]{./assets/final-tsp-tours-with-python/main.pdf}
     \end{center}
     \caption{The final tours obtained by using the neighbourhood search in
     Python.}
-    \label{fig:final-tsp-tours}
+    \label{fig:final-tsp-tours-python}
 \end{figure}
+% TODO Can these plots be squares? to correspond easier with the initial plot of the stop locations. Same with R below.
+
+
 
 \section{Solving with R}\label{sec:solving-with-R}
 
-To solve this problem using R we will write functionality that matches the
+To solve this problem using R functions will be written that match the
 first three steps in the Section~\ref{sec:theory}.
 
 The first step is to write the \mintinline{R}{get_initial_candidate}
@@ -473,7 +498,8 @@ get_initial_candidate <- function(number_of_stops, seed = NA){
 }
 \end{Rin}
 
-Using this we can get a random tour on 13 stops:
+This gives a random tour on 13 stops:
+% TODO Same as with Python, Why give the option to not pass a seed? This adds extra lines/complexity to the code that is not used.
 
 \begin{Rin}
 number_of_stops <- 13
@@ -488,8 +514,8 @@ print(initial_candidate)
  [1]  0  9  4  7  1  2  5  3  8  6 11 12 10  0
 \end{Rout}
 
-To be able to evaluate any given tour we see that we must also be able to
-evaluate its cost. Here we define \mintinline{R}{get_cost} to do this:
+To be able to evaluate any given tour its cost must be found. Here
+\mintinline{R}{get_cost} to do this:
 
 \begin{Rin}
 #' Return the cost of a tour
@@ -530,13 +556,8 @@ print(cost)
 [1] 709
 \end{Rout}
 
-We will now define two different neighbourhood operators:
-
-\begin{itemize}
-    \item \mintinline{R}{swap_stops}: this swaps two stops in a given tour.
-    \item \mintinline{R}{reverse_path}: this swaps two stops and reverts the
-        stops in between them.
-\end{itemize}
+Now a function for neighbourhood operator will now be written,
+\mintinline{R}{swap_stops}, that swaps two stops in a given tour.
 
 \begin{Rin}
 #' Return a new tour by swapping two stops.
@@ -551,28 +572,9 @@ swap_stops <- function(tour){
                         list = stops_to_swap,
                         values = rev(tour[stops_to_swap]))
     }
-
-#' Return a new tour by reversing the path between two stops.
-#'
-#' @param tour A given vector of successive stops.
-#'
-#' @return A tour
-reverse_path <- function(tour){
-    number_of_stops <- length(tour) - 1
-    stops_to_swap <- sort(sample(2:number_of_stops, 2))
-    i <- stops_to_swap[1]
-    j <- stops_to_swap[2]
-    new_order <- c(
-            c(1: (i - 1)),
-            c(j:i),
-            c( (j + 1): length(tour))
-            )
-    tour[new_order]
-    }
 \end{Rin}
 
-If we apply these two neighbour operators to our initial candidate we can see
-the effects:
+Applying this neighbourhood operator to the initial candidate gives:
 
 \begin{Rin}
 print(swap_stops(initial_candidate))
@@ -582,17 +584,6 @@ which swaps the 6th and 11th stops:
 
 \begin{Rout}
  [1]  0  9  4  7  1 11  5  3  8  6  2 12 10  0
-\end{Rout}
-
-\begin{Rin}
-print(reverse_path(initial_candidate))
-\end{Rin}
-
-which reverses the order
-between the 7th and the 11th stop:
-
-\begin{Rout}
- [1]  0  9  4  7  1  2 11  6  8  3  5 12 10  0
 \end{Rout}
 
 Now we have all the tools in place to build a tool to carry out the
@@ -607,7 +598,7 @@ neighbourhood search \mintinline{R}{run_neighbourhood_search}.
 #'                    which to run the algorithm
 #' @param seed: a random seed (default: None)
 #' @param neighbourhood_operator: the neighbourhood operation
-#'                                (default: reverse_path)
+#'                                (default: swap_stops)
 #'
 #' @return A tour
 run_neighbourhood_search <- function(
@@ -615,7 +606,7 @@ run_neighbourhood_search <- function(
   number_of_stops,
   iterations,
   seed = NA,
-  neighbourhood_operator = reverse_path
+  neighbourhood_operator = swap_stops
 ){
   candidate <- get_initial_candidate(
     number_of_stops = number_of_stops,
@@ -642,9 +633,9 @@ run_neighbourhood_search <- function(
   candidate
 }
 \end{Rin}
+% TODO `number_of_stops` is just len(distance_matrix).
 
-Using this we can see the effect of running 1000 iterations using different
-neighbourhood functions:
+Now running this for 1000 iterations:
 
 \begin{Rin}
 number_of_iterations <- 1000
@@ -658,31 +649,13 @@ solution_with_swap_stops <- run_neighbourhood_search(
 print(solution_with_swap_stops)
 \end{Rin}
 
-giving:
+gives:
 
 \begin{Rout}
  [1]  0 11  4 10  6  2  7  8  5  3  1  9 12  0
 \end{Rout}
 
-\begin{Rin}
-number_of_iterations <- 1000
-solution_with_reverse_path <- run_neighbourhood_search(
-    distance_matrix = distance_matrix,
-    number_of_stops = number_of_stops,
-    iterations = number_of_iterations,
-    seed = seed,
-    neighbourhood_operator = reverse_path
-)
-print(solution_with_reverse_path)
-\end{Rin}
-
-giving:
-
-\begin{Rout}
- [1]  0  8  5  3  1  9 12 11  4 10  6  2  7  0
-\end{Rout}
-
-Importantly, the costs differ substantially:
+This has a cost:
 
 \begin{Rin}
 cost <- get_cost(
@@ -698,8 +671,73 @@ which gives:
 [1] 373
 \end{Rout}
 
-Whereas using the reverse path operator, which corresponds to an algorithm
-called the ``2 opt'' algorithm, gives a lower cost:
+Therefore, using this particular algorithm, a pretty good route it found, with a
+total distance of 373.
+
+It is important to note that this may not be the optimal route, and tweaking the
+algorithm slightly may produce better solutions.
+For example, one way to do this is to use a different neighbourhood operator.
+One example is instead of swapping two stop, revering the path between those two
+stops. The \mintinline{R}{reverse_path} function does this:
+
+
+\begin{Rin}
+#' Return a new tour by reversing the path between two stops.
+#'
+#' @param tour A given vector of successive stops.
+#'
+#' @return A tour
+reverse_path <- function(tour){
+    number_of_stops <- length(tour) - 1
+    stops_to_swap <- sort(sample(2:number_of_stops, 2))
+    i <- stops_to_swap[1]
+    j <- stops_to_swap[2]
+    new_order <- c(
+            c(1: (i - 1)),
+            c(j:i),
+            c( (j + 1): length(tour))
+            )
+    tour[new_order]
+    }
+\end{Rin}
+
+Applying this neighbourhood operator to the initial candidate gives:
+
+\begin{Rin}
+print(reverse_path(initial_candidate))
+\end{Rin}
+
+which reverses the order
+between the 8th and the 9th stop:
+
+\begin{Rout}
+ [1]  0  9  4  7  1  2  6  8  3  5 11 12 10  0
+\end{Rout}
+
+Now running the neighbourhood search for 1000 iterations using the
+\mintinline{R}{reverse_path} neighbourhood operator, which corresponds to
+an algorithm called the ``2 opt'' algorithm: %TODO add footnote reference
+
+\begin{Rin}
+number_of_iterations <- 1000
+solution_with_reverse_path <- run_neighbourhood_search(
+    distance_matrix = distance_matrix,
+    number_of_stops = number_of_stops,
+    iterations = number_of_iterations,
+    seed = seed,
+    neighbourhood_operator = reverse_path
+)
+print(solution_with_reverse_path)
+\end{Rin}
+
+gives:
+
+\begin{Rout}
+ [1]  0  8  5  3  1  9 12 11  4 10  6  2  7  0
+\end{Rout}
+
+This is now gives a different route.
+Importantly, the costs differ substantially:
 
 \begin{Rin}
 cost <- get_cost(
@@ -715,13 +753,17 @@ which gives:
 [1] 299
 \end{Rout}
 
+an improvement on the solution found using the \mintinline{R}{swap_stops}
+operator. Figure~\ref{fig:final-tsp-tours-r} shows the final obtained routes
+given by both approaches.
+
 
 \begin{figure}
     \begin{center}
         \includegraphics[width=\textwidth]{./assets/final-tsp-tours-with-R/main.pdf}
     \end{center}
     \caption{The final tours obtained by using the neighbourhood search in R}
-    \label{fig:final-tsp-tours}
+    \label{fig:final-tsp-tours-r}
 \end{figure}
 
 \section{Research}\label{sec:research}
