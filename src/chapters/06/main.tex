@@ -9,11 +9,12 @@ interactive  decision making: game theory.
 
 \section{Problem}\label{sec:problem}
 
-Consider a city council. Two electric taxi companies are going to move in to
-the city and the city wants to ensure that the customers are best served by this
-new duopoly. The two taxi firms will be deciding how many vehicles to deploy:
-one, two or three. The city wants to encourage them to both use three as this
-ensures the highest level of availability to the population.
+Consider a city council. Two electric taxi companies, company A and company B,
+are going to move
+in to the city and the city wants to ensure that the customers are best served
+by this new duopoly. The two taxi firms will be deciding how many vehicles to
+deploy: one, two or three. The city wants to encourage them to both use three as
+this ensures the highest level of availability to the population.
 
 Some exploratory data analysis gives the following insights:
 
@@ -24,28 +25,36 @@ Some exploratory data analysis gives the following insights:
         profit.
 \end{itemize}
 
-The expected profits for Taxi Company A are given in Table~\ref{tbl:profit-of-taxi-companies}.
-The profits for Taxi Company B are the same.
+The expected profits for the companies are given in
+Table~\ref{tbl:profit-of-taxi-companies}. 
 
 \newcolumntype{P}[1]{>{\centering\arraybackslash}p{#1}}
 \begin{table}[!hbtp]
     \begin{center}
     \begin{tabular}{cl|P{0.08\textwidth}P{0.08\textwidth}P{0.08\textwidth}}
-                                                                  &    & \multicolumn{3}{c}{Taxi Company B}\\
+                                                                  &    & \multicolumn{3}{c}{Company B}\\
                                                                   &    & 1               & 2                 & 3\\
         \toprule
-        \multirow{3}{*}{\rotatebox[origin=c]{90}{Taxi Company A}} & 1  & 1               & \(\frac{1}{2}\)   & \(\frac{1}{3}\)\\[4.5mm]
+        \multirow{3}{*}{\rotatebox[origin=c]{90}{Company A}} & 1  & 1               & \(\frac{1}{2}\)   & \(\frac{1}{3}\)\\[4.5mm]
                                                                   & 2  & \(\frac{3}{2}\) & \(\frac{19}{20}\) & \(\frac{1}{2}\)\\[4.5mm]
                                                                   & 3  & \(\frac{5}{3}\) & \(\frac{4}{5}\)   & \(\frac{17}{20}\)\\[4.5mm]
     \end{tabular}
+    \qquad
+    \begin{tabular}{cl|P{0.08\textwidth}P{0.08\textwidth}P{0.08\textwidth}}
+                                                                  &    &
+                                                                  \multicolumn{3}{c}{Company A}\\
+                                                                  &    & 1               & 2                 & 3\\
+        \toprule
+        \multirow{3}{*}{\rotatebox[origin=c]{90}{Company B}} & 1  & 1               & \(\frac{1}{2}\)   & \(\frac{1}{3}\)\\[4.5mm]
+                                                                  & 2  & \(\frac{1}{2}\) & \(\frac{19}{20}\) & \(\frac{4}{5}\)\\[4.5mm]
+                                                                  & 3  & \(\frac{1}{3}\) & \(\frac{1}{2}\)   & \(\frac{17}{20}\)\\[4.5mm]
+    \end{tabular}
     \end{center}
-    \caption{Profits (in GBP per hour) of a Taxi Company A based on
-    their vehicle numbers and the vehicle numbers of Taxi Company B.}
+    \caption{Profits (in GBP per hour) of each Taxi company based on
+    the choice of vehicle number by all companies. The first table shows the profits for
+    company A. The second table shows the profits for company B.}
     \label{tbl:profit-of-taxi-companies}
 \end{table}
-
-% TODO I tried to make the table look better and more readable. Feel free to revert. I don't like that the horizontal and vertical lines don't touch. The column names were confusing, so I made them refer to specific companies now.
-
 
 Given these expected profits, the council wants to understand what is likely to
 happen and potentially give a financial incentive to each company to ensure
@@ -57,17 +66,28 @@ Table~\ref{tbl:profit-of-taxi-companies-offset}
 \begin{table}[!hbtp]
     \begin{center}
     \begin{tabular}{cl|P{0.08\textwidth}P{0.08\textwidth}P{0.08\textwidth}}
-                                                                  &    & \multicolumn{3}{c}{Taxi Company B}\\
+                                                                  &    & \multicolumn{3}{c}{Company B}\\
                                                                   &    & 1               & 2                 & 3\\
         \toprule
-        \multirow{3}{*}{\rotatebox[origin=c]{90}{Taxi Company A}} & 1  & 1               & \(\frac{1}{2}\)   & \(\frac{1}{3} + \epsilon\)\\[4.5mm]
-                                                                  & 2  & \(\frac{3}{2}\) & \(\frac{19}{20}\) & \(\frac{1}{2} + \epsilon\)\\[4.5mm]
-                                                                  & 3  & \(\frac{5}{3}\) & \(\frac{4}{5}\)   & \(\frac{17}{20} + \epsilon\)\\[4.5mm]
+        \multirow{3}{*}{\rotatebox[origin=c]{90}{Company A}} & 1  & 1               & \(\frac{1}{2}\)   & \(\frac{1}{3}\)\\[4.5mm]
+                                                                  & 2  & \(\frac{3}{2}\) & \(\frac{19}{20}\) & \(\frac{1}{2}\)\\[4.5mm]
+                                                                  & 3  & \(\frac{5}{3} + \epsilon\) & \(\frac{4}{5} + \epsilon\) & \(\frac{17}{20} + \epsilon\)\\[4.5mm]
+    \end{tabular}
+    \qquad
+    \begin{tabular}{cl|P{0.08\textwidth}P{0.08\textwidth}P{0.08\textwidth}}
+                                                                  &    &
+                                                                  \multicolumn{3}{c}{Company A}\\
+                                                                  &    & 1               & 2                 & 3\\
+        \toprule
+        \multirow{3}{*}{\rotatebox[origin=c]{90}{Company B}} & 1  & 1 & \(\frac{1}{2}\)   & \(\frac{1}{3} + \epsilon\)\\[4.5mm]
+                                                                  & 2  & \(\frac{1}{2}\) & \(\frac{19}{20}\) & \(\frac{4}{5} + \epsilon\)\\[4.5mm]
+                                                                  & 3  & \(\frac{1}{3}\) & \(\frac{1}{2}\) & \(\frac{17}{20} + \epsilon\)\\[4.5mm]
     \end{tabular}
     \end{center}
-    \caption{Profits (in GBP per hour) of a Taxi Company A based on
-    their vehicle numbers and the vehicle numbers of Taxi Company B, with the
-    council's financial incentive \(\epsilon\).}
+    \caption{Profits (in GBP per hour) of each Taxi company based on
+    the choice of vehicle number by all companies. The first table shows the profits for
+    company A. The second table shows the profits for company B. The
+    council's financial incentive \(\epsilon\) is included.}
     \label{tbl:profit-of-taxi-companies}
 \end{table}
 
@@ -144,7 +164,14 @@ to change what they are doing.
 This is called a Nash equilibrium: when both players are playing a
 strategy that is the best response against the other.
 
-% TODO Having said that, I don't think there is enough theory here, especially compared to other chapters, e.g. the LP chapter or the DES chapter. We do not know how to find a Nash equilibrium. We don't know if a Nash equilibrium necessarily exists. Can something else be added?
+An important fact is that a Nash equilibrium is guaranteed to exist. 
+This was actually the theoretic result for which John Nash received a noble prize.
+% TODO Add footnote reference
+There are various algorithms that can be used for finding Nash equilibria, they involve
+a search through the pairs of spaces of possible strategies until pairs of best 
+responses are found. Mathematical insight allows this do be done somewhat efficiently
+using algorithms that can be thought of as modifications of the algorithms used in linear programming.
+One such example is called the Lemke-Howson algorithm.
 
 \section{Solving with Python}\label{sec:solving-with-python}
 
