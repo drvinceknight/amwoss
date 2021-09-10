@@ -492,7 +492,7 @@ This gives a random tour on 13 stops:
 
 \begin{Rin}
 number_of_stops <- 13
-seed <- 0
+seed <- 1
 initial_candidate <- get_initial_candidate(
     number_of_stops = number_of_stops,
     seed = seed)
@@ -638,7 +638,7 @@ print(solution_with_swap_stops)
 gives:
 
 \begin{Rout}
- [1]  0 11  4 10  6  2  7  8  5  3  1  9 12  0
+ [1]  0 11  4 10  6  2  7 12  9  1  3  5  8  0
 \end{Rout}
 
 This has a cost:
@@ -654,7 +654,7 @@ print(cost)
 which gives:
 
 \begin{Rout}
-[1] 373
+[1] 360
 \end{Rout}
 
 Therefore, using this particular algorithm, a pretty good route it found, with a
@@ -694,10 +694,10 @@ print(reverse_path(initial_candidate))
 \end{Rin}
 
 which reverses the order
-between the 8th and the 9th stop:
+between the 3rd and the 13th stop:
 
 \begin{Rout}
- [1]  0  9  4  7  1  2  6  8  3  5 11 12 10  0
+ [1]  0  9 10 12 11  6  8  3  5  2  1  7  4  0
 \end{Rout}
 
 Now running the neighbourhood search for 1000 iterations using the
@@ -718,7 +718,7 @@ print(solution_with_reverse_path)
 gives:
 
 \begin{Rout}
- [1]  0  8  5  3  1  9 12 11  4 10  6  2  7  0
+ [1]  0  7  2  6 10  4 11 12  9  1  3  5  8  0
 \end{Rout}
 
 This is now gives a different route.
