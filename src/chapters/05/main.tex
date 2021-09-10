@@ -32,21 +32,21 @@ $\pounds 220$ per vaccine. The healthcare providers would like to know if
 achieving a vaccination rate $v$ of $85\%$ would be beneficial financially.
 
 \section{Theory}\label{sec:theory}
-% Setup - diagram & equations
-The above scenario is called a compartmental model of disease, and can be shown
-in the stock and flow diagram in Figure~\ref{fig:stockflow}.
+
+The above scenario is called a compartmental model of disease, and can be
+represented in a stock and flow diagram as in Figure~\ref{fig:stockflow}.
 
 \begin{figure}
-\begin{center}
-\includestandalone[width=\textwidth]{./assets/stock_flow_diagram}
-\caption{Diagrammatic representation of the epidemiology model}
-\label{fig:stockflow}
-\end{center}
+    \begin{center}
+        \includestandalone[width=\textwidth]{./assets/stock_flow_diagram}
+        \caption{Diagrammatic representation of the epidemiology model}
+        \label{fig:stockflow}
+    \end{center}
 \end{figure}
 
-The system has three `stocks' of different types of individuals, those
-susceptible to disease ($S$), those infected with the disease ($I$), and those
-who have recovered from the disease and so have gained immunity ($R$). The
+The system has three quantities, or `stocks', of different types of individuals,
+those susceptible to disease ($S$), those infected with the disease ($I$), and
+those who have recovered from the disease and so have gained immunity ($R$). The
 levels on these stocks change according to the flows in, out, and between them,
 controlled by `taps'. The amount of flow the taps let through are influenced in
 a multiplicative way (either negatively or positively), by other factors, such
@@ -70,11 +70,11 @@ In this system the following taps exist, influenced by the following parameters:
   rate.
 \end{itemize}
 
-Mathematically the change in stock levels are written as the derivatives, for
-example the change in the number of susceptible individuals over time is denoted
-by $\frac{dS}{dt}$. This is equal to the sum of the taps in or out of that
-stock. Thus the system is described by the following system of differential
-equations:
+Mathematically the quantities or stocks are functions over time, and the change
+in stock levels are written as the derivatives, for example the change in the
+number of susceptible individuals over time is denoted by $\frac{dS}{dt}$. This
+is equal to the sum of the taps in or out of that stock. Thus the system is
+described by the following system of differential equations:
 
 \begin{align}
 \frac{dS}{dt} &= -\frac{\alpha SI}{N} + (1 - v)bN - dS \label{eqn:dS}\\
@@ -84,13 +84,14 @@ equations:
 
 Where $N = S + I + R$ is the total number of individuals in the system.
 
-We would like to understand the behaviour of the functions $S$, $I$ and $R$
-under these rules, that is we would like to solve this system of differential
+The behaviour of the quantities $S$, $I$ and $R$
+under these rules can be quantified by solving this system of differential
 equations. This system contains some non-linear terms, implying that this may be
-difficult to solve analytically, so we will use a numerical method instead.
+difficult to solve analytically, so a numerical method instead will be used.
 
-There are a number of numerical methods, and the solvers we will use in Python
-and R cleverly choose the most appropriate for the problem at hand. In general
+A number of potential numerical methods to do this exist.
+The solvers that will be used in Python
+and R choose the most appropriate for the problem at hand. In general
 methods for this kind of problems use the principle that the derivative denotes
 the rate of instantaneous change. Thus for a differential equation
 $\frac{dy}{dt} = f(t,y)$, consider the function $y$ as a discrete sequence of
@@ -103,18 +104,20 @@ y_{n+1} = h \times f(t_0 + nh, y_n).
 
 This sequence approaches the true solution $y$ as $h \rightarrow 0$.
 Thus numerical methods, including the Runge-Kutta methods and the Euler method,
+% TODO Add footnote reference text.
 step through this sequence $\{y_n\}$, choosing appropriate values of $h$ and
 employing other methods of error reduction.
 
 
 \section{Solving with Python}\label{sec:solving-with-python}
-In this book we will use the \mintinline{python}{odeint} method of the SciPy
-library to numerically solve the above epidemiology models.
 
-We first define the system of differential equations described in
-Equations~\ref{eqn:dS}, \ref{eqn:dI} and \ref{eqn:dR}.
-This is a regular Python function, where the first two arguments are the system
-state and the current time respectively.
+Here the \mintinline{python}{odeint} method of the SciPy
+library will be used to numerically solve the above models.
+
+First the system of differential equations described in Equations~\ref{eqn:dS},
+\ref{eqn:dI} and \ref{eqn:dR} must be defined. This is done using a regular
+Python function, where the first two arguments are the system state and the
+current time respectively.
 
 \begin{pyin}
 def derivatives(y, t, vaccine_rate, birth_rate=0.01):
@@ -154,9 +157,9 @@ def derivatives(y, t, vaccine_rate, birth_rate=0.01):
 \end{pyin}
 
 Using this function returns the instantaneous rate of change for each of the
-three stocks, $S$, $I$ and $R$. If we begin at time 0.0, with 4 susceptible
+three quantities, $S$, $I$ and $R$. Starting at time 0.0, with 4 susceptible
 individuals, 1 infected individual, 0 recovered individuals, and a vaccine rate
-of 50\%, then:
+of 50\%, gives:
 
 \begin{pyin}
 print(derivatives(y=(4, 1, 0), t=0.0, vaccine_rate=0.5))
@@ -166,12 +169,11 @@ print(derivatives(y=(4, 1, 0), t=0.0, vaccine_rate=0.5))
 (-0.255, 0.21, 0.045)
 \end{pyout}
 
-we would expect the number of susceptible individuals to reduce by around 0.255
-per time unit, the number of infected individuals to increase by 0.21 per time
-unit, and the number of recovered individuals to increase by 0.045 per time
-unit. Now of course, after a tiny fraction of a time unit the stock levels will
-change, and thus the rates of change will change. So we will require something
-more sophisticated in order to determine the true behaviour of the system.
+this means that the number of susceptible individuals is expected to reduce by
+around 0.255 per time unit, the number of infected individuals to increase by
+0.21 per time unit, and the number of recovered individuals to increase by 0.045
+per time unit. After a tiny fraction of a time unit these quantities will
+change, and thus the rates of change will change.
 
 The following function observes the system's behaviour over some time period,
 using SciPy's \mintinline{python}{odeint} to numerically solve the system of
@@ -211,9 +213,9 @@ def integrate_ode(
     return S, I, R
 \end{pyin}
 
-Now we can use this function to investigate the difference in behaviour between
-a vaccination rate of 0\% and a vaccination rate of 85\%. Let's observe the
-system for two years, that is 730 days, in time steps of 0.01 days.
+This function can be used to investigate the difference in behaviour between a
+vaccination rate of 0\% and a vaccination rate of 85\%. The system will now be
+observed for two years, that is 730 days, in time steps of 0.01 days.
 
 Begin with a vaccine rate of 0\%:
 
@@ -228,7 +230,7 @@ S, I, R = integrate_ode(derivatives, t, vaccine_rate=0.0)
 Now \mintinline{python}{S}, \mintinline{python}{I} and \mintinline{python}{R}
 are arrays of values of the stock levels of $S$, $I$ and $R$ over the time
 steps \mintinline{python}{t}.
-Using \mintinline{python}{matplotlib} we can plot these to visualise their
+Using \mintinline{python}{matplotlib} a plot can be obtained to visualise their
 behaviour.
 The following code gives the plot shown in Figure~\ref{fig:plot_no_vaccine}.
 
@@ -253,15 +255,14 @@ fig.savefig("plot_no_vaccine_python.pdf")
 \label{fig:plot_no_vaccine}
 \end{figure}
 
-We observe that the number of infected individuals increases quickly, and in
-fact the rate of change increases as more individuals are infected. However
-this growth slows down as there are fewer susceptible individuals to infect. Due
-to the equal birth and death rates the overall population size remains constant;
-but we also see after some time period (around 300 time units) the levels of
-susceptible, infected, and recovered individuals becomes seemingly steady, and
-the disease becomes endemic. We can estimate once this steadiness occurs, around
-10\% of the population remain susceptible to the disease, 30\% are infected, and
-60\% are recovered and immune.
+The number of infected individuals increases quickly, and in fact the rate of
+change increases as more individuals are infected. However this growth slows
+down as there are fewer susceptible individuals to infect. Due to the equal
+birth and death rates the overall population size remains constant; but after
+some time period (around 300 time units) the levels of susceptible, infected,
+and recovered individuals stabilise, and the disease becomes endemic. Once this
+occurs, around 10\% of the population remain susceptible to the disease, 30\%
+are infected, and 60\% are recovered and immune.
 
 Now with a vaccine rate of 85\%:
 
@@ -270,7 +271,7 @@ t = np.arange(0, 730.01, 0.01)
 S, I, R = integrate_ode(derivatives, t, vaccine_rate=0.85)
 \end{pyin}
 
-And again we can plot these to visualise their behaviour. The following code
+The following code
 gives the plot shown in Figure~\ref{fig:plot_with_vaccine}.
 
 \begin{pyin-no-test}
@@ -290,14 +291,14 @@ fig.savefig("plot_with_vaccine_python.pdf")
 \label{fig:plot_with_vaccine}
 \end{figure}
 
-With vaccination the disease remains endemic, however now we estimate that once,
-steadiness occurs, around 10\% of the population remain susceptible to the
-disease, 1.7\% are infected, and 88.3\% are immune or recovered and immune.
+With vaccination the disease remains endemic, however once steadiness occurs,
+around 10\% of the population remain susceptible to the disease, 1.7\% are
+infected, and 88.3\% are immune or recovered and immune.
 
-We've seen that vaccination lowers the percentage of the population living with
-the infection, which will lower the public healthcare system's medication costs.
-Let's now investigate if this saving is comparable to the cost of providing the
-vaccination to the newborns.
+This shows that vaccination lowers the percentage of the population living with
+the infection, which will lower the public healthcare system's costs. This
+saving will now be compared to the cost of providing the vaccination to the
+newborns.
 
 The following function calculates the total cost to the public healthcare
 system, that is the sum of the medication costs for those living with the
@@ -338,7 +339,7 @@ def daily_cost(
     return daily_vaccine_cost + daily_meds_cost
 \end{pyin}
 
-Now let's compare the total daily cost with and without vaccination. Without
+Now the total daily cost with and without vaccination can be compared. Without
 vaccinations:
 
 \begin{pyin}
@@ -368,22 +369,20 @@ which gives
 611903.36
 \end{pyout}
 
-So vaccinating 85\% of newborns would cost the public health care system, once
-the infection is endemic $\pounds 611,903.36$ a day. That is a saving of around
-32\%.
-
-
-
+So vaccinating 85\% of the population would cost the public health care system,
+once the infection is endemic $\pounds 611,903.36$ a day. That is a saving of
+around 32\%.
 
 
 \section{Solving with R}\label{sec:solving-with-R}
-In this book we will use the \mintinline{R}{deSolve} library to numerically
-solve the above epidemiology models.
 
-We first define the system of differential equations described in
-Equations~\ref{eqn:dS}, \ref{eqn:dI} and \ref{eqn:dR}. This is an R function
-where the arguments are the current time, the system state, and a list of other
-parameters, respectively.
+The \mintinline{R}{deSolve} library will be used to numerically solve the above
+epidemiology models.
+
+First the system of differential equations described in Equations~\ref{eqn:dS},
+\ref{eqn:dI} and \ref{eqn:dR} must be defined. This is done using an R function,
+where the arguments are the current time, system state and a list of other
+parameters.
 
 \begin{Rin}
 #' Defines the system of differential equations that describe
@@ -415,10 +414,10 @@ derivatives <- function(t, y, parameters){
 }
 \end{Rin}
 
-Using this function returns the instantaneous rate of change for each of the
-three stocks, $S$, $I$ and $R$. If we begin at time 0.0, with 4 susceptible
+This function returns the instantaneous rate of change for each of the
+three quantities $S$, $I$ and $R$. Starting at time 0.0, with 4 susceptible
 individuals, 1 infected individual, 0 recovered individuals, a vaccine rate
-of 50\% and a birth rate of 0.01, then:
+of 50\% and a birth rate of 0.01, gives:
 
 \begin{Rin}
 derivatives(t = 0,
@@ -434,12 +433,11 @@ derivatives(t = 0,
 
 \end{Rout}
 
-we would expect the number of susceptible individuals to reduce by around 0.255
-per time unit, the number of infected individuals to increase by 0.21 per time
-unit, and the number of recovered individuals to increase by 0.045 per time
-unit. Now of course, after a tiny fraction of a time unit the stock levels will
-change, and thus the rates of change will change. So we will require something
-more sophisticated in order to determine the true behaviour of the system.
+The number of susceptible individuals is expected to reduce by around 0.255 per
+time unit, the number of infected individuals to increase by 0.21 per time unit,
+and the number of recovered individuals to increase by 0.045 per time unit.
+After a tiny fraction of a time unit these quantities will change, and thus the
+rates of change will change.
 
 The following function observes the system's behaviour over some time period,
 using the \mintinline{R}{deSolve} library to numerically solve the system of
@@ -469,9 +467,9 @@ integrate_ode <- function(times,
 }
 \end{Rin}
 
-Now we can use this function to investigate the difference in behaviour between
-a vaccination rate of 0\% and a vaccination rate of 85\%. Let's observe the
-system for two years, that is 730 days, in time steps of 0.01 days.
+This function can be used to investigate the difference in behaviour between
+a vaccination rate of 0\% and a vaccination rate of 85\%. The system will be
+observed for two years, that is 730 days, in time steps of 0.01 days.
 
 Begin with a vaccine rate of 0\%:
 
@@ -484,9 +482,8 @@ Now \mintinline{R}{out}, is a matrix with four columns,  \mintinline{R}{time},
 \mintinline{R}{S}, \mintinline{R}{I} and \mintinline{R}{R}, which are arrays of
 values of the time points, and the stock levels of $S$, $I$ and $R$ over the
 time respectively.
-We can plot these to visualise their behaviour.
+These can be plotted to visualise their behaviour.
 The following code gives the plot shown in Figure~\ref{fig:plot_no_vaccine_R}.
-
 
 \begin{Rin-no-test}
 pdf("plot_no_vaccine_R.pdf", width = 7, height = 5)
@@ -505,15 +502,14 @@ dev.off()
 \label{fig:plot_no_vaccine_R}
 \end{figure}
 
-We observe that the number of infected individuals increases quickly, and in
-fact the rate of change increases as more individuals are infected. However
-this growth slows down as there are fewer susceptible individuals to infect. Due
-to the equal birth and death rates the overall population size remains constant;
-but we also see after some time period (around 300 time units) the levels of
-susceptible, infected, and recovered individuals becomes seemingly steady, and
-the disease becomes endemic. We can estimate once this steadiness occurs, around
-10\% of the population remain susceptible to the disease, 30\% are infected, and
-60\% are recovered and immune.
+The number of infected individuals increases quickly, and in fact the rate of
+change increases as more individuals are infected. However this growth slows
+down as there are fewer susceptible individuals to infect. Due to the equal
+birth and death rates the overall population size remains constant; but after
+some time period (around 300 time units) the levels of susceptible, infected,
+and recovered individuals stabilises, and the disease becomes endemic. Once this
+steadiness occurs, around 10\% of the population remain susceptible to the
+disease, 30\% are infected, and 60\% are recovered and immune.
 
 Now with a vaccine rate of 85\%:
 
@@ -522,11 +518,11 @@ times <- seq(0, 730, by = 0.01)
 out <- integrate_ode(times, vaccine_rate = 0.85)
 \end{Rin}
 
-And again we can plot these to visualise their behaviour. The following code
+The following code
 gives the plot shown in Figure~\ref{fig:plot_with_vaccine_R}.
 
 \begin{Rin-no-test}
-pdf("plot_with_vaccine_R.pdf", width = 7, height = 5) 
+pdf("plot_with_vaccine_R.pdf", width = 7, height = 5)
 plot(out[, "time"], out[, "S"], type = "l", col = "blue")
 lines(out[, "time"], out[, "I"], type = "l", col = "orange")
 lines(out[, "time"], out[, "R"], type = "l", col = "darkgreen")
@@ -542,14 +538,14 @@ dev.off()
 \label{fig:plot_with_vaccine_R}
 \end{figure}
 
-With vaccination the disease remains endemic, however now we estimate that once,
-steadiness occurs, around 10\% of the population remain susceptible to the
-disease, 1.7\% are infected, and 88.3\% are immune or recovered and immune.
+With vaccination the disease remains endemic, however once steadiness occurs,
+around 10\% of the population remain susceptible to the disease, 1.7\% are
+infected, and 88.3\% are immune or recovered and immune.
 
-We've seen that vaccination lowers the percentage of the population living with
-the infection, which will lower the public healthcare system's medication costs.
-Let's now investigate if this saving is comparable to the cost of providing the
-vaccination to the newborns.
+This shows that vaccination lowers the percentage of the population living with
+the infection, which will lower the public healthcare system's costs.
+This saving will now be compared to the cost of providing the vaccination to the
+newborns.
 
 The following function calculates the total cost to the public healthcare
 system, that is the sum of the medication costs for those living with the
@@ -584,7 +580,7 @@ daily_cost <- function(derivative_function = derivatives,
 }
 \end{Rin}
 
-Now let's compare the total daily cost with and without vaccination. Without
+The total daily cost with and without vaccination will now be compared. Without
 vaccinations:
 
 \begin{Rin}
@@ -618,6 +614,9 @@ So vaccinating 85\% of newborns would cost the public health care system, once
 the infection is endemic $\pounds 611,903.40$ a day. That is a saving of around
 32\%.
 
-
-
 \section{Research}\label{sec:research}
+
+% TODO Maybe something topica (COVID) like  https://www.ncbi.nlm.nih.gov/pmc/articles/PMC7321055/
+% TODO I do not know if I want us to use something like this:
+% https://web.mit.edu/sysdyn/sd-intro/D-4165-1.pdf (but possibly)
+% TODO Maybe (I have not read it): http://www.ieomsociety.org/ieom2020/papers/111.pdf
