@@ -237,6 +237,7 @@ words = {
     "subdirectory",
     "sym",
     "sympy",
+    "SymPy",
     "startarrowdecide",
     "startarrowobserve",
     "startarrowupdate",
