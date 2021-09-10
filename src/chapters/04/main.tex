@@ -4,19 +4,18 @@
 \chapterinitial{S}{ystems} often change in a way that depends on their current
 state. For example, the speed at which a cup of coffee cools down depends on its
 current temperature. These types of systems are called dynamical systems and are
-modelled mathematically using differential equations. In this chapter we will
+modelled mathematically using differential equations. This chapter will
 consider a direct solution approach using symbolic mathematics.
 
 \section{Problem}\label{sec:problem}
 
 Consider the following situation: the entire population of a small rural town
 has caught a cold. All 100 individuals will recover at an average rate of 2 per
-day.  The town leadership have noticed that being ill costs approximately
+day. The town leadership have noticed that being ill costs approximately
 \pounds10 per day, this is due to general lack of productivity, poorer mood and
 other intangible aspects. They need to decide whether or not to order cold
-medicine which would \textbf{double} the recover rate. The cost of of the cold
+medicine which would \textbf{double} the recovery rate. The cost of of the cold
 medicine is a one off cost of \pounds5 per person.
-% TODO Find a more realistic example.
 
 \section{Theory}\label{sec:theory}
 
@@ -25,26 +24,27 @@ dependent on the number of people in how are ill. This can be represented
 mathematically using a differential equation which is a way of relating the rate
 of change of a system to the state of the system itself.
 
-In general if we are interested in some variable \(x\) over time \(t\) the
-differential function equation will be of the form:
+In general the objects of interest are the variable \(x\) over time \(t\), and
+the rate at which \(x\) changes with \(t\), its derivative \(\frac{dx}{dt}\).
+The differential equation describing this will be of the form:
 
 \begin{equation}
     \frac{dx}{dt} = f(x)
 \end{equation}
 
-For some function \(f\).
-In our case,
-if we denote the number of infected individuals as \(I\) where we implicitly
-mean that \(I\) is a function of time: \(I=I(t)\) and the rate at which
-individuals recover by \(\alpha\) then the differential equation
-that describes the above situation is:
+for some function \(f\).
+In this case,
+the number of infected individuals will be denoted as \(I\), which will
+implicitly mean that \(I\) is a function of time: \(I=I(t)\), and the rate at
+which individuals recover will be denoted by \(\alpha\), then the
+differential equation that describes the above situation is:
 
 \begin{equation}
     \frac{dI}{dt} = -\alpha I
 \end{equation}
 
 Finding a solution to this differential equation means finding an expression for
-\(I\) that when differentiated gives \(- alpha I\).
+\(I\) that when differentiated gives \(- \alpha I\).
 
 In this particular case, one such function is:
 
@@ -52,17 +52,22 @@ In this particular case, one such function is:
     I(t) = e ^ {-\alpha t}
 \end{equation}
 
-However, \(I(0) = 1\) whereas for our problem we know that at time \(t=0\) there
-are 100 infected individuals. Indeed a differential equation defines a family of
-solutions and we need to know some sort of initial (also referred to as
-boundary) condition to have the exact solution. Which in this case would be:
+This is a solution because:
+\(\frac{dI}{dt} = -\alpha e ^ {-\alpha y} = -\alpha I\).
+
+However here \(I(0) = 1\), whereas for this problem we know that at time \(t=0\)
+there are 100 infected individuals. In general there are many such functions
+that can satisfy a differential equation, known as a family of solutions. To
+know which particular solution is relevant to the situation, some sort of
+initial (also referred to as boundary) condition is required. Here this would
+be:
 
 \begin{equation}
     I(t) = 100e ^ {-\alpha t}
 \end{equation}
 
-To evaluate the cost we then need to know the sum of the values of that function
-over time. Integration gives us exactly this, so the cost would be:
+To evaluate the cost the sum of the values of that function over time is needed.
+Integration gives exactly this, so the cost would be:
 
 \begin{equation}
     K \int_{0}^{\infty}I(t)dt
@@ -70,14 +75,13 @@ over time. Integration gives us exactly this, so the cost would be:
 
 where \(K\) is the cost per person per unit time.
 
-In the upcoming sections we will confirm and use code to carry out the above
+In the upcoming sections code will be used to confirm to carry out the above
 efficiently so as to answer the original question.
 
 \section{Solving with Python}\label{sec:solving-with-python}
 
-The first step we will take is to write a function to obtain the differential
-equation. Note that here we will be using the Python library
-\mintinline{python}{sympy} which allows us to carry out symbolic calculations.
+The first step is to write a function to obtain the differential
+equation. The Python library SymPy is used which allows symbolic calculations.
 
 \begin{pyin}
 import sympy as sym
@@ -100,7 +104,7 @@ def get_equation(alpha=alpha):
     return sym.Eq(sym.Derivative(I(t), t), -alpha * I(t))
 \end{pyin}
 
-Using this we can get the equation that defines the population change over time:
+This gives an equation that defines the population change over time:
 
 \begin{pyin}
 eq = get_equation()
@@ -120,7 +124,7 @@ well rendered mathematical equation:
 \frac{d}{d t} I{\left(t \right)} = - \alpha I{\left(t \right)}
 \]
 
-Note that we can pass a value to \(\alpha\) if we want to:
+A value of \(\alpha\) can be passed if required:
 
 \begin{pyin}
 eq = get_equation(alpha=1)
@@ -131,7 +135,8 @@ print(eq)
 Eq(Derivative(I(t), t), -I(t))
 \end{pyout}
 
-We will now write a function to obtain the solution to this differential
+Now a function will be written to obtain the solution to this differential with
+initial condition \(I(0) = I_0\):
 
 \begin{pyin}
 def get_solution(I_0=I_0, alpha=alpha):
@@ -148,7 +153,7 @@ def get_solution(I_0=I_0, alpha=alpha):
     return sym.dsolve(eq, I(t), ics={I(0): I_0})
 \end{pyin}
 
-We can verify the solution discussed previously:
+This can verify the solution discussed previously:
 
 \begin{pyin}
 sol = get_solution()
@@ -163,7 +168,7 @@ Eq(I(t), I_0*exp(-alpha*t))
 
 \[I(t) = I_0 e ^{-\alpha t}\]
 
-We can use sympy itself to verify the result, by taking the derivative of the
+SymPy itself can be used to verify the result, by taking the derivative of the
 right hand side of our solution.
 
 \begin{pyin}
@@ -176,9 +181,9 @@ which gives:
 True
 \end{pyout}
 
-All of the above has given us the general solution in terms of \(I(0)=I_0\) and
-\(\alpha\) however we have written the code in such a way as we can pass the
-actual parameters:
+All of the above has given the general solution in terms of \(I(0)=I_0\) and
+\(\alpha\), however the code is written in such a way as we can pass the actual
+parameters:
 
 \begin{pyin}
 sol = get_solution(alpha=2, I_0=100)
@@ -191,7 +196,7 @@ which gives:
 Eq(I(t), 100*exp(-2*t))
 \end{pyout}
 
-Now, to calculate the cost we will write a function to integrate our result:
+Now, to calculate the cost write a function to integrate the result:
 
 \begin{pyin}
 def get_cost(
@@ -219,7 +224,7 @@ def get_cost(
     )
 \end{pyin}
 
-We can now obtain the cost without purchasing the cure:
+The cost without purchasing the cure is:
 
 \begin{pyin}
 I_0 = 100
@@ -257,13 +262,20 @@ So given the current parameters it is not worth purchasing the cure.
 \section{Solving with R}\label{sec:solving-with-R}
 
 R has some capability for symbolic mathematics, however at the time of writing
-the options available are somewhat limited and/or not reliable. As such, we will
-actually solve the problem with R using a numerical integration approach. For an
-outline of the theory behind this approach see Chapter % TODO Add reference to chapter
+the options available are somewhat limited and/or not reliable. As such, in R
+the problem will be solved using a numerical integration approach. For an
+outline of the theory behind this approach see Chapter 5. % TODO Add reference to chapter
 
-First we write a function to give us the derivative for a given value of \(I\).
+First write a function to give the derivative for a given value of \(I\).
 
 \begin{Rin}
+#' Returns the numerical value of the derivative.
+#'
+#' @param t a set of time points
+#' @param y a function
+#' @param parameters the set of all parameters passed to y
+
+#' @return a float
 derivative <- function(t, y, parameters) {
   with(as.list(c(y, parameters)), {
     dIdt <- -alpha * I  # nolint
@@ -271,8 +283,9 @@ derivative <- function(t, y, parameters) {
   })
 }
 \end{Rin}
+% TODO remove # nolint
 
-For example, to see the value of the derivative when \(I=0\) we have:
+For example, to see the value of the derivative when \(I=0\):
 
 \begin{Rin}
 derivative(t = 0, y = c(I = 100), parameters = c(alpha = 2))
@@ -286,12 +299,19 @@ This gives:
 
 \end{Rout}
 
-We will now make use of the \mintinline{R}{deSolve} library for solving
-differential equations numerically:
+Now the deSolve library will be used for solving differential equations
+numerically:
 
 \begin{Rin}
 library(deSolve)  # nolint
-integrate_ode <- function(times,
+#' Return the solution to the differential equation.
+#'
+#' @param times: a vector of time points
+#' @param y_0: a float (default: 100)
+#' @param alpha: a float (default: 2)
+
+#' @return A vector of numerical values
+get_solution <- function(times,
                           y0 = c(I = 100),
                           alpha = 2) {
   params <- c(alpha = alpha)
@@ -299,12 +319,22 @@ integrate_ode <- function(times,
 }
 \end{Rin}
 
+% TODO remove # nolint
+
 This will return a sequence of time point and values of \(I\) at those time
-points. Using this we can compute the cost. Note that this function uses
-\mintinline{R}{stopifnot} to make sure our differential equation has been solved
-for a long enough time period.
+points. Using this we can compute the cost.
 
 \begin{Rin}
+#' Return the cost.
+#'
+#' @param I_0: a float (default: symbolic I_0)
+#' @param alpha: a float (default: symbolic alpha)
+#' @param cost_per_person: a float (default: 10)
+#' @param cost_of_cure: a float (default: 0)
+#' @param step_size: a float (default: 0.0001)
+#' @param max_time: an integer (default: 10)
+
+#' @return A numeric value
 get_cost <- function(
                      I_0 = 100,
                      alpha = 2,
@@ -313,13 +343,11 @@ get_cost <- function(
                      step_size = 0.0001,
                      max_time = 10) {
   times <- seq(0, max_time, by = step_size)
-  out <- integrate_ode(times,
+  out <- get_solution(times,
     y0 = c(I = I_0),
     alpha = alpha
   )
   number_of_observations <- length(out[, "I"])
-
-  stopifnot(out[number_of_observations, "I"] < step_size)
 
   time_between_steps <- diff(out[, "time"])
   area_under_curve <- sum(
@@ -332,7 +360,7 @@ get_cost <- function(
 }
 \end{Rin}
 
-Using this we can compute the costs:
+The cost without purchasing the cure is:
 
 \begin{Rin}
 alpha <- 2
@@ -369,3 +397,8 @@ So given the current parameters it is not worth purchasing the cure.
 \section{Research}\label{sec:research}
 
 TBA
+
+
+% Possibilities:
+% + "A dynamic competition model of regime change" Syms R and Solymar L (https://www.tandfonline.com/doi/pdf/10.1057/jors.2015.28?needAccess=true)
+% + "A Fluid Flow Model of Networks of Queues" Vandergraft K (https://www.jstor.org/stable/pdf/2631349.pdf?refreqid=excelsior%3A50876bb857b8a452892a441bff3e9f68)
