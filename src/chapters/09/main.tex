@@ -133,20 +133,20 @@ To illustrate two such neighbourhoods operators, consider the following tour on
 \]
 
 One possible neighbourhood is to choose 2 stops at random and swap. For
-example, the tour \(t^{(1)}\in N(t)\) is obtained by swapping the 2rd and 5th
+example, the tour \(\tilde t^{(1)}\in N(t)\) is obtained by swapping the 2rd and 5th
 stops.
 
 \[
-    t^{(1)} = (0, 1, 5, 3, 4, 2, 6, 0)
+    \tilde t^{(1)} = (0, 1, 5, 3, 4, 2, 6, 0)
 \]
 
 Another possible neighbourhood is to choose 2 stops at random and reversing the
 order of all stops between (including) those two stops. For example, the tour
-\(t^{(2)} \in N(t)\) is obtained by reversing the order of all stops between
+\(\tilde t^{(2)} \in N(t)\) is obtained by reversing the order of all stops between
 the 2rd and the 5th stop.
 
 \[
-    t^{(2)} = (0, 1, 5, 4, 3, 2, 6, 0)
+    \tilde t^{(2)} = (0, 1, 5, 4, 3, 2, 6, 0)
 \]
 
 Examples of these tours are shown in
@@ -156,8 +156,8 @@ Figure~\ref{fig:tsp-effect-of-neighbourhood-operators}.
     \begin{center}
         \includegraphics[width=\textwidth]{./assets/tsp-effect-of-neighbourhood-operators/main.pdf}
     \end{center}
-    \caption{The effect of two neighbourhood operators on \(t\). \(t^{(1)}\) is
-    obtained by swapping stops 3 and 5. \(t^{(2)}\) is obtained by reversing the
+    \caption{The effect of two neighbourhood operators on \(t\). \(\tilde t^{(1)}\) is
+    obtained by swapping stops 3 and 5. \(\tilde t^{(2)}\) is obtained by reversing the
     path between stops 2 and 5.}
     \label{fig:tsp-effect-of-neighbourhood-operators}
 \end{figure}
@@ -174,27 +174,24 @@ function that creates an initial tour:
 import numpy as np
 
 
-def get_initial_candidate(number_of_stops, seed=None):
-    """Return an initial tour.
+def get_initial_candidate(number_of_stops, seed):
+    """Return an random initial tour.
 
     Args:
         number_of_stops: The number of stops
-        seed: An integer seed. If an integer value is
-              passed it will create a random tour.
+        seed: An integer seed.
 
     Returns:
         A tour starting an ending at stop with index 0.
     """
     internal_stops = list(range(1, number_of_stops))
-    if seed is not None:
-        np.random.seed(seed)
-        np.random.shuffle(internal_stops)
+    np.random.seed(seed)
+    np.random.shuffle(internal_stops)
     return [0] + internal_stops + [0]
 \end{pyin}
 
 This gives a random tour on 13 stops:
 % TODO If the number of stops changes this needs to be changed.
-% TODO Why give the option to not pass a seed? This adds extra lines/complexity to the code that is not used.
 
 \begin{pyin}
 number_of_stops = 13
@@ -299,25 +296,24 @@ neighbourhood search \mintinline{python}{run_neighbourhood_search}.
 \begin{pyin}
 def run_neighbourhood_search(
     distance_matrix,
-    number_of_stops,
     iterations,
-    seed=None,
+    seed,
     neighbourhood_operator=swap_stops,
 ):
     """Returns a tour by carrying out a neighbourhood search.
 
     Args:
         distance_matrix: the distance matrix
-        number_of_stops: the number of stops
         iterations: the number of iterations for which to
                     run the algorithm
-        seed: a random seed (default: None)
+        seed: a random seed
         neighbourhood_operator: the neighbourhood operator
                                 (default: swap_stops)
 
     Returns:
         A tour
     """
+    number_of_stops = len(distance_matrix)
     candidate = get_initial_candidate(
         number_of_stops=number_of_stops,
         seed=seed,
@@ -341,7 +337,6 @@ def run_neighbourhood_search(
 
     return candidate
 \end{pyin}
-% TODO `number_of_stops` is just len(distance_matrix).
 
 Now running this for 1000 iterations:
 
@@ -350,7 +345,6 @@ number_of_iterations = 1000
 
 solution_with_swap_stops = run_neighbourhood_search(
     distance_matrix=distance_matrix,
-    number_of_stops=number_of_stops,
     iterations=number_of_iterations,
     seed=seed,
     neighbourhood_operator=swap_stops,
@@ -425,7 +419,6 @@ an algorithm called the ``2 opt'' algorithm: %TODO add footnote reference
 \begin{pyin}
 solution_with_reverse_path = run_neighbourhood_search(
     distance_matrix=distance_matrix,
-    number_of_stops=number_of_stops,
     iterations=number_of_iterations,
     seed=seed,
     neighbourhood_operator=reverse_path,
@@ -481,25 +474,21 @@ The first step is to write the \mintinline{R}{get_initial_candidate}
 function that creates an initial tour:
 
 \begin{Rin}
-#' Return an initial tour.
+#' Return an random initial tour.
 #'
 #' @param number_of_stops The number of stops.
-#' @param seed An integer seed. If an integer value is
-#'        passed it will create a random tour.
+#' @param seed An integer seed.
 #'
 #' @return A tour starting an ending at stop with index 0.
-get_initial_candidate <- function(number_of_stops, seed = NA){
+get_initial_candidate <- function(number_of_stops, seed){
     internal_stops <- 1:(number_of_stops - 1)
-    if (!is.na(seed)) {
-      set.seed(seed)
-      internal_stops <- sample(internal_stops)
-    }
+    set.seed(seed)
+    internal_stops <- sample(internal_stops)
     c(0, internal_stops, 0)
 }
 \end{Rin}
 
 This gives a random tour on 13 stops:
-% TODO Same as with Python, Why give the option to not pass a seed? This adds extra lines/complexity to the code that is not used.
 
 \begin{Rin}
 number_of_stops <- 13
@@ -593,7 +582,6 @@ neighbourhood search \mintinline{R}{run_neighbourhood_search}.
 #' Returns a tour by carrying out a neighbourhood search
 #'
 #' @param distance_matrix: the distance matrix
-#' @param number_of_stops: the number of stops
 #' @param iterations: the number of iterations for
 #'                    which to run the algorithm
 #' @param seed: a random seed (default: None)
@@ -603,11 +591,11 @@ neighbourhood search \mintinline{R}{run_neighbourhood_search}.
 #' @return A tour
 run_neighbourhood_search <- function(
   distance_matrix,
-  number_of_stops,
   iterations,
   seed = NA,
   neighbourhood_operator = swap_stops
 ){
+  number_of_stops <- nrow(distance_matrix)
   candidate <- get_initial_candidate(
     number_of_stops = number_of_stops,
     seed = seed
@@ -633,7 +621,6 @@ run_neighbourhood_search <- function(
   candidate
 }
 \end{Rin}
-% TODO `number_of_stops` is just len(distance_matrix).
 
 Now running this for 1000 iterations:
 
@@ -641,7 +628,6 @@ Now running this for 1000 iterations:
 number_of_iterations <- 1000
 solution_with_swap_stops <- run_neighbourhood_search(
     distance_matrix = distance_matrix,
-    number_of_stops = number_of_stops,
     iterations = number_of_iterations,
     seed = seed,
     neighbourhood_operator = swap_stops
@@ -722,7 +708,6 @@ an algorithm called the ``2 opt'' algorithm: %TODO add footnote reference
 number_of_iterations <- 1000
 solution_with_reverse_path <- run_neighbourhood_search(
     distance_matrix = distance_matrix,
-    number_of_stops = number_of_stops,
     iterations = number_of_iterations,
     seed = seed,
     neighbourhood_operator = reverse_path
