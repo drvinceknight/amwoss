@@ -766,19 +766,20 @@ get_schedule <- function(sol, n_days, n_modules){
 schedule <- get_schedule(
     sol = sol,
     n_days = n_days,
-    n_modules = n_modules,
+    n_modules = n_modules
     )
-print(schedule)
+cat(schedule)
 \end{Rin-no-test}
 
 \begin{Rout-no-test}
-[1] "Day 2 : 4 11"
-[1] "Day 6 : 1 12"
-[1] "Day 8 : 7"
-[1] "Day 10 : 8"
-[1] "Day 11 : 3 13"
-[1] "Day 12 : 2 6 9 14"
-[1] "Day 14 : 5 10"
+
+ "Day 2 : 4 11"
+ "Day 6 : 1 12"
+ "Day 8 : 7"
+ "Day 10 : 8"
+ "Day 11 : 3 13"
+ "Day 12 : 2 6 9 14"
+ "Day 14 : 5 10"
 \end{Rout-no-test}
 % TODO IMPORTANT Test that this is correct.
 
