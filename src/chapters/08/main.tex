@@ -60,19 +60,15 @@ time slots?
 
 \section{Theory}\label{sec:theory}
 
-Linear programming is a method that solves a type of optimisation problem of \(n\)
-variables by making use of some concepts of higher dimensional geometry. 
-% TODO Add footnote reference
-Optimisation here refers to finding the variable that gives, either the maximum
-or minimum of some
-linear function, called the objective function.
+Linear programming is a method that solves a type of optimisation problem of a
+number of variables by making use of some concepts of higher dimensional
+geometry.  % TODO Add footnote reference
+Optimisation here refers to finding the variable that gives either the maximum
+or minimum of some linear function, called the objective function.
 
-Linear programming employs algorithms such as the Simplex method 
-% TODO Add footnote reference
-to
-efficiently search some feasible convex region, stopping at
-the optimum. To do this, an objective function
-function and constraints need to be defined.
+Linear programming employs algorithms such as the Simplex method  % TODO Add footnote reference
+to efficiently search some feasible convex region, stopping at the optimum. To
+do this, an objective function function and constraints need to be defined.
 
 To illustrate this a classic 2-dimensional example will be used: 
 \(\pounds 50\) of profit can be made on each
@@ -84,7 +80,7 @@ much of paint A and paint B should be produced to maximise profit?
 
 This is formulated as a linear objective function, representing total profit,
 that is to be maximised; and two linear constraints, representing the
-availability of ingredients X and Y. They are written as:
+availability of components X and Y. They are written as:
 
 \begin{align}
 \text{Maximise: } 50 A + 60 B & \label{eqn:objective_paint} \\
@@ -94,15 +90,16 @@ availability of ingredients X and Y. They are written as:
 \end{align}
 
 Now this is a linear system in 2-dimensional space with coordinates A and B.
-These are called the decision variables, whose values that
-optimises the objective function given by expression~\ref{eqn:objective_paint}
-are what is required.
+These are called the decision variables, what is required are the values of A
+and B that optimises the objective function given by
+expression~\ref{eqn:objective_paint}.
 
 Inequalities~\ref{eqn:ingredientX} and~\ref{eqn:ingredientY} correspond to the
 amount of component X and Y available per day. These, along with the additional
-constraints that a negative amount of paint cannot be produced
-(\(A \geq 0$ and $B \geq 0\)), form the convex feasible region shown in
-Figure~\ref{fig:paint_lp}.
+constraints that a negative amount of paint cannot be produced (\(A \geq 0\) and
+\(B \geq 0\)), form a convex region, shown in Figure~\ref{fig:paint_lp}.
+This shaded region shows the pairs of values of \(A\) and \(B\) which are
+feasible, that is they satisfy the constraints.
 
 \begin{figure}
 \begin{center}
@@ -124,7 +121,7 @@ Therefore for this problem the optimum occurs in a particular vertex of the
 feasible region, at \(A = \frac{12}{7}\) and \(B = \frac{20}{7}\).
 
 This works well as \(A\) and \(B\) can take any real value in the feasible region.
-Some problems must be formulated as Integer Linear Programs where the decision
+Some problems must be formulated as integer linear programs where the decision
 % TODO Check Programme versus Program for consistency (VK: I don't care which
 % one)
 variables are restricted to integers. There are a number of methods that can
@@ -136,7 +133,7 @@ solutions.
 % TODO Add footnote reference
 
 Both Python and R have libraries that carry out the linear and integer
-programming algorithms for us. When solving these kinds of problems, formulating
+programming algorithms. When solving these kinds of problems, formulating
 them as linear systems is the most important challenge.
 
 Consider again the exam scheduling problem from Section~\ref{sec:problem} which
@@ -406,8 +403,11 @@ def get_schedule(x, y, Ac, Ao, Bc, Bo, Cc, Co, times):
                 if x[mod][day].value() == 1:
                     schedule += f"{mod}, "
     return schedule
+\end{pyin}
 
+Thus:
 
+\begin{pyin}
 schedule = get_schedule(
     x=x,
     y=y,
@@ -422,7 +422,7 @@ schedule = get_schedule(
 print(schedule)
 \end{pyin}
 
-giving:
+gives:
 
 \begin{pyout}
 
@@ -762,7 +762,11 @@ get_schedule <- function(sol, n_days, n_modules){
     }
     schedule
 }
+\end{Rin-no-test}
 
+Thus:
+
+\begin{Rin-no-test}
 schedule <- get_schedule(
     sol = sol,
     n_days = n_days,
@@ -770,6 +774,8 @@ schedule <- get_schedule(
     )
 cat(schedule)
 \end{Rin-no-test}
+
+gives:
 
 \begin{Rout-no-test}
 
@@ -781,7 +787,6 @@ cat(schedule)
  "Day 12 : 2 6 9 14"
  "Day 14 : 5 10"
 \end{Rout-no-test}
-% TODO IMPORTANT Test that this is correct.
 
 This gives that 7 days are the minimum required to schedule the 14 exams without
 clashes, with either 1, 2 or 4 exams scheduled on each day.
