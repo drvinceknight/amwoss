@@ -24,7 +24,7 @@ swap_stops_solution = [0, 7, 2, 8, 5, 3, 1, 9, 12, 11, 4, 10, 6, 0]
 swap_paths_solution = [0, 8, 5, 3, 1, 9, 12, 11, 4, 10, 6, 2, 7, 0]
 
 # Draw plot
-fig, axarr = plt.subplots(1, 3, figsize=(15, 3))
+fig, axarr = plt.subplots(1, 3, figsize=(15, 4))
 plot_tour(ax=axarr[0], x=xs, y=ys, tour=initial_candidate)
 axarr[0].set_title("Initial candidate")
 
