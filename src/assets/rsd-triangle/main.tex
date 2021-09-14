@@ -21,7 +21,7 @@
 
 \draw[-triangle 45] (M) -- (T) node[pos=0.5, sloped, align=center] {\tiny makes possible, \& test failures\\\tiny become more meaningful};
 \draw[triangle 45-] (D) edge[out=105,in=195, postaction={decorate,decoration={text along path,text align=center,text={|\tiny\upshift|increases accuracy}}}] (M);
-\draw[-triangle 45] (D) edge[out=-45,in=-135, postaction={decorate,decoration={text along path,text align=center,text={|\tiny\downshift|clarifies purpose, and indicates expected outcome}}}] (T);
+\draw[-triangle 45] (D) edge[out=-45,in=-135, postaction={decorate,decoration={text along path,text align=center,text={|\tiny\downshift|clarifies purpose, and shows expected outcome}}}] (T);
 \draw[-triangle 45] (D) -- (M) node[pos=0.5, sloped, above, align=center] {\tiny helps identify components};
 \draw[triangle 45-] (M) edge[out=-15,in=75, postaction={decorate,decoration={text along path,text align=center,text={|\tiny\upshift|checks modules individually and together}}}] (T);
 \draw[-triangle 45] (T) -- (D) node[pos=0.5, above] {\tiny confirms};
