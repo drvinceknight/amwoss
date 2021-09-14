@@ -140,7 +140,7 @@ programming algorithms for us. When solving these kinds of problems, formulating
 them as linear systems is the most important challenge.
 
 Consider again the exam scheduling problem from Section~\ref{sec:problem} which
-will now be formulated as an Integer Linear Program.
+will now be formulated as an integer linear program.
 Define \(M\) as the set of all modules to be scheduled, and define \(T\) as the set
 of possible time slots. At worst each exam is
 scheduled for a different day, thus \(|T| = |M| = 14\) in this case.
@@ -229,7 +229,7 @@ Equation~\ref{eqn:auxiliary}, and ones for all other constraints.
 
 \section{Solving with Python}\label{sec:solving-with-python}
 
-In this book the Python library \mintinline{python}{pulp} will be used to
+In this book the Python library Pulp will be used to
 formulate and solve the integer program. First a function to create the
 binary problem variables for a given set of times and modules is needed:
 
@@ -440,7 +440,7 @@ schedule all exams with no clashes, with at most three exams scheduled each day.
 
 \section{Solving with R}\label{sec:solving-with-R}
 
-The R package \mintinline{R}{ROI}, the R Optimization
+The R package ROI, the R Optimization
 Infrastructure will be used here.
 This is a library of code that acts as a front end to a number of other solvers
 that need to be installed externally, allowing a range of optimisation problems
@@ -449,7 +449,7 @@ The solver that will be used here is called the CBC MILP Solver, which needs to
 be installed as well as the R \mintinline{R}{rcbc} package.
 % TODO Do we need to point at installation documentation for this?
 
-The \mintinline{R}{ROI} package requires that the linear program is
+The ROI package requires that the linear program is
 represented in its matrix form, with a one-dimensional array of decision
 variables. Therefore the form of the model described at the end of
 Section~\ref{sec:theory} will be used.
