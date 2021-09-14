@@ -15,10 +15,8 @@ this chapter and the rest of the book.
 
 \section{Who is this book for?}\label{sec:who-is-this-book-for}
 
-Anyone who is interested in using mathematics and computers to solve
-problems will hopefully find this book helpful.
-
-%TODO Include VENN Diagram
+This book is aimed at readers who want to use open source software to solve the
+considered applied mathematical problems.
 
 If you are a student of a mathematical discipline, a graduate student of
 a subject like operational research, a hobbyist who enjoys solving the
@@ -36,13 +34,24 @@ It would be helpful for the reader of this book to:
 
 \begin{itemize}
 \item
-  Have access to a computer and be able to connect to the internet (at
-  least once) to be able to download the relevant software.
+  Have access to a computer and be able to connect to the internet
+  to be able to download the relevant software;
+\item
+  Have done any introductory tutorial in the languages they plan to use;
 \item
   Be prepared to read some mathematics. Technically you do not need to
   understand the specific mathematics to be able to use the tools in this book.
   The topics covered use some algebra, calculus and probability.
 \end{itemize}
+
+By reading a particular chapter of the book, the reader will have:
+
+\begin{enumerate}
+  \item the practical knowledge to solve problems using a computer;
+  \item an overview of the higher level theoretic concepts;
+  \item pointers to further reading to gain background understand and research
+        undertaken using the concepts.
+\end{enumerate}
 
 \section{What do we mean by applied mathematics?}\label{sec:what-do-we-mean-by-applied-mathematics}
 
@@ -60,14 +69,14 @@ was able to ensure that everyone sat next to someone they liked and/or
 knew.
 
 The other author, Geraint, used mathematics to find the best team of
-Pokemon. Using an area of mathematics call linear programming which is
-based on linear algebra he was able to find the best makeup of pokemon.
+Pokémon. Using an area of mathematics call linear programming which is
+based on linear algebra he was able to find the best makeup of Pokémon.
 
 Here, applied mathematics is the type of mathematics that helps us
 answer questions that the real world asks.
 
-\section{What is open source
-software}\label{sec:what-is-open-source-software}
+\section{What is open source software}
+\label{sec:what-is-open-source-software}
 
 Strictly speaking open source software is software with source code that
 anyone can read, modify and improve. In practice this means that you do
@@ -76,25 +85,25 @@ This financial aspect can also be one of the reasons that someone will
 not use a particular piece of software due to a confusion between cost
 and value: if something is free is it really going to be any good?
 
-In practice open source software is used all of the world and powers
+In practice open source software is used all over the world and powers
 some of the most important infrastructure around. For example, one
 should never use any cryptographic software that is not open source: if
-you cannot open up and read things than you should not trust it (this is
+you cannot open up and read things then you should not trust it (this is
 indeed why most cryptographic systems used are open source).
-% TODO Add a reference to back up this claim.
+% TODO footnote reference to back up this claim.
 
 Today, open source software is a lot more than a licensing agreement:
 it is a community of practice. Bugs are fixed faster, research is
 implemented immediately and knowledge is spread more widely thanks to
 open source software. Bugs are fixed faster because anyone can read and
-inspect the source code. Most open source software projects also have a
+inspect the source code. Most open source software projects also have
 clear mechanisms for communicating with the developers and even
 reviewing and accepting code contributions from the general public.
 Research is implemented immediately because when new algorithms are
 discovered they are often added directly to the software by the
 researchers who found them. This all contributes to the spread of
-knowledge: open source software is the modern should of giants that we
-all stand on.
+knowledge: open source software is the modern shoulder of giants that
+we all stand on.
 
 Open source software is software that, like scientific knowledge is not
 restricted in its use.
@@ -109,15 +118,38 @@ files} that include code snippets that let you follow along.
 
 We feel that you can choose to read the book from cover to cover,
 writing out the code examples as you go; or it could also be used as a
-reference text when faced with particular problem and wanting to know
+reference text when faced with a particular problem and wanting to know
 where to start.
 
-The book is made up of 10 chapters that are paired in two 4 parts. Each
-part corresponds to a particular area of mathematics, for example
-``Emergent Behaviour''. Two chapters are paired together for each
-chapter, usually these two chapters correspond to the same area of
-mathematics but from a slightly different scale that correspond to
-different ways of tackling the problem.
+After this introductory chapter the book is split in to 4 sections.
+Each section corresponds to a broad problem type and contains 2 chapters that
+correspond to 2 solution approaches. The first chapter in a section is based on
+exact methodology whereas the second chapter is based on heuristic
+methodology.
+The structure of the book is:
+
+\begin{enumerate}
+    \item Probabilistic modelling
+        \begin{itemize}
+                \item Markov chains
+                \item Discrete event simulation
+        \end{itemize}
+    \item Dynamical systems
+        \begin{itemize}
+                \item Differential equations
+                \item Systems dynamics
+        \end{itemize}
+    \item Emergent behaviour
+        \begin{itemize}
+                \item Game theory.
+                \item Agent based simulation
+        \end{itemize}
+    \item Optimisation.
+        \begin{itemize}
+                \item Linear programming
+                \item Heuristics
+        \end{itemize}
+\end{enumerate}
 
 Every chapter has the following structure:
 
@@ -126,30 +158,99 @@ Every chapter has the following structure:
   Introduction - a brief overview of a given problem type. Here we will
   describe the problem at hand in general terms.
 \item
-  An Example problem. This will provide a tangible example problem that
+  An example problem. This will provide a tangible example problem that
   offers the reader some intuition for the rest of the discussion.
 \item
-  Solving with Python. We will describe the mathematical tools available
-  to us in a programming language called Python to solve the problem.
+  An overview of the theory as well as a discussion as to how the theory relates
+  to the considered problem. Readers will also be presented with reference
+  texts if they want to gain a more in depth understanding.
 \item
-  Solving with R. Here we will do the same with the R programming
-  language.
+  Solving with Python. We will describe how to use tools available
+  in Python to solve the problem.
 \item
-  Brief theoretic background with pointers to reference texts. Some
-  readers might like to delve in to the mathematics of the problem a bit
-  further, we will include those details here.
+  Solving with R. We will describe how to use tools available
+  in R to solve the problem.
 \item
-  Examples of research using these methods. Finally, some readers might
-  even be interested in finding out a bit more of what mathematicians
-  are doing on these problems. Often this will include some descriptions
-  of the problem considered but perhaps at a much larger scale than the
-  one presented in the example.
+  This section will include a few hand picked academic papers relevant to the
+  covered topic. It is hoped that these few papers can be a good starting point
+  for someone wanting to not only use the methodology described but also
+  understand the broader field.
 \end{enumerate}
 
 For a given reader, not all sections of a chapter will be of interest.
 Perhaps a reader is only interested in R and finding out more about the
-research. Please do take from the book what you find useful.
+research.
+The R and Python sections are \textbf{purposefully} written as near clones of
+each other so that a reader can read only the section that interests them.
+In places there are some minor differences in the text and this is due to
+differences of implementation in the respective languages.
 
-% TODO Discuss:
-% - Input/output R/python boxes
-% - Line number throughout
+Please do take from the book what you find useful.
+
+\section{How code is written in this book}\label{sec:how-to-get-the-most-out-of-this-book}
+
+Throughout this book, there are going to be various pieces of code written. Code
+is a series of instructions that usually give some sort of output when submitted
+to a computer.
+
+This book will show both the set of instructions (referred to as the input) and
+the output.
+
+You will see Python input as follows:
+
+\begin{pyin}
+print(2 + 2)
+\end{pyin}
+
+and you will see Python output as follows:
+
+\begin{pyout}
+4
+\end{pyout}
+
+You will see R input as follows:
+
+\begin{Rin}
+print(2 + 2)
+\end{Rin}
+
+and you will see R output as follows:
+
+\begin{Rout}
+[1] 4
+\end{Rout}
+
+As well as this, a continuous line numbering across all code sections is used so
+that if the reader needs to refer to a given set of input or output this can be
+done.
+
+The code itself is written using 3 principles:
+
+\begin{itemize}
+        \item Modularity: code is written as a
+              series of smaller sections of code. These correspond to smaller,
+              simpler, individual tasks (modules) that can be used together to carry out
+              a particular larger task.
+        \item Documentation: readable variable names as
+              well as
+              text describing the functionality of each module of code are used
+              throughout. This ensures that code is not only usable but also
+              understandable.
+          \item Tests: there are places where each module of code is
+              used independently to check the output. This can be thought of as a
+              test of functionality which readers can use to check they are
+              getting expected results.
+\end{itemize}
+
+These are best practice principles in research software development % TODO Add a footnote reference
+that ensure usable, reproducible and reliable code.
+Interested readers might want to see Figure~\ref{fig:rsd-triangle} which shows
+how the 3 principles interact with each other.
+
+\begin{figure}
+    \begin{center}
+        \includestandalone[width=.6\textwidth]{./assets/rsd-triangle/main}
+        \caption{The relationship between modularisation, documentation and testing} %TODO reference this
+        \label{fig:rsd-triangle}
+    \end{center}
+\end{figure}
