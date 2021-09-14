@@ -42,10 +42,10 @@ Table~\ref{tbl:profit-of-taxi-companies}.
     \qquad
     \begin{tabular}{cl|P{0.08\textwidth}P{0.08\textwidth}P{0.08\textwidth}}
                                                                   &    &
-                                                                  \multicolumn{3}{c}{Company A}\\
+                                                                  \multicolumn{3}{c}{Company B}\\
                                                                   &    & 1               & 2                 & 3\\
         \toprule
-        \multirow{3}{*}{\rotatebox[origin=c]{90}{Company B}} & 1  & 1               & \(\frac{1}{2}\)   & \(\frac{1}{3}\)\\[4.5mm]
+        \multirow{3}{*}{\rotatebox[origin=c]{90}{Company A}} & 1  & 1               & \(\frac{1}{2}\)   & \(\frac{1}{3}\)\\[4.5mm]
                                                                   & 2  & \(\frac{1}{2}\) & \(\frac{19}{20}\) & \(\frac{4}{5}\)\\[4.5mm]
                                                                   & 3  & \(\frac{1}{3}\) & \(\frac{1}{2}\)   & \(\frac{17}{20}\)\\[4.5mm]
     \end{tabular}
@@ -76,10 +76,10 @@ Table~\ref{tbl:profit-of-taxi-companies-offset}
     \qquad
     \begin{tabular}{cl|P{0.08\textwidth}P{0.08\textwidth}P{0.08\textwidth}}
                                                                   &    &
-                                                                  \multicolumn{3}{c}{Company A}\\
+                                                                  \multicolumn{3}{c}{Company B}\\
                                                                   &    & 1               & 2                 & 3\\
         \toprule
-        \multirow{3}{*}{\rotatebox[origin=c]{90}{Company B}} & 1  & 1 & \(\frac{1}{2}\)   & \(\frac{1}{3} + \epsilon\)\\[4.5mm]
+        \multirow{3}{*}{\rotatebox[origin=c]{90}{Company A}} & 1  & 1 & \(\frac{1}{2}\)   & \(\frac{1}{3} + \epsilon\)\\[4.5mm]
                                                                   & 2  & \(\frac{1}{2}\) & \(\frac{19}{20}\) & \(\frac{4}{5} + \epsilon\)\\[4.5mm]
                                                                   & 3  & \(\frac{1}{3}\) & \(\frac{1}{2}\) & \(\frac{17}{20} + \epsilon\)\\[4.5mm]
     \end{tabular}
@@ -90,6 +90,12 @@ Table~\ref{tbl:profit-of-taxi-companies-offset}
     council's financial incentive \(\epsilon\) is included.}
     \label{tbl:profit-of-taxi-companies}
 \end{table}
+
+From Table~\ref{tbl:profit-of-taxi-companies} it can be seen that if Company B
+chooses to use 3 vehicles while Company A chooses to only use 2 then Company B
+would get \(\frac{17}{20} + \epsilon\) and Company A would get \(\frac{1}{2}\)
+profits per hour. The question is: what value of \(\epsilon\) ensures both
+companies use 3 vehicles.
 
 \section{Theory}\label{sec:theory}
 
