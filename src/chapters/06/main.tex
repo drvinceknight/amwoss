@@ -5,7 +5,7 @@
 approaches are valid: to make assumptions about the overall behaviour or to make
 assumptions about the detailed behaviour. The later can be thought of as
 measuring emergent behaviour. One tool used to do this is the study of
-interactive  decision making: game theory.
+interactive decision making: game theory.
 
 \section{Problem}\label{sec:problem}
 
@@ -170,14 +170,20 @@ to change what they are doing.
 This is called a Nash equilibrium: when both players are playing a
 strategy that is the best response against the other.
 
-An important fact is that a Nash equilibrium is guaranteed to exist. 
+An important fact is that a Nash equilibrium is guaranteed to exist.
 This was actually the theoretic result for which John Nash received a noble prize.
 % TODO Add footnote reference
 There are various algorithms that can be used for finding Nash equilibria, they involve
-a search through the pairs of spaces of possible strategies until pairs of best 
+a search through the pairs of spaces of possible strategies until pairs of best
 responses are found. Mathematical insight allows this do be done somewhat efficiently
 using algorithms that can be thought of as modifications of the algorithms used in linear programming.
 One such example is called the Lemke-Howson algorithm.
+A Nash equilibrium is not necessarily guaranteed to be arrived at through
+dynamic decision making. However, any stable
+behaviour that does emerge will be a Nash
+equilibrium, such emergent processes are the topics of evolutionary game theory,
+learning algorithms and/or agent based modelling.
+% TODO Add footnote reference and pointer to ABS chapter.
 
 \section{Solving with Python}\label{sec:solving-with-python}
 
