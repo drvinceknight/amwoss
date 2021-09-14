@@ -10,6 +10,7 @@ linear way, then linear programming is one technique that can be used to find
 the solution.
 
 \section{Problem}\label{sec:problem}
+
 A university runs 14 modules over three subjects: Art, Biology, and Chemistry.
 Each subject runs core modules and optional modules.
 Table~\ref{tab:modules} gives the module numbers for each of these.
@@ -54,39 +55,32 @@ as they share some students:
   biology modules may share students with core art modules.
 \end{itemize}
 
-How can every exam be scheduled with no clashes, that using the least amount of
+How can every exam be scheduled with no clashes, using the least amount of
 time slots?
 
-
 \section{Theory}\label{sec:theory}
-Linear programming is a method that solves an optimisation problem of $n$
-variables by defining all constraints as planes in $n$-dimensional space. These
-planes combine to create a convex region where all feasible solutions (those
-that satisfy the constraints) lie within that region, and all infeasible
-solutions (those that break at least one constraint) lie outside that region.
 
-We are interested in optimising, that is either minimising or maximising, some
-linear function, called the objective function. Therefore the solution must lie
-at the very edge of the feasible convex region, that is we have improved so much
-that if we were to improve any further we would lie outside the feasible region
-- hence the optimum lies on the edge.
+Linear programming is a method that solves a type of optimisation problem of a
+number of variables by making use of some concepts of higher dimensional
+geometry.  % TODO Add footnote reference
+Optimisation here refers to finding the variable that gives either the maximum
+or minimum of some linear function, called the objective function.
 
-Linear programming employs algorithms such as the Simplex method to
-mathematically traverse the edges of the feasible convex region, stopping at
-the optimum. Therefore to solve such a problem, we need to define out objective
-function and constraints in a linear fashion, and then apply appropriate
-algorithms.
+Linear programming employs algorithms such as the Simplex method  % TODO Add footnote reference
+to efficiently search some feasible convex region, stopping at the optimum. To
+do this, an objective function function and constraints need to be defined.
 
-Consider a 2-dimensional example: I am able to make $\pounds 50$ profit on each
-tonne of paint A I produce, and $\pounds 60$ profit on each tonne of paint B I
-produce. A tonne of paint A needs 4 tonnes of ingredient X and 5 tonnes of
-ingredient Y. A tonne of paint B needs 6 tonnes of ingredient X and 4 tonnes of
-ingredient Y. Only 24 tonnes of X and 20 tonnes of Y are available per day. How
-much of paint A and paint B should I produce daily to maximise profit?
+To illustrate this a classic 2-dimensional example will be used: 
+\(\pounds 50\) of profit can be made on each
+tonne of paint A produced, and \(\pounds 60\) profit on each tonne of paint B 
+produced. A tonne of paint A needs 4 tonnes of component X and 5 tonnes of
+component Y. A tonne of paint B needs 6 tonnes of component X and 4 tonnes of
+component Y. Only 24 tonnes of X and 20 tonnes of Y are available per day. How
+much of paint A and paint B should be produced to maximise profit?
 
 This is formulated as a linear objective function, representing total profit,
 that is to be maximised; and two linear constraints, representing the
-availability of ingredients X and Y. They are written as:
+availability of components X and Y. They are written as:
 
 \begin{align}
 \text{Maximise: } 50 A + 60 B & \label{eqn:objective_paint} \\
@@ -95,14 +89,17 @@ availability of ingredients X and Y. They are written as:
 5 A + 4 B &\leq 20 \label{eqn:ingredientY}
 \end{align}
 
-Now we have a linear system in 2-dimensional space with coordinates A and B.
-These are called the decision variables, whose values we wish to find that
-optimises the objective function given by expression~\ref{eqn:objective_paint}.
+Now this is a linear system in 2-dimensional space with coordinates A and B.
+These are called the decision variables, what is required are the values of A
+and B that optimises the objective function given by
+expression~\ref{eqn:objective_paint}.
+
 Inequalities~\ref{eqn:ingredientX} and~\ref{eqn:ingredientY} correspond to the
-amount of ingredient X and Y available per day. These, along with the additional
-constraints that we cannot produce a negative amount of paint
-($A \geq 0$ and $B \geq 0$), form the convex feasible region shown in
-Figure~\ref{fig:paint_lp}.
+amount of component X and Y available per day. These, along with the additional
+constraints that a negative amount of paint cannot be produced (\(A \geq 0\) and
+\(B \geq 0\)), form a convex region, shown in Figure~\ref{fig:paint_lp}.
+This shaded region shows the pairs of values of \(A\) and \(B\) which are
+feasible, that is they satisfy the constraints.
 
 \begin{figure}
 \begin{center}
@@ -115,62 +112,67 @@ in a dashed line.}
 \end{figure}
 
 Expression~\ref{eqn:objective_paint} corresponds to the total profit, which is
-the expression we are trying to maximise. As a line in the 2-dimensional space,
+the value to be maximised. As a line in 2-dimensional space,
 this expression fixes its gradient, but its value determines the size of the
-$y$-intercept. Therefore optimising this function corresponds to pushing a line
+\(y\)-intercept. Therefore optimising this function corresponds to pushing a line
 with that gradient to its furthest extreme within the feasible region,
 demonstrated in Figure~\ref{fig:paint_lp}.
 Therefore for this problem the optimum occurs in a particular vertex of the
-feasible region, at $A = \frac{12}{7}$ and $B = \frac{20}{7}$.
+feasible region, at \(A = \frac{12}{7}\) and \(B = \frac{20}{7}\).
 
-This works well as $A$ and $B$ can take any real value in the feasible region.
-It is common however to formulate Integer Linear Programmes where the decision
+This works well as \(A\) and \(B\) can take any real value in the feasible region.
+Some problems must be formulated as integer linear programs where the decision
+% TODO Check Programme versus Program for consistency (VK: I don't care which
+% one)
 variables are restricted to integers. There are a number of methods that can
-help us adapt a real solution to an integer solution. These include cutting
+help adapt a real solution to an integer solution. These include cutting
 planes, which introduce new constraints around the real solution to force an
 integer value; and branch and bound methods, where we iteratively convert
 decision variables to their closest two integers and remove any infeasible
 solutions.
+% TODO Add footnote reference
 
 Both Python and R have libraries that carry out the linear and integer
-programming algorithms for us. When solving these kinds of problems, formulating
+programming algorithms. When solving these kinds of problems, formulating
 them as linear systems is the most important challenge.
 
-Consider again the exam scheduling problem from Section~\ref{sec:problem}, and
-let's formulate this as a linear program.
-Define $M$ as the set of all modules to be scheduled, and define $T$ as the set
+Consider again the exam scheduling problem from Section~\ref{sec:problem} which
+will now be formulated as an integer linear program.
+Define \(M\) as the set of all modules to be scheduled, and define \(T\) as the set
 of possible time slots. At worst each exam is
-scheduled for a different day, thus $|T| = |M| = 14$ in this case.
-Let $\{X_{mt} \text{ for } m \in M \text{ and } t \in T\}$ be a set of binary
-decision variables, that is $X_{mt} = 1$ if module $m$ is scheduled for time
-$t$, and $0$ otherwise.
+scheduled for a different day, thus \(|T| = |M| = 14\) in this case.
+Let \(\{X_{mt} \text{ for } m \in M \text{ and } t \in T\}\) be a set of binary
+decision variables, that is \(X_{mt} = 1\) if module \(m\) is scheduled for time
+\(t\), and \(0\) otherwise.
 
 There are six distinct sets of modules in which exams cannot be scheduled
-simultaneously: $A_c$, $A_o$ representing core and optional art modules
-respectively; $B_c$, $B_o$ representing core and optional biology modules
-respectively; and $C_c$, $C_o$ representing core and optional chemistry modules
+simultaneously: \(A_c\), \(A_o\) representing core and optional art modules
+respectively; \(B_c\), \(B_o\) representing core and optional biology modules
+respectively; and \(C_c\), \(C_o\) representing core and optional chemistry modules
 respectively.
-Therefore $M = A_c \cup A_o \cup B_c \cup B_o \cup C_c \cup C_o$.
+Therefore \(M = A_c \cup A_o \cup B_c \cup B_o \cup C_c \cup C_o\).
 
 Additionally there are further clashes between these sets:
 \begin{itemize}
-  \item No modules in $A_c \cup A_o$ can be scheduled together as they may
+  \item No modules in \(A_c \cup A_o\) can be scheduled together as they may
   share students, this is given by the constraint in inequality~\ref{eqn:clique1}.
-  \item No modules in $B_c \cup B_o \cup A_c$, can be scheduled together as
+  \item No modules in \(B_c \cup B_o \cup A_c\), can be scheduled together as
   they may share students, given by inequality~\ref{eqn:clique2}.
-  \item No modules in $B_c \cup B_o \cup C_o$, can be scheduled together as
+  \item No modules in \(B_c \cup B_o \cup C_o\), can be scheduled together as
   they may share students, given by inequality~\ref{eqn:clique3}.
-  \item No modules in $B_o \cup C_c \cup C_o$, can be scheduled together as
+  \item No modules in \(B_o \cup C_c \cup C_o\), can be scheduled together as
   they may share students, given by inequality~\ref{eqn:clique4}.
 \end{itemize}
 
-Let's also define $\{Y_t \text{ for } t \in T\}$ as a set of auxiliary binary
-decision variables, where $Y_t$ is 1 if time slot $t$ is being used. This is
+Define \(\{Y_t \text{ for } t \in T\}\) as a set of auxiliary binary
+decision variables, where \(Y_t\) is 1 if time slot \(t\) is being used. This is
 enforced by Inequality~\ref{eqn:auxiliary}.
 
-Finally we have one final constraint, Equation~\ref{eqn:schedule_all_modules},
-which ensures all modules are scheduled once and once only.
-Thus altogether our integer program becomes:
+Equation~\ref{eqn:schedule_all_modules},
+ensures all modules are scheduled once and once only.
+Thus altogether the integer program becomes:
+% TODO Capitalize Integer Program or not? (VK I don't care, but need to check
+% for consistency)
 
 \begin{align}
 \text{Minimise: } \sum_{t \in T} Y_j & \label{eqn:objective_modules} \\
@@ -193,15 +195,15 @@ That is:
 A Z & \star b
 \end{align}
 
-where $Z$ is a vector representing the decision variables, $c$ is the
-coefficients of the $Z$ in the objective function, $A$ is the matrix of
-the coefficients of $Z$ in the constraints, $b$ is the vector of the
-right hand side of the constraints, and $\star$ represents either $\leq$, $=$ or
-$\geq$ as required.
+where \(Z\) is a vector representing the decision variables, \(c\) is the
+coefficients of the \(Z\) in the objective function, \(A\) is the matrix of the
+coefficients of \(Z\) in the constraints, \(b\) is the vector of the right hand
+side of the constraints, and \(\star\) represents either \(\leq\), \(=\) or
+\(\geq\) as required.
 
-As $Z$ is a one-dimensional vector of decisions variables, we `flatten'
-the matrix $X$ and the vector $Y$ together to form this new variable.
-We can do this by first ordering by $X$ then $Y$, within that
+As \(Z\) is a one-dimensional vector of decisions variables,
+the matrix \(X\) and the vector \(Y\) can be `flattened' together to form this new variable.
+This is done by first ordering \(X\) then \(Y\), within that
 ordering by time slot, then within that ordering by module number.
 Therefore:
 
@@ -210,23 +212,48 @@ Z_{|M|t + m} &= X_{mt}\\
 Z_{|M|^2 + m} &= Y_m
 \end{align}
 
-where $t$ and $m$ are indices starting at 0.
-For example $Z_{17}$ would correspond to $X_{3, 2}$, the decision variable
-representing whether module number 4 is scheduled on day 3; $Z_{208}$ would
-correspond to $Y_{12}$, the decision variable representing whether there's an
+where \(t\) and \(m\) are indices starting at 0.
+For example \(Z_{17}\) would correspond to \(X_{3, 2}\), the decision variable
+representing whether module number 4 is scheduled on day 3; \(Z_{208}\) would
+correspond to \(Y_{12}\), the decision variable representing whether there is an
 exam scheduled for day 12.
 
-Parameters $c$, $A$, and $b$ can be determined by using this same conversion
+Parameters \(c\), \(A\), and \(b\) can be determined by using this same conversion
 from the model in Equations~\ref{eqn:objective_modules} to \ref{eqn:clique4}.
-The vector $c$ would be $|M|^2$ zeroes followed by $|M|$ ones.
-The vector $b$ would be zeroes for all the rows representing
+The vector \(c\) would be \(|M|^2\) zeroes followed by \(|M|\) ones.
+The vector \(b\) would be zeroes for all the rows representing
 Equation~\ref{eqn:auxiliary}, and ones for all other constraints.
 
-
 \section{Solving with Python}\label{sec:solving-with-python}
-In this book we will use the Python library \mintinline{python}{PuLP} to
-formulate and solve the integer program. First let's define all the sets we
-will use to formulate the problem.
+
+In this book the Python library Pulp will be used to
+formulate and solve the integer program. First a function to create the
+binary problem variables for a given set of times and modules is needed:
+
+\begin{pyin}
+import pulp
+
+
+def get_variables(modules, times):
+    """Returns the binary variables for a given timetabling
+    problem.
+
+    Args:
+        modules: The complete collection of modules to be
+                 timetabled.
+        times: The collection of available time slots.
+
+    Returns:
+        A tuple containing the decision variables x and y.
+    """
+    xshape = (modules, times)
+    x = pulp.LpVariable.dicts("X", xshape, cat=pulp.LpBinary)
+    y = pulp.LpVariable.dicts("Y", times, cat=pulp.LpBinary)
+    return x, y
+\end{pyin}
+
+The specific modules and times relating to the problem can now be used to
+obtain the corresponding variables:
 
 \begin{pyin}
 Ac = [0, 1]
@@ -237,27 +264,13 @@ Cc = [9, 10]
 Co = [11, 12, 13]
 modules = Ac + Ao + Bc + Bo + Cc + Co
 times = range(14)
-\end{pyin}
 
-Now let's begin by defining an empty problem:
-
-\begin{pyin}
-import pulp
-
-prob = pulp.LpProblem("ExamScheduling", pulp.LpMinimize)
-\end{pyin}
-
-We also need to define our sets of binary decision variables:
-
-\begin{pyin}
-xshape = (modules, times)
-x = pulp.LpVariable.dicts("X", xshape, cat=pulp.LpBinary)
-y = pulp.LpVariable.dicts("Y", times, cat=pulp.LpBinary)
+x, y = get_variables(modules=modules, times=times)
 \end{pyin}
 
 Now \mintinline{python}{y} is a dictionary of binary decision variables, with
-keys as elements of the list \mintinline{python}{times}. Let's look at
-$Y_3$ corresponding to the third day:
+keys as elements of the list \mintinline{python}{times}. \(Y_3\) corresponds to
+the third day:
 
 \begin{pyin}
 print(y[3])
@@ -269,7 +282,7 @@ Y_3
 
 While \mintinline{python}{x} is a dictionary of dictionaries of binary decision
 variables, with keys as elements of the lists \mintinline{python}{modules} and
-\mintinline{python}{times}. Let's look at $X_{2,5}$, the variable corresponding
+\mintinline{python}{times}. \(X_{2,5}\) is the variable corresponding
 to module 2 being scheduled on day 5:
 
 \begin{pyin}
@@ -280,45 +293,65 @@ print(x[2][5])
 X_2_5
 \end{pyout}
 
-Now we have an empty problem, all relevant sets, and all decision variables
-defined, we can go ahead and add the objective function and constraints to the
-problem.
 
-For the objective function, Equation~\ref{eqn:objective_modules}:
-
-\begin{pyin}
-objective_function = sum([y[day] for day in times])
-prob += objective_function
-\end{pyin}
-
-Now the constraints, Inequalities~\ref{eqn:auxiliary}-\ref{eqn:clique4}:
-
-\begin{pyin}
-M = 1 / len(modules)
-for day in times:
-    prob += M * sum(x[m][day] for m in modules) <= y[day]
-    prob += sum([x[mod][day] for mod in Ac + Ao]) <= 1
-    prob += sum([x[mod][day] for mod in Bc + Bo + Co]) <= 1
-    prob += sum([x[mod][day] for mod in Bc + Bo + Ac]) <= 1
-    prob += sum([x[mod][day] for mod in Cc + Co + Bo]) <= 1
-
-for mod in modules:
-    prob += sum(x[mod][day] for day in times) == 1
-\end{pyin}
-
-At this stage we could print the \mintinline{python}{prob} object, which would
-explicitly give all constraints written out fully. This can be used to error
-check is the need arises.
-
-Now we can go ahead and solve the problem:
+The next step is to create a specific program with the corresponding variables,
+objective function, constraints and solve it. This is done with the following
+function:
 
 %% TODO remove message supressor
 \begin{pyin}
-prob.solve(pulp.apis.PULP_CBC_CMD(msg=False))
+def get_solution(Ac, Ao, Bc, Bo, Cc, Co, times):
+    """Returns the binary variables corresponding to the
+    solution of given timetabling problem.
+
+    Args:
+        Ac: The set of core art modules
+        Ao: The set of optional art modules
+        Bc: The set of core biology modules
+        Bo: The set of optional biology modules
+        Cc: The set of core chemistry modules
+        Co: The set of optional chemistry modules
+        times: The collection of available time slots.
+
+    Returns:
+        A tuple containing the decision variables x and y.
+    """
+    modules = Ac + Ao + Bc + Bo + Cc + Co
+    x, y = get_variables(modules=modules, times=times)
+
+    prob = pulp.LpProblem("ExamScheduling", pulp.LpMinimize)
+
+    objective_function = sum([y[day] for day in times])
+    prob += objective_function
+
+    M = 1 / len(modules)
+    for day in times:
+        prob += M * sum(x[m][day] for m in modules) <= y[day]
+        prob += sum([x[mod][day] for mod in Ac + Ao]) <= 1
+        prob += sum([x[mod][day] for mod in Bc + Bo + Co]) <= 1
+        prob += sum([x[mod][day] for mod in Bc + Bo + Ac]) <= 1
+        prob += sum([x[mod][day] for mod in Cc + Co + Bo]) <= 1
+
+    for mod in modules:
+        prob += sum(x[mod][day] for day in times) == 1
+
+    prob.solve(pulp.apis.PULP_CBC_CMD(msg=False))
+
+    return x, y
 \end{pyin}
 
-This method has also assigned values to our decision variables. These can be
-inspected, lets check if module 2 was scheduled for day 5:
+Using this, the solution \(x\) of the original problem can be obtained:
+
+%% TODO remove message supressor
+\begin{pyin}
+x, y = get_solution(
+    Ac=Ac, Ao=Ao, Bc=Bc, Bo=Bo, Cc=Cc, Co=Co, times=times
+)
+\end{pyin}
+
+These can be
+inspected, for example \(x_{25}\) is a boolean variable relating to if module 2
+is scheduled on the 5th day.
 
 \begin{pyin}
 print(x[2][5].value())
@@ -329,7 +362,7 @@ print(x[2][5].value())
 \end{pyout}
 
 This was assigned the value 0, and so module 2 was not scheduled for that day.
-Let's check if module 2 was scheduled for day 9:
+However, module 2 was scheduled for day 9:
 
 \begin{pyin}
 print(x[2][9].value())
@@ -341,22 +374,58 @@ print(x[2][9].value())
 
 This was assigned a value of 1, and so module 2 was scheduled for that day.
 
-We can iterate through all decision variables and make a print solutions in
-order to read off the schedule easier:
+The following function creates a readable schedule:
 
 \begin{pyin}
-for day in times:
-    if y[day].value() == 1:
-        schedule = f"Day {day}: "
-        for mod in modules:
-            if x[mod][day].value() == 1:
-                schedule += f"{mod}, "
-        print(schedule)
+def get_schedule(x, y, Ac, Ao, Bc, Bo, Cc, Co, times):
+    """Returns a human readable schedule corresponding to the
+    solution of given timetabling problem.
+
+    Args:
+        Ac: The set of core art modules
+        Ao: The set of optional art modules
+        Bc: The set of core biology modules
+        Bo: The set of optional biology modules
+        Cc: The set of core chemistry modules
+        Co: The set of optional chemistry modules
+        times: The collection of available time slots.
+
+    Returns:
+        A string with the schedule
+    """
+    modules = Ac + Ao + Bc + Bo + Cc + Co
+
+    schedule = ""
+    for day in times:
+        if y[day].value() == 1:
+            schedule += f"\nDay {day}: "
+            for mod in modules:
+                if x[mod][day].value() == 1:
+                    schedule += f"{mod}, "
+    return schedule
 \end{pyin}
 
-giving:
+Thus:
+
+\begin{pyin}
+schedule = get_schedule(
+    x=x,
+    y=y,
+    times=times,
+    Ac=Ac,
+    Ao=Ao,
+    Bc=Bc,
+    Bo=Bo,
+    Cc=Cc,
+    Co=Co,
+)
+print(schedule)
+\end{pyin}
+
+gives:
 
 \begin{pyout}
+
 Day 0: 1, 12, 
 Day 5: 0, 13, 
 Day 6: 11, 
@@ -366,31 +435,29 @@ Day 9: 2, 7,
 Day 13: 8,
 \end{pyout}
 
-Now the order of the days do not matter here, but we can see that 7 days are
-required in order to schedule all exams with no clashes, with two exams
-scheduled each day.
-
+The order of the days do not matter here, but we 7 days are required in order to
+schedule all exams with no clashes, with at most three exams scheduled each day.
 
 \section{Solving with R}\label{sec:solving-with-R}
 
-In R we will use the R package \mintinline{R}{ROI}, the R Optimization
-Infrastructure.
+The R package ROI, the R Optimization
+Infrastructure will be used here.
 This is a library of code that acts as a front end to a number of other solvers
 that need to be installed externally, allowing a range of optimisation problems
-to be solved with a number of different solvers, using similar problem
-structures and syntax.
-The solver that we will use here is called the CBC MILP Solver, which needs to
-be installed as well as the \mintinline{R}{rcbc} package.
+to be solved with a number of different solvers.
+The solver that will be used here is called the CBC MILP Solver, which needs to
+be installed as well as the R \mintinline{R}{rcbc} package.
+% TODO Do we need to point at installation documentation for this?
 
-The \mintinline{R}{ROI} package requires that the linear programme is
+The ROI package requires that the linear program is
 represented in its matrix form, with a one-dimensional array of decision
-variables. Therefore we will use the form of the model described at the end of
-Section~\ref{sec:theory}.
-We will write functions that define the objective function $c$, the coefficient
-matrix $A$, the vector of the right hand side of the constraints $b$, and the
-vector of equality or inequalities directions $\star$.
+variables. Therefore the form of the model described at the end of
+Section~\ref{sec:theory} will be used.
+Functions that define the objective function \(c\), the coefficient
+matrix \(A$, the vector of the right hand side of the constraints $b\), and the
+vector of equality or inequalities directions \(\star\) are needed.
 
-First we consider the objective function:
+First the objective function:
 
 \begin{Rin-no-test}
 #' Writes the row of coefficients for the objective function
@@ -409,11 +476,11 @@ write_objective <- function(n_modules, n_days){
 For 3 modules and 3 days:
 
 \begin{Rin-no-test}
-write_objective(3, 3)
+write_objective(n_modules = 3, n_days = 3)
 \end{Rin-no-test}
 
-Which gives the following array, corresponding the the coefficients of the
-array $Z$ for Equation~\ref{eqn:objective_modules}.
+Which gives the following array, corresponding to the coefficients of the
+array \(Z\) for Equation~\ref{eqn:objective_modules}.
 
 \begin{Rout-no-test}
 [1] 0 0 0 0 0 0 0 0 0 1 1 1
@@ -443,8 +510,8 @@ write_X_clashes <- function(clashes, day, n_days, n_modules){
 }
 \end{Rin-no-test}
 
-where \mintinline{R}{clashes} is an array containing the module numbers of a set of
-modules that may all share students.
+where \mintinline{R}{clashes} is an array containing the module numbers of a set
+of modules that may all share students.
 
 The following function is used to write one row of the coefficients matrix, for
 each module, ensuring that each module is scheduled on one day and one day only,
@@ -489,10 +556,11 @@ write_Y_constraints <- function(day, n_days, n_modules){
 }
 \end{Rin-no-test}
 
-Finally the following function uses them all to assemble a coefficients matrix.
+Finally the following function uses all previous functions
+to assemble a coefficients matrix.
 It loops though the parameters for each constraint row required, uses the
 appropriate function to create the row of the coefficients matrix, sets the
-appropriate inequality direction ($\leq$, $=$, $\geq$), and the value of the
+appropriate inequality direction (\(\leq$, $=$, $\geq\)), and the value of the
 right hand side.
 It returns all three components:
 
@@ -511,7 +579,7 @@ write_constraints <- function(list_clashes, n_days, n_modules){
   all_dirs <- c()
   all_rhss <- c()
   n_rows <- 0
-  
+
   for (clash in list_clashes){
     for (day in 1:n_days){
       clashes <- write_X_clashes(clash, day, n_days, n_modules)
@@ -521,7 +589,7 @@ write_constraints <- function(list_clashes, n_days, n_modules){
       n_rows <- n_rows + 1
     }
   }
-  
+
   for (module in 1:n_modules){
     reqs <- write_X_requirements(module, n_days, n_modules)
     all_rows <- append(all_rows, reqs)
@@ -529,7 +597,7 @@ write_constraints <- function(list_clashes, n_days, n_modules){
     all_rhss <- append(all_rhss, 1)
     n_rows <- n_rows + 1
   }
-  
+
   for (day in 1:n_days){
     Yconstraints <- write_Y_constraints(day, n_days, n_modules)
     all_rows <- append(all_rows, Yconstraints)
@@ -537,7 +605,7 @@ write_constraints <- function(list_clashes, n_days, n_modules){
     all_rhss <- append(all_rhss, 0)
     n_rows <- n_rows + 1
   }
-  
+
   f.con <- matrix(all_rows, nrow = n_rows, byrow = TRUE)
   f.dir <- all_dirs
   f.rhs <- all_rhss
@@ -545,7 +613,7 @@ write_constraints <- function(list_clashes, n_days, n_modules){
 }
 \end{Rin-no-test}
 
-For demonstration, if we had two modules and two possible days, with the single
+For demonstration, with 2 modules and 2 possible days, with the single
 constraint that both modules cannot be scheduled at the same time, then:
 
 \begin{Rin-no-test}
@@ -554,14 +622,15 @@ write_constraints(list_clashes = list(c(1, 2)),
                   n_modules = 2)
 \end{Rin-no-test}
 
-This would give three components:
+This would give 3 components:
+
 \begin{itemize}
-  \item a coefficient matrix of the left hand side of the constraints, $A$, (rows 1
+  \item a coefficient matrix of the left hand side of the constraints, \(A\), (rows 1
   and 2 corresponding to the clash on days 1 and 2, row 3 ensuring module 1 is
   scheduled on one day only, row 4 ensuring module 2 is scheduled on one day
-  only, and rows 5 and 6 defining the decision variables $Y$),
-  \item an array of direction of the constraint inequalities, $\star$,
-  \item and an array of the right hand side values of the constraints, $b$.
+  only, and rows 5 and 6 defining the decision variables \(Y\)),
+  \item an array of direction of the constraint inequalities, \(\star\),
+  \item and an array of the right hand side values of the constraints, \(b\).
 \end{itemize}
 
 \begin{Rout-no-test}
@@ -581,9 +650,9 @@ This would give three components:
 [1] 1 1 1 1 0 0
 \end{Rout-no-test}
 
-Now we are ready to use these to solve the exam scheduling problem.
-First we define some parameters, including the sets of modules that all share
-students, that is the list of clashes:
+Now, the problem will be solved.
+First some parameters, including the sets of modules that all share
+students, that is the list of clashes are needed:
 
 \begin{Rin-no-test}
 n_modules = 14
@@ -604,8 +673,8 @@ list_clashes <- list(
 )
 \end{Rin-no-test}
 
-Then we can use the functions defined above to create the objective function and
-the three elements of the constraints:
+Then, the functions defined above are used to create the objective function and
+the 3 elements of the constraints:
 
 \begin{Rin-no-test}
 constraints <- write_constraints(list_clashes = list_clashes,
@@ -617,8 +686,8 @@ f.rhs <- constraints[[3]]
 f.obj <- write_objective(n_modules = n_modules, n_days = n_days)
 \end{Rin-no-test}
 
-Finally, once these objects are in place, we can use the
-\mintinline{R}{ROI} library to construct an optimisation problem object:
+Finally, once these objects are in place, the
+\mintinline{R}{ROI} library is used to construct an optimisation problem object:
 
 \begin{Rin-no-test}
 library(ROI)
@@ -627,7 +696,7 @@ milp <- OP(objective = L_objective(f.obj),
            constraints = L_constraint(L = f.con,
                                       dir = f.dir,
                                       rhs = f.rhs),
-           types = rep("B", length(f.obj)), 
+           types = rep("B", length(f.obj)),
            maximum = FALSE)
 \end{Rin-no-test}
 
@@ -635,10 +704,11 @@ This creates an \mintinline{R}{OP} object from our objective row
 \mintinline{R}{f.obj}, and our constraints which are made up from the three
 components \mintinline{R}{f.con}, \mintinline{R}{f.dir} and
 \mintinline{R}{f.rhs}.
-When creating this object we also denote the \mintinline{R}{types} as binary
-variables (an array of \mintinline{R}{"B"} for each decision variable), and we
-want to minimise the objective function so we set
-\mintinline{R}{maximum = FALSE}.
+When creating this object the \mintinline{R}{types} as binary
+variables are indicated (an array of \mintinline{R}{"B"} for each decision
+variable).
+The objective function is to be minimised so
+\mintinline{R}{maximum = FALSE} is used.
 
 Now to solve:
 
@@ -647,7 +717,6 @@ sol <- ROI_solve(milp)
 \end{Rin-no-test}
 
 The solver will output information about the solve process and runtime.
-We can now print the solution:
 
 \begin{Rin-no-test}
 print(sol$solution)
@@ -664,34 +733,59 @@ print(sol$solution)
 [204] 1 0 1 1 1 0 1
 \end{Rout-no-test}
 
-This gives the values of each of the $Z$ decision variables.
+This gives the values of each of the \(Z\) decision variables.
 We know the structure of this, that is the first 14 variables are the modules
 scheduled for day 1, and so on.
 The following code prints a readable schedule:
 
 \begin{Rin-no-test}
-for (day in 1:n_days){
-  if (sol$solution[(n_days * n_modules) + day] == 1){
-    schedule <- paste("Day", day, ":")
-    for (module in 1:n_modules){
-      var <- ((day - 1) * n_modules) + module
-      if (sol$solution[var] == 1){
-        schedule <- paste(schedule, module)
+#' Gives a human readable schedule corresponding to the
+#' solution of a given timetable problem.
+#'
+#' @param sol: a solution to the timetabling problem
+#' @param n_modules: the number of modules to schedule
+#' @param n_days: the maximum number of days to schedule
+#'
+#' @return A string with the schedule
+get_schedule <- function(sol, n_days, n_modules){
+    schedule = ""
+    for (day in 1:n_days){
+      if (sol$solution[(n_days * n_modules) + day] == 1){
+        schedule <- paste(schedule, "\n", "Day", day, ":")
+        for (module in 1:n_modules){
+          var <- ((day - 1) * n_modules) + module
+          if (sol$solution[var] == 1){
+            schedule <- paste(schedule, module)
+          }
+        }
       }
     }
-    print(schedule)
-  }
+    schedule
 }
 \end{Rin-no-test}
 
+Thus:
+
+\begin{Rin-no-test}
+schedule <- get_schedule(
+    sol = sol,
+    n_days = n_days,
+    n_modules = n_modules
+    )
+cat(schedule)
+\end{Rin-no-test}
+
+gives:
+
 \begin{Rout-no-test}
-[1] "Day 2 : 4 11"
-[1] "Day 6 : 1 12"
-[1] "Day 8 : 7"
-[1] "Day 10 : 8"
-[1] "Day 11 : 3 13"
-[1] "Day 12 : 2 6 9 14"
-[1] "Day 14 : 5 10"
+
+ "Day 2 : 4 11"
+ "Day 6 : 1 12"
+ "Day 8 : 7"
+ "Day 10 : 8"
+ "Day 11 : 3 13"
+ "Day 12 : 2 6 9 14"
+ "Day 14 : 5 10"
 \end{Rout-no-test}
 
 This gives that 7 days are the minimum required to schedule the 14 exams without
