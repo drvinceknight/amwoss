@@ -9,17 +9,17 @@ to play.
 
 \section{Problem}\label{sec:problem}
 
-Consider a delivery company needs to deliver goods to 13 different stops.
-They needs to find a route for a driver to traverse that stops at each of stops
+A delivery company needs to deliver goods to 13 different stops.
+They need to find a route for a driver that stops at each of the stops
 once only, then returns to the first stop, the depot.
 
-The stops are represented spatially in Figure~\ref{fig:tsp}.
+The stops are drawn in Figure~\ref{fig:tsp}.
 
 \begin{figure}
     \begin{center}
         \includegraphics[width=.8\textwidth]{./assets/tsp/main.pdf}
     \end{center}
-    \caption{Spacial representation of the required stops.}
+    \caption{The positions of the required stops.}
     \label{fig:tsp}
 \end{figure}
 
@@ -31,18 +31,10 @@ which is given by the distance matrix in equation (\ref{eqn:tsp}).
 }
 \normalsize
 
-The value \(d\) gives the travel distance between
+The value \(d_{ij}\) gives the travel distance between
 stops \(i\) and \(j\). For example, \(d_{23}=67\) % TODO If the distance matrix changes, this value need to be updated
 indicates that the distance between the 2nd and 3rd stop in the route is 67. % TODO If the distance matrix changes, this value need to be updated
 
-% Given these parameters, we aim to find a \emph{sufficiently good} set of
-% itineraries that gives a low total amount of travel.
-
-% The emphasis on needing a good solution, but not necessarily the best one,
-% prioritising computational efficiency is where the field of heuristics comes in
-% to its own.
-
-% These paragraphs are not relevant to the problem, they comment on the solution method. I have moved them and reworded them slightly into the next section.
 
 The delivery company would like to find the route around the 13 stops that gives
 the smallest overall travel distance.
@@ -50,8 +42,9 @@ the smallest overall travel distance.
 
 \section{Theory}\label{sec:theory}
 
-This is an example of what is known as the Travelling Salesman Problem, %TODO add footnote reference
-and can be considered too complex to solve using exact methods.
+This problem is called a travelling salesman problem, which can 
+often be inefficient to solve using exact methods.
+%TODO add footnote reference
 Heuristics are a family of methods that can be used to find a find a
 \emph{sufficiently good} solution, though not necessarily the optimal solution,
 where the emphasis is on prioritising computational efficiency.
@@ -60,11 +53,11 @@ The heuristic approach taken here will be to use a neighbourhood search algorith
 This algorithm works by considering a given potential solution, evaluating it
 and then trying another potential solution \emph{close} to it. What \emph{close}
 means depends on different approaches and problems: it is referred to as the
-neighbourhood. When new solution is considered \emph{good} (this is
+neighbourhood. When a new solution is considered \emph{good} (this is
 again a term that depends on the approach and problem) then the search
 continues from the neighbourhood of this new solution.
 
-For this problem, first represent a possible solution, that is a given route
+For this problem, the steps are to first represent a possible solution, that is a given route
 between all the potential stops as a \emph{tour}. If there are 3 total stops
 and require that the tour starts and stops at the first one then there are two
 possible tours:
@@ -256,7 +249,7 @@ print(cost)
 827
 \end{pyout}
 
-Now a function for neighbourhood operator will now be written,
+Now a function for neighbourhood operator will be written,
 \mintinline{python}{swap_stops}, that swaps two stops in a given tour.
 
 \begin{pyin}
@@ -372,13 +365,13 @@ print(cost)
 362
 \end{pyout}
 
-Therefore, using this particular algorithm, a pretty good route it found, with a
+Therefore, using this particular algorithm, a pretty good route is found, with a
 total distance of 362.
 
-It is important to note that this may not be the optimal route, and tweaking the
-algorithm slightly may produce better solutions.
-For example, one way to do this is to use a different neighbourhood operator.
-One example is instead of swapping two stop, revering the path between those two
+It is important to note that this may not be the optimal route, and different algorithms
+may produce better solutions.
+For example, one way to modify the algorithm is to use a different neighbourhood operator.
+Instead of swapping two stops, reverse the path between those two
 stops. The \mintinline{python}{reverse_path} function does this:
 
 \begin{pyin}
@@ -432,7 +425,7 @@ gives:
 [0, 8, 5, 3, 1, 9, 12, 11, 4, 10, 6, 2, 7, 0]
 \end{pyout}
 
-This is now gives a different route.
+This now gives a different route.
 Importantly, the costs differ substantially:
 
 \begin{pyin}
@@ -449,7 +442,7 @@ which gives:
 299
 \end{pyout}
 
-an improvement on the solution found using the \mintinline{python}{swap_stops}
+This improves on the solution found using the \mintinline{python}{swap_stops}
 operator. Figure~\ref{fig:final-tsp-tours-python} shows the final obtained
 routes given by both approaches.
 
@@ -467,7 +460,7 @@ routes given by both approaches.
 
 \section{Solving with R}\label{sec:solving-with-R}
 
-To solve this problem using R functions will be written that match the
+To solve this problem using R, functions will be written that match the
 first three steps in the Section~\ref{sec:theory}.
 
 The first step is to write the \mintinline{R}{get_initial_candidate}
@@ -504,7 +497,7 @@ print(initial_candidate)
 \end{Rout}
 
 To be able to evaluate any given tour its cost must be found. Here
-\mintinline{R}{get_cost} to do this:
+\mintinline{R}{get_cost}  does this:
 
 \begin{Rin}
 #' Return the cost of a tour
@@ -545,8 +538,8 @@ print(cost)
 [1] 709
 \end{Rout}
 
-Now a function for neighbourhood operator will now be written,
-\mintinline{R}{swap_stops}, that swaps two stops in a given tour.
+Now a function for a neighbourhood operator will be written,
+\mintinline{R}{swap_stops}: swapping two stops in a given tour.
 
 \begin{Rin}
 #' Return a new tour by swapping two stops.
@@ -657,13 +650,13 @@ which gives:
 [1] 360
 \end{Rout}
 
-Therefore, using this particular algorithm, a pretty good route it found, with a
+Therefore, using this particular algorithm, a pretty good route is found, with a
 total distance of 373.
 
-It is important to note that this may not be the optimal route, and tweaking the
-algorithm slightly may produce better solutions.
-For example, one way to do this is to use a different neighbourhood operator.
-One example is instead of swapping two stop, revering the path between those two
+It is important to note that this may not be the optimal route, and different algorithms
+ may produce better solutions.
+For example, one way to modify the algorithm is to use a different neighbourhood operator.
+Instead of swapping two stops, reverse the path between those two
 stops. The \mintinline{R}{reverse_path} function does this:
 
 
@@ -721,7 +714,7 @@ gives:
  [1]  0  7  2  6 10  4 11 12  9  1  3  5  8  0
 \end{Rout}
 
-This is now gives a different route.
+This now gives a different route.
 Importantly, the costs differ substantially:
 
 \begin{Rin}
@@ -738,7 +731,7 @@ which gives:
 [1] 299
 \end{Rout}
 
-an improvement on the solution found using the \mintinline{R}{swap_stops}
+This is an improvement on the solution found using the \mintinline{R}{swap_stops}
 operator. Figure~\ref{fig:final-tsp-tours-r} shows the final obtained routes
 given by both approaches.
 
