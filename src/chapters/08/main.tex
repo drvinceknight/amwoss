@@ -62,17 +62,18 @@ time slots?
 
 Linear programming is a method that solves a type of optimisation problem of a
 number of variables by making use of some concepts of higher dimensional
-geometry.  % TODO Add footnote reference
+geometry\autocite{conforti2014integer}.
 Optimisation here refers to finding the variable that gives either the maximum
 or minimum of some linear function, called the objective function.
 
-Linear programming employs algorithms such as the Simplex method  % TODO Add footnote reference
+Linear programming employs algorithms such as the Simplex
+method\autocite{conforti2014integer}
 to efficiently search some feasible convex region, stopping at the optimum. To
 do this, an objective function function and constraints need to be defined.
 
-To illustrate this a classic 2-dimensional example will be used: 
+To illustrate this a classic 2-dimensional example will be used:
 \(\pounds 50\) of profit can be made on each
-tonne of paint A produced, and \(\pounds 60\) profit on each tonne of paint B 
+tonne of paint A produced, and \(\pounds 60\) profit on each tonne of paint B
 produced. A tonne of paint A needs 4 tonnes of component X and 5 tonnes of
 component Y. A tonne of paint B needs 6 tonnes of component X and 4 tonnes of
 component Y. Only 24 tonnes of X and 20 tonnes of Y are available per day. How
@@ -122,15 +123,12 @@ feasible region, at \(A = \frac{12}{7}\) and \(B = \frac{20}{7}\).
 
 This works well as \(A\) and \(B\) can take any real value in the feasible region.
 Some problems must be formulated as integer linear programs where the decision
-% TODO Check Programme versus Program for consistency (VK: I don't care which
-% one)
 variables are restricted to integers. There are a number of methods that can
 help adapt a real solution to an integer solution. These include cutting
 planes, which introduce new constraints around the real solution to force an
 integer value; and branch and bound methods, where we iteratively convert
 decision variables to their closest two integers and remove any infeasible
-solutions.
-% TODO Add footnote reference
+solutions\autocite{conforti2014integer}.
 
 Both Python and R have libraries that carry out the linear and integer
 programming algorithms. When solving these kinds of problems, formulating
@@ -171,8 +169,6 @@ enforced by Inequality~\ref{eqn:auxiliary}.
 Equation~\ref{eqn:schedule_all_modules},
 ensures all modules are scheduled once and once only.
 Thus altogether the integer program becomes:
-% TODO Capitalize Integer Program or not? (VK I don't care, but need to check
-% for consistency)
 
 \begin{align}
 \text{Minimise: } \sum_{t \in T} Y_j & \label{eqn:objective_modules} \\
@@ -426,12 +422,12 @@ gives:
 
 \begin{pyout}
 
-Day 0: 1, 12, 
-Day 5: 0, 13, 
-Day 6: 11, 
-Day 7: 4, 6, 10, 
-Day 8: 3, 5, 9, 
-Day 9: 2, 7, 
+Day 0: 1, 12,
+Day 5: 0, 13,
+Day 6: 11,
+Day 7: 4, 6, 10,
+Day 8: 3, 5, 9,
+Day 9: 2, 7,
 Day 13: 8,
 \end{pyout}
 
