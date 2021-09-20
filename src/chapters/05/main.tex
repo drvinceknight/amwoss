@@ -103,8 +103,11 @@ y_{n+1} = h \times f(t_0 + nh, y_n).
 \end{equation}
 
 This sequence approaches the true solution $y$ as $h \rightarrow 0$.
-Thus numerical methods, including the Runge-Kutta methods and the Euler method,
-% TODO Add footnote reference text.
+Thus numerical methods, including the Runge-Kutta methods and the Euler
+method\footnote{
+    These methods are studied in the area of Numerical Analysis. A good textbook
+    is~\autocite{burden2001numerical}.
+},
 step through this sequence $\{y_n\}$, choosing appropriate values of $h$ and
 employing other methods of error reduction.
 
