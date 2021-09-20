@@ -42,9 +42,9 @@ the smallest overall travel distance.
 
 \section{Theory}\label{sec:theory}
 
-This problem is called a travelling salesman problem, which can 
-often be inefficient to solve using exact methods.
-%TODO add footnote reference
+This problem is called a travelling salesman problem, which can
+often be inefficient to solve using exact
+methods\autocite{michalewicz2013solve}.
 Heuristics are a family of methods that can be used to find a find a
 \emph{sufficiently good} solution, though not necessarily the optimal solution,
 where the emphasis is on prioritising computational efficiency.
@@ -407,7 +407,9 @@ which reverses the order between the 3rd and the 11th stop:
 
 Now running the neighbourhood search for 1000 iterations using the
 \mintinline{python}{reverse_path} neighbourhood operator, which corresponds to
-an algorithm called the ``2 opt'' algorithm: %TODO add footnote reference
+an algorithm called the ``2 opt'' algorithm\footnote{The 2 opt algorithm was
+first published in~\autocite{croes1958method}.
+}:
 
 \begin{pyin}
 solution_with_reverse_path = run_neighbourhood_search(
@@ -454,7 +456,6 @@ routes given by both approaches.
     Python.}
     \label{fig:final-tsp-tours-python}
 \end{figure}
-% TODO Can these plots be squares? to correspond easier with the initial plot of the stop locations. Same with R below.
 
 
 
@@ -695,7 +696,9 @@ between the 3rd and the 13th stop:
 
 Now running the neighbourhood search for 1000 iterations using the
 \mintinline{R}{reverse_path} neighbourhood operator, which corresponds to
-an algorithm called the ``2 opt'' algorithm: %TODO add footnote reference
+an algorithm called the ``2 opt'' algorithm\footnote{The 2 opt algorithm was
+first published in~\autocite{croes1958method}.
+}t
 
 \begin{Rin}
 number_of_iterations <- 1000
