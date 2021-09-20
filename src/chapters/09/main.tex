@@ -263,9 +263,7 @@ def swap_stops(tour):
         A tour
     """
     number_of_stops = len(tour) - 1
-    i, j = sorted(
-        np.random.choice(range(1, number_of_stops), 2)
-    )
+    i, j = np.random.choice(range(1, number_of_stops), 2)
     new_tour = list(tour)
     new_tour[i], new_tour[j] = tour[j], tour[i]
     return new_tour
@@ -386,9 +384,8 @@ def reverse_path(tour):
         A tour
     """
     number_of_stops = len(tour) - 1
-    i, j = sorted(
-        np.random.choice(range(1, number_of_stops), 2)
-    )
+    stops = np.random.choice(range(1, number_of_stops), 2)
+    i, j = sorted(stops)
     new_tour = tour[:i] + tour[i : j + 1][::-1] + tour[j + 1 :]
     return new_tour
 \end{pyin}
@@ -549,7 +546,7 @@ Now a function for a neighbourhood operator will be written,
 #' @return A tour
 swap_stops <- function(tour){
     number_of_stops <- length(tour) - 1
-    stops_to_swap <- sort(sample(2:number_of_stops, 2))
+    stops_to_swap <- sample(2:number_of_stops, 2)
     new_tour <- replace(x = tour,
                         list = stops_to_swap,
                         values = rev(tour[stops_to_swap]))
@@ -668,9 +665,9 @@ stops. The \mintinline{R}{reverse_path} function does this:
 #' @return A tour
 reverse_path <- function(tour){
     number_of_stops <- length(tour) - 1
-    stops_to_swap <- sort(sample(2:number_of_stops, 2))
-    i <- stops_to_swap[1]
-    j <- stops_to_swap[2]
+    stops_to_swap <- sample(2:number_of_stops, 2)
+    i <- min(stops_to_swap)
+    j <- max(stops_to_swap)
     new_order <- c(
             c(1: (i - 1)),
             c(j:i),
