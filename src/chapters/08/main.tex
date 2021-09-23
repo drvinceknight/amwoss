@@ -618,8 +618,8 @@ constraint that both modules cannot be scheduled at the same time, then:
 
 \begin{Rin-no-test}
 write_constraints(list_clashes = list(c(1, 2)),
-                  n_days = 2,
-                  n_modules = 2)
+  n_days = 2,
+  n_modules = 2)
 \end{Rin-no-test}
 
 This would give 3 components:
@@ -677,9 +677,10 @@ Then, the functions defined above are used to create the objective function and
 the 3 elements of the constraints:
 
 \begin{Rin-no-test}
-constraints <- write_constraints(list_clashes = list_clashes,
-                                 n_days = n_days,
-                                 n_modules = n_modules)
+constraints <- write_constraints(
+  list_clashes = list_clashes,
+  n_days = n_days,
+  n_modules = n_modules)
 f.con <- constraints[[1]]
 f.dir <- constraints[[2]]
 f.rhs <- constraints[[3]]
@@ -692,12 +693,14 @@ Finally, once these objects are in place, the
 \begin{Rin-no-test}
 library(ROI)
 
-milp <- OP(objective = L_objective(f.obj),
-           constraints = L_constraint(L = f.con,
-                                      dir = f.dir,
-                                      rhs = f.rhs),
-           types = rep("B", length(f.obj)),
-           maximum = FALSE)
+milp <- OP(
+  objective = L_objective(f.obj),
+  constraints = L_constraint(
+    L = f.con,
+    dir = f.dir,
+    rhs = f.rhs),
+  types = rep("B", length(f.obj)),
+  maximum = FALSE)
 \end{Rin-no-test}
 
 This creates an \mintinline{R}{OP} object from our objective row
@@ -748,19 +751,19 @@ The following code prints a readable schedule:
 #'
 #' @return A string with the schedule
 get_schedule <- function(sol, n_days, n_modules){
-    schedule = ""
-    for (day in 1:n_days){
-      if (sol$solution[(n_days * n_modules) + day] == 1){
-        schedule <- paste(schedule, "\n", "Day", day, ":")
-        for (module in 1:n_modules){
-          var <- ((day - 1) * n_modules) + module
-          if (sol$solution[var] == 1){
-            schedule <- paste(schedule, module)
-          }
+  schedule = ""
+  for (day in 1:n_days){
+    if (sol$solution[(n_days * n_modules) + day] == 1){
+      schedule <- paste(schedule, "\n", "Day", day, ":")
+      for (module in 1:n_modules){
+        var <- ((day - 1) * n_modules) + module
+        if (sol$solution[var] == 1){
+          schedule <- paste(schedule, module)
         }
       }
     }
-    schedule
+  }
+  schedule
 }
 \end{Rin-no-test}
 
@@ -768,10 +771,10 @@ Thus:
 
 \begin{Rin-no-test}
 schedule <- get_schedule(
-    sol = sol,
-    n_days = n_days,
-    n_modules = n_modules
-    )
+  sol = sol,
+  n_days = n_days,
+  n_modules = n_modules
+)
 cat(schedule)
 \end{Rin-no-test}
 

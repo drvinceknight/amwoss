@@ -471,10 +471,10 @@ function that creates an initial tour:
 #'
 #' @return A tour starting an ending at stop with index 0.
 get_initial_candidate <- function(number_of_stops, seed){
-    internal_stops <- 1:(number_of_stops - 1)
-    set.seed(seed)
-    internal_stops <- sample(internal_stops)
-    c(0, internal_stops, 0)
+  internal_stops <- 1:(number_of_stops - 1)
+  set.seed(seed)
+  internal_stops <- sample(internal_stops)
+  c(0, internal_stops, 0)
 }
 \end{Rin}
 
@@ -484,8 +484,8 @@ This gives a random tour on 13 stops:
 number_of_stops <- 13
 seed <- 1
 initial_candidate <- get_initial_candidate(
-    number_of_stops = number_of_stops,
-    seed = seed)
+  number_of_stops = number_of_stops,
+  seed = seed)
 print(initial_candidate)
 \end{Rin}
 
@@ -617,10 +617,10 @@ Now running this for 1000 iterations:
 \begin{Rin}
 number_of_iterations <- 1000
 solution_with_swap_stops <- run_neighbourhood_search(
-    distance_matrix = distance_matrix,
-    iterations = number_of_iterations,
-    seed = seed,
-    neighbourhood_operator = swap_stops
+  distance_matrix = distance_matrix,
+  iterations = number_of_iterations,
+  seed = seed,
+  neighbourhood_operator = swap_stops
 )
 print(solution_with_swap_stops)
 \end{Rin}
@@ -635,8 +635,8 @@ This has a cost:
 
 \begin{Rin}
 cost <- get_cost(
-    tour = solution_with_swap_stops,
-    distance_matrix = distance_matrix
+  tour = solution_with_swap_stops,
+  distance_matrix = distance_matrix
 )
 print(cost)
 \end{Rin}
@@ -664,17 +664,17 @@ stops. The \mintinline{R}{reverse_path} function does this:
 #'
 #' @return A tour
 reverse_path <- function(tour){
-    number_of_stops <- length(tour) - 1
-    stops_to_swap <- sample(2:number_of_stops, 2)
-    i <- min(stops_to_swap)
-    j <- max(stops_to_swap)
-    new_order <- c(
-            c(1: (i - 1)),
-            c(j:i),
-            c( (j + 1): length(tour))
-            )
-    tour[new_order]
-    }
+  number_of_stops <- length(tour) - 1
+  stops_to_swap <- sample(2:number_of_stops, 2)
+  i <- min(stops_to_swap)
+  j <- max(stops_to_swap)
+  new_order <- c(
+    c(1: (i - 1)),
+    c(j:i),
+    c( (j + 1): length(tour))
+  )
+  tour[new_order]
+}
 \end{Rin}
 
 Applying this neighbourhood operator to the initial candidate gives:
@@ -697,10 +697,10 @@ an algorithm called the ``2 opt'' algorithm: %TODO add footnote reference
 \begin{Rin}
 number_of_iterations <- 1000
 solution_with_reverse_path <- run_neighbourhood_search(
-    distance_matrix = distance_matrix,
-    iterations = number_of_iterations,
-    seed = seed,
-    neighbourhood_operator = reverse_path
+  distance_matrix = distance_matrix,
+  iterations = number_of_iterations,
+  seed = seed,
+  neighbourhood_operator = reverse_path
 )
 print(solution_with_reverse_path)
 \end{Rin}
@@ -716,8 +716,8 @@ Importantly, the costs differ substantially:
 
 \begin{Rin}
 cost <- get_cost(
-    tour = solution_with_reverse_path,
-    distance_matrix = distance_matrix
+  tour = solution_with_reverse_path,
+  distance_matrix = distance_matrix
 )
 print(cost)
 \end{Rin}

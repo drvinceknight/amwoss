@@ -564,8 +564,10 @@ the resulting mean happiness:
 #'
 #' @return The average city's household satisfaction
 #'   after n_steps
-find_mean_happiness <- function(seed, size,
-                                threshold, n_steps){
+find_mean_happiness <- function(seed,
+                                size,
+                                threshold,
+                                n_steps){
   set.seed(seed)
   our_city <- city$new(size, threshold)
   our_city$run(n_steps)

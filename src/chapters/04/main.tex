@@ -312,8 +312,8 @@ library(deSolve)  # nolint
 
 #' @return A vector of numerical values
 get_solution <- function(times,
-                          y0 = c(I = 100),
-                          alpha = 2) {
+                         y0 = c(I = 100),
+                         alpha = 2) {
   params <- c(alpha = alpha)
   ode(y = y0, times = times, func = derivative, parms = params)
 }
@@ -335,8 +335,7 @@ points. Using this we can compute the cost.
 #' @param max_time: an integer (default: 10)
 
 #' @return A numeric value
-get_cost <- function(
-                     I_0 = 100,
+get_cost <- function(I_0 = 100,
                      alpha = 2,
                      cost_per_person = 10,
                      cost_of_cure = 0,
@@ -381,7 +380,7 @@ cost of the cure itself:
 \begin{Rin}
 cost_of_cure <- 5
 cost_with_cure <- get_cost(
-    alpha = 2 * alpha, cost_of_cure = cost_of_cure
+  alpha = 2 * alpha, cost_of_cure = cost_of_cure
 )
 print(round(cost_with_cure))
 \end{Rin}
