@@ -347,7 +347,6 @@ get_cost <- function(I_0 = 100,
     alpha = alpha
   )
   number_of_observations <- length(out[, "I"])
-
   time_between_steps <- diff(out[, "time"])
   area_under_curve <- sum(
     time_between_steps *

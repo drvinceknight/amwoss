@@ -309,12 +309,10 @@ def run_neighbourhood_search(
         number_of_stops=number_of_stops,
         seed=seed,
     )
-
     best_cost = get_cost(
         tour=candidate,
         distance_matrix=distance_matrix,
     )
-
     for _ in range(iterations):
         new_candidate = neighbourhood_operator(candidate)
         if (
@@ -548,8 +546,8 @@ swap_stops <- function(tour){
     number_of_stops <- length(tour) - 1
     stops_to_swap <- sample(2:number_of_stops, 2)
     new_tour <- replace(x = tour,
-                        list = stops_to_swap,
-                        values = rev(tour[stops_to_swap]))
+      list = stops_to_swap,
+      values = rev(tour[stops_to_swap]))
     }
 \end{Rin}
 
@@ -595,7 +593,6 @@ run_neighbourhood_search <- function(
     tour = candidate,
     distance_matrix = distance_matrix
     )
-
   for (repetition in 1:iterations) {
     new_candidate <- neighbourhood_operator(candidate)
     cost <- get_cost(
@@ -606,7 +603,6 @@ run_neighbourhood_search <- function(
       best_cost <- cost
       candidate <- new_candidate
     }
-
   }
   candidate
 }

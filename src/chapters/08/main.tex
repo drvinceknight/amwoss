@@ -264,7 +264,6 @@ Cc = [9, 10]
 Co = [11, 12, 13]
 modules = Ac + Ao + Bc + Bo + Cc + Co
 times = range(14)
-
 x, y = get_variables(modules=modules, times=times)
 \end{pyin}
 
@@ -318,9 +317,7 @@ def get_solution(Ac, Ao, Bc, Bo, Cc, Co, times):
     """
     modules = Ac + Ao + Bc + Bo + Cc + Co
     x, y = get_variables(modules=modules, times=times)
-
     prob = pulp.LpProblem("ExamScheduling", pulp.LpMinimize)
-
     objective_function = sum([y[day] for day in times])
     prob += objective_function
 
@@ -336,7 +333,6 @@ def get_solution(Ac, Ao, Bc, Bo, Cc, Co, times):
         prob += sum(x[mod][day] for day in times) == 1
 
     prob.solve(pulp.apis.PULP_CBC_CMD(msg=False))
-
     return x, y
 \end{pyin}
 
@@ -589,7 +585,6 @@ write_constraints <- function(list_clashes, n_days, n_modules){
       n_rows <- n_rows + 1
     }
   }
-
   for (module in 1:n_modules){
     reqs <- write_X_requirements(module, n_days, n_modules)
     all_rows <- append(all_rows, reqs)
@@ -597,7 +592,6 @@ write_constraints <- function(list_clashes, n_days, n_modules){
     all_rhss <- append(all_rhss, 1)
     n_rows <- n_rows + 1
   }
-
   for (day in 1:n_days){
     Yconstraints <- write_Y_constraints(day, n_days, n_modules)
     all_rows <- append(all_rows, Yconstraints)
@@ -605,7 +599,6 @@ write_constraints <- function(list_clashes, n_days, n_modules){
     all_rhss <- append(all_rhss, 0)
     n_rows <- n_rows + 1
   }
-
   f.con <- matrix(all_rows, nrow = n_rows, byrow = TRUE)
   f.dir <- all_dirs
   f.rhs <- all_rhss
@@ -657,14 +650,12 @@ students, that is the list of clashes are needed:
 \begin{Rin-no-test}
 n_modules = 14
 n_days = 14
-
 Ac <- c(0, 1)
 Ao <- c(2, 3, 4)
 Bc <- c(5, 6)
 Bo <- c(7, 8)
 Cc <- c(9, 10)
 Co <- c(11, 12, 13)
-
 list_clashes <- list(
   c(Ac, Ao),
   c(Bc, Bo, Co),
