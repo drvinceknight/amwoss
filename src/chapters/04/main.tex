@@ -80,8 +80,8 @@ efficiently so as to answer the original question.
 
 \section{Solving with Python}\label{sec:solving-with-python}
 
-The first step is to write a function to obtain the differential
-equation. The Python library SymPy is used which allows symbolic calculations.
+The first step is to define the symbolic variables that will be used.
+The Python library SymPy is used which allows symbolic calculations.
 
 \begin{pyin}
 import sympy as sym
@@ -90,8 +90,11 @@ t = sym.Symbol("t")
 alpha = sym.Symbol("alpha")
 I_0 = sym.Symbol("I_0")
 I = sym.Function("I")
+\end{pyin}
 
+Now write a function to obtain the differential equation.
 
+\begin{pyin}
 def get_equation(alpha=alpha):
     """Return the differential equation.
 
