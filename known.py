@@ -221,6 +221,7 @@ words = {
     "orge",
     "ost",
     "outext",
+    "parallelisation",
     "param",
     "params",
     "parms",
