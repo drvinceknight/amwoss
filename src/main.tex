@@ -1,4 +1,5 @@
 \documentclass[Alon2,singlecolor,11pt]{Alon}
+
 \usepackage{fixltx2e,fix-cm}
 \usepackage[english]{babel}
 \usepackage{epigrafica}
@@ -27,11 +28,16 @@
 \usepackage{standalone}
 \usepackage{tikz}
 \usepackage{varwidth}
+
 \usetikzlibrary{arrows}
 \usetikzlibrary{calc}
 \usetikzlibrary{decorations.markings}
 \usetikzlibrary{decorations.text}
 \usetikzlibrary{shapes}
+
+\usepackage[style=verbose]{biblatex}
+\addbibresource{footnotes.bib}
+
 %---------------------
 
 
@@ -94,9 +100,7 @@
 \input{./chapters/08/main.tex}
 \input{./chapters/09/main.tex}
 
-
-\bibliographystyle{plain}
-\bibliography{library}
+\printbibliography
 
 \printindex
 \cleardoublepage

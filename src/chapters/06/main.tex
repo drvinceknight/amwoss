@@ -171,8 +171,12 @@ This is called a Nash equilibrium: when both players are playing a
 strategy that is the best response against the other.
 
 An important fact is that a Nash equilibrium is guaranteed to exist.
-This was actually the theoretic result for which John Nash received a noble prize.
-% TODO Add footnote reference
+This was actually the theoretic result for which John Nash received a noble
+prize\footnote{
+John Nash proved the fact that any game has a Nash equilibrium
+in~\autocite{nash1950equilibrium}. Discussions and proofs for particular cases
+can be found in good Game Theory text books such as~\autocite{maschler2013game}
+}.
 There are various algorithms that can be used for finding Nash equilibria, they involve
 a search through the pairs of spaces of possible strategies until pairs of best
 responses are found. Mathematical insight allows this do be done somewhat efficiently
@@ -181,9 +185,16 @@ One such example is called the Lemke-Howson algorithm.
 A Nash equilibrium is not necessarily guaranteed to be arrived at through
 dynamic decision making. However, any stable
 behaviour that does emerge will be a Nash
-equilibrium, such emergent processes are the topics of evolutionary game theory,
-learning algorithms and/or agent based modelling.
-% TODO Add footnote reference and pointer to ABS chapter.
+equilibrium, such emergent processes are the topics of evolutionary game
+theory\footnote{
+Evolutionary game theory was formalised in~\autocite{smith1974theory} although
+some of the work of Robert Axelrod is evolutionary in principle~\autocite{axelrod1981evolution}
+},
+learning algorithms\footnote{
+An excellent text on learning in games is~\autocite{fudenberg1998theory}
+}
+and/or agent based modelling which will be covered in
+Chapter~\ref{chp:agent_based_simulation}.
 
 \section{Solving with Python}\label{sec:solving-with-python}
 

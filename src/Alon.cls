@@ -686,7 +686,8 @@
 \def\tabnotefont{\fontsize{9}{11}\selectfont}%
 \def\indexfont{\fontsize{8}{10}\selectfont}%\rightskip11pc
 \def\Initialfont{\reset@font\fontsize{33}{33}\selectfont}
-\def\bibfont{\reset@font\fontsize{10}{12}\selectfont}
+%\def\bibfont{\reset@font\fontsize{10}{12}\selectfont}  % Removed this to allow
+                                                        % for footnote citations
 \newcommand\VfFont{\fontsize{9}{11}\sffamily\selectfont}
 \newcommand\CAPlusOneFont{\fontsize{12}{14}\bfseries\selectfont}
 \newcommand\CAAPlusOneFont{\fontsize{10}{12}\itshape\selectfont}
@@ -1988,7 +1989,8 @@
 
 \newenvironment{thefurtherreading}[1]
      {\section*{FURTHER READING}\vspace*{-9.3pt}%
-\bibfont
+%\bibfont  % Removed this to allow
+           % for footnote citations
 \noindent{\redink\vrule height.5pt width\textwidth}\vspace*{-8.2pt}\blackink
 \ifappendix
 \else

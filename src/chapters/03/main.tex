@@ -104,8 +104,14 @@ Computers are deterministic, therefore true randomness is in itself a
 challenging mathematical problem.
 They can however generate pseudorandom numbers: sequences of numbers that look
 like random numbers, but are entirely determined from the
-previous numbers in the sequence. Most programming languages have methods of
-doing this. % TODO add footnote
+previous numbers in the sequence\footnote{An early
+discussion of pseudo random numbers is~\autocite{von195113} where the author
+claimed: ``Anyone who considers arithmetical methods of producing random digits
+is, of course, in a state of sin.'' A number of different pseudo random
+number generators exist, at the time of writing the state of the art is the
+Mersenne Twister described in~\autocite{matsumoto1998mersenne}. }.
+Most programming languages have methods of
+doing this.
 
 In order to simulate an event the law of large numbers can be used.
 Let \(X \sim U(0, 1)\), a uniformly pseudorandom variable between 0 and 1.
@@ -225,7 +231,7 @@ repair workshop. For each of these the following need to be defined:
 
 In this case the time between consecutive arrivals will be assumed to follow an
 exponential distribution, as will the service time.
-These are common assumptions for this sort of queueing system. % TODO add reference
+These are common assumptions for this sort of queueing system~\autocite{stewart2009probability}.
 
 In Ciw, these are defined as part of a Network object, created using the
 \mintinline{python}{ciw.create_network} function. The function below creates a
@@ -305,7 +311,11 @@ def run_simulation(network, seed=0):
 \end{pyin}
 
 Notice here a random seed is set. This is because there is randomness in running
-the simulation, setting a seed ensures reproducible results. % TODO add footnote
+the simulation, setting a seed ensures reproducible results\footnote{
+Pseudo random number generators give a sequence of numbers that obey a series of
+properties. A seed is necessary to obtain a starting point for a given sequence.
+This has the benefit of ensuring that given sequences can be reproduced.
+}.
 Notice also that the simulation always begins with an empty system, so the first
 bicycle to arrive will never wait for service. Depending on the situation this
 may be an unwanted feature, though not in this case as it is reasonable to
@@ -542,7 +552,11 @@ run_simulation <- function(bicycle,
 
 Notice here a random seed is set. This is because there are elements of
 randomness when running the simulation, setting a seed ensures reproducible
-results. % TODO add footnote
+results\footnote{
+Pseudo random number generators give a sequence of numbers that obey a series of
+properties. A seed is necessary to obtain a starting point for a given sequence.
+This has the benefit of ensuring that given sequences can be reproduced.
+}.
 Notice also that the simulation always begins with an empty system, so the first
 bicycle to arrive will never wait for service. Depending on the situation this
 may be an unwanted feature, though not in this case as it is reasonable to
