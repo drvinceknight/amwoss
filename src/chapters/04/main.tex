@@ -395,11 +395,37 @@ which gives:
 
 So given the current parameters it is not worth purchasing the cure.
 
-\section{Research}\label{sec:research}
+\section{Wider context}\label{sec:differential_equations_wider_context}
 
-TBA
+There are a number of further areas related to the study of as well as the use
+of differential equations. Topics omitted here include the actual solution
+approaches which in this chapter are taken
+care of using open source software. Chapters 9, 14 and 16
+of~\parencite{stewart2009calculus} provide a good introduction to some of
+these concepts as well as a general discussion of the area of mathematics in
+which they sit: Calculus.
 
+Differential equations have been applied in many settings.
+In~\parencite{lanchester1916aircraft} differential equations were used to model
+attrition in warfare, the insights from these differential equations are
+referred to as Lanchester's square law. This has been historically fitted to a
+number of battles with varying levels of success.
 
-% Possibilities:
-% + "A dynamic competition model of regime change" Syms R and Solymar L (https://www.tandfonline.com/doi/pdf/10.1057/jors.2015.28?needAccess=true)
-% + "A Fluid Flow Model of Networks of Queues" Vandergraft K (https://www.jstor.org/stable/pdf/2631349.pdf?refreqid=excelsior%3A50876bb857b8a452892a441bff3e9f68)
+In~\parencite{syms2015dynamic} differential equations are used to build a
+generic model of regime change. A detailed analysis of the stability of the
+system is included. The model offers some explanation of why oppressive regimes
+can follow an overthrow of a similarly oppressive regime: the underlying
+mathematical system is a stable cycle from which it is difficult to escape.
+
+\parencite{vandergraft1983fluid} uses differential equations as a framework for
+modelling queueing networks. This is interesting in its inception as
+differential equations are models for continuous quantities whereas queues are
+discrete type events (see Chapter~\ref{chp:markov_models}
+and~\ref{chp:discrete_event_simulation} for more on this). The advantages of
+using differential equations are mainly in the computational efficiency.
+
+The model presented in this chapter is deterministic: there is a single solution
+that remains the same. This is not always a precise model of reality: often
+systems are stochastic so that the inputs are not constant parameters but follow
+some random distribution. This is where stochastic differential equations are
+applied which is the subject of~\parencite{sarkka2019applied}.

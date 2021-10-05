@@ -72,7 +72,7 @@ ways:
 
 \begin{itemize}
     \item Using probabilities of changing state (or not) in a well defined time
-        interval. This is called a discrete Markov chain.
+        interval. This is called a discrete time Markov chain.
     \item Using rates of change from one state to another. This is called a
         continuous time Markov chain.
 \end{itemize}
@@ -688,6 +688,38 @@ Therefore, it would be better to increase the number of barbers by 1
 than to increase the waiting room capacity by 2.
 
 
-\section{Research}\label{sec:research}
+\section{Wider context}\label{sec:markov_chains_wider_context}
 
-TBA
+The overview of Markov chains given here has mainly concentrated on calculation
+of steady state probabilities. There are in fact many more theoretic an applied
+aspects of Markov chain models. Some examples of this include the calculation of
+sojourn times which is how long a system spends in a given state as well as
+considering models with absorption: where the system arrives at a state that it
+no longer leaves. For a good overview of
+these the following textbook is recommended:~\parencite{stewart2009probability}.
+
+In \parencite{tan1997markov, stewart1996monopoly}, Markov chains are used to model board games. In
+\parencite{tan1997markov} a model of the battles that take place on a Risk board is used
+to understand the probabilities of invasion of territories based on troupe
+numbers. This is done using an absorbing Markov chain. In
+\parencite{stewart1996monopoly} a
+standard model is used to identify the properties that are most likely to be
+landed on in Monopoly. This is done through calculation of steady state
+probabilities. These are both examples of discrete time Markov chains.
+
+A common application of Markov chains is in queueing systems and specifically
+queueing systems applied to healthcare. In \parencite{griffiths2013modelling} a
+model of a neurological rehabilitation unit is built and used to help better
+staff the unit.  This is accomplished using the steady state probabilities and
+calculating various performance measures.  This is an application of a
+continuous time Markov chain.
+
+An extension of Markov chains are Markov decision processes. This is a
+particular mathematical model that identifies the optimal decision made within a
+Markov chain.
+Instead of building multiple Markov models for different decisions, in Markov
+decision processes decisions can be made at each state of the underlying chain.
+A policy can be identified giving the optimal decision at each state.
+In \parencite{white1993survey} a literature review is given showing a wide
+ranging application of these decision processes from to agriculture to motor
+insurance claims as well as sports.

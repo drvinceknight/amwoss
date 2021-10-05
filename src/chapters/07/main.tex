@@ -575,6 +575,10 @@ find_mean_happiness <- function(seed, size,
   our_city$mean_satisfaction()
 }
 \end{Rin}
+% TODO Modify the class names to be CamelCase and then modify names of instance
+% variables:
+% - Ensure they remain snake care
+% - Change variable name: s/our_city/city
 
 
 Now consider each household with a threshold of
@@ -626,7 +630,31 @@ It shows the households segregating over time.
 \label{fig:schelling_R_plot}
 \end{figure}
 
-\section{Research}\label{sec:research}
+\section{Wider context}\label{sec:agent_based_simulation_wider_context}
 
-% TODO Even though we will footnote reference it I feel that Schelling's model
-% should be here also.
+The simulations described in this chapter come under the larger umbrella term of
+multi agent systems, which discusses the theory of systems with multiple
+independent agents interacting with one another. A good source on the topic
+is~\parencite{shoham2008multiagent}.
+
+The model described here is called Schelling's Model of Segregation, and is
+first described in \parencite{schelling2006micromotives}. Another model
+considered as classic in this domain is a model of a flock of birds presented
+in~\parencite{reynolds1987flocks}, otherwise referred to as Boids, where the
+behaviours of flocks of birds are understood by capturing the individual
+interactions between individual birds. Conway's Game of Life, described
+in~\parencite{gardener1970mathematical} is another classic, which comes under
+the banner of cellular autonoma. Here cells on a grid either become alive or dead
+depending on a certain simplistic set of rules. Emergent behaviours observed due
+to these rules include self replicating as well as oscillating structures.
+In the 1970s agent based tournaments were held by Robert Axelrod (described
+in~\parencite{axelrod1981evolution}), which was the first of a number of studies
+using agent based modelling and game theory (see Chapter 6) to understand the
+emergence of cooperative behaviours.
+
+In recent years, similar methodologies have been used in a variety of
+applications. \parencite{diaz2021agent} models parents' choice of school, in
+\parencite{romanowska2019agent} archaeological population migration and trade
+dynamics are modelled, and \parencite{jing2020agent} offers a systematic
+literature review for the use of agent based modelling of autonomous vehicles.
+

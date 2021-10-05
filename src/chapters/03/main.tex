@@ -1,4 +1,4 @@
-\chapter[Discrete Event Simulation]{Discrete Event Simulation}
+\chapter[Discrete Event Simulation]{Discrete Event Simulation}\label{chp:discrete_event_simulation}
 
 % Introduction
 \chapterinitial{C}{omplex} situations further compounded by randomness appear
@@ -698,14 +698,36 @@ that is 12.25\% of bicycles.
 Therefore an additional member of staff at the inspection desk would be more
 beneficial than an additional member of staff at the repair workshop.
 
-\section{Research highlights}\label{sec:research}
+\section{Wider context}\label{sec:discrete_event_simulation_wider_context}
 
-% TODO
+The concepts shown in this chapter cover some theoretical aspects of discrete
+event simulation. There are a number of further topics that can be vital to
+creating valid models of real life scenarios. These include time dependent rates
+and rostering servers. An overview of the theory of discrete event simulation is
+given in~\parencite{robinson2004simulation}.
 
-% I have not read: "An analysis of the academic literature on simulation and
-% modelling in health care" https://www.tandfonline.com/doi/abs/10.1057/jos.2009.10
+One particular use of discrete event simulation is as part of a wider
+optimisation exercise. For example, a systematic search for an optimal service
+configuration can use a discrete event simulation model as a replacement for a
+mathematical objective function. Another approach is to integrate an
+optimisation procedure\footnote{For more information on optimisation see
+Chapters~\ref{chp:linear_programming} and~\ref{chp:heuristics}.} within a
+discrete event simulation model so as to iteratively simulate optimal
+configurations. This is done in~\parencite{osorio2017simulation} to be able to
+bring together strategic configuration and overall flow in the blood supply
+chain. A general review and taxonomy of different uses of discrete event
+simulation with optimisation techniques is given
+in~\parencite{figueira2014hybrid}.
 
-% Maybe: "Simulation-optimization model for production planning in the blood
-% supply chain" https://link.springer.com/article/10.1007%2Fs10729-016-9370-6
+One domain where simulation is popularly used is in modelling healthcare systems.
+A general overview is given in~\parencite{brailsford2009analysis} where uses
+include resource utilisation, human behaviour, and workforce management.
 
-% Perhaps something not healthcare related.
+In order to be able to fully capture all the relevant details of the system to
+be modelled, an extension of discrete event simulation is to combine the
+methodology with systems dynamics (Chapter~\ref{chp:system_dynamics}) in order
+to model continuous aspects of the system and/or agent based modelling
+(Chapter~\ref{chp:agent_based_simulation}) in order to observe emergent or
+learned behaviours. This is known as hybrid simulation, and an overview is given
+in~\parencite{brailsford2019hybrid}. There are a number of ways of combining
+these methodologies, from comparison to full integration.
