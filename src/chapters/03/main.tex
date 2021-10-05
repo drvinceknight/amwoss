@@ -11,7 +11,7 @@ to do this, is to let a computer create a dynamic virtual representation of the
 scenario in question, a particular approach we are going to cover here is called
 Discrete Event Simulation.
 
-\section{Typical Problem}\label{sec:problem}
+\section{Problem}\label{sec:discrete_event_simulation_problem}
 
 A bicycle repair shop would like reconfigure
 in order to guarantee that all bicycles processed take a maximum of 30 minutes.
@@ -51,7 +51,7 @@ The shop will hire an extra member of staff in order to meet their target of a
 maximum time in the system of 30 minutes. They would like to know if they
 should work on the inspection counter or in the repair workshop?
 
-\section{Theory}\label{sec:theory}
+\section{Theory}\label{sec:discrete_event_simulation_theory}
 
 A number of aspects of the bicycle shop above are
 probabilistic. For example the
@@ -143,7 +143,7 @@ In this case the fundamental random events that need to be generated are:
 \end{itemize}
 
 As the simulation progresses these events will be generated, and will interact
-together as described in Section~\ref{sec:problem}.
+together as described in Section~\ref{sec:discrete_event_simulation_problem}.
 The proportion of customers spending longer than 30 minutes in the shop can then
 be counted. This proportion itself is a random variable, and so like the
 weighted die, running this simulation once does not give much information.
@@ -211,7 +211,7 @@ Therefore in process based simulations, in addition to defining a sequence of
 events, resource types and their numbers also need to be defined.
 
 
-\section{Solving with Python}\label{sec:solving-with-python}
+\section{Solving with Python}\label{sec:discrete_event_simulation_solving-with-python}
 
 In this book the Ciw library will be used in order to conduct Discrete Event
 Simulation in Python.
@@ -459,7 +459,7 @@ Therefore an additional member of staff at the inspection desk would be more
 beneficial than an additional member of staff at the repair workshop.
 
 
-\section{Solving with R}\label{sec:solving-with-R}
+\section{Solving with R}\label{sec:discrete_event_simulation_solving-with-R}
 
 In this book we will use the Simmer package in order to conduct discrete event
 simulation in R.  Simmer uses the process based approach, which means that each
