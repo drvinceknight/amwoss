@@ -158,24 +158,20 @@ Now to define the \mintinline{python}{City}:
 class City:
     def __init__(self, size, threshold):
         """Initialises the City object.
-
         Args:
             size: an integer number of rows and columns
-            threshold: a number between 0 and 1 representing
-              the minimum acceptable proportion of similar
-              neighbours
+            threshold: float between 0 and 1 representing the
+            minimum acceptable proportion of similar neighbours
         """
         self.size = size
         sides = range(size)
         self.coords = itertools.product(sides, sides)
         self.houses = {
             (x, y): House(x, y, threshold, self)
-            for x, y in self.coords
-        }
+            for x, y in self.coords}
 
     def run(self, n_steps):
         """Runs the simulation of a number of time steps.
-
         Args:
             n_steps: an integer number of steps
         """
@@ -193,13 +189,11 @@ class City:
 
     def mean_satisfaction(self):
         """Finds the average household satisfaction.
-
         Returns:
             The average city's household satisfaction
         """
         return np.mean(
-            [h.satisfaction() for h in self.houses.values()]
-        )
+            [h.satisfaction() for h in self.houses.values()])
 \end{pyin}
 
 This defines a class, a template or a set of instructions that can be used to
@@ -248,7 +242,6 @@ a \mintinline{python}{House} class:
 class House:
     def __init__(self, x, y, threshold, city):
         """Initialises the House object.
-
         Args:
             x: the integer x-coordinate
             y: the integer y-coordinate
@@ -265,7 +258,6 @@ class House:
 
     def satisfaction(self):
         """Determines the household's satisfaction level.
-
         Returns:
             A proportion
         """
@@ -278,7 +270,6 @@ class House:
 
     def sad(self):
         """Determines if the household is sad.
-
         Returns:
             a Boolean
         """
@@ -286,7 +277,6 @@ class House:
 
     def swap(self, house):
         """Swaps two households.
-
         Args:
             house: the house object to swap household with
         """
