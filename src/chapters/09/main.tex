@@ -315,12 +315,11 @@ def run_neighbourhood_search(
     )
     for _ in range(iterations):
         new_candidate = neighbourhood_operator(candidate)
-        if (
-            cost := get_cost(
-                tour=new_candidate,
-                distance_matrix=distance_matrix,
-            )
-        ) <= best_cost:
+        cost = get_cost(
+          tour=new_candidate,
+          distance_matrix=distance_matrix,
+        )
+        if cost <= best_cost:
             best_cost = cost
             candidate = new_candidate
 
