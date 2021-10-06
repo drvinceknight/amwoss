@@ -100,6 +100,7 @@ words = {
     "Savageau",
     "SciPy",
     "SciPy's",
+    "Simpy",
     "Simula",
     "SymPy",
     "Sympy",
