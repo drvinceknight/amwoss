@@ -295,7 +295,6 @@ The next step is to create a specific program with the corresponding variables,
 objective function, constraints and solve it. This is done with the following
 function:
 
-%% TODO remove message supressor
 \begin{pyin}
 def get_solution(Ac, Ao, Bc, Bo, Cc, Co, times):
     """Returns the binary variables corresponding to the
@@ -339,7 +338,6 @@ def get_solution(Ac, Ao, Bc, Bo, Cc, Co, times):
 
 Using this, the solution \(x\) of the original problem can be obtained:
 
-%% TODO remove message supressor
 \begin{pyin}
 x, y = get_solution(
     Ac=Ac, Ao=Ao, Bc=Bc, Bo=Bo, Cc=Cc, Co=Co, times=times
