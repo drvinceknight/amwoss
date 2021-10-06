@@ -610,9 +610,11 @@ For demonstration, with 2 modules and 2 possible days, with the single
 constraint that both modules cannot be scheduled at the same time, then:
 
 \begin{Rin-no-test}
-write_constraints(list_clashes = list(c(1, 2)),
+write_constraints(
+  list_clashes = list(c(1, 2)),
   n_days = 2,
-  n_modules = 2)
+  n_modules = 2
+)
 \end{Rin-no-test}
 
 This would give 3 components:
@@ -671,7 +673,8 @@ the 3 elements of the constraints:
 constraints <- write_constraints(
   list_clashes = list_clashes,
   n_days = n_days,
-  n_modules = n_modules)
+  n_modules = n_modules
+)
 f.con <- constraints[[1]]
 f.dir <- constraints[[2]]
 f.rhs <- constraints[[3]]
@@ -689,9 +692,11 @@ milp <- OP(
   constraints = L_constraint(
     L = f.con,
     dir = f.dir,
-    rhs = f.rhs),
+    rhs = f.rhs
+  ),
   types = rep("B", length(f.obj)),
-  maximum = FALSE)
+  maximum = FALSE
+)
 \end{Rin-no-test}
 
 This creates an \mintinline{R}{OP} object from our objective row

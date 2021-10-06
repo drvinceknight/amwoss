@@ -502,8 +502,8 @@ To be able to evaluate any given tour its cost must be found. Here
 #'
 #' @return The cost
 get_cost <- function(tour, distance_matrix){
-    pairs <-  cbind(tour[-length(tour)], tour[-1]) + 1
-    sum(distance_matrix[pairs])
+  pairs <-  cbind(tour[-length(tour)], tour[-1]) + 1
+  sum(distance_matrix[pairs])
 }
 \end{Rin}
 
@@ -524,8 +524,8 @@ distance_matrix <- rbind(
         c(69, 37, 94, 69, 69, 76, 94, 82, 74, 37, 73, 65, 0)
 )
 cost <- get_cost(
-    tour = initial_candidate,
-    distance_matrix = distance_matrix)
+  tour = initial_candidate,
+  distance_matrix = distance_matrix)
 print(cost)
 \end{Rin}
 
@@ -543,12 +543,14 @@ Now a function for a neighbourhood operator will be written,
 #'
 #' @return A tour
 swap_stops <- function(tour){
-    number_of_stops <- length(tour) - 1
-    stops_to_swap <- sample(2:number_of_stops, 2)
-    new_tour <- replace(x = tour,
-      list = stops_to_swap,
-      values = rev(tour[stops_to_swap]))
-    }
+  number_of_stops <- length(tour) - 1
+  stops_to_swap <- sample(2:number_of_stops, 2)
+  new_tour <- replace(
+    x = tour,
+    list = stops_to_swap,
+    values = rev(tour[stops_to_swap])
+  )
+}
 \end{Rin}
 
 Applying this neighbourhood operator to the initial candidate gives:
@@ -587,18 +589,17 @@ run_neighbourhood_search <- function(
   candidate <- get_initial_candidate(
     number_of_stops = number_of_stops,
     seed = seed
-    )
-
+  )
   best_cost <- get_cost(
     tour = candidate,
     distance_matrix = distance_matrix
-    )
+  )
   for (repetition in 1:iterations) {
     new_candidate <- neighbourhood_operator(candidate)
     cost <- get_cost(
         tour = new_candidate,
-        distance_matrix = distance_matrix)
-
+        distance_matrix = distance_matrix
+    )
     if (cost <= best_cost) {
       best_cost <- cost
       candidate <- new_candidate

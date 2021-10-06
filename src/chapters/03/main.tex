@@ -526,9 +526,11 @@ run_simulation <- function(bicycle,
     simmer("Repair Shop") %>%
     add_resource("Inspector", num_inspectors) %>%
     add_resource("Repairer", num_repairers) %>%
-    add_generator("Bicycle", bicycle, function() {
-      rexp(1, arrival_rate)
-    })
+    add_generator(
+      "Bicycle", bicycle, function() {
+        rexp(1, arrival_rate)
+      }
+    )
   set.seed(seed)
   repair_shop %>% run(until = 8)
   return(repair_shop)
@@ -645,7 +647,8 @@ the situation where the additional member of staff works at the inspection desk:
 print(
   get_average_proportion(
     num_inspectors = 2,
-    num_repairers = 2)
+    num_repairers = 2
+  )
 )
 \end{Rin}
 
@@ -664,7 +667,8 @@ repair workshop:
 print(
   get_average_proportion(
     num_inspectors = 1,
-    num_repairers = 3)
+    num_repairers = 3
+  )
 )
 \end{Rin}
 

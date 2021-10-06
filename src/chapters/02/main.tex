@@ -463,7 +463,8 @@ get_transition_rate_matrix <- function(waiting_room = 4,
                                        num_barbers = 2){
   max_state <- waiting_room + num_barbers
 
-  Q <- outer(0:max_state,
+  Q <- outer(
+    0:max_state,
     0:max_state,
     vectorized_get_transition_rate,
     waiting_room = waiting_room,

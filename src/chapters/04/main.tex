@@ -280,10 +280,12 @@ First write a function to give the derivative for a given value of \(I\).
 
 #' @return a float
 derivative <- function(t, y, parameters) {
-  with(as.list(c(y, parameters)), {
-    dIdt <- -alpha * I  # nolint
-    list(dIdt)  # nolint
-  })
+  with(
+    as.list(c(y, parameters)), {
+      dIdt <- -alpha * I  # nolint
+      list(dIdt)  # nolint
+    }
+  )
 }
 \end{Rin}
 % TODO remove # nolint

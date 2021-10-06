@@ -398,19 +398,21 @@ derivatives <- function(t, y, parameters){
   infection_rate <- 0.3
   recovery_rate <- 0.02
   death_rate <- 0.01
-  with(as.list(c(y, parameters)), {
-    N <- S + I + R
-    dSdt <- ( - ( (infection_rate * S * I) / N)  # nolint
-      + ( (1 - vaccine_rate) * birth_rate * N)
-      - (death_rate * S))
-    dIdt <- ( ( (infection_rate * S * I) / N)  # nolint
-      - (recovery_rate * I)
-      - (death_rate * I))
-    dRdt <- ( (recovery_rate * I)  # nolint
-      - (death_rate * R)
-      + (vaccine_rate * birth_rate * N))
-    list(c(dSdt, dIdt, dRdt))  # nolint
-  })
+  with(
+    as.list(c(y, parameters)), {
+      N <- S + I + R
+      dSdt <- ( - ( (infection_rate * S * I) / N)  # nolint
+        + ( (1 - vaccine_rate) * birth_rate * N)
+        - (death_rate * S))
+      dIdt <- ( ( (infection_rate * S * I) / N)  # nolint
+        - (recovery_rate * I)
+        - (death_rate * I))
+      dRdt <- ( (recovery_rate * I)  # nolint
+        - (death_rate * R)
+        + (vaccine_rate * birth_rate * N))
+      list(c(dSdt, dIdt, dRdt))  # nolint
+    }
+  )
 }
 \end{Rin}
 

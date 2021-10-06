@@ -356,7 +356,8 @@ library(Recon)
 get_equilibria <- function(profits, offset = 0){
   new_profits <- rbind(
     profits[c(1, 2), ],
-    profits[3, ] + offset)
+    profits[3, ] + offset
+  )
   sim_nasheq(new_profits, t(new_profits))
 }
 \end{Rin}
