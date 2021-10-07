@@ -114,7 +114,7 @@ employing other methods of error reduction.
 
 \section{Solving with Python}\label{sec:solving-with-python}
 
-Here the \mintinline{python}{odeint} method of the SciPy
+Here the \mintinline{python}{solve_ivp} method of the SciPy
 library will be used to numerically solve the above models.
 
 First the system of differential equations described in Equations~\ref{eqn:dS},
@@ -123,13 +123,13 @@ Python function, where the first two arguments are the system state and the
 current time respectively.
 
 \begin{pyin}
-def derivatives(y, t, vaccine_rate, birth_rate=0.01):
+def derivatives(t, y, vaccine_rate, birth_rate=0.01):
     """Defines the system of differential equations that
     describe the epidemiology model.
 
     Args:
-        y: a tuple of three integers
         t: a positive float
+        y: a tuple of three integers
         vaccine_rate: a positive float <= 1
         birth_rate: a positive float <= 1
 
@@ -165,7 +165,7 @@ individuals, 1 infected individual, 0 recovered individuals, and a vaccine rate
 of 50\%, gives:
 
 \begin{pyin}
-print(derivatives(y=(4, 1, 0), t=0.0, vaccine_rate=0.5))
+print(derivatives(t=0.0, y=(4, 1, 0), vaccine_rate=0.5))
 \end{pyin}
 
 \begin{pyout}
@@ -179,16 +179,16 @@ per time unit. After a tiny fraction of a time unit these quantities will
 change, and thus the rates of change will change.
 
 The following function observes the system's behaviour over some time period,
-using SciPy's \mintinline{python}{odeint} to numerically solve the system of
-differential equations:
+using SciPy's \mintinline{python}{solve_ivp} to numerically solve the system
+of differential equations:
 
 \begin{pyin}
-from scipy.integrate import odeint
+from scipy.integrate import solve_ivp
 
 
-def integrate_ode(
+def solve_ode(
     derivative_function,
-    t,
+    t_span,
     y0=(2999, 1, 0),
     vaccine_rate=0.85,
     birth_rate=0.01,
@@ -198,22 +198,22 @@ def integrate_ode(
     Args:
         derivative_function: a function returning a tuple
                              of three floats
-        t: an array of increasing positive floats
+        t_span: endpoints of the time range to integrate over
         y0: a tuple of three integers (default: (2999, 1, 0))
         vaccine_rate: a positive float <= 1 (default: 0.85)
         birth_rate: a positive float <= 1 (default: 0.01)
 
     Returns:
-        A tuple of three arrays
+        A tuple of four arrays
     """
-    results = odeint(
+    sol = solve_ivp(
         derivative_function,
+        t_span,
         y0,
-        t,
         args=(vaccine_rate, birth_rate),
     )
-    S, I, R = results.T
-    return S, I, R
+    t, S, I, R = sol.t, sol.y[0], sol.y[1], sol.y[2]
+    return t, S, I, R
 \end{pyin}
 
 This function can be used to investigate the difference in behaviour between a
@@ -223,11 +223,10 @@ observed for two years, that is 730 days, in time steps of 0.01 days.
 Begin with a vaccine rate of 0\%:
 
 \begin{pyin}
-import numpy as np
 from scipy.integrate import odeint
 
-t = np.arange(0, 730.01, 0.01)
-S, I, R = integrate_ode(derivatives, t, vaccine_rate=0.0)
+t_span = [0, 730]
+t, S, I, R = solve_ode(derivatives, t_span, vaccine_rate=0.0)
 \end{pyin}
 
 Now \mintinline{python}{S}, \mintinline{python}{I} and \mintinline{python}{R}
@@ -238,7 +237,7 @@ Figure~\ref{fig:plot_no_vaccine}.
 
 \begin{figure}
 \begin{center}
-\includegraphics[width=0.6\textwidth]{./assets/plot_no_vaccine_python.pdf}
+\includegraphics[width=0.6\textwidth]{./assets/sd_vaccine_plots/plot_no_vaccine_python.pdf}
 \end{center}
 \caption{Stock levels without vaccination, in Python.}
 \label{fig:plot_no_vaccine}
@@ -256,15 +255,14 @@ are infected, and 60\% are recovered and immune.
 Now with a vaccine rate of 85\%:
 
 \begin{pyin}
-t = np.arange(0, 730.01, 0.01)
-S, I, R = integrate_ode(derivatives, t, vaccine_rate=0.85)
+t, S, I, R = solve_ode(derivatives, t_span, vaccine_rate=0.85)
 \end{pyin}
 
 The corresponding plot is shown in Figure~\ref{fig:plot_with_vaccine}.
 
 \begin{figure}
 \begin{center}
-\includegraphics[width=0.6\textwidth]{./assets/plot_with_vaccine_python.pdf}
+\includegraphics[width=0.6\textwidth]{./assets/sd_vaccine_plots/plot_with_vaccine_python.pdf}
 \end{center}
 \caption{Stock levels with vaccination, in Python.}
 \label{fig:plot_with_vaccine}
@@ -298,28 +296,26 @@ def daily_cost(
     Returns:
         the daily cost
     """
-    max_time = 730
-    time_step = 0.01
     birth_rate = 0.01
     vaccine_cost = 220
     medication_cost = 10
-    t = np.arange(0, max_time + time_step, time_step)
-    S, I, R = integrate_ode(
+    t_span = [0, 730]
+    t, S, I, R = solve_ode(
         derivatives,
-        t,
+        t_span,
         vaccine_rate=vaccine_rate,
         birth_rate=birth_rate,
     )
     N = S[-1] + I[-1] + R[-1]
     daily_vaccine_cost = (
         N * birth_rate * vaccine_rate * vaccine_cost
-    ) / time_step
-    daily_meds_cost = (I[-1] * medication_cost) / time_step
+    )
+    daily_meds_cost = (I[-1] * medication_cost)
     return daily_vaccine_cost + daily_meds_cost
 \end{pyin}
 
-Now the total daily cost with and without vaccination can be compared. Without
-vaccinations:
+Now the total daily cost with and without vaccination can be compared.
+Without vaccinations:
 
 \begin{pyin}
 cost = daily_cost(vaccine_rate=0.0)
@@ -329,11 +325,11 @@ print(round(cost, 2))
 which gives
 
 \begin{pyout}
-900000.0
+9002.33
 \end{pyout}
 
 Therefore without vaccinations, once the infection is endemic, the public health
-care system would expect to spend $\pounds 900,000$ a day.
+care system would expect to spend $\pounds 9002.33$ a day.
 
 With a vaccine rate of 85\%:
 
@@ -345,11 +341,11 @@ print(round(cost, 2))
 which gives
 
 \begin{pyout}
-611903.36
+6119.14
 \end{pyout}
 
 So vaccinating 85\% of the population would cost the public health care system,
-once the infection is endemic $\pounds 611,903.36$ a day. That is a saving of
+once the infection is endemic $\pounds 6119.14$ a day. That is a saving of
 around 32\%.
 
 
@@ -433,7 +429,7 @@ library(deSolve)  # nolint
 #' @param vaccine_rate a positive float <= 1 (default: 0.85)
 #'
 #' @return a matrix of times, S, I and R values
-integrate_ode <- function(times,
+solve_ode <- function(times,
                           y0 = c(S = 2999, I = 1, R = 0),
                           birth_rate = 0.01,
                           vaccine_rate = 0.84){
@@ -454,7 +450,7 @@ Begin with a vaccine rate of 0\%:
 
 \begin{Rin}
 times <- seq(0, 730, by = 0.01)
-out <- integrate_ode(times, vaccine_rate = 0.0)
+out <- solve_ode(times, vaccine_rate = 0.0)
 \end{Rin}
 
 Now \mintinline{R}{out}, is a matrix with four columns,  \mintinline{R}{time},
@@ -466,7 +462,7 @@ Figure~\ref{fig:plot_no_vaccine_R}.
 
 \begin{figure}
 \begin{center}
-\includegraphics[width=0.6\textwidth]{./assets/plot_no_vaccine_R.pdf}
+\includegraphics[width=0.6\textwidth]{./assets/sd_vaccine_plots/plot_no_vaccine_R.pdf}
 \end{center}
 \caption{Stock levels without vaccination, in R.}
 \label{fig:plot_no_vaccine_R}
@@ -485,14 +481,14 @@ Now with a vaccine rate of 85\%:
 
 \begin{Rin}
 times <- seq(0, 730, by = 0.01)
-out <- integrate_ode(times, vaccine_rate = 0.85)
+out <- solve_ode(times, vaccine_rate = 0.85)
 \end{Rin}
 
 The corresponding plot is shown in Figure~\ref{fig:plot_with_vaccine_R}.
 
 \begin{figure}
 \begin{center}
-\includegraphics[width=0.6\textwidth]{./assets/plot_with_vaccine_R.pdf}
+\includegraphics[width=0.6\textwidth]{./assets/sd_vaccine_plots/plot_with_vaccine_R.pdf}
 \end{center}
 \caption{Stock levels with vaccination, in R.}
 \label{fig:plot_with_vaccine_R}
@@ -528,14 +524,14 @@ daily_cost <- function(derivative_function = derivatives,
   vaccine_cost <- 220
   medication_cost <- 10
   times <- seq(0, max_time, by = time_step)
-  out <- integrate_ode(times, vaccine_rate = vaccine_rate)
+  out <- solve_ode(times, vaccine_rate = vaccine_rate)
   N <- sum(tail(out[, c("S", "I", "R")], n = 1))
-  daily_vaccine_cost <- (N
-                         * birth_rate
-                         * vaccine_rate
-                         * vaccine_cost) / time_step
-  daily_medication_cost <- ( (tail(out[, "I"], n = 1)
-                             * medication_cost)) / time_step
+  daily_vaccine_cost <- (
+    N * birth_rate * vaccine_rate * vaccine_cost
+  )
+  daily_medication_cost <- (
+    tail(out[, "I"], n = 1) * medication_cost
+  )
   daily_vaccine_cost + daily_medication_cost
 }
 \end{Rin}
@@ -551,11 +547,11 @@ print(cost)
 which gives
 
 \begin{Rout}
-[1] 9e+05
+[1] 9000
 \end{Rout}
 
 Therefore without vaccinations, once the infection is endemic, the public health
-care system would expect to spend $\pounds 900,000$ a day.
+care system would expect to spend $\pounds 9000$ a day.
 
 With a vaccine rate of 85\%:
 
@@ -567,11 +563,11 @@ print(cost)
 which gives
 
 \begin{Rout}
-[1] 611903.4
+[1] 6119.034
 \end{Rout}
 
 So vaccinating 85\% of newborns would cost the public health care system, once
-the infection is endemic $\pounds 611,903.40$ a day. That is a saving of around
+the infection is endemic $\pounds 6119.04$ a day. That is a saving of around
 32\%.
 
 \section{Wider context}\label{sec:system_dynamics_wider_context}
