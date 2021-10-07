@@ -3,6 +3,12 @@
 \usepackage[framemethod=TikZ]{mdframed}
 \usepackage{xcolor}
 
+\definecolor{pyincol}{RGB}{51, 110, 159}
+\definecolor{pyoutcol}{RGB}{78, 169, 244}
+\definecolor{Rincol}{RGB}{55, 151, 59}
+\definecolor{Routcol}{RGB}{132, 203, 47}
+\definecolor{bg}{RGB}{248, 248, 248}
+
 %%% Test environment
 
 \newenvironment{explanation}
@@ -11,15 +17,14 @@
 
 %%% Code environments
 
-\newenvironment{code}[4]
+\newenvironment{code}[3]
 % The basic code environment.
 % Used to create further environments.
 %
 % Take four arguments:
-% - a string of text to appear and a language for syntax
-% - a string of text to appear and a language for syntax
-% - the width of the border frame
-% - the color of the background
+% - a string of text to appear, the title
+% - a language for syntax
+% - the color of the box
 %
 % For example:
 %
@@ -27,25 +32,21 @@
 % for i in range(5):
 %   print(i)
 % end{code}
-{\begin{mdframed}[nobreak=true,
-                  frametitle={\colorbox{#4}{\space#1\space}},
-                  innertopmargin=10pt,
-                  frametitlefont=\ttfamily,
-                  frametitleaboveskip=-\ht\strutbox,
-                  frametitlealignment=\center,
-                  backgroundcolor=#4,
-                  ]
+{\begin{tcolorbox}[colframe=#3,
+                   colback=white,
+                   coltitle=white,
+                   fonttitle=\bfseries\ttfamily\Large,
+                   left=26pt,
+                   colback=bg,
+                   title=#1]
  \VerbatimEnvironment
  \begin{minted}[
     linenos=true,
     style=friendly,
     samepage=true,
-    frame=single,
-    framerule=#3,
-    bgcolor=white,
     firstnumber=last,
     ]{#2}}
-{\end{minted}\end{mdframed}}
+{\end{minted}\end{tcolorbox}}
 
 %%%%% Python code environments
 
@@ -57,7 +58,7 @@
 % end{pyin}
 {
 \VerbatimEnvironment
-\begin{code}{Python input}{python}{0.8pt}{cyan!5}}
+\begin{code}{Python input}{python}{pyincol}}
 {\end{code}}
 
 \newenvironment{pyout}
@@ -71,7 +72,7 @@
 % end{pyout}
 {
 \VerbatimEnvironment
-\begin{code}{Python output}{python}{0.4pt}{yellow!5}}
+\begin{code}{Python output}{python}{pyoutcol}}
 {\end{code}}
 
 \newenvironment{pyin-no-test}
@@ -98,7 +99,7 @@
 % end{pyin}
 {
 \VerbatimEnvironment
-\begin{code}{R input}{R}{0.8pt}{magenta!5}}
+\begin{code}{R input}{R}{Rincol}}
 {\end{code}}
 
 
@@ -113,7 +114,7 @@
 % end{Rout}
 {
 \VerbatimEnvironment
-\begin{code}{R output}{R}{0.4pt}{green!5}}
+\begin{code}{R output}{R}{Routcol}}
 {\end{code}}
 
 \newenvironment{Rin-no-test}
@@ -135,13 +136,13 @@
 \newenvironment{cliin}
 {
 \VerbatimEnvironment
-\begin{code}{Cli input}{bash}{0.8pt}{white}}
+\begin{code}{Cli input}{bash}{white}}
 {\end{code}}
 
 
 \newenvironment{cliout}
 {
 \VerbatimEnvironment
-\begin{code}{Cli output}{bash}{0.4pt}{white}}
+\begin{code}{Cli output}{bash}{white}}
 {\end{code}}
 
