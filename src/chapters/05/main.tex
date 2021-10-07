@@ -230,32 +230,17 @@ t = np.arange(0, 730.01, 0.01)
 S, I, R = integrate_ode(derivatives, t, vaccine_rate=0.0)
 \end{pyin}
 
-% TODO Remove plotting form chapter (See tsp and abs chapters for example)
 Now \mintinline{python}{S}, \mintinline{python}{I} and \mintinline{python}{R}
 are arrays of values of the stock levels of $S$, $I$ and $R$ over the time
 steps \mintinline{python}{t}.
-Using \mintinline{python}{matplotlib} a plot can be obtained to visualise their
-behaviour.
-The following code gives the plot shown in Figure~\ref{fig:plot_no_vaccine}.
-
-
-\begin{pyin-no-test}
-import matplotlib.pyplot as plt
-
-fig, ax = plt.subplots(1)
-ax.plot(t, S, label='Susceptible')
-ax.plot(t, I, label='Infected')
-ax.plot(t, R, label='Recovered')
-ax.legend(fontsize=12)
-fig.savefig("plot_no_vaccine_python.pdf")
-\end{pyin-no-test}
-
+These can be plotted to visualise their behaviour, shown in
+Figure~\ref{fig:plot_no_vaccine}.
 
 \begin{figure}
 \begin{center}
 \includegraphics[width=0.6\textwidth]{./assets/plot_no_vaccine_python.pdf}
 \end{center}
-\caption{Output of code line 737-742}
+\caption{Stock levels without vaccination, in Python.}
 \label{fig:plot_no_vaccine}
 \end{figure}
 
@@ -275,23 +260,13 @@ t = np.arange(0, 730.01, 0.01)
 S, I, R = integrate_ode(derivatives, t, vaccine_rate=0.85)
 \end{pyin}
 
-The following code
-gives the plot shown in Figure~\ref{fig:plot_with_vaccine}.
-
-\begin{pyin-no-test}
-fig, ax = plt.subplots(1)
-ax.plot(t, S, label='Susceptible')
-ax.plot(t, I, label='Infected')
-ax.plot(t, R, label='Recovered')
-ax.legend(fontsize=12)
-fig.savefig("plot_with_vaccine_python.pdf")
-\end{pyin-no-test}
+The corresponding plot is shown in Figure~\ref{fig:plot_with_vaccine}.
 
 \begin{figure}
 \begin{center}
 \includegraphics[width=0.6\textwidth]{./assets/plot_with_vaccine_python.pdf}
 \end{center}
-\caption{Output of code line 745-750}
+\caption{Stock levels with vaccination, in Python.}
 \label{fig:plot_with_vaccine}
 \end{figure}
 
@@ -486,23 +461,14 @@ Now \mintinline{R}{out}, is a matrix with four columns,  \mintinline{R}{time},
 \mintinline{R}{S}, \mintinline{R}{I} and \mintinline{R}{R}, which are arrays of
 values of the time points, and the stock levels of $S$, $I$ and $R$ over the
 time respectively.
-These can be plotted to visualise their behaviour.
-The following code gives the plot shown in Figure~\ref{fig:plot_no_vaccine_R}.
-
-\begin{Rin-no-test}
-pdf("plot_no_vaccine_R.pdf", width = 7, height = 5)
-plot(out[, "time"], out[, "S"], type = "l", col = "blue")
-lines(out[, "time"], out[, "I"], type = "l", col = "orange")
-lines(out[, "time"], out[, "R"], type = "l", col = "darkgreen")
-dev.off()
-\end{Rin-no-test}
-
+These can be plotted to visualise their behaviour, shown in
+Figure~\ref{fig:plot_no_vaccine_R}.
 
 \begin{figure}
 \begin{center}
 \includegraphics[width=0.6\textwidth]{./assets/plot_no_vaccine_R.pdf}
 \end{center}
-\caption{Output of code line 846-850}
+\caption{Stock levels without vaccination, in R.}
 \label{fig:plot_no_vaccine_R}
 \end{figure}
 
@@ -522,23 +488,13 @@ times <- seq(0, 730, by = 0.01)
 out <- integrate_ode(times, vaccine_rate = 0.85)
 \end{Rin}
 
-The following code
-gives the plot shown in Figure~\ref{fig:plot_with_vaccine_R}.
-
-\begin{Rin-no-test}
-pdf("plot_with_vaccine_R.pdf", width = 7, height = 5)
-plot(out[, "time"], out[, "S"], type = "l", col = "blue")
-lines(out[, "time"], out[, "I"], type = "l", col = "orange")
-lines(out[, "time"], out[, "R"], type = "l", col = "darkgreen")
-dev.off()
-\end{Rin-no-test}
-
+The corresponding plot is shown in Figure~\ref{fig:plot_with_vaccine_R}.
 
 \begin{figure}
 \begin{center}
 \includegraphics[width=0.6\textwidth]{./assets/plot_with_vaccine_R.pdf}
 \end{center}
-\caption{Output of code line 853-857}
+\caption{Stock levels with vaccination, in R.}
 \label{fig:plot_with_vaccine_R}
 \end{figure}
 
