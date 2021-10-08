@@ -10,7 +10,7 @@ these changes may be complex, and are not necessarily solvable analytically. In
 these cases numerical methods and visualisation may be used, which is the focus
 of this chapter.
 
-\section{Problem}\label{sec:problem}
+\section{Problem}\label{sec:system_dynamics_problem}
 Consider the following scenario, where a population of 3000 people are
 susceptible to infection by some disease. This population can be described by
 the following parameters:
@@ -31,7 +31,7 @@ This vaccine costs the public health care system a one-off cost of
 $\pounds 220$ per vaccine. The healthcare providers would like to know if
 achieving a vaccination rate $v$ of $85\%$ would be beneficial financially.
 
-\section{Theory}\label{sec:theory}
+\section{Theory}\label{sec:system_dynamics_theory}
 
 The above scenario is called a compartmental model of disease, and can be
 represented in a stock and flow diagram as in Figure~\ref{fig:stockflow}.
@@ -112,7 +112,7 @@ step through this sequence $\{y_n\}$, choosing appropriate values of $h$ and
 employing other methods of error reduction.
 
 
-\section{Solving with Python}\label{sec:solving-with-python}
+\section{Solving with Python}\label{sec:system_dynamics_solving-with-python}
 
 Here the \mintinline{python}{odeint} method of the SciPy
 library will be used to numerically solve the above models.
@@ -378,7 +378,7 @@ once the infection is endemic $\pounds 611,903.36$ a day. That is a saving of
 around 32\%.
 
 
-\section{Solving with R}\label{sec:solving-with-R}
+\section{Solving with R}\label{sec:system_dynamics_solving-with-R}
 
 The \mintinline{R}{deSolve} library will be used to numerically solve the above
 epidemiology models.

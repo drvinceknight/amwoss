@@ -7,7 +7,7 @@ current temperature. These types of systems are called dynamical systems and are
 modelled mathematically using differential equations. This chapter will
 consider a direct solution approach using symbolic mathematics.
 
-\section{Problem}\label{sec:problem}
+\section{Problem}\label{sec:differential_equations_problem}
 
 Consider the following situation: the entire population of a small rural town
 has caught a cold. All 100 individuals will recover at an average rate of 2 per
@@ -17,7 +17,7 @@ other intangible aspects. They need to decide whether or not to order cold
 medicine which would \textbf{double} the recovery rate. The cost of of the cold
 medicine is a one off cost of \pounds5 per person.
 
-\section{Theory}\label{sec:theory}
+\section{Theory}\label{sec:differential_equations_theory}
 
 In the case of this town, the overall rate at which people get better is
 dependent on the number of people in how are ill. This can be represented
@@ -78,7 +78,7 @@ where \(K\) is the cost per person per unit time.
 In the upcoming sections code will be used to confirm to carry out the above
 efficiently so as to answer the original question.
 
-\section{Solving with Python}\label{sec:solving-with-python}
+\section{Solving with Python}\label{sec:differential_equations_solving-with-python}
 
 The first step is to write a function to obtain the differential
 equation. The Python library SymPy is used which allows symbolic calculations.
@@ -259,7 +259,7 @@ which gives:
 
 So given the current parameters it is not worth purchasing the cure.
 
-\section{Solving with R}\label{sec:solving-with-R}
+\section{Solving with R}\label{sec:differential_equations_solving-with-R}
 
 R has some capability for symbolic mathematics, however at the time of writing
 the options available are somewhat limited and/or not reliable. As such, in R
@@ -420,7 +420,7 @@ mathematical system is a stable cycle from which it is difficult to escape.
 \parencite{vandergraft1983fluid} uses differential equations as a framework for
 modelling queueing networks. This is interesting in its inception as
 differential equations are models for continuous quantities whereas queues are
-discrete type events (see Chapter~\ref{chp:markov_models}
+discrete type events (see Chapter~\ref{chp:markov_chains}
 and~\ref{chp:discrete_event_simulation} for more on this). The advantages of
 using differential equations are mainly in the computational efficiency.
 
