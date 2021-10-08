@@ -68,7 +68,7 @@ def build(c, substitions=substitions):
     """
     Copy the src directory in to build and then make all substitutions
     """
-    c.run("rm -r build/")
+    c.run("rm -rf build/")
     c.run("cp -r src build")
     for key, value in substitions.items():
         print(key, value)
@@ -80,7 +80,7 @@ def compile(c):
     Compile the LaTeX document.
     """
     build(c)
-    c.run("cd build; latexmk  -interaction=nonstopmode  --xelatex -shell-escape main.tex")
+    c.run("cd build; latexmk --xelatex -shell-escape main.tex")
 
 @task
 def analyse(c):
