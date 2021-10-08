@@ -1,4 +1,5 @@
 \documentclass[Alon2,singlecolor,11pt]{Alon}
+
 \usepackage{fixltx2e,fix-cm}
 \usepackage[english]{babel}
 \usepackage{epigrafica}
@@ -16,6 +17,7 @@
 \usepackage{subfigure}
 \usepackage{booktabs}
 \usepackage{multirow}
+\usepackage{tcolorbox}
 
 \renewcommand{\sfdefault}{txss}
 
@@ -27,11 +29,16 @@
 \usepackage{standalone}
 \usepackage{tikz}
 \usepackage{varwidth}
+
 \usetikzlibrary{arrows}
 \usetikzlibrary{calc}
 \usetikzlibrary{decorations.markings}
 \usetikzlibrary{decorations.text}
 \usetikzlibrary{shapes}
+
+\usepackage[style=verbose]{biblatex}
+\addbibresource{bibliography.bib}
+
 %---------------------
 
 
@@ -45,8 +52,7 @@
 
 % Non publisher libraries
 
-\title{Applied mathematics problems with Open Source Software:
-       Operational Research with Python and R.}
+\title{Applied Mathematics Problems with Open Source Software}
 \author{Vincent Knight and Geraint Palmer}
 
 \begin{document}
@@ -71,8 +77,9 @@
 %%\listoffigures
 %%\listoftables
 
-\include{frontmatter/foreword/main}
-\include{frontmatter/preface/main}
+% Geraint and Vince decided to comment this out for now.
+%\include{frontmatter/foreword/main}
+%\include{frontmatter/preface/main}
 \include{frontmatter/contributor/main}
 
 
@@ -94,9 +101,7 @@
 \input{./chapters/08/main.tex}
 \input{./chapters/09/main.tex}
 
-
-\bibliographystyle{plain}
-\bibliography{library}
+\printbibliography
 
 \printindex
 \cleardoublepage

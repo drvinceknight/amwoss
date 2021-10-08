@@ -11,6 +11,13 @@ from invoke import task
 
 import known
 
+substitions = {
+        "# nolint": "",
+        "prob.solve(pulp.apis.PULP_CBC_CMD(msg=False))": "prob.solve()",
+        ", warn.conflicts = FALSE, quietly = TRUE)": ")",
+        }
+
+
 @task
 def delenv(c):
     """
@@ -56,11 +63,23 @@ def env(c):
     # )
 
 @task
+def build(c, substitions=substitions):
+    """
+    Copy the src directory in to build and then make all substitutions
+    """
+    c.run("rm -rf build/")
+    c.run("cp -r src build")
+    for key, value in substitions.items():
+        print(key, value)
+        c.run(f"cd build; sed -i '.bak' 's/{key}/{value}/g' chapters/*/main.tex")
+
+@task
 def compile(c):
     """
     Compile the LaTeX document.
     """
-    c.run("cd src; latexmk  -interaction=nonstopmode  --xelatex -shell-escape main.tex")
+    build(c)
+    c.run("cd build; latexmk --xelatex -shell-escape main.tex")
 
 @task
 def analyse(c):

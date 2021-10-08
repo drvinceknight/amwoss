@@ -1,4 +1,5 @@
-\chapter[Linear programming]{Linear Programming}
+\chapter[Linear programming]{Linear Programming}\label{chp:linear_programming}
+
 
 % Introduction
 \chapterinitial{F}{inding} the best configuration of some system can be
@@ -9,7 +10,7 @@ feasibility constraints. When all components of the problem can be written in a
 linear way, then linear programming is one technique that can be used to find
 the solution.
 
-\section{Problem}\label{sec:problem}
+\section{Problem}\label{sec:linear_programming_problem}
 
 A university runs 14 modules over three subjects: Art, Biology, and Chemistry.
 Each subject runs core modules and optional modules.
@@ -58,21 +59,22 @@ as they share some students:
 How can every exam be scheduled with no clashes, using the least amount of
 time slots?
 
-\section{Theory}\label{sec:theory}
+\section{Theory}\label{sec:linear_programming_theory}
 
 Linear programming is a method that solves a type of optimisation problem of a
 number of variables by making use of some concepts of higher dimensional
-geometry.  % TODO Add footnote reference
+geometry\autocite{conforti2014integer}.
 Optimisation here refers to finding the variable that gives either the maximum
 or minimum of some linear function, called the objective function.
 
-Linear programming employs algorithms such as the Simplex method  % TODO Add footnote reference
+Linear programming employs algorithms such as the Simplex
+method
 to efficiently search some feasible convex region, stopping at the optimum. To
 do this, an objective function function and constraints need to be defined.
 
-To illustrate this a classic 2-dimensional example will be used: 
+To illustrate this a classic 2-dimensional example will be used:
 \(\pounds 50\) of profit can be made on each
-tonne of paint A produced, and \(\pounds 60\) profit on each tonne of paint B 
+tonne of paint A produced, and \(\pounds 60\) profit on each tonne of paint B
 produced. A tonne of paint A needs 4 tonnes of component X and 5 tonnes of
 component Y. A tonne of paint B needs 6 tonnes of component X and 4 tonnes of
 component Y. Only 24 tonnes of X and 20 tonnes of Y are available per day. How
@@ -122,21 +124,19 @@ feasible region, at \(A = \frac{12}{7}\) and \(B = \frac{20}{7}\).
 
 This works well as \(A\) and \(B\) can take any real value in the feasible region.
 Some problems must be formulated as integer linear programs where the decision
-% TODO Check Programme versus Program for consistency (VK: I don't care which
-% one)
 variables are restricted to integers. There are a number of methods that can
 help adapt a real solution to an integer solution. These include cutting
 planes, which introduce new constraints around the real solution to force an
 integer value; and branch and bound methods, where we iteratively convert
 decision variables to their closest two integers and remove any infeasible
-solutions.
-% TODO Add footnote reference
+solutions\autocite{conforti2014integer}.
 
 Both Python and R have libraries that carry out the linear and integer
 programming algorithms. When solving these kinds of problems, formulating
 them as linear systems is the most important challenge.
 
-Consider again the exam scheduling problem from Section~\ref{sec:problem} which
+Consider again the exam scheduling problem from
+Section~\ref{sec:linear_programming_problem} which
 will now be formulated as an integer linear program.
 Define \(M\) as the set of all modules to be scheduled, and define \(T\) as the set
 of possible time slots. At worst each exam is
@@ -171,8 +171,6 @@ enforced by Inequality~\ref{eqn:auxiliary}.
 Equation~\ref{eqn:schedule_all_modules},
 ensures all modules are scheduled once and once only.
 Thus altogether the integer program becomes:
-% TODO Capitalize Integer Program or not? (VK I don't care, but need to check
-% for consistency)
 
 \begin{align}
 \text{Minimise: } \sum_{t \in T} Y_j & \label{eqn:objective_modules} \\
@@ -224,7 +222,7 @@ The vector \(c\) would be \(|M|^2\) zeroes followed by \(|M|\) ones.
 The vector \(b\) would be zeroes for all the rows representing
 Equation~\ref{eqn:auxiliary}, and ones for all other constraints.
 
-\section{Solving with Python}\label{sec:solving-with-python}
+\section{Solving with Python}\label{sec:linear_programming_solving-with-python}
 
 In this book the Python library Pulp will be used to
 formulate and solve the integer program. First a function to create the
@@ -297,7 +295,6 @@ The next step is to create a specific program with the corresponding variables,
 objective function, constraints and solve it. This is done with the following
 function:
 
-%% TODO remove message supressor
 \begin{pyin}
 def get_solution(Ac, Ao, Bc, Bo, Cc, Co, times):
     """Returns the binary variables corresponding to the
@@ -338,7 +335,6 @@ def get_solution(Ac, Ao, Bc, Bo, Cc, Co, times):
 
 Using this, the solution \(x\) of the original problem can be obtained:
 
-%% TODO remove message supressor
 \begin{pyin}
 x, y = get_solution(
     Ac=Ac, Ao=Ao, Bc=Bc, Bo=Bo, Cc=Cc, Co=Co, times=times
@@ -434,7 +430,7 @@ Day 13: 8,
 The order of the days do not matter here, but we 7 days are required in order to
 schedule all exams with no clashes, with at most three exams scheduled each day.
 
-\section{Solving with R}\label{sec:solving-with-R}
+\section{Solving with R}\label{sec:linear_programming_solving-with-R}
 
 The R package ROI, the R Optimization
 Infrastructure will be used here.
@@ -442,13 +438,17 @@ This is a library of code that acts as a front end to a number of other solvers
 that need to be installed externally, allowing a range of optimisation problems
 to be solved with a number of different solvers.
 The solver that will be used here is called the CBC MILP Solver, which needs to
-be installed as well as the R \mintinline{R}{rcbc} package.
-% TODO Do we need to point at installation documentation for this?
+be installed. The \mintinline{R}{rcbc} package is also necessary but cannot be
+installed in the usual way. Installation instructions for both, depend on the
+operating system and can
+be found at the documentation page for the \mintinline{R}{ROI}
+package\footnote{As of the time of writing, this can be found at
+\url{https://roi.r-forge.r-project.org/installation.html}}.
 
 The ROI package requires that the linear program is
 represented in its matrix form, with a one-dimensional array of decision
 variables. Therefore the form of the model described at the end of
-Section~\ref{sec:theory} will be used.
+Section~\ref{sec:linear_programming_theory} will be used.
 Functions that define the objective function \(c\), the coefficient
 matrix \(A$, the vector of the right hand side of the constraints $b\), and the
 vector of equality or inequalities directions \(\star\) are needed.
@@ -790,4 +790,25 @@ gives:
 This gives that 7 days are the minimum required to schedule the 14 exams without
 clashes, with either 1, 2 or 4 exams scheduled on each day.
 
-\section{Research}\label{sec:research}
+\section{Wider context}\label{sec:linear_programming_wider_context}
+
+The overview given here on linear programming covers a wide breath of the subject
+although not much depth. For specific algorithmic approaches to the underlying
+algorithms and problem types, such as branch and bound and cutting plane methods
+as well as some minor extensions see~\parencite{conforti2014integer,
+sultan2014linear}.
+
+The efficiency of a linear programme as well as the ability to model
+linear situations imply that it is often used for a variety of applications.
+Theatre scheduling as one such application is given
+in~\parencite{guerriero2011operational}.
+However, scheduling is a wide ranging sub application of linear programming
+which can also be used to schedule sport
+seasons~\parencite{duran2007scheduling}.
+
+Other applications include the transportation problem~\parencite{diaz2014survey}
+which can be used to find a best allocation of a fleet of delivery vehicles;
+fire station location problem~\parencite{schreuder1981application} used to
+minimise travel times to at-risk areas; and the bin packing
+problem~\parencite{hifi2010linear} in which a number of, possibly irregular,
+shapes are packed into the smallest possible number of bins.

@@ -1,4 +1,4 @@
-\chapter[Discrete Event Simulation]{Discrete Event Simulation}
+\chapter[Discrete Event Simulation]{Discrete Event Simulation}\label{chp:discrete_event_simulation}
 
 % Introduction
 \chapterinitial{C}{omplex} situations further compounded by randomness appear
@@ -11,7 +11,7 @@ to do this, is to let a computer create a dynamic virtual representation of the
 scenario in question, a particular approach we are going to cover here is called
 Discrete Event Simulation.
 
-\section{Typical Problem}\label{sec:problem}
+\section{Problem}\label{sec:discrete_event_simulation_problem}
 
 A bicycle repair shop would like reconfigure
 in order to guarantee that all bicycles processed take a maximum of 30 minutes.
@@ -51,7 +51,7 @@ The shop will hire an extra member of staff in order to meet their target of a
 maximum time in the system of 30 minutes. They would like to know if they
 should work on the inspection counter or in the repair workshop?
 
-\section{Theory}\label{sec:theory}
+\section{Theory}\label{sec:discrete_event_simulation_theory}
 
 A number of aspects of the bicycle shop above are
 probabilistic. For example the
@@ -104,8 +104,14 @@ Computers are deterministic, therefore true randomness is in itself a
 challenging mathematical problem.
 They can however generate pseudorandom numbers: sequences of numbers that look
 like random numbers, but are entirely determined from the
-previous numbers in the sequence. Most programming languages have methods of
-doing this. % TODO add footnote
+previous numbers in the sequence\footnote{An early
+discussion of pseudo random numbers is~\autocite{von195113} where the author
+claimed: ``Anyone who considers arithmetical methods of producing random digits
+is, of course, in a state of sin.'' A number of different pseudo random
+number generators exist, at the time of writing the state of the art is the
+Mersenne Twister described in~\autocite{matsumoto1998mersenne}. }.
+Most programming languages have methods of
+doing this.
 
 In order to simulate an event the law of large numbers can be used.
 Let \(X \sim U(0, 1)\), a uniformly pseudorandom variable between 0 and 1.
@@ -137,7 +143,7 @@ In this case the fundamental random events that need to be generated are:
 \end{itemize}
 
 As the simulation progresses these events will be generated, and will interact
-together as described in Section~\ref{sec:problem}.
+together as described in Section~\ref{sec:discrete_event_simulation_problem}.
 The proportion of customers spending longer than 30 minutes in the shop can then
 be counted. This proportion itself is a random variable, and so like the
 weighted die, running this simulation once does not give much information.
@@ -205,7 +211,7 @@ Therefore in process based simulations, in addition to defining a sequence of
 events, resource types and their numbers also need to be defined.
 
 
-\section{Solving with Python}\label{sec:solving-with-python}
+\section{Solving with Python}\label{sec:discrete_event_simulation_solving-with-python}
 
 In this book the Ciw library will be used in order to conduct Discrete Event
 Simulation in Python.
@@ -225,7 +231,7 @@ repair workshop. For each of these the following need to be defined:
 
 In this case the time between consecutive arrivals will be assumed to follow an
 exponential distribution, as will the service time.
-These are common assumptions for this sort of queueing system. % TODO add reference
+These are common assumptions for this sort of queueing system~\autocite{stewart2009probability}.
 
 In Ciw, these are defined as part of a Network object, created using the
 \mintinline{python}{ciw.create_network} function. The function below creates a
@@ -305,7 +311,11 @@ def run_simulation(network, seed=0):
 \end{pyin}
 
 Notice here a random seed is set. This is because there is randomness in running
-the simulation, setting a seed ensures reproducible results. % TODO add footnote
+the simulation, setting a seed ensures reproducible results\footnote{
+Pseudo random number generators give a sequence of numbers that obey a series of
+properties. A seed is necessary to obtain a starting point for a given sequence.
+This has the benefit of ensuring that given sequences can be reproduced.
+}.
 Notice also that the simulation always begins with an empty system, so the first
 bicycle to arrive will never wait for service. Depending on the situation this
 may be an unwanted feature, though not in this case as it is reasonable to
@@ -449,7 +459,7 @@ Therefore an additional member of staff at the inspection desk would be more
 beneficial than an additional member of staff at the repair workshop.
 
 
-\section{Solving with R}\label{sec:solving-with-R}
+\section{Solving with R}\label{sec:discrete_event_simulation_solving-with-R}
 
 In this book we will use the Simmer package in order to conduct discrete event
 simulation in R.  Simmer uses the process based approach, which means that each
@@ -539,7 +549,11 @@ run_simulation <- function(bicycle,
 
 Notice here a random seed is set. This is because there are elements of
 randomness when running the simulation, setting a seed ensures reproducible
-results. % TODO add footnote
+results\footnote{
+Pseudo random number generators give a sequence of numbers that obey a series of
+properties. A seed is necessary to obtain a starting point for a given sequence.
+This has the benefit of ensuring that given sequences can be reproduced.
+}.
 Notice also that the simulation always begins with an empty system, so the first
 bicycle to arrive will never wait for service. Depending on the situation this
 may be an unwanted feature, though not in this case as it is reasonable to
@@ -683,14 +697,36 @@ that is 12.25\% of bicycles.
 Therefore an additional member of staff at the inspection desk would be more
 beneficial than an additional member of staff at the repair workshop.
 
-\section{Research highlights}\label{sec:research}
+\section{Wider context}\label{sec:discrete_event_simulation_wider_context}
 
-% TODO
+The concepts shown in this chapter cover some theoretical aspects of discrete
+event simulation. There are a number of further topics that can be vital to
+creating valid models of real life scenarios. These include time dependent rates
+and rostering servers. An overview of the theory of discrete event simulation is
+given in~\parencite{robinson2004simulation}.
 
-% I have not read: "An analysis of the academic literature on simulation and
-% modelling in health care" https://www.tandfonline.com/doi/abs/10.1057/jos.2009.10
+One particular use of discrete event simulation is as part of a wider
+optimisation exercise. For example, a systematic search for an optimal service
+configuration can use a discrete event simulation model as a replacement for a
+mathematical objective function. Another approach is to integrate an
+optimisation procedure\footnote{For more information on optimisation see
+Chapters~\ref{chp:linear_programming} and~\ref{chp:heuristics}.} within a
+discrete event simulation model so as to iteratively simulate optimal
+configurations. This is done in~\parencite{osorio2017simulation} to be able to
+bring together strategic configuration and overall flow in the blood supply
+chain. A general review and taxonomy of different uses of discrete event
+simulation with optimisation techniques is given
+in~\parencite{figueira2014hybrid}.
 
-% Maybe: "Simulation-optimization model for production planning in the blood
-% supply chain" https://link.springer.com/article/10.1007%2Fs10729-016-9370-6
+One domain where simulation is popularly used is in modelling healthcare systems.
+A general overview is given in~\parencite{brailsford2009analysis} where uses
+include resource utilisation, human behaviour, and workforce management.
 
-% Perhaps something not healthcare related.
+In order to be able to fully capture all the relevant details of the system to
+be modelled, an extension of discrete event simulation is to combine the
+methodology with systems dynamics (Chapter~\ref{chp:system_dynamics}) in order
+to model continuous aspects of the system and/or agent based modelling
+(Chapter~\ref{chp:agent_based_simulation}) in order to observe emergent or
+learned behaviours. This is known as hybrid simulation, and an overview is given
+in~\parencite{brailsford2019hybrid}. There are a number of ways of combining
+these methodologies, from comparison to full integration.

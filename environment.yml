@@ -2,22 +2,21 @@ name: ampwoss
 channels:
   - defaults
 dependencies:
-  - numpy
-  - pandas
-  - python
-  - pip
-  - scipy
-  - sympy
-  - r-desolve
-  - r-essentials
-  - r-lintr
-  - r-pracma
-  - r-rootSolve
+  - numpy=1.20.3
+  - pandas=1.3.3
+  - pip=21.2.2
+  - scipy=1.7.1
+  - sympy=1.8
+  - r-desolve=1.24
+  - r-essentials=3.6.0
+  - r-lintr=1.0.3
+  - r-pracma=2.2.5
+  - r-rootsolve=1.7
   - pip:
-      - black
-      - ciw
-      - docformatter
-      - dwys
-      - invoke
-      - nashpy
-      - pulp
+    - black==21.9b0
+    - ciw==2.2.0
+    - docformatter==1.4
+    - dwys==0.0.4
+    - invoke==1.6.0
+    - nashpy==0.0.25
+    - pulp==2.5.1

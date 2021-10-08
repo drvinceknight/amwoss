@@ -1,4 +1,4 @@
-\chapter[Agent Based Simulation]{Agent Based Simulation}
+\chapter[Agent Based Simulation]{Agent Based Simulation}\label{chp:agent_based_simulation}
 
 \chapterinitial{S}{ometimes} individual behaviours and
 interactions are well understood,
@@ -11,21 +11,23 @@ Agent based simulation is a paradigm of
 thinking that allows such emergent population level behaviour to be investigated
 from individual rules and interactions.
 
-\section{Problem}\label{sec:problem}
+\section{Problem}\label{sec:agent_based_simulation_problem}
 
 Consider a city populated by two categories of household, for example a household
-might be fans of Cardiff City FC or Swansea City AFC.  % TODO Maybe include a footnote reference to the FA?
+might be fans of Cardiff City FC or Swansea City AFC\footnote{Swansea and
+Cardiff are two cities in South Wales with rival football clubs.}.
 Each household has a
 preference for living close to households of the same kind, and will move
 around the city while their preferences are not satisfied.
 How will these individual preferences affect the overall distribution of fans in
 the city?
 
-\section{Theory}\label{sec:theory}
+\section{Theory}\label{sec:agent_based_simulation_theory}
 
 The problem considered here is considered a `classic' one for the paradigm of
 agent based simulation, and is usually called Schelling's segregation model.
-It features in Thomas Schelling's book `Micromotives and Macrobehaviours', whose % TODO Add footnote reference
+It features in Thomas Schelling's book `Micromotives and
+Macrobehaviours'\autocite{schelling2006micromotives}, whose
 title neatly summarises the world view of agent based modelling: we know,
 understand, determine, or can control individual micromotives; and from this
 we'd like to observe and understand macrobehaviours.
@@ -79,7 +81,7 @@ Each cell of the grid is a house that can either contain a household of Cardiff
 City FC supporters, or contain a household of Swansea City AFC supporters.
 A house's neighbours are assumed to be the houses adjacent to it, horizontally,
 vertically, and diagonally.
-For mathematical simplicity, it is also assumed that the grid is a torus, % TODO Maybe a footnote reference here?
+For mathematical simplicity, it is also assumed that the grid is a torus,
 where
 houses in the top row are vertically adjacent to the bottom row, and houses in
 the rightmost column are horizontally adjacent to the leftmost column.
@@ -129,7 +131,7 @@ from this agent based model, as it only explicitly defines individual behaviours
 and interactions.  Any population level behaviour that may have emerged without
 explicit definition.
 
-\section{Solving with Python}\label{sec:solving-with-python}
+\section{Solving with Python}\label{sec:agent_based_simulation_solving-with-python}
 
 Agent based modelling lends itself well to a programming paradigm called
 object-orientated programming.
@@ -359,7 +361,8 @@ After 100 time steps the average satisfaction level is much higher.
 In fact, it is much higher than each individual household's threshold.
 Now consider that this satisfaction level is really a level of how similar
 each households' neighbours are, it is actually a level of segregation.
-This was the central premise of Schelling's original model, % TODO Repeat the footnote reference?
+This was the central premise of Schelling's original
+model\autocite{schelling2006micromotives}
 that overall
 emergent segregation levels are much higher than any individuals' personal
 preference for segregation.
@@ -380,7 +383,7 @@ It visually shows the households segregating over time.
 \label{fig:schelling_python_plot}
 \end{figure}
 
-\section{Solving with R}\label{sec:solving-with-R}
+\section{Solving with R}\label{sec:agent_based_simulation_solving-with-R}
 
 Agent based modelling lends itself well to a programming paradigm called
 object-orientated programming.
@@ -398,10 +401,10 @@ In this chapter, a package called \mintinline{R}{R6} will be used here.
 For this problem two classes will be built: a
 \mintinline{R}{House} and a \mintinline{R}{City} for them to live in.
 
-Now to define the \mintinline{R}{City}: % TODO Add a footnote with something
-                                        % like: Note that for the purposes of
-% pagination of this book no documentation is included in the definition of the
-% class however. 
+Now to define the \mintinline{R}{City}\footnote{
+For the purposes of pagination, no documentation is included in the definition
+of the class.
+}
 
 \begin{Rin}
 library(R6)
@@ -564,6 +567,10 @@ find_mean_happiness <- function(seed,
   our_city$mean_satisfaction()
 }
 \end{Rin}
+% TODO Modify the class names to be CamelCase and then modify names of instance
+% variables:
+% - Ensure they remain snake care
+% - Change variable name: s/our_city/city
 
 
 Now consider each household with a threshold of
@@ -594,7 +601,8 @@ After 100 time steps the average satisfaction has increased.
 It is now actually much higher that each individual household's threshold.
 We can consider this satisfaction level as a level of how similar each
 households' neighbours are, and so it is actually a level of segregation.
-This was the central premise of Schelling's original model, that overall  % TODO Repeat the footnote reference
+This was the central premise of Schelling's original
+model\autocite{schelling2006micromotives}, that overall
 emergent segregation levels are much higher than any individuals' personal
 preference for segregation.
 
@@ -614,7 +622,31 @@ It shows the households segregating over time.
 \label{fig:schelling_R_plot}
 \end{figure}
 
-\section{Research}\label{sec:research}
+\section{Wider context}\label{sec:agent_based_simulation_wider_context}
 
-% TODO Even though we will footnote reference it I feel that Schelling's model
-% should be here also.
+The simulations described in this chapter come under the larger umbrella term of
+multi agent systems, which discusses the theory of systems with multiple
+independent agents interacting with one another. A good source on the topic
+is~\parencite{shoham2008multiagent}.
+
+The model described here is called Schelling's Model of Segregation, and is
+first described in \parencite{schelling2006micromotives}. Another model
+considered as classic in this domain is a model of a flock of birds presented
+in~\parencite{reynolds1987flocks}, otherwise referred to as Boids, where the
+behaviours of flocks of birds are understood by capturing the individual
+interactions between individual birds. Conway's Game of Life, described
+in~\parencite{gardener1970mathematical} is another classic, which comes under
+the banner of cellular autonoma. Here cells on a grid either become alive or dead
+depending on a certain simplistic set of rules. Emergent behaviours observed due
+to these rules include self replicating as well as oscillating structures.
+In the 1970s agent based tournaments were held by Robert Axelrod (described
+in~\parencite{axelrod1981evolution}), which was the first of a number of studies
+using agent based modelling and game theory (see Chapter 6) to understand the
+emergence of cooperative behaviours.
+
+In recent years, similar methodologies have been used in a variety of
+applications. \parencite{diaz2021agent} models parents' choice of school, in
+\parencite{romanowska2019agent} archaeological population migration and trade
+dynamics are modelled, and \parencite{jing2020agent} offers a systematic
+literature review for the use of agent based modelling of autonomous vehicles.
+

@@ -86,11 +86,14 @@ not use a particular piece of software due to a confusion between cost
 and value: if something is free is it really going to be any good?
 
 In practice open source software is used all over the world and powers
-some of the most important infrastructure around. For example, one
-should never use any cryptographic software that is not open source: if
-you cannot open up and read things then you should not trust it (this is
-indeed why most cryptographic systems used are open source).
-% TODO footnote reference to back up this claim.
+some of the most important infrastructure around.
+A good example of this is cryptographic software which should not rely on
+secrecy for security\footnote{This
+is also referred to as Kerckhoffs's principle which states that ``a cryptosystem
+should be secure, even if everything about the system, except the key, is public
+knowledge''~\autocite{kerckhoffs1883cryptographie}}. This implies that
+cryptographic systems that do not require trust in a hidden system can exist.
+In practice these are all open source.
 
 Today, open source software is a lot more than a licensing agreement:
 it is a community of practice. Bugs are fixed faster, research is
@@ -185,9 +188,14 @@ each other so that a reader can read only the section that interests them.
 In places there are some minor differences in the text and this is due to
 differences of implementation in the respective languages.
 
+Note that the solution proposed to each problem in each chapter is not
+necessarily unique. For example, in Chapter~\ref{chp:discrete_event_simulation}
+the python library Ciw is used whereas an alternative could be to use a python
+library called Simpy.
+
 Please do take from the book what you find useful.
 
-\section{How code is written in this book}\label{sec:how-to-get-the-most-out-of-this-book}
+\section{How code is written in this book}\label{sec:how-code-is-written-in-this-book}
 
 Throughout this book, there are going to be various pieces of code written. Code
 is a series of instructions that usually give some sort of output when submitted
@@ -242,15 +250,17 @@ The code itself is written using 3 principles:
               getting expected results.
 \end{itemize}
 
-These are best practice principles in research software development % TODO Add a footnote reference
-that ensure usable, reproducible and reliable code.
+These are best practice principles in research software development
+that ensure usable, reproducible and reliable code\autocite{wilson2014best}.
 Interested readers might want to see Figure~\ref{fig:rsd-triangle} which shows
 how the 3 principles interact with each other.
 
 \begin{figure}
     \begin{center}
         \includestandalone[width=.6\textwidth]{./assets/rsd-triangle/main}
-        \caption{The relationship between modularisation, documentation and testing} %TODO reference this
+        \caption{The relationship between modularisation, documentation and
+            testing. The authors thank Dr Nikoleta E. Glynatsi for their contribution to
+            the drawing of this diagram.}
         \label{fig:rsd-triangle}
     \end{center}
 \end{figure}

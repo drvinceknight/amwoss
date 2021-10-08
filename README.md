@@ -25,6 +25,16 @@ Run:
 
     $ inv compile
 
+This creates a `build/` directory which contains slightly modified source files
+(some annotations removed) as well as a `main.pdf`. This modifications are
+prescribed by a `substitions` variables in `tasks.py`.
+
+An intermediate step is to run:
+
+    $ inv build
+
+Which creates the modified source files but does not compile the document.
+
 ## Doctesting
 
 Run:

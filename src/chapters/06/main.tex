@@ -7,7 +7,7 @@ assumptions about the detailed behaviour. The later can be thought of as
 measuring emergent behaviour. One tool used to do this is the study of
 interactive decision making: game theory.
 
-\section{Problem}\label{sec:problem}
+\section{Problem}\label{sec:game_theory_problem}
 
 Consider a city council. Two electric taxi companies, company A and company B,
 are going to move
@@ -88,16 +88,16 @@ Table~\ref{tbl:profit-of-taxi-companies-offset}
     the choice of vehicle number by all companies. The first table shows the profits for
     company A. The second table shows the profits for company B. The
     council's financial incentive \(\epsilon\) is included.}
-    \label{tbl:profit-of-taxi-companies}
+    \label{tbl:profit-of-taxi-companies-offset}
 \end{table}
 
-From Table~\ref{tbl:profit-of-taxi-companies} it can be seen that if Company B
+From Table~\ref{tbl:profit-of-taxi-companies-offset} it can be seen that if Company B
 chooses to use 3 vehicles while Company A chooses to only use 2 then Company B
 would get \(\frac{17}{20} + \epsilon\) and Company A would get \(\frac{1}{2}\)
 profits per hour. The question is: what value of \(\epsilon\) ensures both
 companies use 3 vehicles.
 
-\section{Theory}\label{sec:theory}
+\section{Theory}\label{sec:game_theory_theory}
 
 In the case of this city, the interaction can be modelled using a mathematical
 object called a game, which here requires:
@@ -171,8 +171,12 @@ This is called a Nash equilibrium: when both players are playing a
 strategy that is the best response against the other.
 
 An important fact is that a Nash equilibrium is guaranteed to exist.
-This was actually the theoretic result for which John Nash received a noble prize.
-% TODO Add footnote reference
+This was actually the theoretic result for which John Nash received a noble
+prize\footnote{
+John Nash proved the fact that any game has a Nash equilibrium
+in~\autocite{nash1950equilibrium}. Discussions and proofs for particular cases
+can be found in good Game Theory text books such as~\autocite{maschler2013game}
+}.
 There are various algorithms that can be used for finding Nash equilibria, they involve
 a search through the pairs of spaces of possible strategies until pairs of best
 responses are found. Mathematical insight allows this do be done somewhat efficiently
@@ -181,11 +185,18 @@ One such example is called the Lemke-Howson algorithm.
 A Nash equilibrium is not necessarily guaranteed to be arrived at through
 dynamic decision making. However, any stable
 behaviour that does emerge will be a Nash
-equilibrium, such emergent processes are the topics of evolutionary game theory,
-learning algorithms and/or agent based modelling.
-% TODO Add footnote reference and pointer to ABS chapter.
+equilibrium, such emergent processes are the topics of evolutionary game
+theory\footnote{
+Evolutionary game theory was formalised in~\autocite{smith1974theory} although
+some of the work of Robert Axelrod is evolutionary in principle~\autocite{axelrod1981evolution}
+},
+learning algorithms\footnote{
+An excellent text on learning in games is~\autocite{fudenberg1998theory}
+}
+and/or agent based modelling which will be covered in
+Chapter~\ref{chp:agent_based_simulation}.
 
-\section{Solving with Python}\label{sec:solving-with-python}
+\section{Solving with Python}\label{sec:game_theory_solving-with-python}
 
 The first step we will take is to write a function to create a game using the
 matrix expected profits and any offset. The Nashpy library will be used for this.
@@ -336,7 +347,7 @@ Therefore, in order to ensure that the maximum amount of taxis are used, the
 council should offer a \(\pounds 0.15\) per hour incentive to both taxi
 companies for putting on 3 taxis.
 
-\section{Solving with R}\label{sec:solving-with-R}
+\section{Solving with R}\label{sec:game_theory_solving-with-R}
 
 R does not have a single appropriate library for the game considered here, we
 will choose to use \mintinline{R}{Recon} which has functionality for finding the
@@ -445,6 +456,37 @@ Therefore, in order to ensure that the maximum amount of taxis are used, the
 council should offer a \(\pounds 0.15\) per hour incentive to both taxi
 companies for putting on 3 taxis.
 
-\section{Research}\label{sec:research}
+\section{Wider context}\label{sec:game_theory_wider_context}
 
-TBA
+The definition of a normal form game here as well as the solution concept of
+Nash equilibrium are common starting points for the use of game theory as a
+study of emergent behaviour. Other topics include different forms of games, for
+example extensive form which are represented by trees and more explicitly model
+asynchronous decision making. Other solution concepts involve the specific study
+of the emergence mechanisms through models based on natural evolutionary
+process: Moran processes or replicator dynamics. A good text book to read on
+these topics is~\parencite{maschler2013game}.
+
+John Nash whose life was portrayed in the 2001 movie ``a beautiful mind'' (which
+is an adaptation of~\parencite{nasar2011beautiful}) won the Noble prize
+for\parencite{nash1950equilibrium} in which he proved that a Nash equilibrium
+always exists. However, in~\parencite{nash1951non} John Nash gives an
+application of Game Theory to a specific version of Poker.
+
+Another application of the concept of Nash equilibrium
+is~\parencite{deo2011centralized} where the authors identify worst case
+scenarios for ambulance diversion: a practice where an emergency room will
+declare itself too full to accept new patients. When they are multiple emergency
+units serving a same population strategic behaviour becomes relevant. The
+authors of this paper identify the effect of this decentralised decision making
+and also propose an approach that is socially optimal: similarly to the Taxi
+problem considered in this chapter.
+
+A specific area of a lot of research in Game theory is the study of cooperative
+behaviour. \parencite{axelrod1981evolution} started this work with his original
+computer tournaments with more recent work involving so called Zero-Determinant
+strategies which considered extortion as a mathematical
+concept~\parencite{press2012iterated}.
+A review and systemic analysis of some of the research on behaviour, of which
+game theory is a subset,
+is given in~\parencite{press2012iterated}.

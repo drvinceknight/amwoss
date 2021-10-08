@@ -1,4 +1,4 @@
-\chapter[Markov Chains]{Markov Chains}
+\chapter[Markov Chains]{Markov Chains}\label{chp:markov_chains}
 
 % Introduction
 \chapterinitial{M}{any} real world situations have some level of
@@ -8,7 +8,7 @@ in fact let us make predictions about what can be expected to happen. One tool u
 understand randomness is Markov chains, an area of mathematics sitting at the
 intersection of probability and linear algebra.
 
-\section{Problem}\label{sec:problem}
+\section{Problem}\label{sec:markov_chains_problem}
 
 Consider a barber shop. The shop owners have noticed that customers will not
 wait if there is no room in their waiting room and will choose to take their
@@ -27,7 +27,7 @@ This is represented diagrammatically in Figure~\ref{fig:barber-shop}.
 
 \begin{figure}[!hbtp]
     \begin{center}
-    \includestandalone[width=.6\textwidth]{./assets/barber-shop/main}
+    \includestandalone[width=.75\textwidth]{./assets/barber-shop/main}
     \end{center}
     \caption{Diagrammatic representation of the barber shop as a queuing system.}
     \label{fig:barber-shop}
@@ -40,7 +40,7 @@ another barber's chair and barber.
 
 The mathematical tool used here to model this situation is a Markov chain.
 
-\section{Theory}\label{sec:theory}
+\section{Theory}\label{sec:markov_chains_theory}
 
 A Markov chain is a model of a sequence of random events that is defined by a
 collection of \textbf{states} and rules that define how to move between these
@@ -72,7 +72,7 @@ ways:
 
 \begin{itemize}
     \item Using probabilities of changing state (or not) in a well defined time
-        interval. This is called a discrete Markov chain.
+        interval. This is called a discrete time Markov chain.
     \item Using rates of change from one state to another. This is called a
         continuous time Markov chain.
 \end{itemize}
@@ -120,7 +120,14 @@ The matrix \(Q\) can be used to understand the probability of being in a given s
 \(t\) time unis. This is can be represented mathematically using a matrix
 \(P_{t}\) where \((P_{t})_{ij}\) is the probability of being in state \(j\)
 after \(t\) time units having started in state \(i\). Using a mathematical tool
-called the matrix exponential % TODO Add footnote pointing at texts on matrix exponential
+called the matrix exponential\footnote{
+
+Chapter 9 of the following text book give a description of how to compute the
+matrix exponential numerically~\autocite{van1996matrix}
+and~\autocite{moler1978nineteen, moler2003nineteen} give a review of 19
+algorithms that can be used.
+}
+
 the value of \(P_{t}\) can be calculated numerically.
 
 \begin{equation}
@@ -150,7 +157,7 @@ with the following constraint:
 
 In the upcoming sections all of the above concepts will be demonstrate.
 
-\section{Solving with Python}\label{sec:solving-with-python}
+\section{Solving with Python}\label{sec:markov_chains_solving-with-python}
 
 The first step is to write a function to obtain the transition
 rates between 2 given states:
@@ -403,7 +410,7 @@ print(round(get_probability_of_full_shop(num_barbers=3), 6))
 Therefore, it would be better to increase the number of barbers by 1
 than to increase the waiting room capacity by 2.
 
-\section{Solving with R}\label{sec:solving-with-R}
+\section{Solving with R}\label{sec:markov_chains_solving-with-R}
 
 The first step taken is to write a function to obtain the transition rates
 between 2 given states:
@@ -438,8 +445,16 @@ get_transition_rate <- function(in_state,
 }
 \end{Rin}
 
-This actual function will not be used but instead a vectorized version of this
-makes calculations more efficient:  % TODO Add footnote reference on vectorization
+This actual function will not be used but instead a vectorized
+version\footnote{
+A vectorized calculation refers to the manner in which an instruction is given
+to a computer. When vectorized: a single instruction with multiple
+data are given at the same time
+which corresponds to "Single instruction, multiple data" (SIMD) as defined in
+Flynn's taxonomy~\autocite{flynn1966very}. This is a type of parallelisation
+that can be done at the central processing unit level of the computer. }
+of this
+makes calculations more efficient:
 
 \begin{Rin}
 vectorized_get_transition_rate <- Vectorize(
@@ -669,6 +684,38 @@ Therefore, it would be better to increase the number of barbers by 1
 than to increase the waiting room capacity by 2.
 
 
-\section{Research}\label{sec:research}
+\section{Wider context}\label{sec:markov_chains_wider_context}
 
-TBA
+The overview of Markov chains given here has mainly concentrated on calculation
+of steady state probabilities. There are in fact many more theoretic an applied
+aspects of Markov chain models. Some examples of this include the calculation of
+sojourn times which is how long a system spends in a given state as well as
+considering models with absorption: where the system arrives at a state that it
+no longer leaves. For a good overview of
+these the following textbook is recommended:~\parencite{stewart2009probability}.
+
+In \parencite{tan1997markov, stewart1996monopoly}, Markov chains are used to model board games. In
+\parencite{tan1997markov} a model of the battles that take place on a Risk board is used
+to understand the probabilities of invasion of territories based on troupe
+numbers. This is done using an absorbing Markov chain. In
+\parencite{stewart1996monopoly} a
+standard model is used to identify the properties that are most likely to be
+landed on in Monopoly. This is done through calculation of steady state
+probabilities. These are both examples of discrete time Markov chains.
+
+A common application of Markov chains is in queueing systems and specifically
+queueing systems applied to healthcare. In \parencite{griffiths2013modelling} a
+model of a neurological rehabilitation unit is built and used to help better
+staff the unit.  This is accomplished using the steady state probabilities and
+calculating various performance measures.  This is an application of a
+continuous time Markov chain.
+
+An extension of Markov chains are Markov decision processes. This is a
+particular mathematical model that identifies the optimal decision made within a
+Markov chain.
+Instead of building multiple Markov models for different decisions, in Markov
+decision processes decisions can be made at each state of the underlying chain.
+A policy can be identified giving the optimal decision at each state.
+In \parencite{white1993survey} a literature review is given showing a wide
+ranging application of these decision processes from to agriculture to motor
+insurance claims as well as sports.
