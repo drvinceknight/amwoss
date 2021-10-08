@@ -310,7 +310,7 @@ def daily_cost(
     daily_vaccine_cost = (
         N * birth_rate * vaccine_rate * vaccine_cost
     )
-    daily_meds_cost = (I[-1] * medication_cost)
+    daily_meds_cost = I[-1] * medication_cost
     return daily_vaccine_cost + daily_meds_cost
 \end{pyin}
 
