@@ -284,7 +284,6 @@ derivative <- function(t, y, parameters) {
   })
 }
 \end{Rin}
-% TODO remove # nolint
 
 For example, to see the value of the derivative when \(I=0\):
 
@@ -319,8 +318,6 @@ get_solution <- function(times,
   ode(y = y0, times = times, func = derivative, parms = params)
 }
 \end{Rin}
-
-% TODO remove # nolint
 
 This will return a sequence of time point and values of \(I\) at those time
 points. Using this we can compute the cost.
