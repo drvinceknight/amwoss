@@ -8,7 +8,7 @@ exact techniques but often this is not possible and finding an almost perfect
 choice quickly is just as good. This is where the field of heuristics comes in
 to play.
 
-\section{Problem}\label{sec:problem}
+\section{Problem}\label{sec:heuristics_problem}
 
 A delivery company needs to deliver goods to 13 different stops.
 They need to find a route for a driver that stops at each of the stops
@@ -41,7 +41,7 @@ The delivery company would like to find the route around the 13 stops that gives
 the smallest overall travel distance.
 
 
-\section{Theory}\label{sec:theory}
+\section{Theory}\label{sec:heuristics_theory}
 
 This problem is called a travelling salesman problem, which can
 often be inefficient to solve using exact
@@ -101,7 +101,8 @@ Using this framework, the neighbourhood search can be written down as:
     \item Repeat the 3rd step until some stopping condition is met.
 \end{enumerate}
 
-This is shown diagrammatically in Figure~\ref{fig:tsp}.
+This is shown diagrammatically in
+Figure~\ref{fig:neighbourhood_search_flow_diagram}.
 
 \begin{figure}[!hbtp]
     \begin{center}
@@ -109,7 +110,7 @@ This is shown diagrammatically in Figure~\ref{fig:tsp}.
     \end{center}
     \caption{The general neighbourhood search algorithm. \(N(t)\) refers to some
     neighbourhood of \(t\).}
-    \label{fig:tsp}
+    \label{fig:neighbourhood_search_flow_diagram}
 \end{figure}
 
 A number of stopping conditions can be used including some specific
@@ -156,10 +157,10 @@ Figure~\ref{fig:tsp-effect-of-neighbourhood-operators}.
     \label{fig:tsp-effect-of-neighbourhood-operators}
 \end{figure}
 
-\section{Solving with Python}\label{sec:solving-with-python}
+\section{Solving with Python}\label{sec:heuristics_solving-with-python}
 
 To solve this problem using Python functions will be written that match the
-first three steps in the Section~\ref{sec:theory}.
+first three steps in the Section~\ref{sec:heuristics_theory}.
 
 The first step is to write the \mintinline{python}{get_initial_candidate}
 function that creates an initial tour:
@@ -457,10 +458,10 @@ routes given by both approaches.
 
 
 
-\section{Solving with R}\label{sec:solving-with-R}
+\section{Solving with R}\label{sec:heuristics_solving-with-R}
 
 To solve this problem using R, functions will be written that match the
-first three steps in the Section~\ref{sec:theory}.
+first three steps in the Section~\ref{sec:heuristics_theory}.
 
 The first step is to write the \mintinline{R}{get_initial_candidate}
 function that creates an initial tour:
@@ -756,7 +757,7 @@ and ant colony optimisation. They are usually employed when the problem is too
 large or complex to use exact methodologies.
 
 The Travelling Salesman Problem, described in this chapter, is a classic example
-of one of these problems, formally described first in~\ref{merger1932}, although
+of one of these problems, formally described first in~\ref{menger1932}, although
 thought to have been discussed informally centuries before.
 It is an example of a large number of types of problems collectively known as
 vehicle routing problems, which often require heuristic methods for their

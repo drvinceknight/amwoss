@@ -1,4 +1,4 @@
-\chapter[Markov Chains]{Markov Chains}
+\chapter[Markov Chains]{Markov Chains}\label{chp:markov_chains}
 
 % Introduction
 \chapterinitial{M}{any} real world situations have some level of
@@ -8,7 +8,7 @@ in fact let us make predictions about what can be expected to happen. One tool u
 understand randomness is Markov chains, an area of mathematics sitting at the
 intersection of probability and linear algebra.
 
-\section{Problem}\label{sec:problem}
+\section{Problem}\label{sec:markov_chains_problem}
 
 Consider a barber shop. The shop owners have noticed that customers will not
 wait if there is no room in their waiting room and will choose to take their
@@ -27,7 +27,7 @@ This is represented diagrammatically in Figure~\ref{fig:barber-shop}.
 
 \begin{figure}[!hbtp]
     \begin{center}
-    \includestandalone[width=.6\textwidth]{./assets/barber-shop/main}
+    \includestandalone[width=.75\textwidth]{./assets/barber-shop/main}
     \end{center}
     \caption{Diagrammatic representation of the barber shop as a queuing system.}
     \label{fig:barber-shop}
@@ -40,7 +40,7 @@ another barber's chair and barber.
 
 The mathematical tool used here to model this situation is a Markov chain.
 
-\section{Theory}\label{sec:theory}
+\section{Theory}\label{sec:markov_chains_theory}
 
 A Markov chain is a model of a sequence of random events that is defined by a
 collection of \textbf{states} and rules that define how to move between these
@@ -157,7 +157,7 @@ with the following constraint:
 
 In the upcoming sections all of the above concepts will be demonstrate.
 
-\section{Solving with Python}\label{sec:solving-with-python}
+\section{Solving with Python}\label{sec:markov_chains_solving-with-python}
 
 The first step is to write a function to obtain the transition
 rates between 2 given states:
@@ -412,7 +412,7 @@ print(round(get_probability_of_full_shop(num_barbers=3), 6))
 Therefore, it would be better to increase the number of barbers by 1
 than to increase the waiting room capacity by 2.
 
-\section{Solving with R}\label{sec:solving-with-R}
+\section{Solving with R}\label{sec:markov_chains_solving-with-R}
 
 The first step taken is to write a function to obtain the transition rates
 between 2 given states:

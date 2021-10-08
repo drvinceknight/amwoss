@@ -7,7 +7,7 @@ assumptions about the detailed behaviour. The later can be thought of as
 measuring emergent behaviour. One tool used to do this is the study of
 interactive decision making: game theory.
 
-\section{Problem}\label{sec:problem}
+\section{Problem}\label{sec:game_theory_problem}
 
 Consider a city council. Two electric taxi companies, company A and company B,
 are going to move
@@ -88,16 +88,16 @@ Table~\ref{tbl:profit-of-taxi-companies-offset}
     the choice of vehicle number by all companies. The first table shows the profits for
     company A. The second table shows the profits for company B. The
     council's financial incentive \(\epsilon\) is included.}
-    \label{tbl:profit-of-taxi-companies}
+    \label{tbl:profit-of-taxi-companies-offset}
 \end{table}
 
-From Table~\ref{tbl:profit-of-taxi-companies} it can be seen that if Company B
+From Table~\ref{tbl:profit-of-taxi-companies-offset} it can be seen that if Company B
 chooses to use 3 vehicles while Company A chooses to only use 2 then Company B
 would get \(\frac{17}{20} + \epsilon\) and Company A would get \(\frac{1}{2}\)
 profits per hour. The question is: what value of \(\epsilon\) ensures both
 companies use 3 vehicles.
 
-\section{Theory}\label{sec:theory}
+\section{Theory}\label{sec:game_theory_theory}
 
 In the case of this city, the interaction can be modelled using a mathematical
 object called a game, which here requires:
@@ -196,7 +196,7 @@ An excellent text on learning in games is~\autocite{fudenberg1998theory}
 and/or agent based modelling which will be covered in
 Chapter~\ref{chp:agent_based_simulation}.
 
-\section{Solving with Python}\label{sec:solving-with-python}
+\section{Solving with Python}\label{sec:game_theory_solving-with-python}
 
 The first step we will take is to write a function to create a game using the
 matrix expected profits and any offset. The Nashpy library will be used for this.
@@ -347,7 +347,7 @@ Therefore, in order to ensure that the maximum amount of taxis are used, the
 council should offer a \(\pounds 0.15\) per hour incentive to both taxi
 companies for putting on 3 taxis.
 
-\section{Solving with R}\label{sec:solving-with-R}
+\section{Solving with R}\label{sec:game_theory_solving-with-R}
 
 R does not have a single appropriate library for the game considered here, we
 will choose to use \mintinline{R}{Recon} which has functionality for finding the
