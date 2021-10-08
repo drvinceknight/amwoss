@@ -14,6 +14,8 @@ import known
 substitions = {
         "# nolint": "",
         "prob.solve(pulp.apis.PULP_CBC_CMD(msg=False))": "prob.solve(pulp.apis.PULP_CBC_CMD())",
+
+        ", warn.conflicts = FALSE, quietly = TRUE)": ")",
         }
 
 
