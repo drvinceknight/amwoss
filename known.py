@@ -209,6 +209,7 @@ words = {
     "iterable",
     "iteratively",
     "itertools",
+    "ivp",
     "jing",
     "jupyter",
     "kerckhoffs",
