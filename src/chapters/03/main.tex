@@ -323,7 +323,7 @@ assume that the bicycle shop will begin the day with no customers.
 
 To count the number of bicycles that have finished service, and to
 count the number of those whose entire journey through the system lasted longer
-than 0.5 hours the \mintinline{python}{pandas}
+than 0.5 hours the pandas
 library will be used:
 
 \begin{pyin}
@@ -346,9 +346,7 @@ def get_proportion(Q):
     recs = pd.DataFrame(
         dr for ind in inds for dr in ind.data_records
     )
-    recs["total_time"] = (
-        recs["exit_date"] - recs["arrival_date"]
-    )
+    recs["total_time"] = recs["exit_date"] - recs["arrival_date"]
     total_times = recs.groupby("id_number")["total_time"].sum()
     return (total_times > limit).mean()
 \end{pyin}
@@ -379,8 +377,8 @@ The following function returns an average proportion:
 
 \begin{pyin}
 def get_average_proportion(num_inspectors=1, num_repairers=2):
-    """Returns the average proportion of bicycles spending over
-    a given limit at the repair shop.
+    """Returns the average proportion of bicycles spending over a
+    given limit at the repair shop.
 
     Args:
         num_inspectors: a positive integer (default: 1)
@@ -540,12 +538,13 @@ run_simulation <- function(bicycle,
     simmer("Repair Shop") %>%
     add_resource("Inspector", num_inspectors) %>%
     add_resource("Repairer", num_repairers) %>%
-    add_generator("Bicycle", bicycle, function() {
-      rexp(1, arrival_rate)
-    })
-
+    add_generator(
+      "Bicycle", bicycle, function() {
+        rexp(1, arrival_rate)
+      }
+    )
   set.seed(seed)
-  repair_shop %>% run(until = 8)
+  repair_shop %>% run(until = max_time)
   return(repair_shop)
 }
 \end{Rin}
@@ -578,7 +577,7 @@ get_proportion <- function(repair_shop) {
   limit <- 0.5
   recs <- repair_shop %>% get_mon_arrivals()
   total_times <- recs$end_time - recs$start_time
-  return(mean(total_times > 0.5))
+  return(mean(total_times > limit))
 }
 \end{Rin}
 
@@ -664,7 +663,8 @@ the situation where the additional member of staff works at the inspection desk:
 print(
   get_average_proportion(
     num_inspectors = 2,
-    num_repairers = 2)
+    num_repairers = 2
+  )
 )
 \end{Rin}
 
@@ -683,7 +683,8 @@ repair workshop:
 print(
   get_average_proportion(
     num_inspectors = 1,
-    num_repairers = 3)
+    num_repairers = 3
+  )
 )
 \end{Rin}
 

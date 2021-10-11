@@ -154,30 +154,29 @@ import itertools
 import numpy as np
 \end{pyin}
 
-Now to define the \mintinline{python}{City}:
+Now to define the \mintinline{python}{City}\footnote{
+For the purposes of pagination the style is inconsistent with the other
+chapters in this book.
+}:
 
 \begin{pyin}
 class City:
     def __init__(self, size, threshold):
         """Initialises the City object.
-
         Args:
             size: an integer number of rows and columns
-            threshold: a number between 0 and 1 representing
-              the minimum acceptable proportion of similar
-              neighbours
+            threshold: float between 0 and 1 representing the
+            minimum acceptable proportion of similar neighbours
         """
         self.size = size
         sides = range(size)
         self.coords = itertools.product(sides, sides)
         self.houses = {
             (x, y): House(x, y, threshold, self)
-            for x, y in self.coords
-        }
+            for x, y in self.coords}
 
     def run(self, n_steps):
         """Runs the simulation of a number of time steps.
-
         Args:
             n_steps: an integer number of steps
         """
@@ -195,13 +194,11 @@ class City:
 
     def mean_satisfaction(self):
         """Finds the average household satisfaction.
-
         Returns:
             The average city's household satisfaction
         """
         return np.mean(
-            [h.satisfaction() for h in self.houses.values()]
-        )
+            [h.satisfaction() for h in self.houses.values()])
 \end{pyin}
 
 This defines a class, a template or a set of instructions that can be used to
@@ -223,7 +220,7 @@ In this case it sets a number of attributes.
            is the number of rows and columns of houses it contains.
      \item Next the \mintinline{python}{coords} are defined, a list of tuples
            representing all the possible coordinates of the grid, this uses the
-           \mintinline{python}{itertools} library for efficient iteration.
+           itertools library for efficient iteration.
      \item Finally \mintinline{python}{houses} is defined, a dictionary with
            grid coordinates as keys, and instances of the
            \mintinline{python}{House} class.
@@ -235,13 +232,13 @@ The \mintinline{python}{run} method runs the simulation. For each
 method \mintinline{python}{take_turn}.
 In this method, we first create a list of all the houses with households that
 are unhappy with their neighbours; these are put in a random order using the
-\mintinline{python}{random} library; and then working inwards from the boundary
+random library; and then working inwards from the boundary
 houses with sad households are paired up and swap households.
 
 The last method defined here is the \mintinline{python}{mean_satisfaction}
 method, which is only used to observe any emergent behaviour.
 This calculates the average satisfaction of all the houses in the grid, using
-the \mintinline{python}{numpy} library for convenience.
+the numpy library for convenience.
 
 In order to be able to create an instance of the above class, we need to define
 a \mintinline{python}{House} class:
@@ -250,7 +247,6 @@ a \mintinline{python}{House} class:
 class House:
     def __init__(self, x, y, threshold, city):
         """Initialises the House object.
-
         Args:
             x: the integer x-coordinate
             y: the integer y-coordinate
@@ -267,7 +263,6 @@ class House:
 
     def satisfaction(self):
         """Determines the household's satisfaction level.
-
         Returns:
             A proportion
         """
@@ -280,7 +275,6 @@ class House:
 
     def sad(self):
         """Determines if the household is sad.
-
         Returns:
             a Boolean
         """
@@ -288,7 +282,6 @@ class House:
 
     def swap(self, house):
         """Swaps two households.
-
         Args:
             house: the house object to swap household with
         """
@@ -413,7 +406,7 @@ For this problem two classes will be built: a
 
 Now to define the \mintinline{R}{City}\footnote{
 For the purposes of pagination, no documentation is included in the definition
-of the class.
+of the class and the style is inconsistent with the other chapters in this book.
 }
 
 \begin{Rin}
@@ -567,8 +560,10 @@ the resulting mean happiness:
 #'
 #' @return The average city's household satisfaction
 #'   after n_steps
-find_mean_happiness <- function(seed, size,
-                                threshold, n_steps){
+find_mean_happiness <- function(seed,
+                                size,
+                                threshold,
+                                n_steps){
   set.seed(seed)
   our_city <- city$new(size, threshold)
   our_city$run(n_steps)

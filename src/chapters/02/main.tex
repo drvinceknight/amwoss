@@ -183,7 +183,6 @@ def get_transition_rate(
     """
     arrival_rate = 10
     service_rate = 4
-
     capacity = waiting_room + num_barbers
     delta = out_state - in_state
 
@@ -197,8 +196,8 @@ def get_transition_rate(
 \end{pyin}
 
 Next, a function that creates an entire transition rate matrix \(Q\) for a given
-problem is written. The \mintinline{python}{numpy} library will be used to
-handle all the linear algebra and the \mintinline{python}{itertools} library for
+problem is written. The numpy library will be used to
+handle all the linear algebra and the itertools library for
 some iterations:
 
 \begin{pyin}
@@ -217,10 +216,7 @@ def get_transition_rate_matrix(waiting_room=4, num_barbers=2):
         A matrix.
     """
     capacity = waiting_room + num_barbers
-    state_pairs = itertools.product(
-        range(capacity + 1), repeat=2
-    )
-
+    state_pairs = itertools.product(range(capacity + 1), repeat=2)
     flat_transition_rates = [
         get_transition_rate(
             in_state=in_state,
@@ -260,7 +256,7 @@ which gives:
 \end{pyout}
 
 Here, the matrix exponential will be used as
-discussed above, using the \mintinline{python}{scipy}
+discussed above, using the scipy
 library. To see what would happen after .5 time units:
 
 \begin{pyin}
@@ -311,12 +307,12 @@ directly.
 
 The underlying linear system will be solved using a numerically efficient
 algorithm called least squares optimisation (available from the
-\mintinline{python}{numpy} library):
+numpy library):
 
 \begin{pyin}
 def get_steady_state_vector(Q):
-    """Return the steady state vector of any given continuous
-    time transition rate matrix.
+    """Return the steady state vector of any given continuous time
+    transition rate matrix.
 
     Args:
        Q: a transition rate matrix
@@ -350,9 +346,7 @@ The final function written is one that uses all of
 the above to return the probability of the shop being full.
 
 \begin{pyin}
-def get_probability_of_full_shop(
-    waiting_room=4, num_barbers=2
-):
+def get_probability_of_full_shop(waiting_room=4, num_barbers=2):
     """Return the probability of the barber shop being full.
 
     Args:
@@ -429,10 +423,9 @@ between 2 given states:
 get_transition_rate <- function(in_state,
                                 out_state,
                                 waiting_room = 4,
-                                num_barbers = 2){
+                                num_barbers = 2) {
   arrival_rate <- 10
   service_rate <- 4
-
   capacity <- waiting_room + num_barbers
   delta <- out_state - in_state
 
@@ -441,7 +434,6 @@ get_transition_rate <- function(in_state,
       return(arrival_rate)
     }
   }
-
   if (delta == -1) {
     return(min(in_state, num_barbers) * service_rate)
   }
@@ -482,14 +474,14 @@ get_transition_rate_matrix <- function(waiting_room = 4,
                                        num_barbers = 2){
   max_state <- waiting_room + num_barbers
 
-  Q <- outer(0:max_state,
+  Q <- outer(
+    0:max_state,
     0:max_state,
     vectorized_get_transition_rate,
     waiting_room = waiting_room,
     num_barbers = num_barbers
   )
   row_sums <- rowSums(Q)
-
   diag(Q) <- -row_sums
   Q
 }
@@ -517,10 +509,10 @@ which gives:
 
 One immediate thing that can be done with this matrix is to take the matrix exponential
 discussed above. To do this, an R library called
-\mintinline{R}{expm} will be used.
+expm will be used.
 
 To be able to make use of the nice \mintinline{R}{%>%}
-``pipe'' operator the \mintinline{R}{magrittr} library will be loaded.
+``pipe'' operator the magrittr library will be loaded.
 Now if to see what would happen after .5 time units:
 
 \begin{Rin}
@@ -572,7 +564,7 @@ amount for all possible scenarios, as such the
 underlying equation~\ref{eqn:continuous_time_markov_process_steady_state}
 directly.
 
-To be able to do this, the versatile \mintinline{R}{pracma} package will be used
+To be able to do this, the versatile pracma package will be used
 which includes a number of numerical analysis functions for efficient
 computations.
 
@@ -593,7 +585,7 @@ get_steady_state_vector <- function(Q){
 }
 \end{Rin}
 
-This is making use of \mintinline{R}{pracma}'s \mintinline{R}{mldivide} function
+This is making use of pracma \mintinline{R}{mldivide} function
 which chooses the best numerical algorithm to find the solution to a given
 matrix equation \(Ax=b\).
 

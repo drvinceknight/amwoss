@@ -115,11 +115,12 @@ def doctest(c, style=False, path=None):
     - Check style of python code with black
     - Check style of R code with lintr (TODO Check that this works)
     """
-    max_column_length = 63
+    max_column_length = 66
     pyin_pattern = re.compile(r"\\begin\{pyin\}\n(.*?)\\end\{pyin\}", re.DOTALL)
     pyout_pattern = re.compile(r"\\begin\{pyout\}\n(.*?)\n\\end\{pyout\}", re.DOTALL)
     Rin_pattern = re.compile(r"\\begin\{Rin\}\n(.*?)\\end\{Rin\}", re.DOTALL)
     Rout_pattern = re.compile(r"\\begin\{Rout\}\n(.*?)\n\\end\{Rout\}", re.DOTALL)
+    files_to_ignore_style = ("src/chapters/07/main.tex",)
     pyexecution_command = "python"
     Rexecution_command = "Rscript"
 
@@ -131,6 +132,7 @@ def doctest(c, style=False, path=None):
     dir_for_R_input_files = tempfile.mkdtemp()
 
     exit_codes = []
+    temp_files_to_ignore_style = []
     for i, p in enumerate(paths):
         print(f"Testing {p}")
         text = p.read_text()
@@ -153,6 +155,9 @@ def doctest(c, style=False, path=None):
                 input_filename = f"{dir_for_python_input_files}/{i}.py"
             else:
                 input_filename = f"{dir_for_R_input_files}/{i}.R"
+
+            if str(p) in files_to_ignore_style:
+                temp_files_to_ignore_style.append(input_filename)
 
             try:
                 diff, output, expected_output = dwys.diff(
@@ -206,7 +211,11 @@ def doctest(c, style=False, path=None):
             exit_codes.append(1)
 
     if style is True:
-        exit_codes += check_style(dir_for_python_input_files, dir_for_R_input_files)
+        for file_path in temp_files_to_ignore_style:
+            path = pathlib.Path(file_path)
+            path.unlink()
+        exit_codes += check_style(dir_for_python_input_files,
+                dir_for_R_input_files, max_column_length)
 
     exit_code = max(exit_codes)
     if exit_code == 0:
@@ -215,11 +224,12 @@ def doctest(c, style=False, path=None):
         print("❌❌❌ A test has failed. ❌❌❌")
     sys.exit(exit_code)
 
-def check_style(dir_for_python_input_files, dir_for_R_input_files):
+def check_style(dir_for_python_input_files,
+        dir_for_R_input_files, max_column_length):
     exit_codes = []
     print("Running black")
     ec = subprocess.call(
-        ["black", "--check", "--diff", "-l 63", dir_for_python_input_files]
+        ["black", "--check", "--diff", f"-l {max_column_length}", dir_for_python_input_files]
     )
     exit_codes.append(ec)
 
@@ -229,9 +239,9 @@ def check_style(dir_for_python_input_files, dir_for_R_input_files):
             "docformatter",
             "--check",
             "--wrap-descriptions",
-            "63",
+            f"{max_column_length}",
             "--wrap-summaries",
-            "63",
+            f"{max_column_length}",
             "-r",
             dir_for_python_input_files,
         ]
@@ -241,9 +251,9 @@ def check_style(dir_for_python_input_files, dir_for_R_input_files):
             [
                 "docformatter",
                 "--wrap-descriptions",
-                "63",
+                f"{max_column_length}",
                 "--wrap-summaries",
-                "63",
+                f"{max_column_length}",
                 "-r",
                 dir_for_python_input_files,
             ]

@@ -124,8 +124,8 @@ current time respectively.
 
 \begin{pyin}
 def derivatives(t, y, vaccine_rate, birth_rate=0.01):
-    """Defines the system of differential equations that
-    describe the epidemiology model.
+    """Defines the system of differential equations that describe
+    the epidemiology model.
 
     Args:
         t: a positive float
@@ -269,8 +269,8 @@ infection and the vaccination costs:
 def daily_cost(
     derivative_function=derivatives, vaccine_rate=0.85
 ):
-    """Calculates the daily cost to the public health system
-    after 2 years.
+    """Calculates the daily cost to the public health system after
+    2 years.
 
     Args:
         derivative_function: a function returning a tuple
@@ -373,19 +373,21 @@ derivatives <- function(t, y, parameters){
   infection_rate <- 0.3
   recovery_rate <- 0.02
   death_rate <- 0.01
-  with(as.list(c(y, parameters)), {
-    N <- S + I + R
-    dSdt <- ( - ( (infection_rate * S * I) / N)  # nolint
-             + ( (1 - vaccine_rate) * birth_rate * N)
-             - (death_rate * S))
-    dIdt <- ( ( (infection_rate * S * I) / N)  # nolint
-            - (recovery_rate * I)
-            - (death_rate * I))
-    dRdt <- ( (recovery_rate * I)  # nolint
-             - (death_rate * R)
-             + (vaccine_rate * birth_rate * N))
-    list(c(dSdt, dIdt, dRdt))  # nolint
-  })
+  with(
+    as.list(c(y, parameters)), {
+      N <- S + I + R
+      dSdt <- ( - ( (infection_rate * S * I) / N)  # nolint
+        + ( (1 - vaccine_rate) * birth_rate * N)
+        - (death_rate * S))
+      dIdt <- ( ( (infection_rate * S * I) / N)  # nolint
+        - (recovery_rate * I)
+        - (death_rate * I))
+      dRdt <- ( (recovery_rate * I)  # nolint
+        - (death_rate * R)
+        + (vaccine_rate * birth_rate * N))
+      list(c(dSdt, dIdt, dRdt))  # nolint
+    }
+  )
 }
 \end{Rin}
 
@@ -396,9 +398,8 @@ of 50\% and a birth rate of 0.01, gives:
 
 \begin{Rin}
 derivatives(t = 0,
-            y = c(S = 4, I = 1, R = 0),
-            parameters = c(vaccine_rate = 0.5,
-                           birth_rate = 0.01)
+  y = c(S = 4, I = 1, R = 0),
+  parameters = c(vaccine_rate = 0.5, birth_rate = 0.01)
 )
 \end{Rin}
 
@@ -434,8 +435,8 @@ solve_ode <- function(times,
                           birth_rate = 0.01,
                           vaccine_rate = 0.84){
   params <- c(birth_rate = birth_rate,
-                  vaccine_rate = vaccine_rate)
-  ode(y = y0,
+    vaccine_rate = vaccine_rate)
+    ode(y = y0,
       times = times,
       func = derivatives,
       parms = params)

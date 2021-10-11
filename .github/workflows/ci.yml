@@ -31,7 +31,7 @@ jobs:
     - name: Doctest
       run: |
         source activate ampwoss
-        inv doctest --style  # Test all code and also check style
+        inv doctest --style
 
     - name: Install LaTeX
       run: |
