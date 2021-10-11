@@ -224,7 +224,7 @@ Equation~\ref{eqn:auxiliary}, and ones for all other constraints.
 
 \section{Solving with Python}\label{sec:linear_programming_solving-with-python}
 
-In this book the Python library Pulp will be used to
+In this book the Python library Pulp\autocite{mitchell2011pulp} will be used to
 formulate and solve the integer program. First a function to create the
 binary problem variables for a given set of times and modules is needed:
 
@@ -432,18 +432,16 @@ schedule all exams with no clashes, with at most three exams scheduled each day.
 
 \section{Solving with R}\label{sec:linear_programming_solving-with-R}
 
-The R package ROI, the R Optimization
-Infrastructure will be used here.
-This is a library of code that acts as a front end to a number of other solvers
-that need to be installed externally, allowing a range of optimisation problems
-to be solved with a number of different solvers.
-The solver that will be used here is called the CBC MILP Solver, which needs to
-be installed. The \mintinline{R}{rcbc} package is also necessary but cannot be
-installed in the usual way. Installation instructions for both, depend on the
-operating system and can
-be found at the documentation page for the \mintinline{R}{ROI}
-package\footnote{As of the time of writing, this can be found at
-\url{https://roi.r-forge.r-project.org/installation.html}}.
+The R package ROI, the R Optimization Infrastructure will be used here.  This is
+a library of code that acts as a front end to a number of other solvers that
+need to be installed externally, allowing a range of optimisation problems to be
+solved with a number of different solvers.  The solver that will be used here is
+called the CBC\autocite{forrest2005cbc} MILP Solver, which needs to be
+installed. The rcbc\autocite{shumacher2021rcbc} package is also necessary but
+cannot be installed in the usual way. Installation instructions for both, depend
+on the operating system and can be found at the documentation page for the
+ROI\autocite{theussl2017roi} package\footnote{As of the time of writing, this
+can be found at \url{https://roi.r-forge.r-project.org/installation.html}}.
 
 The ROI package requires that the linear program is
 represented in its matrix form, with a one-dimensional array of decision

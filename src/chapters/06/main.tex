@@ -199,7 +199,8 @@ Chapter~\ref{chp:agent_based_simulation}.
 \section{Solving with Python}\label{sec:game_theory_solving-with-python}
 
 The first step we will take is to write a function to create a game using the
-matrix expected profits and any offset. The Nashpy library will be used for this.
+matrix expected profits and any offset. The Nashpy\autocite{knight2018nashpy}
+and numpy\autocite{harris2020array} libraries will be used for this.
 
 \begin{pyin}
 import nashpy as nash
@@ -350,7 +351,7 @@ companies for putting on 3 taxis.
 \section{Solving with R}\label{sec:game_theory_solving-with-R}
 
 R does not have a single appropriate library for the game considered here, we
-will choose to use \mintinline{R}{Recon} which has functionality for finding the
+will choose to use Recon\autocite{oliveira2019recon} which has functionality for finding the
 Nash equilibria for two player games when only considering pure strategies
 (where the players only choose to use a single action at a time).
 

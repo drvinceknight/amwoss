@@ -163,7 +163,8 @@ To solve this problem using Python functions will be written that match the
 first three steps in the Section~\ref{sec:heuristics_theory}.
 
 The first step is to write the \mintinline{python}{get_initial_candidate}
-function that creates an initial tour:
+function that creates an initial tour\footnote{Numpy~\autocite{harris2020array}
+is used here for representing tours as arrays.}.
 
 \begin{pyin}
 import numpy as np
@@ -748,7 +749,7 @@ and ant colony optimisation. They are usually employed when the problem is too
 large or complex to use exact methodologies.
 
 The Travelling Salesman Problem, described in this chapter, is a classic example
-of one of these problems, formally described first in~\ref{menger1932}, although
+of one of these problems, formally described first in~\autocite{menger1932}, although
 thought to have been discussed informally centuries before.
 It is an example of a large number of types of problems collectively known as
 vehicle routing problems, which often require heuristic methods for their
