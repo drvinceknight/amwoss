@@ -12,9 +12,10 @@ ys = np.random.randint(0, 100, number_of_stops)
 
 
 # Draw plot
-plt.figure()
-plt.scatter(xs, ys)
-plt.title("Map of all stops")
+fig, ax = plt.subplots(1, figsize=(5, 5))
+ax.scatter(xs, ys, s=170, zorder=3, c='white', edgecolor='black')
+ax.tick_params(labelsize=6)
+ax.set_title("Map of all stops")
 plt.savefig("main.pdf")
 
 # Write distance matrices
