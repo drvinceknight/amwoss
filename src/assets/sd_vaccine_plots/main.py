@@ -1,5 +1,6 @@
 from scipy.integrate import solve_ivp
 import matplotlib.pyplot as plt
+plt.style.use('seaborn-whitegrid')
 
 def derivatives(t, y, vaccine_rate, birth_rate=0.01):
     """Defines the system of differential equations that
@@ -68,18 +69,22 @@ def integrate_ode(
 t_span = [0, 730]
 t, S, I, R = integrate_ode(derivatives, t_span, vaccine_rate=0.0)
 
-fig, ax = plt.subplots(1)
-ax.plot(t, S, label='Susceptible')
-ax.plot(t, I, label='Infected')
-ax.plot(t, R, label='Recovered')
-ax.legend(fontsize=12)
-fig.savefig("plot_no_vaccine_python.pdf")
+fig, ax = plt.subplots(1, figsize=(10, 5))
+ax.plot(t, S, label='Susceptible', c='black', linestyle='solid', linewidth=1.75)
+ax.plot(t, I, label='Infected', c='black', linestyle='dotted', linewidth=1.75)
+ax.plot(t, R, label='Recovered', c='black', linestyle='dashed', linewidth=1.75)
+ax.legend(fontsize=14, frameon=True, ncol=3, bbox_to_anchor=(0.85, 1.13))
+ax.set_xlabel('Time', fontsize=14)
+ax.set_ylabel('People', fontsize=14)
+fig.savefig("plot_no_vaccine.pdf")
 
 t, S, I, R = integrate_ode(derivatives, t_span, vaccine_rate=0.85)
 
-fig, ax = plt.subplots(1)
-ax.plot(t, S, label='Susceptible')
-ax.plot(t, I, label='Infected')
-ax.plot(t, R, label='Recovered')
-ax.legend(fontsize=12)
-fig.savefig("plot_with_vaccine_python.pdf")
+fig, ax = plt.subplots(1, figsize=(10, 5))
+ax.plot(t, S, label='Susceptible', c='black', linestyle='solid', linewidth=1.75)
+ax.plot(t, I, label='Infected', c='black', linestyle='dotted', linewidth=1.75)
+ax.plot(t, R, label='Recovered', c='black', linestyle='dashed', linewidth=1.75)
+ax.legend(fontsize=14, frameon=True, ncol=3, bbox_to_anchor=(0.85, 1.13))
+ax.set_xlabel('Time', fontsize=14)
+ax.set_ylabel('People', fontsize=14)
+fig.savefig("plot_with_vaccine.pdf")
