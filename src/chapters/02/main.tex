@@ -216,9 +216,7 @@ def get_transition_rate_matrix(waiting_room=4, num_barbers=2):
         A matrix.
     """
     capacity = waiting_room + num_barbers
-    state_pairs = itertools.product(
-        range(capacity + 1), repeat=2
-    )
+    state_pairs = itertools.product(range(capacity + 1), repeat=2)
     flat_transition_rates = [
         get_transition_rate(
             in_state=in_state,
@@ -313,8 +311,8 @@ algorithm called least squares optimisation (available from the
 
 \begin{pyin}
 def get_steady_state_vector(Q):
-    """Return the steady state vector of any given continuous
-    time transition rate matrix.
+    """Return the steady state vector of any given continuous time
+    transition rate matrix.
 
     Args:
        Q: a transition rate matrix
@@ -348,9 +346,7 @@ The final function written is one that uses all of
 the above to return the probability of the shop being full.
 
 \begin{pyin}
-def get_probability_of_full_shop(
-    waiting_room=4, num_barbers=2
-):
+def get_probability_of_full_shop(waiting_room=4, num_barbers=2):
     """Return the probability of the barber shop being full.
 
     Args:
