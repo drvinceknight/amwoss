@@ -134,6 +134,7 @@ def doctest(c, style=False, path=None):
     exit_codes = []
     temp_files_to_ignore_style = []
     for i, p in enumerate(paths):
+        print(f"Testing {p}")
         text = p.read_text()
 
         for in_pattern, out_pattern, execution_command, input_dir in (
