@@ -666,11 +666,7 @@ reverse_path <- function(tour){
   stops_to_swap <- sample(2:number_of_stops, 2)
   i <- min(stops_to_swap)
   j <- max(stops_to_swap)
-  new_order <- c(
-    c(1: (i - 1)),
-    c(j:i),
-    c( (j + 1): length(tour))
-  )
+  new_order <- c(c(1: (i - 1)), c(j:i), c( (j + 1): length(tour)))
   tour[new_order]
 }
 \end{Rin}

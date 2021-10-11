@@ -344,10 +344,7 @@ get_cost <- function(I_0 = 100,
                      step_size = 0.0001,
                      max_time = 10) {
   times <- seq(0, max_time, by = step_size)
-  out <- get_solution(times,
-    y0 = c(I = I_0),
-    alpha = alpha
-  )
+  out <- get_solution(times, y0 = c(I = I_0), alpha = alpha)
   number_of_observations <- length(out[, "I"])
   time_between_steps <- diff(out[, "time"])
   area_under_curve <- sum(

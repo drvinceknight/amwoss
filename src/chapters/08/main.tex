@@ -689,11 +689,7 @@ library(ROI)
 
 milp <- OP(
   objective = L_objective(f.obj),
-  constraints = L_constraint(
-    L = f.con,
-    dir = f.dir,
-    rhs = f.rhs
-  ),
+  constraints = L_constraint(L = f.con, dir = f.dir, rhs = f.rhs),
   types = rep("B", length(f.obj)),
   maximum = FALSE
 )
