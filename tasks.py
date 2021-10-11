@@ -115,7 +115,7 @@ def doctest(c, style=False, path=None):
     - Check style of python code with black
     - Check style of R code with lintr (TODO Check that this works)
     """
-    max_column_length = 63
+    max_column_length = 66
     pyin_pattern = re.compile(r"\\begin\{pyin\}\n(.*?)\\end\{pyin\}", re.DOTALL)
     pyout_pattern = re.compile(r"\\begin\{pyout\}\n(.*?)\n\\end\{pyout\}", re.DOTALL)
     Rin_pattern = re.compile(r"\\begin\{Rin\}\n(.*?)\\end\{Rin\}", re.DOTALL)
