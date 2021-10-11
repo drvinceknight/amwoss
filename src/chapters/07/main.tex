@@ -220,7 +220,7 @@ In this case it sets a number of attributes.
            is the number of rows and columns of houses it contains.
      \item Next the \mintinline{python}{coords} are defined, a list of tuples
            representing all the possible coordinates of the grid, this uses the
-           \mintinline{python}{itertools} library for efficient iteration.
+           itertools library for efficient iteration.
      \item Finally \mintinline{python}{houses} is defined, a dictionary with
            grid coordinates as keys, and instances of the
            \mintinline{python}{House} class.
@@ -232,13 +232,13 @@ The \mintinline{python}{run} method runs the simulation. For each
 method \mintinline{python}{take_turn}.
 In this method, we first create a list of all the houses with households that
 are unhappy with their neighbours; these are put in a random order using the
-\mintinline{python}{random} library; and then working inwards from the boundary
+random library; and then working inwards from the boundary
 houses with sad households are paired up and swap households.
 
 The last method defined here is the \mintinline{python}{mean_satisfaction}
 method, which is only used to observe any emergent behaviour.
 This calculates the average satisfaction of all the houses in the grid, using
-the \mintinline{python}{numpy} library for convenience.
+the numpy library for convenience.
 
 In order to be able to create an instance of the above class, we need to define
 a \mintinline{python}{House} class:

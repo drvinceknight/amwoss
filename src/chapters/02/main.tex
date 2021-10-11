@@ -196,8 +196,8 @@ def get_transition_rate(
 \end{pyin}
 
 Next, a function that creates an entire transition rate matrix \(Q\) for a given
-problem is written. The \mintinline{python}{numpy} library will be used to
-handle all the linear algebra and the \mintinline{python}{itertools} library for
+problem is written. The numpy library will be used to
+handle all the linear algebra and the itertools library for
 some iterations:
 
 \begin{pyin}
@@ -256,7 +256,7 @@ which gives:
 \end{pyout}
 
 Here, the matrix exponential will be used as
-discussed above, using the \mintinline{python}{scipy}
+discussed above, using the scipy
 library. To see what would happen after .5 time units:
 
 \begin{pyin}
@@ -307,7 +307,7 @@ directly.
 
 The underlying linear system will be solved using a numerically efficient
 algorithm called least squares optimisation (available from the
-\mintinline{python}{numpy} library):
+numpy library):
 
 \begin{pyin}
 def get_steady_state_vector(Q):
@@ -509,10 +509,10 @@ which gives:
 
 One immediate thing that can be done with this matrix is to take the matrix exponential
 discussed above. To do this, an R library called
-\mintinline{R}{expm} will be used.
+expm will be used.
 
 To be able to make use of the nice \mintinline{R}{%>%}
-``pipe'' operator the \mintinline{R}{magrittr} library will be loaded.
+``pipe'' operator the magrittr library will be loaded.
 Now if to see what would happen after .5 time units:
 
 \begin{Rin}
@@ -564,7 +564,7 @@ amount for all possible scenarios, as such the
 underlying equation~\ref{eqn:continuous_time_markov_process_steady_state}
 directly.
 
-To be able to do this, the versatile \mintinline{R}{pracma} package will be used
+To be able to do this, the versatile pracma package will be used
 which includes a number of numerical analysis functions for efficient
 computations.
 
@@ -585,7 +585,7 @@ get_steady_state_vector <- function(Q){
 }
 \end{Rin}
 
-This is making use of \mintinline{R}{pracma}'s \mintinline{R}{mldivide} function
+This is making use of pracma \mintinline{R}{mldivide} function
 which chooses the best numerical algorithm to find the solution to a given
 matrix equation \(Ax=b\).
 
