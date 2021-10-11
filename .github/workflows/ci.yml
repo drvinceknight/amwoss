@@ -28,10 +28,15 @@ jobs:
         inv env  # Finish install of environment
         sudo apt-get install aspell aspell-en #To check spelling
 
-    - name: Doctest
+    - name: Doctest chapter 2
       run: |
         source activate ampwoss
-        inv doctest --style  # Test all code and also check style
+        inv doctest --style --path="src/chapters/02/main.tex"
+
+    - name: Doctest chapter 3
+      run: |
+        source activate ampwoss
+        inv doctest --style --path="src/chapters/03/main.tex"
 
     - name: Install LaTeX
       run: |
