@@ -235,14 +235,6 @@ steps \mintinline{python}{t}.
 These can be plotted to visualise their behaviour, shown in
 Figure~\ref{fig:plot_no_vaccine}.
 
-\begin{figure}
-\begin{center}
-\includegraphics[width=0.6\textwidth]{./assets/sd_vaccine_plots/plot_no_vaccine_python.pdf}
-\end{center}
-\caption{Stock levels without vaccination, in Python.}
-\label{fig:plot_no_vaccine}
-\end{figure}
-
 The number of infected individuals increases quickly, and in fact the rate of
 change increases as more individuals are infected. However this growth slows
 down as there are fewer susceptible individuals to infect. Due to the equal
@@ -259,14 +251,6 @@ t, S, I, R = solve_ode(derivatives, t_span, vaccine_rate=0.85)
 \end{pyin}
 
 The corresponding plot is shown in Figure~\ref{fig:plot_with_vaccine}.
-
-\begin{figure}
-\begin{center}
-\includegraphics[width=0.6\textwidth]{./assets/sd_vaccine_plots/plot_with_vaccine_python.pdf}
-\end{center}
-\caption{Stock levels with vaccination, in Python.}
-\label{fig:plot_with_vaccine}
-\end{figure}
 
 With vaccination the disease remains endemic, however once steadiness occurs,
 around 10\% of the population remain susceptible to the disease, 1.7\% are
@@ -347,6 +331,22 @@ which gives
 So vaccinating 85\% of the population would cost the public health care system,
 once the infection is endemic $\pounds 6119.14$ a day. That is a saving of
 around 32\%.
+
+\begin{figure}
+\begin{center}
+\includegraphics[width=0.85\textwidth]{./assets/sd_vaccine_plots/plot_no_vaccine.pdf}
+\end{center}
+\caption{Stock levels without vaccination.}
+\label{fig:plot_no_vaccine}
+\end{figure}
+
+\begin{figure}
+\begin{center}
+\includegraphics[width=0.85\textwidth]{./assets/sd_vaccine_plots/plot_with_vaccine.pdf}
+\end{center}
+\caption{Stock levels with vaccination.}
+\label{fig:plot_with_vaccine}
+\end{figure}
 
 
 \section{Solving with R}\label{sec:system_dynamics_solving-with-R}
@@ -458,15 +458,10 @@ Now \mintinline{R}{out}, is a matrix with four columns,  \mintinline{R}{time},
 values of the time points, and the stock levels of $S$, $I$ and $R$ over the
 time respectively.
 These can be plotted to visualise their behaviour, shown in
-Figure~\ref{fig:plot_no_vaccine_R}.
-
-\begin{figure}
-\begin{center}
-\includegraphics[width=0.6\textwidth]{./assets/sd_vaccine_plots/plot_no_vaccine_R.pdf}
-\end{center}
-\caption{Stock levels without vaccination, in R.}
-\label{fig:plot_no_vaccine_R}
-\end{figure}
+Figure~\ref{fig:plot_no_vaccine}.\footnote{The particular figures shown in
+Figures~\ref{fig:plot_no_vaccine} and~\ref{fig:plot_with_vaccine} were created
+using Python and the Matplotlib library. However R also has some powerful
+plotting tools, both in base R, and with packages such as ggplot2.}
 
 The number of infected individuals increases quickly, and in fact the rate of
 change increases as more individuals are infected. However this growth slows
@@ -484,15 +479,7 @@ times <- seq(0, 730, by = 0.01)
 out <- solve_ode(times, vaccine_rate = 0.85)
 \end{Rin}
 
-The corresponding plot is shown in Figure~\ref{fig:plot_with_vaccine_R}.
-
-\begin{figure}
-\begin{center}
-\includegraphics[width=0.6\textwidth]{./assets/sd_vaccine_plots/plot_with_vaccine_R.pdf}
-\end{center}
-\caption{Stock levels with vaccination, in R.}
-\label{fig:plot_with_vaccine_R}
-\end{figure}
+The corresponding plot is shown in Figure~\ref{fig:plot_with_vaccine}.
 
 With vaccination the disease remains endemic, however once steadiness occurs,
 around 10\% of the population remain susceptible to the disease, 1.7\% are
