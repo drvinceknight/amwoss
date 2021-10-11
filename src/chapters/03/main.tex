@@ -492,14 +492,18 @@ define_bicycle_trajectories <- function() {
   bicycle <-
     trajectory("Inspection") %>%
     seize("Inspector") %>%
-    timeout(function() {rexp(1, inspection_rate)}) %>%
+    timeout(function() {
+      rexp(1, inspection_rate)
+    }) %>%
     release("Inspector") %>%
     branch(
       function() (runif(1) < prob_need_repair),
       continue = c(F),
       trajectory("Repair") %>%
         seize("Repairer") %>%
-        timeout(function() {rexp(1, repair_rate)}) %>%
+        timeout(function() {
+          rexp(1, repair_rate)
+        }) %>%
         release("Repairer"),
       trajectory("Out")
     )
