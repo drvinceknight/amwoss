@@ -540,7 +540,7 @@ run_simulation <- function(bicycle,
       }
     )
   set.seed(seed)
-  repair_shop %>% run(until = 8)
+  repair_shop %>% run(until = max_time)
   return(repair_shop)
 }
 \end{Rin}
@@ -573,7 +573,7 @@ get_proportion <- function(repair_shop) {
   limit <- 0.5
   recs <- repair_shop %>% get_mon_arrivals()
   total_times <- recs$end_time - recs$start_time
-  return(mean(total_times > 0.5))
+  return(mean(total_times > limit))
 }
 \end{Rin}
 
