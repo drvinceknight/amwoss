@@ -196,7 +196,7 @@ def get_transition_rate(
 \end{pyin}
 
 Next, a function that creates an entire transition rate matrix \(Q\) for a given
-problem is written. The numpy library will be used to
+problem is written. The numpy\autocite{harris2020array} library will be used to
 handle all the linear algebra and the itertools library for
 some iterations:
 
@@ -509,11 +509,11 @@ which gives:
 
 One immediate thing that can be done with this matrix is to take the matrix exponential
 discussed above. To do this, an R library called
-expm will be used.
+expm\autocite{goulet2021expm} will be used.
 
-To be able to make use of the nice \mintinline{R}{%>%}
-``pipe'' operator the magrittr library will be loaded.
-Now if to see what would happen after .5 time units:
+To be able to make use of the nice \mintinline{R}{%>%} ``pipe'' operator the
+magrittr\autocite{bache2020magrittr} library will be loaded.  Now if to see
+what would happen after .5 time units:
 
 \begin{Rin}
 library(expm, warn.conflicts = FALSE, quietly = TRUE)
@@ -564,9 +564,9 @@ amount for all possible scenarios, as such the
 underlying equation~\ref{eqn:continuous_time_markov_process_steady_state}
 directly.
 
-To be able to do this, the versatile pracma package will be used
-which includes a number of numerical analysis functions for efficient
-computations.
+To be able to do this, the versatile pracma\autocite{borchers2021pracma} package
+will be used which includes a number of numerical analysis functions for
+efficient computations.
 
 \begin{Rin}
 library(pracma, warn.conflicts = FALSE, quietly = TRUE)
@@ -585,7 +585,7 @@ get_steady_state_vector <- function(Q){
 }
 \end{Rin}
 
-This is making use of pracma \mintinline{R}{mldivide} function
+This is making use of pracma's \mintinline{R}{mldivide} function
 which chooses the best numerical algorithm to find the solution to a given
 matrix equation \(Ax=b\).
 

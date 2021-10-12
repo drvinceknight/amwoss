@@ -163,7 +163,8 @@ To solve this problem using Python functions will be written that match the
 first three steps in the Section~\ref{sec:heuristics_theory}.
 
 The first step is to write the \mintinline{python}{get_initial_candidate}
-function that creates an initial tour:
+function that creates an initial tour\footnote{Numpy~\autocite{harris2020array}
+is used here for representing tours as arrays.}.
 
 \begin{pyin}
 import numpy as np
@@ -733,7 +734,7 @@ given by both approaches.
     \begin{center}
         \includegraphics[width=\textwidth]{./assets/final-tsp-tours-with-R/main.pdf}
     \end{center}
-    \caption{The final tours obtained by using the neighbourhood search in R}
+    \caption{The final tours obtained by using the neighbourhood search in R.}
     \label{fig:final-tsp-tours-r}
 \end{figure}
 
