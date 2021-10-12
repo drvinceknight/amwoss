@@ -431,9 +431,9 @@ library(deSolve)  # nolint
 #'
 #' @return a matrix of times, S, I and R values
 solve_ode <- function(times,
-                          y0 = c(S = 2999, I = 1, R = 0),
-                          birth_rate = 0.01,
-                          vaccine_rate = 0.84){
+                      y0 = c(S = 2999, I = 1, R = 0),
+                      birth_rate = 0.01,
+                      vaccine_rate = 0.84){
   params <- c(birth_rate = birth_rate,
     vaccine_rate = vaccine_rate)
     ode(y = y0,
