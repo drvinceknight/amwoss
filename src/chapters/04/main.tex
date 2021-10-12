@@ -221,10 +221,10 @@ def get_cost(
         A symbolic expression
     """
     I_sol = get_solution(I_0=I_0, alpha=alpha)
-    return (
-        sym.integrate(I_sol.rhs, (t, 0, sym.oo)) * cost_per_person
-        + cost_of_cure * I_0
-    )
+    area = sym.integrate(I_sol.rhs, (t, 0, sym.oo))
+    productivity_cost = area * cost_per_person
+    total_cost_of_cure = cost_of_cure * I_0
+    return productivity_cost + total_cost_of_cure
 \end{pyin}
 
 The cost without purchasing the cure is:
@@ -347,14 +347,11 @@ get_cost <- function(I_0 = 100,
   times <- seq(0, max_time, by = step_size)
   out <- get_solution(times, y0 = c(I = I_0), alpha = alpha)
   number_of_observations <- length(out[, "I"])
-  time_between_steps <- diff(out[, "time"])
-  area_under_curve <- sum(
-    time_between_steps *
-      out[-number_of_observations, "I"]
-  )
-  area_under_curve *
-    cost_per_person + cost_of_cure *
-      I_0
+  time_intervals <- diff(out[, "time"])
+  area <- sum(time_intervals * out[-number_of_observations, "I"])
+  productivity_cost <- area * cost_per_person
+  total_cost_of_cure <- cost_of_cure * I_0
+  productivity_cost + total_cost_of_cure
 }
 \end{Rin}
 
