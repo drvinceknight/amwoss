@@ -397,10 +397,11 @@ individuals, 1 infected individual, 0 recovered individuals, a vaccine rate
 of 50\% and a birth rate of 0.01, gives:
 
 \begin{Rin}
-derivatives(t = 0,
+ders <- derivatives(t = 0,
   y = c(S = 4, I = 1, R = 0),
   parameters = c(vaccine_rate = 0.5, birth_rate = 0.01)
 )
+print(ders)
 \end{Rin}
 
 \begin{Rout}

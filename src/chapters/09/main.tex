@@ -557,7 +557,8 @@ swap_stops <- function(tour){
 Applying this neighbourhood operator to the initial candidate gives:
 
 \begin{Rin}
-print(swap_stops(initial_candidate))
+new_tour <- swap_stops(initial_candidate)
+print(new_tour)
 \end{Rin}
 
 which swaps the 6th and 11th stops:
@@ -674,7 +675,8 @@ reverse_path <- function(tour){
 Applying this neighbourhood operator to the initial candidate gives:
 
 \begin{Rin}
-print(reverse_path(initial_candidate))
+new_tour <- reverse_path(initial_candidate)
+print(new_tour)
 \end{Rin}
 
 which reverses the order

@@ -165,6 +165,8 @@ words = {
     "darwin",
     "deSolve",
     "deo",
+    "der",
+    "ders",
     "dev",
     "diag",
     "diaz",
