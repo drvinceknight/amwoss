@@ -411,7 +411,7 @@ of the class and the style is inconsistent with the other chapters in this book.
 
 \begin{Rin}
 library(R6)
-city <- R6Class("City", list(
+City <- R6Class("City", list(
   size = NA,
   houses = NA,
   initialize = function(size, threshold) {
@@ -420,7 +420,7 @@ city <- R6Class("City", list(
     for (x in 1:size) {
       row <- c()
       for (y in 1:size) {
-        row <- c(row, house$new(x, y, threshold, self))
+        row <- c(row, House$new(x, y, threshold, self))
       }
       self$houses <- rbind(self$houses, row)
     } },
@@ -486,7 +486,7 @@ In order to be able to create an instance of the above class,
 a \mintinline{R}{House} class is needed:
 
 \begin{Rin}
-house <- R6Class("House", list(
+House <- R6Class("House", list(
   x = NA,
   y = NA,
   threshold = NA,
@@ -565,16 +565,11 @@ find_mean_happiness <- function(seed,
                                 threshold,
                                 n_steps){
   set.seed(seed)
-  our_city <- city$new(size, threshold)
-  our_city$run(n_steps)
-  our_city$mean_satisfaction()
+  city <- City$new(size, threshold)
+  city$run(n_steps)
+  city$mean_satisfaction()
 }
 \end{Rin}
-% TODO Modify the class names to be CamelCase and then modify names of instance
-% variables:
-% - Ensure they remain snake care
-% - Change variable name: s/our_city/city
-
 
 Now consider each household with a threshold of
 0.65, and compare the mean happiness after 0 steps and 100 steps.
