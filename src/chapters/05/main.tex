@@ -106,7 +106,7 @@ This sequence approaches the true solution $y$ as $h \rightarrow 0$.
 Thus numerical methods, including the Runge-Kutta methods and the Euler
 method\footnote{
     These methods are studied in the area of Numerical Analysis. A good textbook
-    is~\autocite{burden2001numerical}.
+    is~~\cite{burden2001numerical}.
 },
 step through this sequence $\{y_n\}$, choosing appropriate values of $h$ and
 employing other methods of error reduction.
@@ -114,7 +114,7 @@ employing other methods of error reduction.
 
 \section{Solving with Python}\label{sec:system_dynamics_solving-with-python}
 
-Here the \mintinline{python}{solve_ivp} method of the SciPy\autocite{2020SciPy-NMeth}
+Here the \mintinline{python}{solve_ivp} method of the SciPy~\cite{2020SciPy-NMeth}
 library will be used to numerically solve the above models.
 
 First the system of differential equations described in Equations~\ref{eqn:dS},
@@ -351,7 +351,7 @@ around 32\%.
 
 \section{Solving with R}\label{sec:system_dynamics_solving-with-R}
 
-The deSolve\autocite{soetaert2010solving} library will be used to numerically
+The deSolve~\cite{soetaert2010solving} library will be used to numerically
 solve the above epidemiology models.
 
 First the system of differential equations described in Equations~\ref{eqn:dS},
@@ -462,8 +462,8 @@ time respectively.
 These can be plotted to visualise their behaviour, shown in
 Figure~\ref{fig:plot_no_vaccine}.\footnote{The particular figures shown in
 Figures~\ref{fig:plot_no_vaccine} and~\ref{fig:plot_with_vaccine} were created
-using Python and the Matplotlib library\autocite{hunter2007matplotlib}. R has powerful
-plotting tools with packages such as ggplot2\autocite{wickham2016ggplot2}.}
+using Python and the Matplotlib library~\cite{hunter2007matplotlib}. R has powerful
+plotting tools with packages such as ggplot2~\cite{wickham2016ggplot2}.}
 
 The number of infected individuals increases quickly, and in fact the rate of
 change increases as more individuals are infected. However this growth slows
@@ -562,21 +562,21 @@ the infection is endemic $\pounds 6119.04$ a day. That is a saving of around
 \section{Wider context}\label{sec:system_dynamics_wider_context}
 
 System dynamics is an applied aspect of the more general mathematical field of
-dynamical systems. \parencite{robinson1998dynamical} gives a mathematical
-overview of the theory of dynamical systems and~\parencite{burden2001numerical}
+dynamical systems. \cite{robinson1998dynamical} gives a mathematical
+overview of the theory of dynamical systems and~\cite{burden2001numerical}
 is a good text on the numerical algorithms used to be able to observe the
 behaviour of these. For an overview of the type of
-application covered in this chapter see~\parencite{martin2006theory}.
+application covered in this chapter see~\cite{martin2006theory}.
 
 Jay Forrester is recognised as the first person to use dynamical systems in the way
 shown in this chapter. His own account can be read
-in~\parencite{forrester1995beginning}. From Forrester's initial application to
-industry in 1961~\parencite{forrester1961industrial} dynamical systems continue
-to be of use today in a wide range of areas. In~\parencite{coyle1999system}
+in~\cite{forrester1995beginning}. From Forrester's initial application to
+industry in 1961~\cite{forrester1961industrial} dynamical systems continue
+to be of use today in a wide range of areas. In~\cite{coyle1999system}
 a case study of using dynamical systems for relevant modelling for the navy is
 described.
-\parencite{vazquez2020system} gives a literature review of the application area
-of healthcare. For example, \parencite{cooper2020sir} applies the same model
+\cite{vazquez2020system} gives a literature review of the application area
+of healthcare. For example, \cite{cooper2020sir} applies the same model
 from this chapter to the study of the COVID pandemic.
 
 In order to be able to fully capture all the relevant details of the system to be
@@ -586,5 +586,5 @@ in order to model discrete aspects of the system
 and/or agent based modelling (see Chapter~\ref{chp:agent_based_simulation}) in
 order to observe emergent or learned
 behaviours. This is known as hybrid simulation, and an overview is given
-in~\parencite{brailsford2019hybrid}. There are a number of ways of
+in~\cite{brailsford2019hybrid}. There are a number of ways of
 combining these methodologies, from comparison to full integration.

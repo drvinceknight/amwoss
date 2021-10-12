@@ -105,11 +105,11 @@ challenging mathematical problem.
 They can however generate pseudorandom numbers: sequences of numbers that look
 like random numbers, but are entirely determined from the
 previous numbers in the sequence\footnote{An early
-discussion of pseudo random numbers is~\autocite{von195113} where the author
+discussion of pseudo random numbers is~\cite{von195113} where the author
 claimed: ``Anyone who considers arithmetical methods of producing random digits
 is, of course, in a state of sin.'' A number of different pseudo random
 number generators exist, at the time of writing the state of the art is the
-Mersenne Twister described in~\autocite{matsumoto1998mersenne}. }.
+Mersenne Twister described in~\cite{matsumoto1998mersenne}. }.
 Most programming languages have methods of
 doing this.
 
@@ -232,7 +232,7 @@ repair workshop. For each of these the following need to be defined:
 
 In this case the time between consecutive arrivals will be assumed to follow an
 exponential distribution, as will the service time.
-These are common assumptions for this sort of queueing system~\autocite{stewart2009probability}.
+These are common assumptions for this sort of queueing system~\cite{stewart2009probability}.
 
 In Ciw, these are defined as part of a Network object, created using the
 \mintinline{python}{ciw.create_network} function. The function below creates a
@@ -324,7 +324,7 @@ assume that the bicycle shop will begin the day with no customers.
 
 To count the number of bicycles that have finished service, and to
 count the number of those whose entire journey through the system lasted longer
-than 0.5 hours the pandas\autocite{reback2020pandas, mckinney-proc-scipy-2010}
+than 0.5 hours the pandas~\cite{reback2020pandas, mckinney-proc-scipy-2010}
 library will be used:
 
 \begin{pyin}
@@ -460,7 +460,7 @@ beneficial than an additional member of staff at the repair workshop.
 
 \section{Solving with R}\label{sec:discrete_event_simulation_solving-with-R}
 
-In this book we will use the Simmer\autocite{ucar2019simmer} package in order to conduct discrete event
+In this book we will use the Simmer~\cite{ucar2019simmer} package in order to conduct discrete event
 simulation in R. Simmer uses the process based approach, which means that each
 bicycle's sequence of actions must be defined, and then generate a number of
 bicycles with these sequences.
@@ -706,7 +706,7 @@ The concepts shown in this chapter cover some theoretical aspects of discrete
 event simulation. There are a number of further topics that can be vital to
 creating valid models of real life scenarios. These include time dependent rates
 and rostering servers. An overview of the theory of discrete event simulation is
-given in~\parencite{robinson2004simulation}.
+given in~\cite{robinson2004simulation}.
 
 One particular use of discrete event simulation is as part of a wider
 optimisation exercise. For example, a systematic search for an optimal service
@@ -715,14 +715,14 @@ mathematical objective function. Another approach is to integrate an
 optimisation procedure\footnote{For more information on optimisation see
 Chapters~\ref{chp:linear_programming} and~\ref{chp:heuristics}.} within a
 discrete event simulation model so as to iteratively simulate optimal
-configurations. This is done in~\parencite{osorio2017simulation} to be able to
+configurations. This is done in~\cite{osorio2017simulation} to be able to
 bring together strategic configuration and overall flow in the blood supply
 chain. A general review and taxonomy of different uses of discrete event
 simulation with optimisation techniques is given
-in~\parencite{figueira2014hybrid}.
+in~\cite{figueira2014hybrid}.
 
 One domain where simulation is popularly used is in modelling healthcare systems.
-A general overview is given in~\parencite{brailsford2009analysis} where uses
+A general overview is given in~\cite{brailsford2009analysis} where uses
 include resource utilisation, human behaviour, and workforce management.
 
 In order to be able to fully capture all the relevant details of the system to
@@ -731,5 +731,5 @@ methodology with systems dynamics (Chapter~\ref{chp:system_dynamics}) in order
 to model continuous aspects of the system and/or agent based modelling
 (Chapter~\ref{chp:agent_based_simulation}) in order to observe emergent or
 learned behaviours. This is known as hybrid simulation, and an overview is given
-in~\parencite{brailsford2019hybrid}. There are a number of ways of combining
+in~\cite{brailsford2019hybrid}. There are a number of ways of combining
 these methodologies, from comparison to full integration.
