@@ -63,7 +63,7 @@ time slots?
 
 Linear programming is a method that solves a type of optimisation problem of a
 number of variables by making use of some concepts of higher dimensional
-geometry\autocite{conforti2014integer}.
+geometry~\cite{conforti2014integer}.
 Optimisation here refers to finding the variable that gives either the maximum
 or minimum of some linear function, called the objective function.
 
@@ -129,7 +129,7 @@ help adapt a real solution to an integer solution. These include cutting
 planes, which introduce new constraints around the real solution to force an
 integer value; and branch and bound methods, where we iteratively convert
 decision variables to their closest two integers and remove any infeasible
-solutions\autocite{conforti2014integer}.
+solutions~\cite{conforti2014integer}.
 
 Both Python and R have libraries that carry out the linear and integer
 programming algorithms. When solving these kinds of problems, formulating
@@ -224,7 +224,7 @@ Equation~\ref{eqn:auxiliary}, and ones for all other constraints.
 
 \section{Solving with Python}\label{sec:linear_programming_solving-with-python}
 
-In this book the Python library Pulp\autocite{mitchell2011pulp} will be used to
+In this book the Python library Pulp~\cite{mitchell2011pulp} will be used to
 formulate and solve the integer program. First a function to create the
 binary problem variables for a given set of times and modules is needed:
 
@@ -436,11 +436,11 @@ The R package ROI, the R Optimization Infrastructure will be used here.  This is
 a library of code that acts as a front end to a number of other solvers that
 need to be installed externally, allowing a range of optimisation problems to be
 solved with a number of different solvers.  The solver that will be used here is
-called the CBC\autocite{forrest2005cbc} MILP Solver, which needs to be
-installed. The rcbc\autocite{shumacher2021rcbc} package is also necessary but
+called the CBC~\cite{forrest2005cbc} MILP Solver, which needs to be
+installed. The rcbc~\cite{shumacher2021rcbc} package is also necessary but
 cannot be installed in the usual way. Installation instructions for both, depend
 on the operating system and can be found at the documentation page for the
-ROI\autocite{theussl2017roi} package\footnote{As of the time of writing, this
+ROI~\cite{theussl2017roi} package\footnote{As of the time of writing, this
 can be found at \url{https://roi.r-forge.r-project.org/installation.html}}.
 
 The ROI package requires that the linear program is
@@ -790,20 +790,20 @@ clashes, with either 1, 2 or 4 exams scheduled on each day.
 The overview given here on linear programming covers a wide breath of the subject
 although not much depth. For specific algorithmic approaches to the underlying
 algorithms and problem types, such as branch and bound and cutting plane methods
-as well as some minor extensions see~\parencite{conforti2014integer,
+as well as some minor extensions see~\cite{conforti2014integer,
 sultan2014linear}.
 
 The efficiency of a linear programme as well as the ability to model
 linear situations imply that it is often used for a variety of applications.
 Theatre scheduling as one such application is given
-in~\parencite{guerriero2011operational}.
+in~\cite{guerriero2011operational}.
 However, scheduling is a wide ranging sub application of linear programming
 which can also be used to schedule sport
-seasons~\parencite{duran2007scheduling}.
+seasons~\cite{duran2007scheduling}.
 
-Other applications include the transportation problem~\parencite{diaz2014survey}
+Other applications include the transportation problem~\cite{diaz2014survey}
 which can be used to find a best allocation of a fleet of delivery vehicles;
-fire station location problem~\parencite{schreuder1981application} used to
+fire station location problem~\cite{schreuder1981application} used to
 minimise travel times to at-risk areas; and the bin packing
-problem~\parencite{hifi2010linear} in which a number of, possibly irregular,
+problem~\cite{hifi2010linear} in which a number of, possibly irregular,
 shapes are packed into the smallest possible number of bins.

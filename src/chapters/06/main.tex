@@ -174,8 +174,8 @@ An important fact is that a Nash equilibrium is guaranteed to exist.
 This was actually the theoretic result for which John Nash received a noble
 prize\footnote{
 John Nash proved the fact that any game has a Nash equilibrium
-in~\autocite{nash1950equilibrium}. Discussions and proofs for particular cases
-can be found in good Game Theory text books such as~\autocite{maschler2013game}
+in~\cite{nash1950equilibrium}. Discussions and proofs for particular cases
+can be found in good Game Theory text books such as~\cite{maschler2013game}
 }.
 There are various algorithms that can be used for finding Nash equilibria, they involve
 a search through the pairs of spaces of possible strategies until pairs of best
@@ -187,11 +187,11 @@ dynamic decision making. However, any stable
 behaviour that does emerge will be a Nash
 equilibrium, such emergent processes are the topics of evolutionary game
 theory\footnote{
-Evolutionary game theory was formalised in~\autocite{smith1974theory} although
-some of the work of Robert Axelrod is evolutionary in principle~\autocite{axelrod1981evolution}
+Evolutionary game theory was formalised in~\cite{smith1974theory} although
+some of the work of Robert Axelrod is evolutionary in principle~\cite{axelrod1981evolution}
 },
 learning algorithms\footnote{
-An excellent text on learning in games is~\autocite{fudenberg1998theory}
+An excellent text on learning in games is~\cite{fudenberg1998theory}
 }
 and/or agent based modelling which will be covered in
 Chapter~\ref{chp:agent_based_simulation}.
@@ -199,8 +199,8 @@ Chapter~\ref{chp:agent_based_simulation}.
 \section{Solving with Python}\label{sec:game_theory_solving-with-python}
 
 The first step we will take is to write a function to create a game using the
-matrix expected profits and any offset. The Nashpy\autocite{knight2018nashpy}
-and numpy\autocite{harris2020array} libraries will be used for this.
+matrix expected profits and any offset. The Nashpy~\cite{knight2018nashpy}
+and numpy~\cite{harris2020array} libraries will be used for this.
 
 \begin{pyin}
 import nashpy as nash
@@ -351,7 +351,7 @@ companies for putting on 3 taxis.
 \section{Solving with R}\label{sec:game_theory_solving-with-R}
 
 R does not have a single appropriate library for the game considered here, we
-will choose to use Recon\autocite{oliveira2019recon} which has functionality for finding the
+will choose to use Recon~\cite{oliveira2019recon} which has functionality for finding the
 Nash equilibria for two player games when only considering pure strategies
 (where the players only choose to use a single action at a time).
 
@@ -467,16 +467,16 @@ example extensive form which are represented by trees and more explicitly model
 asynchronous decision making. Other solution concepts involve the specific study
 of the emergence mechanisms through models based on natural evolutionary
 process: Moran processes or replicator dynamics. A good text book to read on
-these topics is~\parencite{maschler2013game}.
+these topics is~\cite{maschler2013game}.
 
 John Nash whose life was portrayed in the 2001 movie ``a beautiful mind'' (which
-is an adaptation of~\parencite{nasar2011beautiful}) won the Noble prize
-for\parencite{nash1950equilibrium} in which he proved that a Nash equilibrium
-always exists. However, in~\parencite{nash1951non} John Nash gives an
+is an adaptation of~\cite{nasar2011beautiful}) won the Noble prize
+for\cite{nash1950equilibrium} in which he proved that a Nash equilibrium
+always exists. However, in~\cite{nash1951non} John Nash gives an
 application of Game Theory to a specific version of Poker.
 
 Another application of the concept of Nash equilibrium
-is~\parencite{deo2011centralized} where the authors identify worst case
+is~\cite{deo2011centralized} where the authors identify worst case
 scenarios for ambulance diversion: a practice where an emergency room will
 declare itself too full to accept new patients. When they are multiple emergency
 units serving a same population strategic behaviour becomes relevant. The
@@ -485,10 +485,10 @@ and also propose an approach that is socially optimal: similarly to the Taxi
 problem considered in this chapter.
 
 A specific area of a lot of research in Game theory is the study of cooperative
-behaviour. \parencite{axelrod1981evolution} started this work with his original
+behaviour. \cite{axelrod1981evolution} started this work with his original
 computer tournaments with more recent work involving so called Zero-Determinant
 strategies which considered extortion as a mathematical
-concept~\parencite{press2012iterated}.
+concept~\cite{press2012iterated}.
 A review and systemic analysis of some of the research on behaviour, of which
 game theory is a subset,
-is given in~\parencite{press2012iterated}.
+is given in~\cite{press2012iterated}.
