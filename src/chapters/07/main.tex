@@ -576,7 +576,8 @@ Now consider each household with a threshold of
 First 0 steps:
 
 \begin{Rin}
-print(find_mean_happiness(0, 50, 0.65, 0))
+mean_happiness <- find_mean_happiness(0, 50, 0.65, 0)
+print(mean_happiness)
 \end{Rin}
 
 \begin{Rout}
@@ -588,7 +589,8 @@ households are unhappy here.
 Let's run the simulation for 100 generations and see how this changes:
 
 \begin{Rin}
-print(find_mean_happiness(0, 50, 0.65, 100))
+mean_happiness <- find_mean_happiness(0, 50, 0.65, 100)
+print(mean_happiness)
 \end{Rin}
 
 \begin{Rout}

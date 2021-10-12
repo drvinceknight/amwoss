@@ -293,7 +293,8 @@ derivative <- function(t, y, parameters) {
 For example, to see the value of the derivative when \(I=0\):
 
 \begin{Rin}
-derivative(t = 0, y = c(I = 100), parameters = c(alpha = 2))
+dv <- derivative(t = 0, y = c(I = 100), parameters = c(alpha = 2))
+print(dv)
 \end{Rin}
 
 This gives:
