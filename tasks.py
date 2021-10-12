@@ -56,7 +56,7 @@ def env(c):
         """Rscript -e 'install.packages("remotes", repos="http://cran.us.r-project.org")'"""
     )
     c.run(
-        """Rscript -e 'remotes::install_github("dirkschumacher/rcbc")'"""
+        """Rscript -e 'remotes::install_github("dirkschumacher/rcbc", build = FALSE)'"""
     )
     c.run(
         """Rscript -e 'remotes::install_github("dirkschumacher/ROI.plugin.cbc")'"""
