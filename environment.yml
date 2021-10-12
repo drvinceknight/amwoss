@@ -12,6 +12,7 @@ dependencies:
   - r-lintr=1.0.3
   - r-pracma=2.2.5
   - r-rootsolve=1.7
+  - r-remotes=2.4.1
   - pip:
     - black==21.9b0
     - ciw==2.2.0
