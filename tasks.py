@@ -44,8 +44,6 @@ def env(c):
     c.run(
         """Rscript -e 'install.packages("Recon", repos="http://cran.us.r-project.org")'"""
     )
-    c.run("conda install -c conda-forge coincbc")
-    c.run("conda install -c conda-forge coin-or-clp ")
     c.run(
         """Rscript -e 'install.packages("ROI", repos="http://cran.us.r-project.org")'"""
     )
