@@ -12,15 +12,15 @@ consider a direct solution approach using symbolic mathematics.
 Consider the following situation: the entire population of a small rural town
 has caught a cold. All 100 individuals will recover at an average rate of 2 per
 day. The town leadership have noticed that being ill costs approximately
-\pounds10 per day, this is due to general lack of productivity, poorer mood and
+\(\pounds10\) per day, this is due to general lack of productivity, poorer mood and
 other intangible aspects. They need to decide whether or not to order cold
 medicine which would \textbf{double} the recovery rate. The cost of of the cold
-medicine is a one off cost of \pounds5 per person.
+medicine is a one off cost of \(\pounds5\) per person.
 
 \section{Theory}\label{sec:differential_equations_theory}
 
 In the case of this town, the overall rate at which people get better is
-dependent on the number of people in how are ill. This can be represented
+dependent on the number of people who are ill. This can be represented
 mathematically using a differential equation which is a way of relating the rate
 of change of a system to the state of the system itself.
 
@@ -74,6 +74,7 @@ Integration gives exactly this, so the cost would be:
 \end{equation}
 
 where \(K\) is the cost per person per unit time.
+% TODO Add: 'Therefore the overall cost, C, would be the cost if being unproductive, plus the cost of the medicine, M, that is \( C = K \int_{0}^{\infty}I(t)dt + M I(0) \).
 
 In the upcoming sections code will be used to confirm to carry out the above
 efficiently so as to answer the original question.
@@ -254,6 +255,9 @@ cost_with_cure = get_cost(
 print(cost_with_cure)
 \end{pyin}
 
+% TODO Why do we set cost_of_cure = 5 here instead of just cost_with_cure = get_cost(I_0=I_0, alpha=2 * alpha, cost_of_cure=5) ?
+
+
 which gives:
 
 \begin{pyout}
@@ -382,6 +386,8 @@ cost_with_cure <- get_cost(
 print(round(cost_with_cure))
 \end{Rin}
 
+% TODO Why do we set cost_of_cure <- 5 here instead of just cost_with_cure <- get_cost(alpha=2 * alpha, cost_of_cure = 5) ?
+
 which gives:
 
 \begin{Rout}
@@ -398,7 +404,7 @@ approaches which in this chapter are taken
 care of using open source software. Chapters 9, 14 and 16
 of~\cite{stewart2009calculus} provide a good introduction to some of
 these concepts as well as a general discussion of the area of mathematics in
-which they sit: Calculus.
+which they sit: calculus.
 
 Differential equations have been applied in many settings.
 In~\cite{lanchester1916aircraft} differential equations were used to model
@@ -423,4 +429,4 @@ The model presented in this chapter is deterministic: there is a single solution
 that remains the same. This is not always a precise model of reality: often
 systems are stochastic so that the inputs are not constant parameters but follow
 some random distribution. This is where stochastic differential equations are
-applied which is the subject of~\cite{sarkka2019applied}.
+applied, which is the subject of~\cite{sarkka2019applied}.

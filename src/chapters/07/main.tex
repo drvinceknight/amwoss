@@ -36,11 +36,11 @@ In general an agent based model consists of two components, agents, and an
 environment:
 
 \begin{itemize}
-  \item Agents are autonomous entities that will periodically choose to take one
+  \item agents are autonomous entities that will periodically choose to take one
         of a number of actions (including the option not to take an action).
         These are chosen in order to maximise that agent's own given utility
         function;
-  \item An environment contains a number of agents and defines how their
+  \item an environment contains a number of agents and defines how their
         interactions affect each other.
         The agents may be homogeneous or heterogeneous, and the
         relationships may change over time, possibly due to the actions taken
@@ -114,22 +114,22 @@ who swap households with each other.
 Therefore the model logic is:
 
 \begin{enumerate}
-  \item Initialise the model: fill each house in the grid with either a
+  \item initialise the model: fill each house in the grid with either a
   household of Cardiff City FC or Swansea City AFC supporters with
-  probability \(0.5\) each.
-  \item At each discrete time step, for every house:
+  probability \(0.5\) each;
+  \item at each discrete time step, for every house:
   \begin{enumerate}
-    \item Consider their household's neighbours (\textit{observe}).
-    \item Determine if the household is happy (\textit{update}).
-    \item If unhappy (\textit{decide}), swap household with another randomly
+    \item consider their household's neighbours (\textit{observe});
+    \item determine if the household is happy (\textit{update});
+    \item if unhappy (\textit{decide}), swap household with another randomly
     chosen house with an unhappy household (\textit{action}).
   \end{enumerate}
 \end{enumerate}
 
-After a number of time steps the overall structure of the city can be observed
-from this agent based model, as it only explicitly defines individual behaviours
-and interactions.  Any population level behaviour that may have emerged without
-explicit definition.
+After a number of time steps the overall structure of the city can be observed.
+This agent based model only explicitly defines individual behaviours
+and interactions, therefore any population level behaviour that may have emerged
+would occur without explicit definition.
 
 \section{Solving with Python}\label{sec:agent_based_simulation_solving-with-python}
 
@@ -217,11 +217,11 @@ In this case it sets a number of attributes.
 
 \begin{itemize}
      \item First the square grid's \mintinline{python}{size} is defined, which
-           is the number of rows and columns of houses it contains.
-     \item Next the \mintinline{python}{coords} are defined, a list of tuples
+           is the number of rows and columns of houses it contains;
+     \item next the \mintinline{python}{coords} are defined, a list of tuples
            representing all the possible coordinates of the grid, this uses the
-           itertools library for efficient iteration.
-     \item Finally \mintinline{python}{houses} is defined, a dictionary with
+           itertools library for efficient iteration;
+     \item finally \mintinline{python}{houses} is defined, a dictionary with
            grid coordinates as keys, and instances of the
            \mintinline{python}{House} class.
 \end{itemize}
@@ -230,7 +230,7 @@ In this case it sets a number of attributes.
 The \mintinline{python}{run} method runs the simulation. For each
 \mintinline{python}{n_steps} number of discrete time steps, the city runs the
 method \mintinline{python}{take_turn}.
-In this method, we first create a list of all the houses with households that
+In this method, first a list of all the houses is created with households that
 are unhappy with their neighbours; these are put in a random order using the
 random library; and then working inwards from the boundary
 houses with sad households are paired up and swap households.
@@ -341,19 +341,31 @@ Now consider each household with a threshold of
 First 0 steps:
 
 \begin{pyin}
-print(find_mean_happiness(0, 50, 0.65, 0))
+initial_happiness = find_mean_happiness(
+    seed=0,
+    size=50,
+    threshold=0.65,
+    n_steps=0
+)
+print(initial_happiness)
 \end{pyin}
 
 \begin{pyout}
 0.4998
 \end{pyout}
 
-This is well below the minimum threshold of \(0.65\), and so on average most
+This is well below the minimum threshold of \(0.65\), and so on average
 households are unhappy.
 After 100 steps:
 
 \begin{pyin}
-print(find_mean_happiness(0, 50, 0.65, 100))
+final_happiness = find_mean_happiness(
+    seed=0,
+    size=50,
+    threshold=0.65,
+    n_steps=100
+)
+print(final_happiness)
 \end{pyin}
 
 \begin{pyout}
@@ -392,8 +404,8 @@ Agent based modelling lends itself well to a programming paradigm called
 object-orientated programming.
 This paradigm lets a number of \textit{objects} from a set of instructions
 called a \textit{class} to be built.
-These objects can both store information (in the R library used here these are called
-\textit{fields}), and do things (in the R library used here these are called
+These objects can both store information (in the R package used here these are called
+\textit{fields}), and do things (in the R package used here these are called
 \textit{methods}).
 Object-orientated programming allow for the creation of new classes which can be
 used to implement the individual behaviours of an agent based model.
@@ -450,7 +462,7 @@ City <- R6Class("City", list(
 
 This defines an R6 class, a template or a set of instructions that can be used
 to create instances of it, called objects.
-For our model we only need one instance of the \mintinline{R}{City} class,
+For this model only one instance of the \mintinline{R}{City} class is needed,
 although it may be useful to be able to produce more in order to run multiple
 trials with different random seeds.
 This class contains four methods: \mintinline{R}{initialize},
@@ -463,8 +475,8 @@ It initialises the object by setting a number of its fields:
 
 \begin{itemize}
      \item First the square grid's \mintinline{R}{size} is defined, which
-           is the number of rows and columns of houses it contains.
-     \item Then the \mintinline{R}{houses} are defined by iteratively repeating
+           is the number of rows and columns of houses it contains;
+     \item then the \mintinline{R}{houses} are defined by iteratively repeating
            the \mintinline{R}{rbind} function to create a two-dimensional vector
            of instances of the, yet to be defined, \mintinline{R}{House} class,
            representing the houses themselves.
@@ -576,21 +588,31 @@ Now consider each household with a threshold of
 First 0 steps:
 
 \begin{Rin}
-mean_happiness <- find_mean_happiness(0, 50, 0.65, 0)
-print(mean_happiness)
+initial_happiness <- find_mean_happiness(
+  seed = 0,
+  size = 50,
+  threshold = 0.65,
+  n_steps = 0
+)
+print(initial_happiness)
 \end{Rin}
 
 \begin{Rout}
 [1] 0.4956
 \end{Rout}
 
-This is well below the minimum threshold of \(0.65\), and so on average most
+This is well below the minimum threshold of \(0.65\), and so on average
 households are unhappy here.
 Let's run the simulation for 100 generations and see how this changes:
 
 \begin{Rin}
-mean_happiness <- find_mean_happiness(0, 50, 0.65, 100)
-print(mean_happiness)
+final_happiness <- find_mean_happiness(
+  seed = 0,
+  size = 50,
+  threshold = 0.65,
+  n_steps = 100
+)
+print(final_happiness)
 \end{Rin}
 
 \begin{Rout}
@@ -599,7 +621,7 @@ print(mean_happiness)
 
 After 100 time steps the average satisfaction has increased.
 It is now actually much higher that each individual household's threshold.
-We can consider this satisfaction level as a level of how similar each
+This satisfaction level can be considered as a level of how similar each
 households' neighbours are, and so it is actually a level of segregation.
 This was the central premise of Schelling's original
 model~\cite{schelling2006micromotives}, that overall
@@ -640,7 +662,7 @@ the banner of cellular autonoma. Here cells on a grid either become alive or dea
 depending on a certain simplistic set of rules. Emergent behaviours observed due
 to these rules include self replicating as well as oscillating structures.
 In the 1970s agent based tournaments were held by Robert Axelrod (described
-in~\cite{axelrod1981evolution}), which was the first of a number of studies
+in~\cite{axelrod1990evolution}), which was the first of a number of studies
 using agent based modelling and game theory (see Chapter 6) to understand the
 emergence of cooperative behaviours.
 

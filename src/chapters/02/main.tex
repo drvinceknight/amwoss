@@ -12,14 +12,14 @@ intersection of probability and linear algebra.
 
 Consider a barber shop. The shop owners have noticed that customers will not
 wait if there is no room in their waiting room and will choose to take their
-business elsewhere. The Barber shop would like to make an investment so as to
+business elsewhere. The barber shop would like to make an investment so as to
 avoid this situation. They know the following information:
 
 \begin{itemize}
-    \item They currently have 2 barber chairs (and 2 barbers).
-    \item They have waiting room for 4 people.
-    \item They usually have 10 customers arrive per hour.
-    \item Each Barber takes about 15 minutes to serve a customer so they can
+    \item They currently have 2 barber chairs (and 2 barbers);
+    \item they have waiting room for 4 people;
+    \item they usually have 10 customers arrive per hour;
+    \item each barber takes about 15 minutes to serve a customer so they can
         serve 4 customers an hour.
 \end{itemize}
 
@@ -77,7 +77,7 @@ ways:
         continuous time Markov chain.
 \end{itemize}
 
-The barber shop will be considered as a continuous Markov chain as shown
+The barber shop will be considered as a continuous time Markov chain as shown
 in Figure~\ref{fig:barber-shop-continuous-markov-process}
 
 \begin{figure}[!hbtp]
@@ -116,19 +116,15 @@ Q =
 You will see that \(Q_{ii}\) are negative and ensure the rows of \(Q\) sum to 0.
 This gives the total rate of change leaving state \(i\).
 
-The matrix \(Q\) can be used to understand the probability of being in a given state after
-\(t\) time unis. This is can be represented mathematically using a matrix
-\(P_{t}\) where \((P_{t})_{ij}\) is the probability of being in state \(j\)
+The matrix \(Q\) can be used to understand the probability of being in a given
+state after \(t\) time unis. This is can be represented mathematically using a
+matrix \(P_{t}\) where \((P_{t})_{ij}\) is the probability of being in state \(j\)
 after \(t\) time units having started in state \(i\). Using a mathematical tool
-called the matrix exponential\footnote{
-
-Chapter 9 of the following text book give a description of how to compute the
-matrix exponential numerically~\cite{van1996matrix}
-and~\cite{moler1978nineteen, moler2003nineteen} give a review of 19
-algorithms that can be used.
-}
-
-the value of \(P_{t}\) can be calculated numerically.
+called the matrix exponential\footnote{ Chapter 9 of the following text book
+give a description of how to compute the matrix exponential
+numerically~\cite{van1996matrix} and~\cite{moler1978nineteen,
+moler2003nineteen} give a review of 19 algorithms that can be used.} the value
+of \(P_{t}\) can be calculated numerically.
 
 \begin{equation}
     P_t = e^{Qt}
@@ -155,7 +151,7 @@ with the following constraint:
     \sum_{i=1}^{n}\pi_i = 1
 \end{equation}
 
-In the upcoming sections all of the above concepts will be demonstrate.
+In the upcoming sections all of the above concepts will be demonstrated.
 
 \section{Solving with Python}\label{sec:markov_chains_solving-with-python}
 
@@ -194,10 +190,11 @@ def get_transition_rate(
 
     return 0
 \end{pyin}
+% TODO Do we need `and in_state < capacity`?
 
 Next, a function that creates an entire transition rate matrix \(Q\) for a given
-problem is written. The numpy~\cite{harris2020array} library will be used to
-handle all the linear algebra and the itertools library for
+problem is written. The Numpy~\cite{harris2020array} library will be used to
+handle all the linear algebra and the Itertools library for
 some iterations:
 
 \begin{pyin}
@@ -295,19 +292,18 @@ which gives:
  [0.03431 0.08577 0.10722 0.13402 0.16752 0.2094  0.26176]]
 \end{pyout}
 
-No matter what state (row) the system is in,
-after 500 time units, the probability of ending up in each state (columns) is
+After 500 time units, the probability of ending up in each state (columns) is
 the same regardless of the state the system began in (row).
 
 The analysis can in fact be stopped here
 however the choice of 500 time units was arbitrary and might not be the correct
 amount for all possible scenarios, as such the
 underlying equation~\ref{eqn:continuous_time_markov_process_steady_state}
-directly.
+needs to be solved directly.
 
 The underlying linear system will be solved using a numerically efficient
 algorithm called least squares optimisation (available from the
-numpy library):
+Numpy library):
 
 \begin{pyin}
 def get_steady_state_vector(Q):
@@ -364,7 +360,7 @@ def get_probability_of_full_shop(waiting_room=4, num_barbers=2):
     return pi[-1]
 \end{pyin}
 
-This can now confirm the previous probability calculated probability of the shop
+This can now confirm the previous calculated probability of the shop
 being full:
 
 \begin{pyin}
@@ -441,6 +437,8 @@ get_transition_rate <- function(in_state,
 }
 \end{Rin}
 
+% TODO Do we need `if (in_state < capacity)`?
+
 This actual function will not be used but instead a vectorized
 version\footnote{
 A vectorized calculation refers to the manner in which an instruction is given
@@ -510,7 +508,6 @@ which gives:
 One immediate thing that can be done with this matrix is to take the matrix exponential
 discussed above. To do this, an R library called
 expm~\cite{goulet2021expm} will be used.
-
 To be able to make use of the nice \mintinline{R}{%>%} ``pipe'' operator the
 magrittr~\cite{bache2020magrittr} library will be loaded. Now to see
 what would happen after 0.5 time units:
@@ -554,15 +551,14 @@ which gives:
 [7,] 0.03431 0.08577 0.10722 0.13402 0.16752 0.2094 0.26176
 \end{Rout}
 
-No matter what state (row) the system is in,
-after 500 time units, the probability of ending up in each state (columns) is
+After 500 time units, the probability of ending up in each state (columns) is
 the same regardless of the state the system began in (row).
 
 The analysis can in fact be stopped here
 however the choice of 500 time units was arbitrary and might not be the correct
 amount for all possible scenarios, as such the
 underlying equation~\ref{eqn:continuous_time_markov_process_steady_state}
-directly.
+needs to be solved directly.
 
 To be able to do this, the versatile pracma~\cite{borchers2021pracma} package
 will be used which includes a number of numerical analysis functions for
@@ -636,7 +632,7 @@ get_probability_of_full_shop <- function(waiting_room = 4,
 }
 \end{Rin}
 
-This confirms the previous probability calculated probability of the shop
+This confirms the previous calculated probability of the shop
 being full:
 
 \begin{Rin}
@@ -693,7 +689,7 @@ these the following textbook is recommended:~\cite{stewart2009probability}.
 In~\cite{tan1997markov, stewart1996monopoly}, Markov chains are used to model
 board games. In~\cite{tan1997markov} a model of the battles that take place on
 a Risk board is used
-to understand the probabilities of invasion of territories based on troupe
+to understand the probabilities of invasion of territories based on troop
 numbers. This is done using an absorbing Markov chain. In~\cite{stewart1996monopoly} a
 standard model is used to identify the properties that are most likely to be
 landed on in Monopoly. This is done through calculation of steady state
