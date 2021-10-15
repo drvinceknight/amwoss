@@ -119,7 +119,6 @@ overall cost or a number of total iterations of the algorithm.
 The neighbourhood of a tour \(t\) is taken as some set of tours that can be
 obtained from \(t\) using a specific and computationally efficient
 \textbf{neighbourhood operator}.
-
 To illustrate two such neighbourhoods operators, consider the following tour on
 7 stops:
 
@@ -149,10 +148,10 @@ Figure~\ref{fig:tsp-effect-of-neighbourhood-operators}.
 
 \begin{figure}[!hbtp]
     \begin{center}
-        \includegraphics[width=\textwidth]{./assets/tsp-effect-of-neighbourhood-operators/main.pdf}
+        \includegraphics[width=0.8\textwidth]{./assets/tsp-effect-of-neighbourhood-operators/main.pdf}
     \end{center}
     \caption{The effect of two neighbourhood operators on \(t\). \(\tilde t^{(1)}\) is
-    obtained by swapping stops 3 and 5. \(\tilde t^{(2)}\) is obtained by reversing the
+    obtained by swapping stops 2 and 5. \(\tilde t^{(2)}\) is obtained by reversing the
     path between stops 2 and 5.}
     \label{fig:tsp-effect-of-neighbourhood-operators}
 \end{figure}
@@ -161,10 +160,8 @@ Figure~\ref{fig:tsp-effect-of-neighbourhood-operators}.
 
 To solve this problem using Python functions will be written that match the
 first three steps in the Section~\ref{sec:heuristics_theory}.
-
 The first step is to write the \mintinline{python}{get_initial_candidate}
-function that creates an initial tour\footnote{Numpy~\cite{harris2020array}
-is used here for representing tours as arrays.}.
+function that creates an initial tour.
 
 \begin{pyin}
 import numpy as np
@@ -370,7 +367,9 @@ It is important to note that this may not be the optimal route, and different al
 may produce better solutions.
 For example, one way to modify the algorithm is to use a different neighbourhood operator.
 Instead of swapping two stops, reverse the path between those two
-stops. The \mintinline{python}{reverse_path} function does this:
+stops. This corresponds to an algorithm called the ``2 opt''
+algorithm.\footnote{The 2 opt algorithm was first published in~\cite{croes1958method}.}
+The \mintinline{python}{reverse_path} function does this:
 
 \begin{pyin}
 def reverse_path(tour):
@@ -402,10 +401,7 @@ which reverses the order between the 3rd and the 11th stop:
 \end{pyout}
 
 Now running the neighbourhood search for 1000 iterations using the
-\mintinline{python}{reverse_path} neighbourhood operator, which corresponds to
-an algorithm called the ``2 opt'' algorithm\footnote{The 2 opt algorithm was
-first published in~\cite{croes1958method}.
-}:
+\mintinline{python}{reverse_path} neighbourhood operator:
 
 \begin{pyin}
 solution_with_reverse_path = run_neighbourhood_search(
@@ -568,7 +564,7 @@ which swaps the 6th and 11th stops:
  [1]  0  9  4  7  1 11  5  3  8  6  2 12 10  0
 \end{Rout}
 
-Now we have all the tools in place to build a tool to carry out the
+Now all the tools are in place to build a tool to carry out the
 neighbourhood search \mintinline{R}{run_neighbourhood_search}.
 
 \begin{Rin}
@@ -648,13 +644,15 @@ which gives:
 \end{Rout}
 
 Therefore, using this particular algorithm, a pretty good route is found, with a
-total distance of 373.
+total distance of 360.
 
 It is important to note that this may not be the optimal route, and different algorithms
  may produce better solutions.
 For example, one way to modify the algorithm is to use a different neighbourhood operator.
 Instead of swapping two stops, reverse the path between those two
-stops. The \mintinline{R}{reverse_path} function does this:
+stops. This corresponds to an algorithm called the ``2 opt''
+algorithm.\footnote{The 2 opt algorithm was first published in~\cite{croes1958method}.}
+The \mintinline{R}{reverse_path} function does this:
 
 
 \begin{Rin}
@@ -688,10 +686,7 @@ between the 3rd and the 13th stop:
 \end{Rout}
 
 Now running the neighbourhood search for 1000 iterations using the
-\mintinline{R}{reverse_path} neighbourhood operator, which corresponds to
-an algorithm called the ``2 opt'' algorithm\footnote{The 2 opt algorithm was
-first published in~\cite{croes1958method}.
-}t
+\mintinline{R}{reverse_path} neighbourhood operator:
 
 \begin{Rin}
 number_of_iterations <- 1000
@@ -750,7 +745,7 @@ include greedy searches, tabu searches, simulated annealing, genetic algorithms,
 and ant colony optimisation. They are usually employed when the problem is too
 large or complex to use exact methodologies.
 
-The Travelling Salesman Problem, described in this chapter, is a classic example
+The travelling salesman problem, described in this chapter, is a classic example
 of one of these problems, formally described first in~\cite{menger1932},
 although thought to have been discussed informally centuries before.
 It is an example of a large number of types of problems collectively known as

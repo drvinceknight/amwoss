@@ -19,9 +19,9 @@ this ensures the highest level of availability to the population.
 Some exploratory data analysis gives the following insights:
 
 \begin{itemize}
-    \item If both companies use the same number of taxis then they make the same
-        profit which will go down slightly as the number of taxis goes up.
-    \item If one company uses more taxis than the other then they make more
+    \item if both companies use the same number of taxis then they make the same
+        profit which will go down slightly as the number of taxis goes up;
+    \item if one company uses more taxis than the other then they make more
         profit.
 \end{itemize}
 
@@ -50,7 +50,7 @@ Table~\ref{tbl:profit-of-taxi-companies}.
                                                                   & 3  & \(\frac{1}{3}\) & \(\frac{1}{2}\)   & \(\frac{17}{20}\)\\[4.5mm]
     \end{tabular}
     \end{center}
-    \caption{Profits (in GBP per hour) of each Taxi company based on
+    \caption{Profits (in GBP per hour) of each taxi company based on
     the choice of vehicle number by all companies. The first table shows the profits for
     company A. The second table shows the profits for company B.}
     \label{tbl:profit-of-taxi-companies}
@@ -84,7 +84,7 @@ Table~\ref{tbl:profit-of-taxi-companies-offset}
                                                                   & 3  & \(\frac{1}{3}\) & \(\frac{1}{2}\) & \(\frac{17}{20} + \epsilon\)\\[4.5mm]
     \end{tabular}
     \end{center}
-    \caption{Profits (in GBP per hour) of each Taxi company based on
+    \caption{Profits (in GBP per hour) of each taxi company based on
     the choice of vehicle number by all companies. The first table shows the profits for
     company A. The second table shows the profits for company B. The
     council's financial incentive \(\epsilon\) is included.}
@@ -103,18 +103,18 @@ In the case of this city, the interaction can be modelled using a mathematical
 object called a game, which here requires:
 
 \begin{enumerate}
-    \item A given collection of actors that make decisions (players);
-    \item Options available to each player (actions);
-    \item A numerical value associated to each player for every possible
+    \item a given collection of actors that make decisions (players);
+    \item options available to each player (actions);
+    \item a numerical value associated to each player for every possible
         choice of action made by all the players. This is the utility or reward.
 \end{enumerate}
 
 This is called a normal form game and is formally defined by:
 
 \begin{enumerate}
-    \item A finite set of \(N\) players;
-    \item Action spaces for each player: \(\{A_1, A_2, A_3, \dots, A_N\}\);
-    \item Utility functions that for each player \(u_1, u_2, u_3, \dots, u_N\)
+    \item a finite set of \(N\) players;
+    \item action spaces for each player: \(\{A_1, A_2, A_3, \dots, A_N\}\);
+    \item utility functions that for each player \(u_1, u_2, u_3, \dots, u_N\)
         where \(u_i:A_1\times A_2 \times A_3 \dots A_N \to \mathbb{R}\).
 \end{enumerate}
 
@@ -124,7 +124,7 @@ correspond to the actions available to the first player and the columns to the
 actions available to the second player.
 
 Given a pair of actions (a row and column) we can read the utilities to both
-player by looking at the corresponding entry of the corresponding matrix.
+players by looking at the corresponding entry of the corresponding matrix.
 
 For this example, the two matrices would be:
 
@@ -160,8 +160,8 @@ probability vector. For the \(i\)th player, this vector \(v\) would be of size
 \(|A_i|\) (the size of the action space) and \(v_i\) corresponds to the
 probability of choosing the \(i\)th action.
 
-Both taxis always choosing to use 2 taxis (the second row/column) would
-correspond to the strategy: \((0, 1, 0)\).
+Both taxi firms always choosing to use 2 taxis (the second row/column) would
+correspond to both taxi firms choosing the strategy: \((0, 1, 0)\). 
 If both companies use this strategy and the row player (who controls the
 rows) wants to improve their outcome it is evident by inspecting the second
 column that the highest number is \(19 / 20\): thus the row player has no reason
@@ -171,11 +171,11 @@ This is called a Nash equilibrium: when both players are playing a
 strategy that is the best response against the other.
 
 An important fact is that a Nash equilibrium is guaranteed to exist.
-This was actually the theoretic result for which John Nash received a noble
-prize\footnote{
+This was actually the theoretic result for which John Nash received a Nobel
+Prize\footnote{
 John Nash proved the fact that any game has a Nash equilibrium
 in~\cite{nash1950equilibrium}. Discussions and proofs for particular cases
-can be found in good Game Theory text books such as~\cite{maschler2013game}
+can be found in good game theory text books such as~\cite{maschler2013game}
 }.
 There are various algorithms that can be used for finding Nash equilibria, they involve
 a search through the pairs of spaces of possible strategies until pairs of best
@@ -199,9 +199,9 @@ Chapter~\ref{chp:agent_based_simulation}.
 
 \section{Solving with Python}\label{sec:game_theory_solving-with-python}
 
-The first step we will take is to write a function to create a game using the
+The first step is to write a function to create a game using the
 matrix expected profits and any offset. The Nashpy~\cite{knight2018nashpy}
-and numpy~\cite{harris2020array} libraries will be used for this.
+and Numpy~\cite{harris2020array} libraries will be used for this.
 
 \begin{pyin}
 import nashpy as nash
@@ -301,18 +301,18 @@ There are 3 Nash equilibria: 3 possible pairs of behaviour that the 2
 companies could stabilise at:
 
 \begin{itemize}
-    \item The first equilibrium \(((0, 1, 0), (0, 1, 0))\) corresponds to both
+    \item the first equilibrium \(((0, 1, 0), (0, 1, 0))\) corresponds to both
           firms always using 2 taxis;
-    \item The second equilibrium \(((0, 0, 1), (0, 0, 1))\) corresponds to both
+    \item the second equilibrium \(((0, 0, 1), (0, 0, 1))\) corresponds to both
           firms always using 3 taxis;
-    \item The third equilibrium \(((0, 0.7, 0.3), (0, 0.7, 0.3))\) corresponds to
+    \item the third equilibrium \(((0, 0.7, 0.3), (0, 0.7, 0.3))\) corresponds to
           both firms using 2 taxis 70\% of the time and 3 taxis otherwise.
 \end{itemize}
 
 A good thing to note is that the two taxi companies will never only provide a
 single taxi (which would be harmful to the customers).
 
-This can be used to find the number of Nash equilibria for a given offset and
+The code below can be used to find the number of Nash equilibria for a given offset and
 stop when there is a single equilibrium:
 
 \begin{pyin}
@@ -404,9 +404,9 @@ There are 2 pure Nash equilibria: 2 possible pairs of behaviour that the two
 companies might converge to.
 
 \begin{itemize}
-    \item The first equilibrium \(((0, 1, 0), (0, 1, 0))\) corresponds to both
+    \item the first equilibrium \(((0, 1, 0), (0, 1, 0))\) corresponds to both
           firms always using 2 taxis;
-    \item The second equilibrium \(((0, 0, 1), (0, 0, 1))\) corresponds to both
+    \item the second equilibrium \(((0, 0, 1), (0, 0, 1))\) corresponds to both
           firms always using 3 taxis.
 \end{itemize}
 
@@ -418,7 +418,7 @@ strategies.
 As discussed, the council would like to offset the cost of 3
 taxis so as to encourage the taxi company to provide a better service.
 
-This gives the number of equilibria for a given offset and stops when there is a
+The code below gives the number of equilibria for a given offset and stops when there is a
 single equilibrium:
 
 \begin{Rin}
@@ -440,7 +440,7 @@ print(round(offset, 2))
 [1] 0.15
 \end{Rout}
 
-now confirm that the Nash equilibrium is where both taxi firms provide
+Now confirm that the Nash equilibrium is where both taxi firms provide
 three vehicles:
 
 \begin{Rin}
@@ -470,11 +470,11 @@ of the emergence mechanisms through models based on natural evolutionary
 process: Moran processes or replicator dynamics. A good text book to read on
 these topics is~\cite{maschler2013game}.
 
-John Nash whose life was portrayed in the 2001 movie ``a beautiful mind'' (which
-is an adaptation of~\cite{nasar2011beautiful}) won the Noble prize
-for\cite{nash1950equilibrium} in which he proved that a Nash equilibrium
+John Nash whose life was portrayed in the 2001 movie ``A Beautiful Mind'' (which
+is an adaptation of~\cite{nasar2011beautiful}) won the Nobel Prize
+for~\cite{nash1950equilibrium} in which he proved that a Nash equilibrium
 always exists. However, in~\cite{nash1951non} John Nash gives an
-application of Game Theory to a specific version of Poker.
+application of game theory to a specific version of poker.
 
 Another application of the concept of Nash equilibrium
 is~\cite{deo2011centralized} where the authors identify worst case
@@ -482,14 +482,20 @@ scenarios for ambulance diversion: a practice where an emergency room will
 declare itself too full to accept new patients. When they are multiple emergency
 units serving a same population strategic behaviour becomes relevant. The
 authors of this paper identify the effect of this decentralised decision making
-and also propose an approach that is socially optimal: similarly to the Taxi
+and also propose an approach that is socially optimal: similarly to the taxi
 problem considered in this chapter.
 
-A specific area of a lot of research in Game theory is the study of cooperative
-behaviour. Axelrod~\cite{axelrod1990evolution} started this work with his original
-computer tournaments with more recent work involving so called Zero-Determinant
+A specific area of a lot of research in game theory is the study of cooperative 
+behaviour. Axelrod~\cite{axelrod1990evolution} started this work with
+computer tournaments where he invited code submissions of strategies to play a
+game called the Iterated Prisoner's Dilemma. The outcome of this was an
+explanation for how cooperation can emerge in a complex system with a set of 5
+rules which included the need to be `nice'. The conclusions of Axelrod's work and
+these set of rules continue to be examined and often refuted. For example,
+more recent work involving so called Zero-Determinant
 strategies which considered extortion as a mathematical
-concept~\cite{press2012iterated}.
+concept~\cite{press2012iterated} and also a possible outcome as opposed to
+cooperation.
 A review and systemic analysis of some of the research on behaviour, of which
 game theory is a subset,
 is given in~\cite{press2012iterated}.

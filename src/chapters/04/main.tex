@@ -12,15 +12,15 @@ consider a direct solution approach using symbolic mathematics.
 Consider the following situation: the entire population of a small rural town
 has caught a cold. All 100 individuals will recover at an average rate of 2 per
 day. The town leadership have noticed that being ill costs approximately
-\pounds10 per day, this is due to general lack of productivity, poorer mood and
+\(\pounds10\) per day, this is due to general lack of productivity, poorer mood and
 other intangible aspects. They need to decide whether or not to order cold
 medicine which would \textbf{double} the recovery rate. The cost of of the cold
-medicine is a one off cost of \pounds5 per person.
+medicine is a one off cost of \(\pounds5\) per person.
 
 \section{Theory}\label{sec:differential_equations_theory}
 
 In the case of this town, the overall rate at which people get better is
-dependent on the number of people in how are ill. This can be represented
+dependent on the number of people who are ill. This can be represented
 mathematically using a differential equation which is a way of relating the rate
 of change of a system to the state of the system itself.
 
@@ -74,6 +74,12 @@ Integration gives exactly this, so the cost would be:
 \end{equation}
 
 where \(K\) is the cost per person per unit time.
+Therefore the overall cost would be the cost of being unproductive, plus the cost
+of the medicine, \(M\), and is given by:
+
+\begin{equation}
+K \int_{0}^{\infty}I(t)dt + M I(0)
+\end{equation}
 
 In the upcoming sections code will be used to confirm to carry out the above
 efficiently so as to answer the original question.
@@ -206,33 +212,32 @@ Now, to calculate the cost write a function to integrate the result:
 def get_cost(
     I_0=I_0,
     alpha=alpha,
-    cost_per_person=10,
-    cost_of_cure=0,
+    per_person_cost=10,
+    cure_cost=0,
 ):
     """Return the cost.
 
     Args:
         I_0: a float (default: symbolic I_0)
         alpha: a float (default: symbolic alpha)
-        cost_per_person: a float (default: 10)
-        cost_of_cure: a float (default: 0)
+        per_person_cost: a float (default: 10)
+        cure_cost: a float (default: 0)
 
     Returns:
         A symbolic expression
     """
     I_sol = get_solution(I_0=I_0, alpha=alpha)
     area = sym.integrate(I_sol.rhs, (t, 0, sym.oo))
-    productivity_cost = area * cost_per_person
-    total_cost_of_cure = cost_of_cure * I_0
+    productivity_cost = area * per_person_cost
+    total_cost_of_cure = cure_cost * I_0
     return productivity_cost + total_cost_of_cure
 \end{pyin}
 
 The cost without purchasing the cure is:
 
 \begin{pyin}
-I_0 = 100
 alpha = 2
-cost_without_cure = get_cost(I_0=I_0, alpha=alpha)
+cost_without_cure = get_cost(I_0=100, alpha=alpha)
 print(cost_without_cure)
 \end{pyin}
 
@@ -247,10 +252,7 @@ The cost with cure can use the above with a modified \(\alpha\) and a non zero
 cost of the cure itself:
 
 \begin{pyin}
-cost_of_cure = 5
-cost_with_cure = get_cost(
-    I_0=I_0, alpha=2 * alpha, cost_of_cure=cost_of_cure
-)
+cost_with_cure = get_cost(I_0=100, alpha=2 * alpha, cure_cost=5)
 print(cost_with_cure)
 \end{pyin}
 
@@ -333,16 +335,16 @@ points. Using this we can compute the cost.
 #'
 #' @param I_0: a float (default: symbolic I_0)
 #' @param alpha: a float (default: symbolic alpha)
-#' @param cost_per_person: a float (default: 10)
-#' @param cost_of_cure: a float (default: 0)
+#' @param per_person_cost: a float (default: 10)
+#' @param cure_cost: a float (default: 0)
 #' @param step_size: a float (default: 0.0001)
 #' @param max_time: an integer (default: 10)
 
 #' @return A numeric value
 get_cost <- function(I_0 = 100,
                      alpha = 2,
-                     cost_per_person = 10,
-                     cost_of_cure = 0,
+                     per_person_cost = 10,
+                     cure_cost = 0,
                      step_size = 0.0001,
                      max_time = 10) {
   times <- seq(0, max_time, by = step_size)
@@ -350,8 +352,8 @@ get_cost <- function(I_0 = 100,
   number_of_observations <- length(out[, "I"])
   time_intervals <- diff(out[, "time"])
   area <- sum(time_intervals * out[-number_of_observations, "I"])
-  productivity_cost <- area * cost_per_person
-  total_cost_of_cure <- cost_of_cure * I_0
+  productivity_cost <- area * per_person_cost
+  total_cost_of_cure <- cure_cost * I_0
   productivity_cost + total_cost_of_cure
 }
 \end{Rin}
@@ -375,10 +377,7 @@ The cost with cure can use the above with a modified \(\alpha\) and a non zero
 cost of the cure itself:
 
 \begin{Rin}
-cost_of_cure <- 5
-cost_with_cure <- get_cost(
-  alpha = 2 * alpha, cost_of_cure = cost_of_cure
-)
+cost_with_cure <- get_cost(alpha = 2 * alpha, cure_cost = 5)
 print(round(cost_with_cure))
 \end{Rin}
 
@@ -398,7 +397,7 @@ approaches which in this chapter are taken
 care of using open source software. Chapters 9, 14 and 16
 of~\cite{stewart2009calculus} provide a good introduction to some of
 these concepts as well as a general discussion of the area of mathematics in
-which they sit: Calculus.
+which they sit: calculus.
 
 Differential equations have been applied in many settings.
 In~\cite{lanchester1916aircraft} differential equations were used to model
@@ -423,4 +422,4 @@ The model presented in this chapter is deterministic: there is a single solution
 that remains the same. This is not always a precise model of reality: often
 systems are stochastic so that the inputs are not constant parameters but follow
 some random distribution. This is where stochastic differential equations are
-applied which is the subject of~\cite{sarkka2019applied}.
+applied, which is the subject of~\cite{sarkka2019applied}.

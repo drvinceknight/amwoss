@@ -17,12 +17,12 @@ the following parameters:
 
 \begin{itemize}
   \item They have a birth rate $b$ of 0.01 per day;
-  \item They have a death rate $d$ of 0.01 per day;
-  \item For every infectious individual, the infection rate $\alpha$ is 0.3 per
+  \item they have a death rate $d$ of 0.01 per day;
+  \item for every infectious individual, the infection rate $\alpha$ is 0.3 per
   day;
-  \item Infectious people recover naturally (and thus gain an immunity from the
+  \item infectious people recover naturally (and thus gain an immunity from the
   disease), at a recovery rate $r$ of 0.02 per day;
-  \item For each day an individual is infected, they must take medication which
+  \item for each day an individual is infected, they must take medication which
   costs a public healthcare system $\pounds 10$ per day.
 \end{itemize}
 
@@ -55,18 +55,18 @@ as external parameters (e.g. birth rate, infection rate) and the stock levels.
 In this system the following taps exist, influenced by the following parameters:
 
 \begin{itemize}
-  \item \textit{external $\rightarrow S$:} Influenced positively by the birth
-  rate, and negatively by the vaccine rate.
-  \item \textit{$S \rightarrow I$:} Influenced positively by the infection rate,
-  and the number of infected individuals.
-  \item \textit{$S \rightarrow$ external:} Influenced positively by the death
-  rate.
-  \item \textit{$I \rightarrow R$:} Influenced positively by the recovery rate.
-  \item \textit{$I \rightarrow$ external:} Influenced positively by the death
-  rate.
-  \item \textit{$R \rightarrow$ external:} Influenced positively by the birth
-  rate and the vaccine rate.
-  \item \textit{external $\rightarrow R$:} Influenced positively by the death
+  \item \textit{external $\rightarrow S$:} influenced positively by the birth
+  rate, and negatively by the vaccine rate;
+  \item \textit{$S \rightarrow I$:} influenced positively by the infection rate,
+  and the number of infected individuals;
+  \item \textit{$S \rightarrow$ external:} influenced positively by the death
+  rate;
+  \item \textit{$I \rightarrow R$:} influenced positively by the recovery rate;
+  \item \textit{$I \rightarrow$ external:} influenced positively by the death
+  rate;
+  \item \textit{$R \rightarrow$ external:} influenced positively by the birth
+  rate and the vaccine rate;
+  \item \textit{external $\rightarrow R$:} influenced positively by the death
   rate.
 \end{itemize}
 
@@ -105,8 +105,8 @@ y_{n+1} = h \times f(t_0 + nh, y_n).
 This sequence approaches the true solution $y$ as $h \rightarrow 0$.
 Thus numerical methods, including the Runge-Kutta methods and the Euler
 method\footnote{
-    These methods are studied in the area of Numerical Analysis. A good textbook
-    is~~\cite{burden2001numerical}.
+    These methods are studied in the area of numerical analysis. A good textbook
+    is~\cite{burden2001numerical}.
 },
 step through this sequence $\{y_n\}$, choosing appropriate values of $h$ and
 employing other methods of error reduction.
@@ -119,8 +119,8 @@ library will be used to numerically solve the above models.
 
 First the system of differential equations described in Equations~\ref{eqn:dS},
 \ref{eqn:dI} and \ref{eqn:dR} must be defined. This is done using a regular
-Python function, where the first two arguments are the system state and the
-current time respectively.
+Python function, where the first two arguments are the current time and the
+system state respectively.
 
 \begin{pyin}
 def derivatives(t, y, vaccine_rate, birth_rate=0.01):
@@ -218,7 +218,7 @@ def solve_ode(
 
 This function can be used to investigate the difference in behaviour between a
 vaccination rate of 0\% and a vaccination rate of 85\%. The system will now be
-observed for two years, that is 730 days, in time steps of 0.01 days.
+observed for two years, that is 730 days.
 
 Begin with a vaccine rate of 0\%:
 
@@ -239,7 +239,7 @@ The number of infected individuals increases quickly, and in fact the rate of
 change increases as more individuals are infected. However this growth slows
 down as there are fewer susceptible individuals to infect. Due to the equal
 birth and death rates the overall population size remains constant; but after
-some time period (around 300 time units) the levels of susceptible, infected,
+some time period (around 200 time units) the levels of susceptible, infected,
 and recovered individuals stabilise, and the disease becomes endemic. Once this
 occurs, around 10\% of the population remain susceptible to the disease, 30\%
 are infected, and 60\% are recovered and immune.
@@ -334,7 +334,7 @@ around 32\%.
 
 \begin{figure}
 \begin{center}
-\includegraphics[width=0.85\textwidth]{./assets/sd_vaccine_plots/plot_no_vaccine.pdf}
+\includegraphics[width=\textwidth]{./assets/sd_vaccine_plots/plot_no_vaccine.pdf}
 \end{center}
 \caption{Stock levels without vaccination.}
 \label{fig:plot_no_vaccine}
@@ -342,7 +342,7 @@ around 32\%.
 
 \begin{figure}
 \begin{center}
-\includegraphics[width=0.85\textwidth]{./assets/sd_vaccine_plots/plot_with_vaccine.pdf}
+\includegraphics[width=\textwidth]{./assets/sd_vaccine_plots/plot_with_vaccine.pdf}
 \end{center}
 \caption{Stock levels with vaccination.}
 \label{fig:plot_with_vaccine}
@@ -397,7 +397,8 @@ individuals, 1 infected individual, 0 recovered individuals, a vaccine rate
 of 50\% and a birth rate of 0.01, gives:
 
 \begin{Rin}
-ders <- derivatives(t = 0,
+ders <- derivatives(
+  t = 0,
   y = c(S = 4, I = 1, R = 0),
   parameters = c(vaccine_rate = 0.5, birth_rate = 0.01)
 )
@@ -425,7 +426,7 @@ library(deSolve)  # nolint
 
 #' Numerically solve the system of differential equations
 #'
-#' @param t an array of increasing positive floats
+#' @param times an array of increasing positive floats
 #' @param y0 list of integers (default: c(S=2999, I=1, R=0))
 #' @param birth_rate a positive float <= 1 (default: 0.01)
 #' @param vaccine_rate a positive float <= 1 (default: 0.85)
@@ -434,13 +435,17 @@ library(deSolve)  # nolint
 solve_ode <- function(times,
                       y0 = c(S = 2999, I = 1, R = 0),
                       birth_rate = 0.01,
-                      vaccine_rate = 0.84){
-  params <- c(birth_rate = birth_rate,
-    vaccine_rate = vaccine_rate)
-    ode(y = y0,
-      times = times,
-      func = derivatives,
-      parms = params)
+                      vaccine_rate = 0.85){
+  params <- c(
+    birth_rate = birth_rate,
+    vaccine_rate = vaccine_rate
+  )
+  ode(
+    y = y0,
+    times = times,
+    func = derivatives,
+    parms = params
+  )
 }
 \end{Rin}
 
@@ -469,7 +474,7 @@ The number of infected individuals increases quickly, and in fact the rate of
 change increases as more individuals are infected. However this growth slows
 down as there are fewer susceptible individuals to infect. Due to the equal
 birth and death rates the overall population size remains constant; but after
-some time period (around 300 time units) the levels of susceptible, infected,
+some time period (around 200 time units) the levels of susceptible, infected,
 and recovered individuals stabilises, and the disease becomes endemic. Once this
 steadiness occurs, around 10\% of the population remain susceptible to the
 disease, 30\% are infected, and 60\% are recovered and immune.
