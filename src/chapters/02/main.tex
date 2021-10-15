@@ -182,7 +182,7 @@ def get_transition_rate(
     capacity = waiting_room + num_barbers
     delta = out_state - in_state
 
-    if delta == 1 and in_state < capacity:
+    if delta == 1:
         return arrival_rate
 
     if delta == -1:
@@ -426,9 +426,7 @@ get_transition_rate <- function(in_state,
   delta <- out_state - in_state
 
   if (delta == 1) {
-    if (in_state < capacity) {
-      return(arrival_rate)
-    }
+    return(arrival_rate)
   }
   if (delta == -1) {
     return(min(in_state, num_barbers) * service_rate)
