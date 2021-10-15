@@ -117,11 +117,11 @@ You will see that \(Q_{ii}\) are negative and ensure the rows of \(Q\) sum to 0.
 This gives the total rate of change leaving state \(i\).
 
 The matrix \(Q\) can be used to understand the probability of being in a given
-state after \(t\) time unis. This is can be represented mathematically using a
+state after \(t\) time unis. This can be represented mathematically using a
 matrix \(P_{t}\) where \((P_{t})_{ij}\) is the probability of being in state \(j\)
 after \(t\) time units having started in state \(i\). Using a mathematical tool
-called the matrix exponential\footnote{ Chapter 9 of the following text book
-give a description of how to compute the matrix exponential
+called the matrix exponential\footnote{Chapter 9 of the following text book
+gives a description of how to compute the matrix exponential
 numerically~\cite{van1996matrix} and~\cite{moler1978nineteen,
 moler2003nineteen} give a review of 19 algorithms that can be used.} the value
 of \(P_{t}\) can be calculated numerically.
@@ -190,7 +190,6 @@ def get_transition_rate(
 
     return 0
 \end{pyin}
-% TODO Do we need `and in_state < capacity`?
 
 Next, a function that creates an entire transition rate matrix \(Q\) for a given
 problem is written. The Numpy~\cite{harris2020array} library will be used to

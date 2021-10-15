@@ -105,9 +105,7 @@ challenging mathematical problem.
 They can however generate pseudorandom numbers: sequences of numbers that look
 like random numbers, but are entirely determined from the
 previous numbers in the sequence\footnote{An early
-discussion of pseudorandom numbers is~\cite{von195113} where the author
-claimed: ``Anyone who considers arithmetical methods of producing random digits % TODO I do not understand this quite and don't think it's relevant.
-is, of course, in a state of sin.'' A number of different pseudo random
+discussion of pseudorandom numbers is~\cite{von195113}. A number of different pseudo random
 number generators exist, at the time of writing the state of the art is the
 Mersenne Twister described in~\cite{matsumoto1998mersenne}. }.
 Most programming languages have methods of
@@ -155,7 +153,7 @@ for generating pseudorandom numbers and observes the emergent interactions. In
 practice there are two main approaches to simulating complex probabilistic
 systems such as this one: \textit{event scheduling} and
 \textit{process based} simulation.  It so happens that the
-implementations in Python and R used here use each of these approaches respectively.
+implementations in Python and R shown here use each of these approaches respectively.
 
 % Event scheduling
 \subsection{Event Scheduling Approach}
@@ -512,7 +510,7 @@ define_bicycle_trajectories <- function() {
 }
 \end{Rin}
 
-These trajectories are not very useful alone, the resources used are yet to be defined,
+These trajectories are not useful alone as, the resources used are yet to be defined,
 or a way to generate bicycles with these trajectories. This is done in the
 function below, which begins by defining a \mintinline{R}{repair_shop} with one
 resource labelled ``Inspector'', and two resources labelled ``Repairer''.
