@@ -212,24 +212,24 @@ Now, to calculate the cost write a function to integrate the result:
 def get_cost(
     I_0=I_0,
     alpha=alpha,
-    cost_per_person=10,
-    cost_of_cure=0,
+    per_person_cost=10,
+    cure_cost=0,
 ):
     """Return the cost.
 
     Args:
         I_0: a float (default: symbolic I_0)
         alpha: a float (default: symbolic alpha)
-        cost_per_person: a float (default: 10)
-        cost_of_cure: a float (default: 0)
+        per_person_cost: a float (default: 10)
+        cure_cost: a float (default: 0)
 
     Returns:
         A symbolic expression
     """
     I_sol = get_solution(I_0=I_0, alpha=alpha)
     area = sym.integrate(I_sol.rhs, (t, 0, sym.oo))
-    productivity_cost = area * cost_per_person
-    total_cost_of_cure = cost_of_cure * I_0
+    productivity_cost = area * per_person_cost
+    total_cost_of_cure = cure_cost * I_0
     return productivity_cost + total_cost_of_cure
 \end{pyin}
 
@@ -253,15 +253,9 @@ The cost with cure can use the above with a modified \(\alpha\) and a non zero
 cost of the cure itself:
 
 \begin{pyin}
-cost_of_cure = 5
-cost_with_cure = get_cost(
-    I_0=I_0, alpha=2 * alpha, cost_of_cure=cost_of_cure
-)
+cost_with_cure = get_cost(I_0=I_0, alpha=2 * alpha, cure_cost=5)
 print(cost_with_cure)
 \end{pyin}
-
-% TODO Why do we set cost_of_cure = 5 here instead of just cost_with_cure = get_cost(I_0=I_0, alpha=2 * alpha, cost_of_cure=5) ?
-
 
 which gives:
 
@@ -342,16 +336,16 @@ points. Using this we can compute the cost.
 #'
 #' @param I_0: a float (default: symbolic I_0)
 #' @param alpha: a float (default: symbolic alpha)
-#' @param cost_per_person: a float (default: 10)
-#' @param cost_of_cure: a float (default: 0)
+#' @param per_person_cost: a float (default: 10)
+#' @param cure_cost: a float (default: 0)
 #' @param step_size: a float (default: 0.0001)
 #' @param max_time: an integer (default: 10)
 
 #' @return A numeric value
 get_cost <- function(I_0 = 100,
                      alpha = 2,
-                     cost_per_person = 10,
-                     cost_of_cure = 0,
+                     per_person_cost = 10,
+                     cure_cost = 0,
                      step_size = 0.0001,
                      max_time = 10) {
   times <- seq(0, max_time, by = step_size)
@@ -359,8 +353,8 @@ get_cost <- function(I_0 = 100,
   number_of_observations <- length(out[, "I"])
   time_intervals <- diff(out[, "time"])
   area <- sum(time_intervals * out[-number_of_observations, "I"])
-  productivity_cost <- area * cost_per_person
-  total_cost_of_cure <- cost_of_cure * I_0
+  productivity_cost <- area * per_person_cost
+  total_cost_of_cure <- cure_cost * I_0
   productivity_cost + total_cost_of_cure
 }
 \end{Rin}
@@ -384,14 +378,9 @@ The cost with cure can use the above with a modified \(\alpha\) and a non zero
 cost of the cure itself:
 
 \begin{Rin}
-cost_of_cure <- 5
-cost_with_cure <- get_cost(
-  alpha = 2 * alpha, cost_of_cure = cost_of_cure
-)
+cost_with_cure <- get_cost(alpha = 2 * alpha, cure_cost = 5)
 print(round(cost_with_cure))
 \end{Rin}
-
-% TODO Why do we set cost_of_cure <- 5 here instead of just cost_with_cure <- get_cost(alpha=2 * alpha, cost_of_cure = 5) ?
 
 which gives:
 
