@@ -236,9 +236,8 @@ def get_cost(
 The cost without purchasing the cure is:
 
 \begin{pyin}
-I_0 = 100
 alpha = 2
-cost_without_cure = get_cost(I_0=I_0, alpha=alpha)
+cost_without_cure = get_cost(I_0=100, alpha=alpha)
 print(cost_without_cure)
 \end{pyin}
 
@@ -253,7 +252,7 @@ The cost with cure can use the above with a modified \(\alpha\) and a non zero
 cost of the cure itself:
 
 \begin{pyin}
-cost_with_cure = get_cost(I_0=I_0, alpha=2 * alpha, cure_cost=5)
+cost_with_cure = get_cost(I_0=100, alpha=2 * alpha, cure_cost=5)
 print(cost_with_cure)
 \end{pyin}
 
