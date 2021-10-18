@@ -33,8 +33,8 @@ which is given by the distance matrix in equation (\ref{eqn:tsp}).
 \normalsize
 
 The value \(d_{ij}\) gives the travel distance between
-stops \(i\) and \(j\). For example, \(d_{23}=67\) % TODO If the distance matrix changes, this value need to be updated
-indicates that the distance between the 2nd and 3rd stop in the route is 67. % TODO If the distance matrix changes, this value need to be updated
+stops \(i\) and \(j\). For example, \(d_{23}=67\)
+indicates that the distance between the 2nd and 3rd stop in the route is 67.
 
 
 The delivery company would like to find the route around the 13 stops that gives
@@ -127,8 +127,8 @@ To illustrate two such neighbourhoods operators, consider the following tour on
 \]
 
 One possible neighbourhood is to choose 2 stops at random and swap. For
-example, the tour \(\tilde t^{(1)}\in N(t)\) is obtained by swapping the 2rd and 5th
-stops.
+example, the tour \(\tilde t^{(1)}\in N(t)\) is obtained by swapping the stop
+labelled 2 and the stop labelled 5.
 
 \[
     \tilde t^{(1)} = (0, 1, 5, 3, 4, 2, 6, 0)
@@ -137,7 +137,7 @@ stops.
 Another possible neighbourhood is to choose 2 stops at random and reverse the
 order of all stops between (including) those two stops. For example, the tour
 \(\tilde t^{(2)} \in N(t)\) is obtained by reversing the order of all stops between
-the 2rd and the 5th stop.
+the stop labelled 2 and the stop labelled 5.
 
 \[
     \tilde t^{(2)} = (0, 1, 5, 4, 3, 2, 6, 0)
@@ -151,8 +151,8 @@ Figure~\ref{fig:tsp-effect-of-neighbourhood-operators}.
         \includegraphics[width=0.8\textwidth]{./assets/tsp-effect-of-neighbourhood-operators/main.pdf}
     \end{center}
     \caption{The effect of two neighbourhood operators on \(t\). \(\tilde t^{(1)}\) is
-    obtained by swapping stops 2 and 5. \(\tilde t^{(2)}\) is obtained by reversing the
-    path between stops 2 and 5.}
+    obtained by swapping stops labelled 2 and 5. \(\tilde t^{(2)}\) is obtained by reversing the
+    path between stops labelled 2 and 5.}
     \label{fig:tsp-effect-of-neighbourhood-operators}
 \end{figure}
 
@@ -184,7 +184,6 @@ def get_initial_candidate(number_of_stops, seed):
 \end{pyin}
 
 This gives a random tour on 13 stops:
-% TODO If the number of stops changes this needs to be changed.
 
 \begin{pyin}
 number_of_stops = 13

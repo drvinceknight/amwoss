@@ -13,7 +13,7 @@ def plot_tour(ax, x, y, tour):
         ax.tick_params(labelsize=6)
 
         for i, (x, y) in enumerate(zip(xs[:-1], ys[:-1])):
-            ax.annotate(str(i), (x, y), fontsize='small', ha='center', va='center')
+            ax.annotate(str(tour[i]), (x, y), fontsize='small', ha='center', va='center')
 
 seed = 1
 number_of_stops = 13
