@@ -2,12 +2,12 @@
 
 % Introduction
 \chapterinitial{I}{n} many situations systems are dynamical, in that the state
-or population of a number of entities or classes change according the current
+or population of a number of entities or classes change according to the current
 state or population of the system. For example population dynamics, chemical
-reactions, and systems of macroeconomics. It is often useful to be able to
+reactions, and macroeconomic systems. It is often useful to be able to
 predict how these systems will behave over time, though the rules that govern
 these changes may be complex, and are not necessarily solvable analytically. In
-these cases numerical methods and visualisation may be used, which is the focus
+these cases numerical methods may be needed, this is the focus
 of this chapter.
 
 \section{Problem}\label{sec:system_dynamics_problem}
@@ -20,20 +20,20 @@ the following parameters:
   \item they have a death rate $d$ of 0.01 per day;
   \item for every infectious individual, the infection rate $\alpha$ is 0.3 per
   day;
-  \item infectious people recover naturally (and thus gain an immunity from the
-  disease), at a recovery rate $r$ of 0.02 per day;
+  \item infectious people recover naturally and gain an immunity from the
+  disease, at a recovery rate $r$ of 0.02 per day;
   \item for each day an individual is infected, they must take medication which
   costs a public healthcare system $\pounds 10$ per day.
 \end{itemize}
 
-A vaccine is produced, that allows new born individuals to gain an immunity.
+A vaccine is produced, that allows individuals to gain an immunity.
 This vaccine costs the public health care system a one-off cost of
 $\pounds 220$ per vaccine. The healthcare providers would like to know if
 achieving a vaccination rate $v$ of $85\%$ would be beneficial financially.
 
 \section{Theory}\label{sec:system_dynamics_theory}
 
-The above scenario is called a compartmental model of disease, and can be
+The above scenario can be expressed using a compartmental model of disease, and can be
 represented in a stock and flow diagram as in Figure~\ref{fig:stockflow}.
 
 \begin{figure}
@@ -574,7 +574,9 @@ behaviour of these. For an overview of the type of
 application covered in this chapter see~\cite{martin2006theory}.
 
 Jay Forrester is recognised as the first person to use dynamical systems in the way
-shown in this chapter. His own account can be read
+shown in this chapter.
+% TODO This makes me cringe, how can we make this less bad?
+His own account can be read
 in~\cite{forrester1995beginning}. From Forrester's initial application to
 industry in 1961~\cite{forrester1961industrial} dynamical systems continue
 to be of use today in a wide range of areas. In~\cite{coyle1999system}
