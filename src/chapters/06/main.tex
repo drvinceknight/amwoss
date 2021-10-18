@@ -91,11 +91,11 @@ Table~\ref{tbl:profit-of-taxi-companies-offset}
     \label{tbl:profit-of-taxi-companies-offset}
 \end{table}
 
-From Table~\ref{tbl:profit-of-taxi-companies-offset} it can be seen that if Company B
+For example, from Table~\ref{tbl:profit-of-taxi-companies-offset} it can be seen that if Company B
 chooses to use 3 vehicles while Company A chooses to only use 2 then Company B
 would get \(\frac{17}{20} + \epsilon\) and Company A would get \(\frac{1}{2}\)
 profits per hour. The question is: what value of \(\epsilon\) ensures both
-companies use 3 vehicles.
+companies use 3 vehicles?
 
 \section{Theory}\label{sec:game_theory_theory}
 
@@ -119,7 +119,7 @@ This is called a normal form game and is formally defined by:
 \end{enumerate}
 
 When \(N=2\) the utility function is often represented by a pair of matrices (1
-for each player) of with the same number of rows and columns. The rows
+for each player) with the same number of rows and columns. The rows
 correspond to the actions available to the first player and the columns to the
 actions available to the second player.
 
@@ -180,7 +180,8 @@ can be found in good game theory text books such as~\cite{maschler2013game}
 There are various algorithms that can be used for finding Nash equilibria, they involve
 a search through the pairs of spaces of possible strategies until pairs of best
 responses are found. Mathematical insight allows this do be done somewhat efficiently
-using algorithms that can be thought of as modifications of the algorithms used in linear programming.
+using algorithms that can be thought of as modifications of the algorithms used
+in linear programming (see Chapter~\ref{chp:linear_programming}).
 One such example is called the Lemke-Howson algorithm.
 A Nash equilibrium is not necessarily guaranteed to be arrived at through
 dynamic decision making. However, any stable
@@ -189,10 +190,10 @@ equilibrium, such emergent processes are the topics of evolutionary game
 theory\footnote{
 Evolutionary game theory was formalised in~\cite{smith1974theory} although
 some of the work of Robert Axelrod is evolutionary in
-principle~\cite{axelrod1990evolution}
+principle~\cite{axelrod1990evolution}.
 },
 learning algorithms\footnote{
-An excellent text on learning in games is~\cite{fudenberg1998theory}
+An excellent text on learning in games is~\cite{fudenberg1998theory}.
 }
 and/or agent based modelling which will be covered in
 Chapter~\ref{chp:agent_based_simulation}.
@@ -200,7 +201,7 @@ Chapter~\ref{chp:agent_based_simulation}.
 \section{Solving with Python}\label{sec:game_theory_solving-with-python}
 
 The first step is to write a function to create a game using the
-matrix expected profits and any offset. The Nashpy~\cite{knight2018nashpy}
+matrix of expected profits and any offset. The Nashpy~\cite{knight2018nashpy}
 and Numpy~\cite{harris2020array} libraries will be used for this.
 
 \begin{pyin}
@@ -351,7 +352,7 @@ companies for putting on 3 taxis.
 
 \section{Solving with R}\label{sec:game_theory_solving-with-R}
 
-R does not have a single appropriate library for the game considered here, we
+R does not have a uniquely appropriate library for the game considered here, we
 will choose to use Recon~\cite{oliveira2019recon} which has functionality for finding the
 Nash equilibria for two player games when only considering pure strategies
 (where the players only choose to use a single action at a time).
@@ -464,7 +465,7 @@ companies for putting on 3 taxis.
 The definition of a normal form game here as well as the solution concept of
 Nash equilibrium are common starting points for the use of game theory as a
 study of emergent behaviour. Other topics include different forms of games, for
-example extensive form which are represented by trees and more explicitly model
+example extensive form games which are represented by trees and more explicitly model
 asynchronous decision making. Other solution concepts involve the specific study
 of the emergence mechanisms through models based on natural evolutionary
 process: Moran processes or replicator dynamics. A good text book to read on
@@ -473,13 +474,13 @@ these topics is~\cite{maschler2013game}.
 John Nash whose life was portrayed in the 2001 movie ``A Beautiful Mind'' (which
 is an adaptation of~\cite{nasar2011beautiful}) won the Nobel Prize
 for~\cite{nash1950equilibrium} in which he proved that a Nash equilibrium
-always exists. However, in~\cite{nash1951non} John Nash gives an
+always exists. In~\cite{nash1951non} John Nash gives an
 application of game theory to a specific version of poker.
 
 Another application of the concept of Nash equilibrium
 is~\cite{deo2011centralized} where the authors identify worst case
 scenarios for ambulance diversion: a practice where an emergency room will
-declare itself too full to accept new patients. When they are multiple emergency
+declare itself too full to accept new patients. When there are multiple emergency
 units serving a same population strategic behaviour becomes relevant. The
 authors of this paper identify the effect of this decentralised decision making
 and also propose an approach that is socially optimal: similarly to the taxi

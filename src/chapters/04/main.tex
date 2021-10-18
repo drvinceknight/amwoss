@@ -87,8 +87,7 @@ efficiently so as to answer the original question.
 \section{Solving with Python}\label{sec:differential_equations_solving-with-python}
 
 The first step is to define the symbolic variables that will be used.  The
-Python library SymPy~\cite{meurer2017sympy} is used which allows symbolic
-calculations.
+Python library SymPy~\cite{meurer2017sympy} is used.
 
 \begin{pyin}
 import sympy as sym
@@ -127,8 +126,8 @@ which gives:
 Eq(Derivative(I(t), t), -alpha*I(t))
 \end{pyout}
 
-Note that if you are using Jupyter then your output will actually be a
-well rendered mathematical equation:
+Note that if Jupyter~\cite{kluyver2016jupyter} notebooks are used then output
+will actually be a well rendered mathematical equation:
 
 \[
 \frac{d}{d t} I{\left(t \right)} = - \alpha I{\left(t \right)}
@@ -145,7 +144,8 @@ print(eq)
 Eq(Derivative(I(t), t), -I(t))
 \end{pyout}
 
-Now a function will be written to obtain the solution to this differential with
+Now a function will be written to obtain the solution to this differential
+equation with
 initial condition \(I(0) = I_0\):
 
 \begin{pyin}
@@ -272,7 +272,7 @@ the problem will be solved using a numerical integration approach. For an
 outline of the theory behind this approach see Chapter
 \ref{chp:system_dynamics}.
 
-First write a function to give the derivative for a given value of \(I\).
+First a function to give the derivative for a given value of \(I\) is needed:
 
 \begin{Rin}
 #' Returns the numerical value of the derivative.

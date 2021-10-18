@@ -25,7 +25,7 @@ the city?
 \section{Theory}\label{sec:agent_based_simulation_theory}
 
 The problem considered here is considered a `classic' one for the paradigm of
-agent based simulation, and is usually called Schelling's segregation model.
+agent based simulation, and is referred to as Schelling's segregation model.
 It features in Thomas Schelling's book `Micromotives and
 Macrobehaviours'~\cite{schelling2006micromotives}, whose
 title neatly summarises the world view of agent based modelling: we know,
@@ -37,7 +37,7 @@ environment:
 
 \begin{itemize}
   \item agents are autonomous entities that will periodically choose to take one
-        of a number of actions (including the option not to take an action).
+        of a number of actions.
         These are chosen in order to maximise that agent's own given utility
         function;
   \item an environment contains a number of agents and defines how their
@@ -202,7 +202,7 @@ class City:
 \end{pyin}
 
 This defines a class, a template or a set of instructions that can be used to
-create instances of it, called objects.
+create instances, called objects.
 For the considered problem only one instance of the \mintinline{python}{City}
 class will be needed.
 However, it is useful to be able to produce more in order to run multiple trials
@@ -651,7 +651,7 @@ multi agent systems, which discusses the theory of systems with multiple
 independent agents interacting with one another. A good source on the topic
 is~\cite{shoham2008multiagent}.
 
-The model described here is called Schelling's Model of Segregation, and is
+The model described here is called Schelling's segregation model, and was
 first described in~\cite{schelling2006micromotives}. Another model
 considered as classic in this domain is a model of a flock of birds presented
 in~\cite{reynolds1987flocks}, otherwise referred to as Boids, where the
@@ -661,8 +661,9 @@ in~\cite{gardener1970mathematical} is another classic, which comes under
 the banner of cellular autonoma. Here cells on a grid either become alive or dead
 depending on a certain simplistic set of rules. Emergent behaviours observed due
 to these rules include self replicating as well as oscillating structures.
-In the 1970s agent based tournaments were held by Robert Axelrod (described
-in~\cite{axelrod1990evolution}), which was the first of a number of studies
+In the 1970s agent based tournaments were held by Robert
+Axelrod~\cite{axelrod1990evolution},
+which was the first of a number of studies
 using agent based modelling and game theory (see Chapter 6) to understand the
 emergence of cooperative behaviours.
 

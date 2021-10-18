@@ -63,16 +63,16 @@ shop then it is in state 0. This is denoted mathematically as:
 \end{equation}
 
 The state increases when people arrive and this happens at a rate of change of
-10. The state decrease when people are served and this happens at a rate of 4
-per active server. In both cases it is assumed that no 2 events can occur at
+10 per unit time. The state decrease when people are served and this happens at a rate of 4
+per active server per unit time. In both cases it is assumed that no 2 events can occur at
 the same time.
 
-The rules that govern how to move between these states can be defined in 2
+In general, the rules that govern how to move between these states can be defined in 2
 ways:
 
 \begin{itemize}
     \item Using probabilities of changing state (or not) in a well defined time
-        interval. This is called a discrete time Markov chain.
+        interval.
     \item Using rates of change from one state to another. This is called a
         continuous time Markov chain.
 \end{itemize}
@@ -120,9 +120,9 @@ The matrix \(Q\) can be used to understand the probability of being in a given
 state after \(t\) time unis. This can be represented mathematically using a
 matrix \(P_{t}\) where \((P_{t})_{ij}\) is the probability of being in state \(j\)
 after \(t\) time units having started in state \(i\). Using a mathematical tool
-called the matrix exponential\footnote{Chapter 9 of the following text book
+called the matrix exponential\footnote{Chapter 9 of~\cite{van1996matrix}
 gives a description of how to compute the matrix exponential
-numerically~\cite{van1996matrix} and~\cite{moler1978nineteen,
+numerically and~\cite{moler1978nineteen,
 moler2003nineteen} give a review of 19 algorithms that can be used.} the value
 of \(P_{t}\) can be calculated numerically.
 
@@ -151,7 +151,8 @@ with the following constraint:
     \sum_{i=1}^{n}\pi_i = 1
 \end{equation}
 
-In the upcoming sections all of the above concepts will be demonstrated.
+In the upcoming sections all of the above concepts will be demonstrated and used
+to understand what is the best course of action for the barber shop.
 
 \section{Solving with Python}\label{sec:markov_chains_solving-with-python}
 
@@ -291,14 +292,15 @@ which gives:
  [0.03431 0.08577 0.10722 0.13402 0.16752 0.2094  0.26176]]
 \end{pyout}
 
-After 500 time units, the probability of ending up in each state (columns) is
+After 500 time units, the probability of ending up in each state (column) is
 the same regardless of the state the system began in (row).
 
 The analysis can in fact be stopped here
 however the choice of 500 time units was arbitrary and might not be the correct
 amount for all possible scenarios, as such the
 underlying equation~\ref{eqn:continuous_time_markov_process_steady_state}
-needs to be solved directly.
+can be solved directly in order to get a solution where equilibrium is
+guaranteed.
 
 The underlying linear system will be solved using a numerically efficient
 algorithm called least squares optimisation (available from the
@@ -674,7 +676,7 @@ than to increase the waiting room capacity by 2.
 \section{Wider context}\label{sec:markov_chains_wider_context}
 
 The overview of Markov chains given here has mainly concentrated on calculation
-of steady state probabilities. There are in fact many more theoretic an applied
+of steady state probabilities. There are in fact many more theoretic and applied
 aspects of Markov chain models. Some examples of this include the calculation of
 sojourn times which is how long a system spends in a given state as well as
 considering models with absorption: where the system arrives at a state that it
@@ -704,5 +706,5 @@ Instead of building multiple Markov models for different decisions, in Markov
 decision processes decisions can be made at each state of the underlying chain.
 A policy can be identified giving the optimal decision at each state.
 In~\cite{white1993survey} a literature review is given showing a wide
-ranging application of these decision processes from to agriculture to motor
+ranging application of these decision processes from agriculture to motor
 insurance claims as well as sports.

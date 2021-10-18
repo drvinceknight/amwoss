@@ -33,8 +33,8 @@ which is given by the distance matrix in equation (\ref{eqn:tsp}).
 \normalsize
 
 The value \(d_{ij}\) gives the travel distance between
-stops \(i\) and \(j\). For example, \(d_{23}=67\) % TODO If the distance matrix changes, this value need to be updated
-indicates that the distance between the 2nd and 3rd stop in the route is 67. % TODO If the distance matrix changes, this value need to be updated
+stops \(i\) and \(j\). For example, \(d_{23}=67\)
+indicates that the distance between the 2nd and 3rd stop in the route is 67.
 
 
 The delivery company would like to find the route around the 13 stops that gives
@@ -54,13 +54,13 @@ The heuristic approach taken here will be to use a neighbourhood search algorith
 This algorithm works by considering a given potential solution, evaluating it
 and then trying another potential solution \emph{close} to it. What \emph{close}
 means depends on different approaches and problems: it is referred to as the
-neighbourhood. When a new solution is considered \emph{good} (this is
-again a term that depends on the approach and problem) then the search
+neighbourhood. When a new solution is considered \emph{good}\footnote{`Good' is
+again a term that depends on the approach and problem.} then the search
 continues from the neighbourhood of this new solution.
 
 For this problem, the steps are to first represent a possible solution, that is a given route
 between all the potential stops as a \emph{tour}. If there are 3 total stops
-and require that the tour starts and stops at the first one then there are two
+the tour must start and stop at the first one then there are two
 possible tours:
 
 \[
@@ -91,7 +91,7 @@ We have:
     C((1, 3, 2, 1)) &= d_{13} + d_{32} + d_{21} = 3 + 3 + 1 = 7
 \end{eqnarray*}
 
-Using this framework, the neighbourhood search can be written down as:
+In general, the neighbourhood search can be written down as:
 
 \begin{enumerate}
     \item Start with a given tour: \(t\).
@@ -127,17 +127,17 @@ To illustrate two such neighbourhoods operators, consider the following tour on
 \]
 
 One possible neighbourhood is to choose 2 stops at random and swap. For
-example, the tour \(\tilde t^{(1)}\in N(t)\) is obtained by swapping the 2rd and 5th
-stops.
+example, the tour \(\tilde t^{(1)}\in N(t)\) is obtained by swapping the stop
+labelled 2 and the stop labelled 5.
 
 \[
     \tilde t^{(1)} = (0, 1, 5, 3, 4, 2, 6, 0)
 \]
 
-Another possible neighbourhood is to choose 2 stops at random and reversing the
+Another possible neighbourhood is to choose 2 stops at random and reverse the
 order of all stops between (including) those two stops. For example, the tour
 \(\tilde t^{(2)} \in N(t)\) is obtained by reversing the order of all stops between
-the 2rd and the 5th stop.
+the stop labelled 2 and the stop labelled 5.
 
 \[
     \tilde t^{(2)} = (0, 1, 5, 4, 3, 2, 6, 0)
@@ -151,14 +151,14 @@ Figure~\ref{fig:tsp-effect-of-neighbourhood-operators}.
         \includegraphics[width=0.8\textwidth]{./assets/tsp-effect-of-neighbourhood-operators/main.pdf}
     \end{center}
     \caption{The effect of two neighbourhood operators on \(t\). \(\tilde t^{(1)}\) is
-    obtained by swapping stops 2 and 5. \(\tilde t^{(2)}\) is obtained by reversing the
-    path between stops 2 and 5.}
+    obtained by swapping stops labelled 2 and 5. \(\tilde t^{(2)}\) is obtained by reversing the
+    path between stops labelled 2 and 5.}
     \label{fig:tsp-effect-of-neighbourhood-operators}
 \end{figure}
 
 \section{Solving with Python}\label{sec:heuristics_solving-with-python}
 
-To solve this problem using Python functions will be written that match the
+To solve this problem using Python, functions will be written that match the
 first three steps in the Section~\ref{sec:heuristics_theory}.
 The first step is to write the \mintinline{python}{get_initial_candidate}
 function that creates an initial tour.
@@ -184,7 +184,6 @@ def get_initial_candidate(number_of_stops, seed):
 \end{pyin}
 
 This gives a random tour on 13 stops:
-% TODO If the number of stops changes this needs to be changed.
 
 \begin{pyin}
 number_of_stops = 13

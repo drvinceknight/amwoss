@@ -13,7 +13,7 @@ def plot_tour(ax, x, y, tour):
         ax.tick_params(labelsize=6)
 
         for i, (x, y) in enumerate(zip(xs[:-1], ys[:-1])):
-            ax.annotate(str(i), (x, y), fontsize='small', ha='center', va='center')
+            ax.annotate(str(tour[i]), (x, y), fontsize='small', ha='center', va='center')
 
 xs = np.array([0, 1, 2, 4, 3, 2, 1])
 ys = np.array([0, 0.5, 3, 2.75, 1, 2, 2.75])
