@@ -54,13 +54,13 @@ The heuristic approach taken here will be to use a neighbourhood search algorith
 This algorithm works by considering a given potential solution, evaluating it
 and then trying another potential solution \emph{close} to it. What \emph{close}
 means depends on different approaches and problems: it is referred to as the
-neighbourhood. When a new solution is considered \emph{good} (this is
-again a term that depends on the approach and problem) then the search
+neighbourhood. When a new solution is considered \emph{good}\footnote{`Good' is
+again a term that depends on the approach and problem.} then the search
 continues from the neighbourhood of this new solution.
 
 For this problem, the steps are to first represent a possible solution, that is a given route
 between all the potential stops as a \emph{tour}. If there are 3 total stops
-and require that the tour starts and stops at the first one then there are two
+the tour must start and stop at the first one then there are two
 possible tours:
 
 \[
@@ -91,7 +91,7 @@ We have:
     C((1, 3, 2, 1)) &= d_{13} + d_{32} + d_{21} = 3 + 3 + 1 = 7
 \end{eqnarray*}
 
-Using this framework, the neighbourhood search can be written down as:
+In general, the neighbourhood search can be written down as:
 
 \begin{enumerate}
     \item Start with a given tour: \(t\).
@@ -134,7 +134,7 @@ stops.
     \tilde t^{(1)} = (0, 1, 5, 3, 4, 2, 6, 0)
 \]
 
-Another possible neighbourhood is to choose 2 stops at random and reversing the
+Another possible neighbourhood is to choose 2 stops at random and reverse the
 order of all stops between (including) those two stops. For example, the tour
 \(\tilde t^{(2)} \in N(t)\) is obtained by reversing the order of all stops between
 the 2rd and the 5th stop.
@@ -158,7 +158,7 @@ Figure~\ref{fig:tsp-effect-of-neighbourhood-operators}.
 
 \section{Solving with Python}\label{sec:heuristics_solving-with-python}
 
-To solve this problem using Python functions will be written that match the
+To solve this problem using Python, functions will be written that match the
 first three steps in the Section~\ref{sec:heuristics_theory}.
 The first step is to write the \mintinline{python}{get_initial_candidate}
 function that creates an initial tour.
