@@ -54,15 +54,15 @@ should work on the inspection counter or in the repair workshop?
 \section{Theory}\label{sec:discrete_event_simulation_theory}
 
 A number of aspects of the bicycle shop above are
-probabilistic. For example the
+\index{probabilistic}. For example the
 times that bicycles arrive at the shop, the duration of the inspection and
 repairs, and whether the bicycle would need to go on to be repaired or not.
 When a number of these probabilistic events are linked together
 such as the bicycle shop a method to model this situation is
-discrete event simulation (DES).
+\index{discrete event simulation} (\index{DES}).
 
 Consider one probabilistic event, rolling a six sided die where each side is
-equally likely to land.  Therefore the probability of rolling a 1 is
+equally likely to land. Therefore the probability of rolling a 1 is
 \(\frac{1}{6}\), the probability of rolling a 2 is \(\frac{1}{6}\), and so on.
 This means that that if the die is rolled a large number of times,
 \(\frac{1}{6}\) of those rolls would be expected to be a 1.
@@ -73,7 +73,7 @@ die in which the probability of obtaining one number is much greater than the
 others. How can probability of obtaining a 1 on this die be estimated?
 
 Rolling the weighted die once does not give much information.
-However due to a theorem called the law of large numbers~\cite{stewart2009probability},
+However due to a theorem called the \index{law of large numbers}~\cite{stewart2009probability},
 this die can be rolled a number of times
 and find the proportion of those rolls which gave a 1. The more times we roll
 the die, the closer this proportion approaches the actual value of the
@@ -97,12 +97,11 @@ cost, similar to a video game.
 
 In order to do this, the computer needs to be able to generate random outcomes
 of each of the smaller events that make up the large complex system. Generating
-random events are essentially doing things with random numbers, these need to be
-generated.
+random events correspond to sampling random numbers.
 
 Computers are deterministic, therefore true randomness is in itself a
 challenging mathematical problem.
-They can however generate pseudorandom numbers: sequences of numbers that look
+They can however generate \index{pseudorandom} numbers: sequences of numbers that look
 like random numbers, but are entirely determined from the
 previous numbers in the sequence\footnote{An early
 discussion of pseudorandom numbers is~\cite{von195113}. A number of different pseudo random
@@ -129,7 +128,7 @@ D =
 
 The bicycle repair shop is a system of interactions of
 random events. This can be thought of as many interactions of random
-variables, each generated using pseudorandom numbers.
+variables, each generated using \index{pseudorandom} numbers.
 
 In this case the fundamental random events that need to be generated are:
 
@@ -147,18 +146,18 @@ be counted. This proportion itself is a random variable, and like the
 weighted die, running this simulation once does not give much information.
 The simulation can be run many times to give an average proportion.
 
-The process outlined above is a particular implementation of Monte Carlo
+The process outlined above is a particular implementation of \index{Monte Carlo}
 simulation called discrete event simulation, which is a generic term
 for generating pseudorandom numbers and observes the emergent interactions. In
 practice there are two main approaches to simulating complex probabilistic
-systems such as this one: \textit{event scheduling} and
-\textit{process based} simulation.  It so happens that the
+systems such as this one: \textit{\index{event scheduling}} and
+\textit{\index{process based}} simulation.  It so happens that the
 implementations in Python and R shown here use each of these approaches respectively.
 
 % Event scheduling
 \subsection{Event Scheduling Approach}
 
-When using the event scheduling approach, the `virtual representation' of the
+When using the \index{event scheduling} approach, the `virtual representation' of the
 system is the collection of facilities that the bicycles use, shown in
 Figure~\ref{fig:bike-shop}. Then the entities (the bicycles) interact with these
 facilities. It is these facilities that determine how the entities behave.
@@ -174,7 +173,7 @@ this updated list.
 % Process based
 \subsection{Process Based Simulation}
 
-When using process based simulation, the `virtual
+When using \index{process based simulation}, the `virtual
 representation' of the system is the sequence of actions that each entity
 (the bicycles) must take, and these sequences of actions might contain delays as
 a number of entities seize and release a finite amount of resources. It is the
@@ -211,7 +210,7 @@ events, resource types and their numbers also need to be defined.
 
 \section{Solving with Python}\label{sec:discrete_event_simulation_solving-with-python}
 
-In this book the Ciw~\cite{ciwpython, palmer2019ciw}
+In this book the \index{Ciw}~\cite{ciwpython, palmer2019ciw}
 library will be used in order to conduct discrete event
 simulation in Python.
 Ciw uses the event scheduling approach, which means the system's
@@ -232,7 +231,7 @@ In this case the time between consecutive arrivals is assumed to follow an
 exponential distribution, as is the service time.
 These are common assumptions for this sort of queueing system~\cite{stewart2009probability}.
 
-In Ciw, these are defined as part of a Network object, created using the
+In \index{Ciw}, these are defined as part of a Network object, created using the
 \mintinline{python}{ciw.create_network} function. The function below creates a
 Network object that defines the system for a given set of parameters bicycle
 repair shop:
@@ -309,7 +308,7 @@ def run_simulation(network, seed=0):
     return Q
 \end{pyin}
 
-Notice here a random seed is set. This is because there is randomness in running
+Notice here a \index{random seed} is set. This is because there is randomness in running
 the simulation, setting a seed ensures reproducible results\footnote{
 Pseudorandom number generators give a sequence of numbers that obey a series of
 properties. A seed is necessary to obtain a starting point for a given sequence.
@@ -322,7 +321,7 @@ assume that the bicycle shop will begin the day with no customers.
 
 To count the number of bicycles that have finished service, and to
 count the number of those whose entire journey through the system lasted longer
-than 0.5 hours the Pandas~\cite{reback2020pandas, mckinney-proc-scipy-2010}
+than 0.5 hours the \index{Pandas}~\cite{reback2020pandas, mckinney-proc-scipy-2010}
 library will be used:
 
 \begin{pyin}
@@ -369,7 +368,8 @@ This gives:
 meaning 26.13\% of all bicycles spent longer than half an hour at the repair
 shop.
 
-However this particular day may have contained a number of extreme events.
+However this particular day may have contained a number of \index{extreme
+events}.
 For a more accurate proportion this experiment should be repeated a number of
 times, and an average proportion taken.
 The following function returns an average proportion:
@@ -458,7 +458,7 @@ beneficial than an additional member of staff at the repair workshop.
 
 \section{Solving with R}\label{sec:discrete_event_simulation_solving-with-R}
 
-In this book the Simmer~\cite{ucar2019simmer} package will be used in order to conduct discrete event
+In this book the \index{Simmer}~\cite{ucar2019simmer} package will be used in order to conduct discrete event
 simulation in R. Simmer uses the process based approach, which means that each
 bicycle's sequence of actions must be defined, and then generate a number of
 bicycles with these sequences.
@@ -548,7 +548,7 @@ run_simulation <- function(bicycle,
 }
 \end{Rin}
 
-Notice here a random seed is set. This is because there are elements of
+Notice here a \index{random seed} is set. This is because there are elements of
 randomness when running the simulation, setting a seed ensures reproducible
 results\footnote{
 Pseudorandom number generators give a sequence of numbers that obey a series of
@@ -598,9 +598,10 @@ This piece of code gives
 meaning 13.43\% of all bicycles spent longer than half an hour at the repair
 shop.
 
-However this particular day may have contained a number of extreme events.  For
+However this particular day may have contained a number of \index{extreme
+events}. For
 a more accurate proportion this experiment should be repeated a number of times,
-and an average proportion taken.  In order to do so, the following is a function
+and an average proportion taken. In order to do so, the following is a function
 that performs the above experiment over a number of trials, then finds an
 average proportion:
 
@@ -702,12 +703,13 @@ beneficial than an additional member of staff at the repair workshop.
 
 The concepts shown in this chapter cover some theoretical aspects of discrete
 event simulation. There are a number of further topics that can be vital to
-creating valid models of real life scenarios. These include time dependent rates
-and rostering servers. An overview of the theory of discrete event simulation is
+creating valid models of real life scenarios. These include \index{time
+dependent rates}
+and \index{rostering servers}. An overview of the theory of discrete event simulation is
 given in~\cite{robinson2004simulation}.
 
 One particular use of discrete event simulation is as part of a wider
-optimisation exercise. For example, a systematic search for an optimal service
+\index{optimisation} exercise. For example, a systematic search for an optimal service
 configuration can use a discrete event simulation model as a replacement for a
 mathematical objective function. Another approach is to integrate an
 optimisation procedure\footnote{For more information on optimisation see
@@ -719,14 +721,14 @@ chain. A general review and taxonomy of different uses of discrete event
 simulation with optimisation techniques is given
 in~\cite{figueira2014hybrid}.
 
-One domain where simulation is often used is in modelling healthcare systems.
+One domain where simulation is often used is in modelling \index{healthcare} systems.
 A general overview is given in~\cite{brailsford2009analysis} where uses
 include resource utilisation, human behaviour, and workforce management.
 
 In order to be able to fully capture all the relevant details of the system to
 be modelled, an extension of discrete event simulation is to combine the
-methodology with systems dynamics (Chapter~\ref{chp:system_dynamics}) in order
-to model continuous aspects of the system and/or agent based modelling
+methodology with \index{systems dynamics} (Chapter~\ref{chp:system_dynamics}) in order
+to model continuous aspects of the system and/or \index{agent based modelling}
 (Chapter~\ref{chp:agent_based_simulation}) in order to observe emergent or
-learned behaviours. This is known as hybrid simulation, and an overview is given
+learned behaviours. This is known as \index{hybrid simulation}, and an overview is given
 in~\cite{brailsford2019hybrid}.

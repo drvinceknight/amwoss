@@ -37,8 +37,8 @@ M04 &     & M13 \\
 \label{tab:modules}
 \end{table}
 
-The university is required to schedule examinations for each of these modules.
-The university would like the exams to be scheduled using the least amount of
+The university is required to schedule \index{examinations} for each of these modules.
+The university would like the \index{exams} to be scheduled using the least amount of
 time slots. However not all modules can be scheduled at the same time
 as they share some students:
 
@@ -61,16 +61,16 @@ time slots?
 
 \section{Theory}\label{sec:linear_programming_theory}
 
-Linear programming is a method that solves a type of optimisation problem of a
+Linear programming is a method that solves a type of \index{optimisation} problem of a
 number of variables by making use of some concepts of higher dimensional
 geometry~\cite{conforti2014integer}.
 Optimisation here refers to finding the variable that gives either the maximum
-or minimum of some linear function, called the objective function.
+or minimum of some \index{linear} function, called the objective function.
 
-Linear programming employs algorithms such as the Simplex
+Linear programming employs algorithms such as the \index{Simplex}
 method
-to efficiently search some feasible convex region, stopping at the optimum. To
-do this, an objective function function and constraints need to be defined.
+to efficiently search some feasible \index{convex} region, stopping at the optimum. To
+do this, an \index{objective} function function and constraints need to be defined.
 
 To illustrate this a classic 2-dimensional example will be used:
 \(\pounds 50\) of profit can be made on each
@@ -80,7 +80,7 @@ component Y. A tonne of paint B needs 6 tonnes of component X and 4 tonnes of
 component Y. Only 24 tonnes of X and 20 tonnes of Y are available per day. How
 much of paint A and paint B should be produced to maximise profit?
 
-This is formulated as a linear objective function, representing total profit,
+This is formulated as a \index{linear} \index{objective} function, representing total profit,
 that is to be maximised; and two linear constraints, representing the
 availability of components X and Y. They are written as:
 
@@ -101,33 +101,34 @@ amount of component X and Y available per day. These, along with the additional
 constraints that a negative amount of paint cannot be produced (\(A \geq 0\) and
 \(B \geq 0\)), form a convex region, shown in Figure~\ref{fig:paint_lp}.
 This shaded region shows the pairs of values of \(A\) and \(B\) which are
-feasible, that is they satisfy the constraints.
+feasible, that is they satisfy the \index{constraints}.
 
 \begin{figure}
 \begin{center}
 \includestandalone[width=\textwidth]{assets/paint_LP}
 \end{center}
-\caption{Visual representation of the paint linear programming problem. The feasible convex
-region is shaded in grey; the objective function with arbitrary value is shown
+    \caption{Visual representation of the paint \index{linear} programming
+    problem. The feasible \index{convex}
+    region is shaded in grey; the \index{objective} function with arbitrary value is shown
 in a dashed line.}
 \label{fig:paint_lp}
 \end{figure}
 
 Expression~\ref{eqn:objective_paint} corresponds to the total profit, which is
 the value to be maximised. As a line in 2-dimensional space,
-this expression fixes its gradient, but its value determines the size of the
+this expression fixes its \index{gradient}, but its value determines the size of the
 \(y\)-intercept. Therefore optimising this function corresponds to pushing a line
-with that gradient to its furthest extreme within the feasible region,
+with that \index{gradient} to its furthest extreme within the feasible region,
 demonstrated in Figure~\ref{fig:paint_lp}.
 Therefore for this problem the optimum occurs in a particular vertex of the
 feasible region, at \(A = \frac{12}{7}\) and \(B = \frac{20}{7}\).
 
 This works well as \(A\) and \(B\) can take any real value in the feasible region.
-Some problems must be formulated as integer linear programming problems where the decision
+Some problems must be formulated as \index{integer linear programming} problems where the decision
 variables are restricted to integers. There are a number of methods that can
-help adapt a real solution to an integer solution. These include cutting
-planes, which introduce new constraints around the real solution to force an
-integer value; and branch and bound methods, where we iteratively convert
+help adapt a real solution to an integer solution. These include \index{cutting
+planes}, which introduce new constraints around the real solution to force an
+integer value; and \index{branch and bound} methods, where we iteratively convert
 decision variables to their closest two integers and remove any infeasible
 solutions~\cite{conforti2014integer}.
 
@@ -135,9 +136,9 @@ Both Python and R have libraries that carry out linear and integer
 programming algorithms. When solving these kinds of problems, formulating
 them as linear systems is the most important challenge.
 
-Consider again the exam scheduling problem from
+Consider again the \index{exam scheduling} problem from
 Section~\ref{sec:linear_programming_problem} which
-will now be formulated as an integer linear programming problem.
+will now be formulated as an integer \index{linear} programming problem.
 Define \(M\) as the set of all modules to be scheduled, and define \(T\) as the set
 of possible time slots. At worst each exam is
 scheduled for a different day, thus \(|T| = |M| = 14\) in this case.
@@ -184,7 +185,7 @@ Thus altogether the formulation becomes:
 \end{align}
 
 Another common way to define this linear programming problem is by representing the
-coefficients of the constraints as a matrix.
+coefficients of the \index{constraints} as a \index{matrix}.
 That is:
 
 \begin{align}
@@ -224,9 +225,9 @@ Equation~\ref{eqn:auxiliary}, and ones for all other constraints.
 
 \section{Solving with Python}\label{sec:linear_programming_solving-with-python}
 
-In this book the Python library Pulp~\cite{mitchell2011pulp} will be used to
-formulate and solve the integer programming problem. First a function to create the
-binary problem variables for a given set of times and modules is needed:
+In this book the Python library \index{Pulp}~\cite{mitchell2011pulp} will be used to
+formulate and solve the \index{integer} programming problem. First a function to create the
+\index{binary} problem variables for a given set of times and modules is needed:
 
 \begin{pyin}
 import pulp
@@ -291,7 +292,7 @@ X_2_5
 \end{pyout}
 
 
-The next step is to create a Pulp object with the corresponding variables,
+The next step is to create a \index{Pulp} object with the corresponding variables,
 objective function, constraints and solve it. This is done with the following
 function:
 
@@ -342,7 +343,7 @@ x, y = get_solution(
 \end{pyin}
 
 These can be
-inspected, for example \(x_{25}\) is a boolean variable relating to if module 2
+inspected, for example \(x_{25}\) is a \index{boolean} variable relating to if module 2
 is scheduled on the 5th day.
 
 \begin{pyin}
@@ -432,26 +433,26 @@ schedule all exams with no clashes, with at most three exams scheduled each day.
 
 \section{Solving with R}\label{sec:linear_programming_solving-with-R}
 
-The R package ROI, the R Optimization Infrastructure will be used here.  This is
+The R package \index{ROI}, the R Optimization Infrastructure will be used here.  This is
 a library of code that acts as a front end to a number of other solvers that
 need to be installed externally, allowing a range of optimisation problems to be
 solved with a number of different solvers.  The solver that will be used here is
-called the CBC~\cite{forrest2005cbc} MILP Solver, which needs to be
-installed. The rcbc~\cite{shumacher2021rcbc} package is also necessary but
+called the \index{CBC}~\cite{forrest2005cbc} MILP Solver, which needs to be
+installed. The \index{rcbc}~\cite{shumacher2021rcbc} package is also necessary but
 cannot be installed in the usual way. Installation instructions for both, depend
 on the operating system and can be found at the documentation page for the
-ROI~\cite{theussl2017roi} package\footnote{As of the time of writing, this
+\index{ROI}~\cite{theussl2017roi} package\footnote{As of the time of writing, this
 can be found at \url{https://roi.r-forge.r-project.org/installation.html}}.
 
-The ROI package requires that the linear programming problem is
-represented in its matrix form, with a one-dimensional array of decision
+The \index{ROI} package requires that the linear programming problem is
+represented in its \index{matrix} form, with a one-dimensional array of decision
 variables. Therefore the form of the model described at the end of
 Section~\ref{sec:linear_programming_theory} will be used.
-Functions that define the coefficients of the objective function \(c\), the coefficient
-matrix \(A\), the vector of the right hand side of the constraints \(b\), and the
+Functions that define the coefficients of the \index{objective} function \(c\), the coefficient
+\index{matrix} \(A\), the vector of the right hand side of the constraints \(b\), and the
 vector of equality or inequalities directions \(\star\) are needed.
 
-First the objective function:
+First the \index{objective} function:
 
 \begin{Rin-no-test}
 #' Writes the row of coefficients for the objective function
@@ -619,7 +620,7 @@ write_constraints(
 This would give 3 components:
 
 \begin{itemize}
-  \item a coefficient matrix of the left hand side of the constraints, \(A\), (rows 1
+    \item a coefficient \index{matrix} of the left hand side of the constraints, \(A\), (rows 1
   and 2 corresponding to the clash on days 1 and 2, row 3 ensuring module 1 is
   scheduled on one day only, row 4 ensuring module 2 is scheduled on one day
   only, and rows 5 and 6 defining the decision variables \(Y\));
@@ -665,7 +666,7 @@ list_clashes <- list(
 )
 \end{Rin-no-test}
 
-Then, the functions defined above are used to create the objective function and
+Then, the functions defined above are used to create the \index{objective} function and
 the 3 elements of the constraints:
 
 \begin{Rin-no-test}
@@ -681,7 +682,7 @@ f.obj <- write_objective(n_modules = n_modules, n_days = n_days)
 \end{Rin-no-test}
 
 Finally, once these objects are in place, the
-\mintinline{R}{ROI} library is used to construct an optimisation problem object:
+ROI library is used to construct an optimisation problem object:
 
 \begin{Rin-no-test}
 library(ROI)
@@ -789,21 +790,22 @@ clashes, with either 1, 2 or 4 exams scheduled on each day.
 
 The overview given here on linear programming covers a wide breath of the subject
 although not much depth. For specific algorithmic approaches to the underlying
-algorithms and problem types, such as branch and bound and cutting plane methods
+algorithms and problem types, such as \index{branch and bound} and
+\index{cutting plane} methods
 as well as some minor extensions see~\cite{conforti2014integer,
 sultan2014linear}.
 
-The efficiency of linear programming as well as the ability to model
+The efficiency of \index{linear} programming as well as the ability to model
 linear situations imply that it is often used for a variety of applications.
-Theatre scheduling as one such application is given
+Theatre \index{scheduling} as one such application is given
 in~\cite{guerriero2011operational}.
 Scheduling is indeed a wide ranging sub application of linear programming
 which can also be used to schedule sport
 seasons~\cite{duran2007scheduling}.
 
-Other applications include the transportation problem~\cite{diaz2014survey}
+Other applications include the \index{transportation problem}~\cite{diaz2014survey}
 which can be used to find a best allocation of a fleet of delivery vehicles;
-the fire station location problem~\cite{schreuder1981application} used to
-minimise travel times to at-risk areas; and the bin packing
+the \index{fire station location problem}~\cite{schreuder1981application} used to
+minimise travel times to at-risk areas; and the \index{bin packing}
 problem~\cite{hifi2010linear} in which a number of, possibly irregular,
 shapes are packed into the smallest possible number of bins.

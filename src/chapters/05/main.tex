@@ -11,8 +11,9 @@ these cases numerical methods may be needed, this is the focus
 of this chapter.
 
 \section{Problem}\label{sec:system_dynamics_problem}
+
 Consider the following scenario, where a population of 3000 people are
-susceptible to infection by some disease. This population can be described by
+\index{susceptible} to infection by some disease. This population can be described by
 the following parameters:
 
 \begin{itemize}
@@ -20,7 +21,7 @@ the following parameters:
   \item they have a death rate $d$ of 0.01 per day;
   \item for every infectious individual, the infection rate $\alpha$ is 0.3 per
   day;
-  \item infectious people recover naturally and gain an immunity from the
+  \item \index{infectious} people recover naturally and gain an immunity from the
   disease, at a recovery rate $r$ of 0.02 per day;
   \item for each day an individual is infected, they must take medication which
   costs a public healthcare system $\pounds 10$ per day.
@@ -28,8 +29,8 @@ the following parameters:
 
 A vaccine is produced, that allows individuals to gain an immunity.
 This vaccine costs the public health care system a one-off cost of
-$\pounds 220$ per vaccine. The healthcare providers would like to know if
-achieving a vaccination rate $v$ of $85\%$ would be beneficial financially.
+$\pounds 220$ per vaccine. The \index{healthcare} providers would like to know if
+achieving a \index{vaccination rate} $v$ of $85\%$ would be beneficial financially.
 
 \section{Theory}\label{sec:system_dynamics_theory}
 
@@ -46,9 +47,10 @@ represented in a stock and flow diagram as in Figure~\ref{fig:stockflow}.
 
 The system has three quantities, or `stocks', of different types of individuals,
 those susceptible to disease ($S$), those infected with the disease ($I$), and
-those who have recovered from the disease and so have gained immunity ($R$). The
-levels on these stocks change according to the flows in, out, and between them,
-controlled by `taps'. The amount of flow the taps let through are influenced in
+those who have recovered from the disease and so have gained immunity
+($R$)\footnote{This is often referred to as an \index{SIR} model.}. The
+levels on these \index{stocks} change according to the flows in, out, and between them,
+controlled by `taps'. The amount of flow the \index{taps} let through are influenced in
 a multiplicative way (either negatively or positively), by other factors, such
 as external parameters (e.g. birth rate, infection rate) and the stock levels.
 
@@ -70,11 +72,11 @@ In this system the following taps exist, influenced by the following parameters:
   rate.
 \end{itemize}
 
-Mathematically the quantities or stocks are functions over time, and the change
-in stock levels are written as the derivatives, for example the change in the
+Mathematically the quantities or \index{stocks} are functions over time, and the change
+in stock levels are written as the \index{derivatives}, for example the change in the
 number of susceptible individuals over time is denoted by $\frac{dS}{dt}$. This
 is equal to the sum of the taps in or out of that stock. Thus the system is
-described by the following system of differential equations:
+described by the following system of \index{differential} equations:
 
 \begin{align}
 \frac{dS}{dt} &= -\frac{\alpha SI}{N} + (1 - v)bN - dS \label{eqn:dS}\\
@@ -85,15 +87,16 @@ described by the following system of differential equations:
 Where $N = S + I + R$ is the total number of individuals in the system.
 
 The behaviour of the quantities $S$, $I$ and $R$
-under these rules can be quantified by solving this system of differential
+under these rules can be quantified by solving this system of
+\index{differential}
 equations. This system contains some non-linear terms, implying that this may be
 difficult to solve analytically, so a numerical method instead will be used.
 
 A number of potential numerical methods to do this exist.
 The solvers that will be used in Python
 and R choose the most appropriate for the problem at hand. In general
-methods for this kind of problems use the principle that the derivative denotes
-the rate of instantaneous change. Thus for a differential equation
+methods for this kind of problems use the principle that the \index{derivative} denotes
+the rate of instantaneous change. Thus for a \index{differential} equation
 $\frac{dy}{dt} = f(t,y)$, consider the function $y$ as a discrete sequence of
 points $\{y_0, y_1, y_2, y_3, \dots\}$ on
 $\{t_0, t_0 + h, t_0 + 2h, t_0 + 3h, \dots\}$ then
@@ -103,7 +106,8 @@ y_{n+1} = h \times f(t_0 + nh, y_n).
 \end{equation}
 
 This sequence approaches the true solution $y$ as $h \rightarrow 0$.
-Thus numerical methods, including the Runge-Kutta methods and the Euler
+Thus numerical methods, including the \index{Runge-Kutta} methods and the
+\index{Euler}
 method\footnote{
     These methods are studied in the area of numerical analysis. A good textbook
     is~\cite{burden2001numerical}.
@@ -114,11 +118,11 @@ employing other methods of error reduction.
 
 \section{Solving with Python}\label{sec:system_dynamics_solving-with-python}
 
-Here the \mintinline{python}{solve_ivp} method of the SciPy~\cite{2020SciPy-NMeth}
+Here the \mintinline{python}{solve_ivp} method of the \index{SciPy}~\cite{2020SciPy-NMeth}
 library will be used to numerically solve the above models.
 
-First the system of differential equations described in Equations~\ref{eqn:dS},
-\ref{eqn:dI} and \ref{eqn:dR} must be defined. This is done using a regular
+First the system of \index{differential} equations described in Equations~\ref{eqn:dS},
+\ref{eqn:dI} and \ref{eqn:dR} must be defined. This is done using a
 Python function, where the first two arguments are the current time and the
 system state respectively.
 
@@ -172,15 +176,15 @@ print(derivatives(t=0.0, y=(4, 1, 0), vaccine_rate=0.5))
 (-0.255, 0.21, 0.045)
 \end{pyout}
 
-this means that the number of susceptible individuals is expected to reduce by
-around 0.255 per time unit, the number of infected individuals to increase by
-0.21 per time unit, and the number of recovered individuals to increase by 0.045
+this means that the number of \index{susceptible} individuals is expected to reduce by
+around 0.255 per time unit, the number of \index{infected} individuals to increase by
+0.21 per time unit, and the number of \index{recovered} individuals to increase by 0.045
 per time unit. After a tiny fraction of a time unit these quantities will
 change, and thus the rates of change will change.
 
 The following function observes the system's behaviour over some time period,
-using SciPy's \mintinline{python}{solve_ivp} to numerically solve the system
-of differential equations:
+using \index{SciPy}'s \mintinline{python}{solve_ivp} to numerically solve the system
+of \index{differential} equations:
 
 \begin{pyin}
 from scipy.integrate import solve_ivp
@@ -217,10 +221,10 @@ def solve_ode(
 \end{pyin}
 
 This function can be used to investigate the difference in behaviour between a
-vaccination rate of 0\% and a vaccination rate of 85\%. The system will now be
+\index{vaccination} rate of 0\% and a \index{vaccination} rate of 85\%. The system will now be
 observed for two years, that is 730 days.
 
-Begin with a vaccine rate of 0\%:
+Begin with a \index{vaccination} rate of 0\%:
 
 \begin{pyin}
 from scipy.integrate import odeint
@@ -235,12 +239,14 @@ steps \mintinline{python}{t}.
 These can be plotted to visualise their behaviour, shown in
 Figure~\ref{fig:plot_no_vaccine}.
 
-The number of infected individuals increases quickly, and in fact the rate of
+The number of \index{infected} individuals increases quickly, and in fact the rate of
 change increases as more individuals are infected. However this growth slows
-down as there are fewer susceptible individuals to infect. Due to the equal
+down as there are fewer \index{susceptible} individuals to infect. Due to the equal
 birth and death rates the overall population size remains constant; but after
-some time period (around 200 time units) the levels of susceptible, infected,
-and recovered individuals stabilise, and the disease becomes endemic. Once this
+some time period (around 200 time units) the levels of \index{susceptible},
+\index{infected},
+and \index{recovered} individuals stabilise, and the disease becomes
+\index{endemic}. Once this
 occurs, around 10\% of the population remain susceptible to the disease, 30\%
 are infected, and 60\% are recovered and immune.
 
@@ -252,16 +258,17 @@ t, S, I, R = solve_ode(derivatives, t_span, vaccine_rate=0.85)
 
 The corresponding plot is shown in Figure~\ref{fig:plot_with_vaccine}.
 
-With vaccination the disease remains endemic, however once steadiness occurs,
-around 10\% of the population remain susceptible to the disease, 1.7\% are
+With vaccination the disease \index{remains} endemic, however once steadiness occurs,
+around 10\% of the population remain \index{susceptible} to the disease, 1.7\% are
 infected, and 88.3\% are immune or recovered and immune.
 
-This shows that vaccination lowers the percentage of the population living with
-the infection, which will lower the public healthcare system's costs. This
-saving will now be compared to the cost of providing the vaccination to the
+This shows that \index{vaccination} lowers the percentage of the population living with
+the infection, which will lower the public \index{healthcare} system's costs. This
+saving will now be compared to the cost of providing the \index{vaccination} to the
 newborns.
 
-The following function calculates the total cost to the public healthcare
+The following function calculates the total cost to the public
+\index{healthcare}
 system, that is the sum of the medication costs for those living with the
 infection and the vaccination costs:
 
@@ -298,8 +305,8 @@ def daily_cost(
     return daily_vaccine_cost + daily_meds_cost
 \end{pyin}
 
-Now the total daily cost with and without vaccination can be compared.
-Without vaccinations:
+Now the total daily cost with and without \index{vaccination} can be compared.
+Without \index{vaccinations}:
 
 \begin{pyin}
 cost = daily_cost(vaccine_rate=0.0)
@@ -312,10 +319,11 @@ which gives
 9002.33
 \end{pyout}
 
-Therefore without vaccinations, once the infection is endemic, the public health
+Therefore without \index{vaccinations}, once the \index{infection} is
+\index{endemic}, the public health
 care system would expect to spend $\pounds 9002.33$ a day.
 
-With a vaccine rate of 85\%:
+With a \index{vaccination} rate of 85\%:
 
 \begin{pyin}
 cost = daily_cost(vaccine_rate=0.85)
@@ -328,7 +336,7 @@ which gives
 6119.14
 \end{pyout}
 
-So vaccinating 85\% of the population would cost the public health care system,
+So \index{vaccinating} 85\% of the population would cost the public health care system,
 once the infection is endemic $\pounds 6119.14$ a day. That is a saving of
 around 32\%.
 
@@ -351,10 +359,10 @@ around 32\%.
 
 \section{Solving with R}\label{sec:system_dynamics_solving-with-R}
 
-The deSolve~\cite{soetaert2010solving} library will be used to numerically
-solve the above epidemiology models.
+The \index{deSolve}~\cite{soetaert2010solving} library will be used to numerically
+solve the above \index{epidemiology} models.
 
-First the system of differential equations described in Equations~\ref{eqn:dS},
+First the system of \index{differential} equations described in Equations~\ref{eqn:dS},
 \ref{eqn:dI} and \ref{eqn:dR} must be defined. This is done using an R function,
 where the arguments are the current time, system state and a list of other
 parameters.
@@ -411,14 +419,14 @@ print(ders)
 
 \end{Rout}
 
-The number of susceptible individuals is expected to reduce by around 0.255 per
-time unit, the number of infected individuals to increase by 0.21 per time unit,
-and the number of recovered individuals to increase by 0.045 per time unit.
+The number of \index{susceptible} individuals is expected to reduce by around 0.255 per
+time unit, the number of \index{infected} individuals to increase by 0.21 per time unit,
+and the number of \index{recovered} individuals to increase by 0.045 per time unit.
 After a tiny fraction of a time unit these quantities will change, and thus the
 rates of change will change.
 
 The following function observes the system's behaviour over some time period,
-using the \mintinline{R}{deSolve} library to numerically solve the system of
+using the \index{deSolve} library to numerically solve the system of
 differential equations:
 
 \begin{Rin}
@@ -450,10 +458,10 @@ solve_ode <- function(times,
 \end{Rin}
 
 This function can be used to investigate the difference in behaviour between
-a vaccination rate of 0\% and a vaccination rate of 85\%. The system will be
+a \index{vaccination} rate of 0\% and a vaccination rate of 85\%. The system will be
 observed for two years, that is 730 days, in time steps of 0.01 days.
 
-Begin with a vaccine rate of 0\%:
+Begin with a \index{vaccination} rate of 0\%:
 
 \begin{Rin}
 times <- seq(0, 730, by = 0.01)
@@ -467,19 +475,20 @@ time respectively.
 These can be plotted to visualise their behaviour, shown in
 Figure~\ref{fig:plot_no_vaccine}.\footnote{The particular figures shown in
 Figures~\ref{fig:plot_no_vaccine} and~\ref{fig:plot_with_vaccine} were created
-using Python and the Matplotlib library~\cite{hunter2007matplotlib}. R has powerful
-plotting tools with packages such as ggplot2~\cite{wickham2016ggplot2}.}
+using Python and the \index{Matplotlib} library~\cite{hunter2007matplotlib}. R has powerful
+plotting tools with packages such as \index{ggplot2}~\cite{wickham2016ggplot2}.}
 
-The number of infected individuals increases quickly, and in fact the rate of
+The number of \index{infected} individuals increases quickly, and in fact the rate of
 change increases as more individuals are infected. However this growth slows
-down as there are fewer susceptible individuals to infect. Due to the equal
+down as there are fewer \index{susceptible} individuals to infect. Due to the equal
 birth and death rates the overall population size remains constant; but after
-some time period (around 200 time units) the levels of susceptible, infected,
-and recovered individuals stabilises, and the disease becomes endemic. Once this
+some time period (around 200 time units) the levels of \index{susceptible},
+\index{infected},
+and \index{recovered} individuals stabilises, and the disease becomes \index{endemic}. Once this
 steadiness occurs, around 10\% of the population remain susceptible to the
 disease, 30\% are infected, and 60\% are recovered and immune.
 
-Now with a vaccine rate of 85\%:
+Now with a vaccination rate of 85\%:
 
 \begin{Rin}
 times <- seq(0, 730, by = 0.01)
@@ -488,18 +497,18 @@ out <- solve_ode(times, vaccine_rate = 0.85)
 
 The corresponding plot is shown in Figure~\ref{fig:plot_with_vaccine}.
 
-With vaccination the disease remains endemic, however once steadiness occurs,
-around 10\% of the population remain susceptible to the disease, 1.7\% are
+With \index{vaccination} the disease remains endemic, however once steadiness occurs,
+around 10\% of the population remain \index{susceptible} to the disease, 1.7\% are
 infected, and 88.3\% are immune or recovered and immune.
 
-This shows that vaccination lowers the percentage of the population living with
+This shows that \index{vaccination} lowers the percentage of the population living with
 the infection, which will lower the public healthcare system's costs.
 This saving will now be compared to the cost of providing the vaccination to the
 newborns.
 
 The following function calculates the total cost to the public healthcare
 system, that is the sum of the medication costs for those living with the
-infection and the vaccination costs:
+infection and the \index{vaccination} costs:
 
 \begin{Rin}
 #' Calculates the daily cost to the public health
@@ -530,7 +539,7 @@ daily_cost <- function(derivative_function = derivatives,
 }
 \end{Rin}
 
-The total daily cost with and without vaccination will now be compared. Without
+The total daily cost with and without \index{vaccination} will now be compared. Without
 vaccinations:
 
 \begin{Rin}
@@ -544,10 +553,10 @@ which gives
 [1] 9000
 \end{Rout}
 
-Therefore without vaccinations, once the infection is endemic, the public health
+Therefore without vaccinations, once the infection is \index{endemic}, the public health
 care system would expect to spend $\pounds 9000$ a day.
 
-With a vaccine rate of 85\%:
+With a \index{vaccination} rate of 85\%:
 
 \begin{Rin}
 cost <- daily_cost(vaccine_rate = 0.85)
@@ -560,20 +569,20 @@ which gives
 [1] 6119.034
 \end{Rout}
 
-So vaccinating 85\% of newborns would cost the public health care system, once
+So vaccinating 85\% of newborns would cost the public \index{healthcare} system, once
 the infection is endemic $\pounds 6119.04$ a day. That is a saving of around
 32\%.
 
 \section{Wider context}\label{sec:system_dynamics_wider_context}
 
 System dynamics is an applied aspect of the more general mathematical field of
-dynamical systems. \cite{robinson1998dynamical} gives a mathematical
+\index{dynamical systems}. \cite{robinson1998dynamical} gives a mathematical
 overview of the theory of dynamical systems and~\cite{burden2001numerical}
 is a good text on the numerical algorithms used to be able to observe the
 behaviour of these. For an overview of the type of
 application covered in this chapter see~\cite{martin2006theory}.
 
-In the field of operational research, Jay Forrester is recognised as the first
+In the field of operational research, \index{Jay Forrester} is recognised as the first
 person to use dynamical systems in the way shown in this chapter.
 His own account can be read
 in~\cite{forrester1995beginning}. From Forrester's initial application to
@@ -582,14 +591,14 @@ to be of use today in a wide range of areas. In~\cite{coyle1999system}
 a case study of using dynamical systems for relevant modelling for the navy is
 described.
 \cite{vazquez2020system} gives a literature review of the application area
-of healthcare. For example, \cite{cooper2020sir} applies the same model
-from this chapter to the study of the COVID pandemic.
+of \index{healthcare}. For example, \cite{cooper2020sir} applies the same model
+from this chapter to the study of the \index{COVID} pandemic.
 
 In order to be able to fully capture all the relevant details of the system to be
 modelled, an extension of system dynamics is to combine the methodology
-with discrete event simulation (see Chapter~\ref{chp:discrete_event_simulation})
+with \index{discrete event simulation} (see Chapter~\ref{chp:discrete_event_simulation})
 in order to model discrete aspects of the system
-and/or agent based modelling (see Chapter~\ref{chp:agent_based_simulation}) in
+and/or \index{agent based} modelling (see Chapter~\ref{chp:agent_based_simulation}) in
 order to observe emergent or learned
-behaviours. This is known as hybrid simulation, and an overview is given
+behaviours. This is known as \index{hybrid} simulation, and an overview is given
 in~\cite{brailsford2019hybrid}.
