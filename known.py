@@ -53,6 +53,7 @@ words = {
     "Itertools",
     "Jupyter",
     "Kerckhoffs's",
+    "Kerckhoffs",
     "Krak",
     "Kutta",
     "LHS",
