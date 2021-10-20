@@ -25,6 +25,9 @@ jobs:
         conda info -a
         conda env create -f environment.yml
         source activate ampwoss
+        sudo ln -s /bin/tar /bin/gtar  # Sym link needed to fix a build error.
+                                       # Solution found at
+                                       # https://github.com/r-dbi/RPostgres/issues/110
         inv env  # Finish install of environment
         sudo apt-get install aspell aspell-en #To check spelling
 
