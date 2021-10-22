@@ -33,20 +33,21 @@
 % for i in range(5):
 %   print(i)
 % end{code}
-{\begin{tcolorbox}[colframe=#3,
-                   colback=white,
+{\begin{tcolorbox}[enhanced,
+                   colframe=#3,
                    coltitle=white,
                    fonttitle=\bfseries\ttfamily\Large,
                    left=26pt,
                    colback=bg,
                    enlarge top by=8pt,%     equivalent to mdframed 'skipabove'
                    enlarge bottom by=5pt,%  equivalent to mdframed 'skipbelow'
-                   title=#1]
+                   title=#1,
+                   breakable=true,
+                   lines before break=6]
  \VerbatimEnvironment
  \begin{minted}[
     linenos=true,
     style=friendly,
-    samepage=true,
     firstnumber=last,
     ]{#2}}
 {\end{minted}\end{tcolorbox}}
