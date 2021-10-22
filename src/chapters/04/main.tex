@@ -21,7 +21,7 @@ medicine is a one off cost of \(\pounds5\) per person.
 
 In the case of this town, the overall rate at which people get better is
 dependent on the number of people who are ill. This can be represented
-mathematically using a \index{differential} equation which is a way of relating the rate
+mathematically using a differential equation which is a way of relating the rate
 of change of a system to the state of the system itself.
 
 In general the objects of interest are the variable \(x\) over time \(t\), and
@@ -43,7 +43,7 @@ differential equation that describes the above situation is:
     \frac{dI}{dt} = -\alpha I
 \end{equation}
 
-Finding a solution to this \index{differential} equation means finding an expression for
+Finding a solution to this differential equation means finding an expression for
 \(I\) that when differentiated gives \(- \alpha I\).
 
 In this particular case, one such function is:
@@ -98,7 +98,7 @@ I_0 = sym.Symbol("I_0")
 I = sym.Function("I")
 \end{pyin}
 
-Now write a function to obtain the \index{differential} equation.
+Now write a function to obtain the differential equation.
 
 \begin{pyin}
 def get_equation(alpha=alpha):
@@ -145,7 +145,7 @@ Eq(Derivative(I(t), t), -I(t))
 \end{pyout}
 
 Now a function will be written to obtain the solution to this
-\index{differential}
+differential
 equation with
 initial condition \(I(0) = I_0\):
 
@@ -179,7 +179,7 @@ Eq(I(t), I_0*exp(-alpha*t))
 
 \[I(t) = I_0 e ^{-\alpha t}\]
 
-\index{SymPy} itself can be used to verify the result, by taking the derivative of the
+SymPy itself can be used to verify the result, by taking the derivative of the
 right hand side of our solution.
 
 \begin{pyin}
@@ -269,7 +269,7 @@ So given the current parameters it is not worth purchasing the cure.
 
 R has some capability for symbolic mathematics, however at the time of writing
 the options available are somewhat limited and/or not reliable. As such, in R
-the problem will be solved using a \index{numerical integration} approach. For an
+the problem will be solved using a numerical integration approach. For an
 outline of the theory behind this approach see Chapter
 \ref{chp:system_dynamics}.
 
@@ -393,7 +393,7 @@ So given the current parameters it is not worth purchasing the cure.
 \section{Wider context}\label{sec:differential_equations_wider_context}
 
 There are a number of further areas related to the study of as well as the use
-of \index{differential} equations. Topics omitted here include the actual solution
+of differential equations. Topics omitted here include the actual solution
 approaches which in this chapter are taken
 care of using open source software. Chapters 9, 14 and 16
 of~\cite{stewart2009calculus} provide a good introduction to some of
@@ -406,14 +406,14 @@ attrition in \index{warfare}, the insights from these differential equations are
 referred to as \index{Lanchester's square law}. This has been historically fitted to a
 number of battles with varying levels of success.
 
-In~\cite{syms2015dynamic} \index{differential} equations are used to build a
+In~\cite{syms2015dynamic} differential equations are used to build a
 generic model of regime change. A detailed analysis of the stability of the
 system is included. The model offers some explanation of why oppressive regimes
 can follow an overthrow of a similarly oppressive regime: the underlying
 mathematical system is a stable cycle from which it is difficult to escape.
 
 \cite{vandergraft1983fluid} uses differential equations as a framework for
-modelling \index{queueing networks}. This is interesting in its inception as
+modelling queueing networks. This is interesting in its inception as
 differential equations are models for continuous quantities whereas queues are
 discrete type events (see Chapter~\ref{chp:markov_chains}
 and~\ref{chp:discrete_event_simulation} for more on this). The advantages of

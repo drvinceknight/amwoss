@@ -37,8 +37,8 @@ M04 &     & M13 \\
 \label{tab:modules}
 \end{table}
 
-The university is required to schedule \index{examinations} for each of these modules.
-The university would like the \index{exams} to be scheduled using the least amount of
+The university is required to schedule examinations for each of these modules.
+The university would like the exams to be scheduled using the least amount of
 time slots. However not all modules can be scheduled at the same time
 as they share some students:
 
@@ -65,12 +65,12 @@ Linear programming is a method that solves a type of \index{optimisation} proble
 number of variables by making use of some concepts of higher dimensional
 geometry~\cite{conforti2014integer}.
 Optimisation here refers to finding the variable that gives either the maximum
-or minimum of some \index{linear} function, called the objective function.
+or minimum of some linear function, called the objective function.
 
 Linear programming employs algorithms such as the \index{Simplex}
 method
-to efficiently search some feasible \index{convex} region, stopping at the optimum. To
-do this, an \index{objective} function function and constraints need to be defined.
+to efficiently search some feasible convex region, stopping at the optimum. To
+do this, an objective function function and constraints need to be defined.
 
 To illustrate this a classic 2-dimensional example will be used:
 \(\pounds 50\) of profit can be made on each
@@ -80,7 +80,7 @@ component Y. A tonne of paint B needs 6 tonnes of component X and 4 tonnes of
 component Y. Only 24 tonnes of X and 20 tonnes of Y are available per day. How
 much of paint A and paint B should be produced to maximise profit?
 
-This is formulated as a \index{linear} \index{objective} function, representing total profit,
+This is formulated as a linear objective function, representing total profit,
 that is to be maximised; and two linear constraints, representing the
 availability of components X and Y. They are written as:
 
@@ -101,24 +101,24 @@ amount of component X and Y available per day. These, along with the additional
 constraints that a negative amount of paint cannot be produced (\(A \geq 0\) and
 \(B \geq 0\)), form a convex region, shown in Figure~\ref{fig:paint_lp}.
 This shaded region shows the pairs of values of \(A\) and \(B\) which are
-feasible, that is they satisfy the \index{constraints}.
+feasible, that is they satisfy the constraints.
 
 \begin{figure}
 \begin{center}
 \includestandalone[width=\textwidth]{assets/paint_LP}
 \end{center}
-    \caption{Visual representation of the paint \index{linear} programming
-    problem. The feasible \index{convex}
-    region is shaded in grey; the \index{objective} function with arbitrary value is shown
+    \caption{Visual representation of the paint linear programming
+    problem. The feasible convex
+    region is shaded in grey; the objective function with arbitrary value is shown
 in a dashed line.}
 \label{fig:paint_lp}
 \end{figure}
 
 Expression~\ref{eqn:objective_paint} corresponds to the total profit, which is
 the value to be maximised. As a line in 2-dimensional space,
-this expression fixes its \index{gradient}, but its value determines the size of the
+this expression fixes its gradient, but its value determines the size of the
 \(y\)-intercept. Therefore optimising this function corresponds to pushing a line
-with that \index{gradient} to its furthest extreme within the feasible region,
+with that gradient to its furthest extreme within the feasible region,
 demonstrated in Figure~\ref{fig:paint_lp}.
 Therefore for this problem the optimum occurs in a particular vertex of the
 feasible region, at \(A = \frac{12}{7}\) and \(B = \frac{20}{7}\).
@@ -138,7 +138,7 @@ them as linear systems is the most important challenge.
 
 Consider again the \index{exam scheduling} problem from
 Section~\ref{sec:linear_programming_problem} which
-will now be formulated as an integer \index{linear} programming problem.
+will now be formulated as an integer linear programming problem.
 Define \(M\) as the set of all modules to be scheduled, and define \(T\) as the set
 of possible time slots. At worst each exam is
 scheduled for a different day, thus \(|T| = |M| = 14\) in this case.
@@ -185,7 +185,7 @@ Thus altogether the formulation becomes:
 \end{align}
 
 Another common way to define this linear programming problem is by representing the
-coefficients of the \index{constraints} as a \index{matrix}.
+coefficients of the constraints as a matrix.
 That is:
 
 \begin{align}
@@ -226,8 +226,8 @@ Equation~\ref{eqn:auxiliary}, and ones for all other constraints.
 \section{Solving with Python}\label{sec:linear_programming_solving-with-python}
 
 In this book the Python library \index{Pulp}~\cite{mitchell2011pulp} will be used to
-formulate and solve the \index{integer} programming problem. First a function to create the
-\index{binary} problem variables for a given set of times and modules is needed:
+formulate and solve the integer programming problem. First a function to create the
+binary problem variables for a given set of times and modules is needed:
 
 \begin{pyin}
 import pulp
@@ -292,7 +292,7 @@ X_2_5
 \end{pyout}
 
 
-The next step is to create a \index{Pulp} object with the corresponding variables,
+The next step is to create a Pulp object with the corresponding variables,
 objective function, constraints and solve it. This is done with the following
 function:
 
@@ -343,7 +343,7 @@ x, y = get_solution(
 \end{pyin}
 
 These can be
-inspected, for example \(x_{25}\) is a \index{boolean} variable relating to if module 2
+inspected, for example \(x_{25}\) is a boolean variable relating to if module 2
 is scheduled on the 5th day.
 
 \begin{pyin}
@@ -444,15 +444,15 @@ on the operating system and can be found at the documentation page for the
 \index{ROI}~\cite{theussl2017roi} package\footnote{As of the time of writing, this
 can be found at \url{https://roi.r-forge.r-project.org/installation.html}}.
 
-The \index{ROI} package requires that the linear programming problem is
-represented in its \index{matrix} form, with a one-dimensional array of decision
+The ROI package requires that the linear programming problem is
+represented in its matrix form, with a one-dimensional array of decision
 variables. Therefore the form of the model described at the end of
 Section~\ref{sec:linear_programming_theory} will be used.
-Functions that define the coefficients of the \index{objective} function \(c\), the coefficient
-\index{matrix} \(A\), the vector of the right hand side of the constraints \(b\), and the
+Functions that define the coefficients of the objective function \(c\), the coefficient
+matrix \(A\), the vector of the right hand side of the constraints \(b\), and the
 vector of equality or inequalities directions \(\star\) are needed.
 
-First the \index{objective} function:
+First the objective function:
 
 \begin{Rin-no-test}
 #' Writes the row of coefficients for the objective function
@@ -620,7 +620,7 @@ write_constraints(
 This would give 3 components:
 
 \begin{itemize}
-    \item a coefficient \index{matrix} of the left hand side of the constraints, \(A\), (rows 1
+    \item a coefficient matrix of the left hand side of the constraints, \(A\), (rows 1
   and 2 corresponding to the clash on days 1 and 2, row 3 ensuring module 1 is
   scheduled on one day only, row 4 ensuring module 2 is scheduled on one day
   only, and rows 5 and 6 defining the decision variables \(Y\));
@@ -666,7 +666,7 @@ list_clashes <- list(
 )
 \end{Rin-no-test}
 
-Then, the functions defined above are used to create the \index{objective} function and
+Then, the functions defined above are used to create the objective function and
 the 3 elements of the constraints:
 
 \begin{Rin-no-test}
@@ -795,9 +795,9 @@ algorithms and problem types, such as \index{branch and bound} and
 as well as some minor extensions see~\cite{conforti2014integer,
 sultan2014linear}.
 
-The efficiency of \index{linear} programming as well as the ability to model
+The efficiency of linear programming as well as the ability to model
 linear situations imply that it is often used for a variety of applications.
-Theatre \index{scheduling} as one such application is given
+Theatre scheduling as one such application is given
 in~\cite{guerriero2011operational}.
 Scheduling is indeed a wide ranging sub application of linear programming
 which can also be used to schedule sport

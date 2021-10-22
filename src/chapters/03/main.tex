@@ -54,7 +54,7 @@ should work on the inspection counter or in the repair workshop?
 \section{Theory}\label{sec:discrete_event_simulation_theory}
 
 A number of aspects of the bicycle shop above are
-\index{probabilistic}. For example the
+probabilistic. For example the
 times that bicycles arrive at the shop, the duration of the inspection and
 repairs, and whether the bicycle would need to go on to be repaired or not.
 When a number of these probabilistic events are linked together
@@ -128,7 +128,7 @@ D =
 
 The bicycle repair shop is a system of interactions of
 random events. This can be thought of as many interactions of random
-variables, each generated using \index{pseudorandom} numbers.
+variables, each generated using pseudorandom numbers.
 
 In this case the fundamental random events that need to be generated are:
 
@@ -157,7 +157,7 @@ implementations in Python and R shown here use each of these approaches respecti
 % Event scheduling
 \subsection{Event Scheduling Approach}
 
-When using the \index{event scheduling} approach, the `virtual representation' of the
+When using the event scheduling approach, the `virtual representation' of the
 system is the collection of facilities that the bicycles use, shown in
 Figure~\ref{fig:bike-shop}. Then the entities (the bicycles) interact with these
 facilities. It is these facilities that determine how the entities behave.
@@ -173,7 +173,7 @@ this updated list.
 % Process based
 \subsection{Process Based Simulation}
 
-When using \index{process based simulation}, the `virtual
+When using process based simulation, the `virtual
 representation' of the system is the sequence of actions that each entity
 (the bicycles) must take, and these sequences of actions might contain delays as
 a number of entities seize and release a finite amount of resources. It is the
@@ -231,7 +231,7 @@ In this case the time between consecutive arrivals is assumed to follow an
 exponential distribution, as is the service time.
 These are common assumptions for this sort of queueing system~\cite{stewart2009probability}.
 
-In \index{Ciw}, these are defined as part of a Network object, created using the
+In Ciw, these are defined as part of a Network object, created using the
 \mintinline{python}{ciw.create_network} function. The function below creates a
 Network object that defines the system for a given set of parameters bicycle
 repair shop:
@@ -368,8 +368,8 @@ This gives:
 meaning 26.13\% of all bicycles spent longer than half an hour at the repair
 shop.
 
-However this particular day may have contained a number of \index{extreme
-events}.
+However this particular day may have contained a number of extreme
+events.
 For a more accurate proportion this experiment should be repeated a number of
 times, and an average proportion taken.
 The following function returns an average proportion:
@@ -598,8 +598,8 @@ This piece of code gives
 meaning 13.43\% of all bicycles spent longer than half an hour at the repair
 shop.
 
-However this particular day may have contained a number of \index{extreme
-events}. For
+However this particular day may have contained a number of extreme
+events. For
 a more accurate proportion this experiment should be repeated a number of times,
 and an average proportion taken. In order to do so, the following is a function
 that performs the above experiment over a number of trials, then finds an
@@ -727,8 +727,8 @@ include resource utilisation, human behaviour, and workforce management.
 
 In order to be able to fully capture all the relevant details of the system to
 be modelled, an extension of discrete event simulation is to combine the
-methodology with \index{systems dynamics} (Chapter~\ref{chp:system_dynamics}) in order
-to model continuous aspects of the system and/or \index{agent based} modelling
+methodology with (Chapter~\ref{chp:system_dynamics}) in order
+to model continuous aspects of the system and/or agent based modelling
 (Chapter~\ref{chp:agent_based_simulation}) in order to observe emergent or
 learned behaviours. This is known as \index{hybrid simulation}, and an overview is given
 in~\cite{brailsford2019hybrid}.

@@ -138,15 +138,16 @@ likely to be in on average?'' or ``what is the probability of being in the last
 state on average?''.
 
 This \index{long run probability distribution} over the states can be represented using a
-\index{vector} \(\pi\) where \(\pi_i\) represents the probability of being in state
-\(i\). This vector is in fact the solution to the following \index{matrix} equation:
+vector \(\pi\) where \(\pi_i\) represents the probability of being in state
+\(i\). This vector is in fact the solution to the following \index{matrix
+equation}:
 
 \begin{equation}
     \pi Q = 0
     \label{eqn:continuous_time_markov_process_steady_state}
 \end{equation}
 
-with the following \index{constraint}:
+with the following constraint:
 
 \begin{equation}
     \sum_{i=1}^{n}\pi_i = 1
@@ -303,8 +304,8 @@ underlying equation~\ref{eqn:continuous_time_markov_process_steady_state}
 can be solved directly in order to get a solution where \index{equilibrium} is
 guaranteed.
 
-The underlying linear system will be solved using a \index{numerically} efficient
-algorithm called \index{least squares} optimisation (available from the
+The underlying linear system will be solved using a numerically efficient
+algorithm called \index{least squares optimisation} (available from the
 Numpy library):
 
 \begin{pyin}
@@ -504,7 +505,7 @@ which gives:
 \end{Rout}
 
 One immediate thing that can be done with this matrix is to take the
-\index{matrix exponential}
+matrix exponential
 discussed above. To do this, an R library called
 \index{expm}~\cite{goulet2021expm} will be used.
 To be able to make use of the nice \mintinline{R}{%>%} ``pipe'' operator the

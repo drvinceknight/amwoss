@@ -25,7 +25,7 @@ The stops are drawn in Figure~\ref{fig:tsp}.
 \end{figure}
 
 The relevant information is the pairwise distances between each of the stops,
-which is given by the \index{distance matrix} in equation (\ref{eqn:tsp}).
+which is given by the distance matrix in equation (\ref{eqn:tsp}).
 
 \tiny{
     \input{./assets/tsp/main.tex}
@@ -47,10 +47,10 @@ This problem is called a \index{travelling salesman problem}, which can
 often be inefficient to solve using exact
 methods~\cite{michalewicz2013solve}.
 Heuristics are a family of methods that can be used to find a find a
-\emph{sufficiently good} solution, though not necessarily the \index{optimal} solution,
+\emph{sufficiently good} solution, though not necessarily the optimal solution,
 where the emphasis is on prioritising computational efficiency.
 
-The heuristic approach taken here will be to use a \index{neighbourhood search algorithm}.
+The heuristic approach taken here will be to use a neighbourhood search algorithm.
 This algorithm works by considering a given potential solution, evaluating it
 and then trying another potential solution \emph{close} to it. What \emph{close}
 means depends on different approaches and problems: it is referred to as the
@@ -67,7 +67,7 @@ possible tours:
     t \in \{(1, 2, 3, 1), (1, 3, 2, 1)\}
 \]
 
-Given a \index{distance matrix} \(d\) such that \(d_{ij}\) is the distance between stop
+Given a distance matrix \(d\) such that \(d_{ij}\) is the distance between stop
 \(i\) and \(j\) the total cost of a tour is given by:
 
 \[
@@ -116,9 +116,9 @@ Figure~\ref{fig:neighbourhood_search_flow_diagram}.
 A number of stopping conditions can be used including some specific
 overall cost or a number of total iterations of the algorithm.
 
-The \index{neighbourhood} of a tour \(t\) is taken as some set of tours that can be
+The neighbourhood of a tour \(t\) is taken as some set of tours that can be
 obtained from \(t\) using a specific and computationally efficient
-\textbf{\index{neighbourhood operator}}.
+\textbf{neighbourhood operator}.
 To illustrate two such neighbourhoods operators, consider the following tour on
 7 stops:
 
@@ -248,7 +248,7 @@ print(cost)
 827
 \end{pyout}
 
-Now a function for \index{neighbourhood operator} will be written,
+Now a function for neighbourhood operator will be written,
 \mintinline{python}{swap_stops}, that swaps two stops in a given tour.
 
 \begin{pyin}
@@ -268,7 +268,7 @@ def swap_stops(tour):
     return new_tour
 \end{pyin}
 
-Applying this \index{neighbourhood operator} to the initial candidate gives:
+Applying this neighbourhood operator to the initial candidate gives:
 
 \begin{pyin}
 print(swap_stops(initial_candidate))
@@ -365,7 +365,7 @@ total distance of 362.
 It is important to note that this may not be the optimal route, and different algorithms
 may produce better solutions.
 For example, one way to modify the algorithm is to use a different
-\index{neighbourhood operator}.
+neighbourhood operator.
 Instead of swapping two stops, reverse the path between those two
 stops. This corresponds to an algorithm called the ``2 opt''
 algorithm.\footnote{The 2 opt algorithm was first published in~\cite{croes1958method}.}
@@ -388,7 +388,7 @@ def reverse_path(tour):
     return new_tour
 \end{pyin}
 
-Applying this \index{neighbourhood operator} to the initial candidate gives:
+Applying this neighbourhood operator to the initial candidate gives:
 
 \begin{pyin}
 print(reverse_path(initial_candidate))
@@ -531,7 +531,7 @@ print(cost)
 [1] 709
 \end{Rout}
 
-Now a function for a \index{neighbourhood operator} will be written,
+Now a function for a neighbourhood operator will be written,
 \mintinline{R}{swap_stops}: swapping two stops in a given tour.
 
 \begin{Rin}
@@ -551,7 +551,7 @@ swap_stops <- function(tour){
 }
 \end{Rin}
 
-Applying this \index{neighbourhood operator} to the initial candidate gives:
+Applying this neighbourhood operator to the initial candidate gives:
 
 \begin{Rin}
 new_tour <- swap_stops(initial_candidate)
@@ -741,12 +741,12 @@ given by both approaches.
 Heuristic methods, sometimes referred to as meta-heuristics, are a whole family
 of algorithms used to find approximate solutions to combinatorial optimisation
 problems. An overview is given in~\cite{bozorg2017meta}. These algorithms
-include \index{greedy} searches, \index{tabu} searches, \index{simulated
+include greedy searches, \index{tabu} searches, \index{simulated
 annealing}, \index{genetic algorithms},
-as well \index{ant colony} optimisation. They are usually employed when the problem is too
+as well \index{ant colony optimisation}. They are usually employed when the problem is too
 large or complex to use exact methodologies.
 
-The \index{travelling salesman problem}, described in this chapter, is a classic example
+The travelling salesman problem, described in this chapter, is a classic example
 of one of these problems, formally described first in~\cite{menger1932},
 although thought to have been discussed informally centuries before.
 It is an example of a large number of types of problems collectively known as
