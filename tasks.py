@@ -78,17 +78,6 @@ def build(c, substitutions=substitutions):
     for key, value in substitutions.items():
         c.run(f"cd build; sed -i '.bak' 's/{key}/{value}/g' chapters/*/main.tex")
 
-    chapters = list(pathlib.Path("./build/chapters/").glob("**/*.tex"))
-    for chapter in chapters:
-        text = chapter.read_text()
-        indexed_words = set(re.findall(r'\\index{(.*?)}', text))
-    for chapter in chapters:
-        text = chapter.read_text()
-        for index_word in indexed_words:
-            repl = rf"\\index{{{index_word}}} "
-            text = re.sub(pattern=index_word + r"([^}]|$)", repl=repl, string=text)
-        chapter.write_text(data=text)
-
 @task
 def compile(c):
     """
