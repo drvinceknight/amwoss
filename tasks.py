@@ -11,7 +11,7 @@ from invoke import task
 
 import known
 
-substitions = {
+substitutions = {
         "# nolint": "",
         "prob.solve(pulp.apis.PULP_CBC_CMD(msg=False))": "prob.solve()",
         ", warn.conflicts = FALSE, quietly = TRUE)": ")",
@@ -63,13 +63,19 @@ def env(c):
     # )
 
 @task
-def build(c, substitions=substitions):
+def build(c, substitutions=substitutions):
     """
-    Copy the src directory in to build and then make all substitutions
+    Copy the src directory in to build and then make all substitutions. It also
+    ensures all once \index'd words are all \index'd.
+
+    diff -u src/chapters/01/main.tex build/chapters/01/main.tex
+
+    Should be used to carefully ensure this process has not created any unwanted
+    scenarios.
     """
     c.run("rm -rf build/")
     c.run("cp -r src build")
-    for key, value in substitions.items():
+    for key, value in substitutions.items():
         c.run(f"cd build; sed -i '.bak' 's/{key}/{value}/g' chapters/*/main.tex")
 
 @task

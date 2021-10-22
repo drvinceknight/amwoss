@@ -25,8 +25,10 @@ mathematically using a differential equation which is a way of relating the rate
 of change of a system to the state of the system itself.
 
 In general the objects of interest are the variable \(x\) over time \(t\), and
-the rate at which \(x\) changes with \(t\), its derivative \(\frac{dx}{dt}\).
-The differential equation describing this will be of the form:
+the rate at which \(x\) changes with \(t\), its derivative\index{derivative}
+\(\frac{dx}{dt}\).
+The differential equation\index{differential equation} describing this will be
+of the form:
 
 \begin{equation}
     \frac{dx}{dt} = f(x)
@@ -59,7 +61,7 @@ However here \(I(0) = 1\), whereas for this problem we know that at time \(t=0\)
 there are 100 infected individuals. In general there are many such functions
 that can satisfy a differential equation, known as a family of solutions. To
 know which particular solution is relevant to the situation, some sort of
-initial (also referred to as boundary) condition is required. Here this would
+initial condition is required. Here this would
 be:
 
 \begin{equation}
@@ -67,7 +69,7 @@ be:
 \end{equation}
 
 To evaluate the cost the sum of the values of that function over time is needed.
-Integration gives exactly this, so the cost would be:
+Integration\index{integration} gives exactly this, so the cost would be:
 
 \begin{equation}
     K \int_{0}^{\infty}I(t)dt
@@ -86,8 +88,8 @@ efficiently so as to answer the original question.
 
 \section{Solving with Python}\label{sec:differential_equations_solving-with-python}
 
-The first step is to define the symbolic variables that will be used.  The
-Python library SymPy~\cite{meurer2017sympy} is used.
+The first step is to define the symbolic variables that will be used. The
+Python library SymPy\index{SymPy}~\cite{meurer2017sympy} is used.
 
 \begin{pyin}
 import sympy as sym
@@ -126,8 +128,8 @@ which gives:
 Eq(Derivative(I(t), t), -alpha*I(t))
 \end{pyout}
 
-Note that if Jupyter~\cite{kluyver2016jupyter} notebooks are used then output
-will actually be a well rendered mathematical equation:
+Note that if Jupyter\index{Jupyter}~\cite{kluyver2016jupyter} notebooks are used
+then output will actually be a well rendered mathematical equation:
 
 \[
 \frac{d}{d t} I{\left(t \right)} = - \alpha I{\left(t \right)}
@@ -145,8 +147,7 @@ Eq(Derivative(I(t), t), -I(t))
 \end{pyout}
 
 Now a function will be written to obtain the solution to this differential
-equation with
-initial condition \(I(0) = I_0\):
+equation with initial condition \(I(0) = I_0\):
 
 \begin{pyin}
 def get_solution(I_0=I_0, alpha=alpha):
@@ -307,8 +308,8 @@ This gives:
 
 \end{Rout}
 
-Now the deSolve library will be used for solving differential equations
-numerically:
+Now the deSolve\index{deSolve}~\cite{soetaert2010solving} library will be used
+for solving differential equations numerically:
 
 \begin{Rin}
 library(deSolve)  # nolint
@@ -397,29 +398,32 @@ approaches which in this chapter are taken
 care of using open-source software. Chapters 9, 14 and 16
 of~\cite{stewart2009calculus} provide a good introduction to some of
 these concepts as well as a general discussion of the area of mathematics in
-which they sit: calculus.
+which they sit: \index{calculus}.
 
 Differential equations have been applied in many settings.
 In~\cite{lanchester1916aircraft} differential equations were used to model
-attrition in warfare, the insights from these differential equations are
-referred to as Lanchester's square law. This has been historically fitted to a
+attrition in warfare\index{warfare}, the insights from these differential
+equations are referred to as Lanchester's square
+law\index{Lanchester's square law}. This has been historically fitted to a
 number of battles with varying levels of success.
 
 In~\cite{syms2015dynamic} differential equations are used to build a
-generic model of regime change. A detailed analysis of the stability of the
-system is included. The model offers some explanation of why oppressive regimes
-can follow an overthrow of a similarly oppressive regime: the underlying
-mathematical system is a stable cycle from which it is difficult to escape.
+generic model of regime change. A detailed analysis of the
+stability\index{stability} of the system is included. The model offers some
+explanation of why oppressive regimes can follow an overthrow of a similarly
+oppressive regime: the underlying mathematical system is a stable cycle from
+which it is difficult to escape.
 
 \cite{vandergraft1983fluid} uses differential equations as a framework for
-modelling queueing networks. This is interesting in its inception as
-differential equations are models for continuous quantities whereas queues are
-discrete type events (see Chapter~\ref{chp:markov_chains}
+modelling queueing\index{queueing} networks. This is interesting in its
+inception as differential equations are models for continuous quantities whereas
+queues are discrete type events (see Chapter~\ref{chp:markov_chains}
 and~\ref{chp:discrete_event_simulation} for more on this). The advantages of
 using differential equations are mainly in the computational efficiency.
 
 The model presented in this chapter is deterministic: there is a single solution
 that remains the same. This is not always a precise model of reality: often
 systems are stochastic so that the inputs are not constant parameters but follow
-some random distribution. This is where stochastic differential equations are
-applied, which is the subject of~\cite{sarkka2019applied}.
+some random distribution. This is where stochastic differential
+equations\index{stochastic differential equation} are applied, which is the
+subject of~\cite{sarkka2019applied}.

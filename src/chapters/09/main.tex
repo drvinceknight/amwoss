@@ -5,8 +5,8 @@
 \chapterinitial{I}{t} is often necessary to find the most desirable choice from
 a large, or indeed, infinite set of options. Sometimes this can be done using
 exact techniques but often this is not possible and finding an almost perfect
-choice quickly is just as good. This is where the field of heuristics comes in
-to play.
+choice quickly is just as good. This is where the field of
+heuristics\index{heuristics} comes in to play.
 
 \section{Problem}\label{sec:heuristics_problem}
 
@@ -25,7 +25,7 @@ The stops are drawn in Figure~\ref{fig:tsp}.
 \end{figure}
 
 The relevant information is the pairwise distances between each of the stops,
-which is given by the distance matrix in equation (\ref{eqn:tsp}).
+which is given by the distance matrix\index{matrix} in equation (\ref{eqn:tsp}).
 
 \tiny{
     \input{./assets/tsp/main.tex}
@@ -43,9 +43,9 @@ the smallest overall travel distance.
 
 \section{Theory}\label{sec:heuristics_theory}
 
-This problem is called a travelling salesman problem, which can
-often be inefficient to solve using exact
-methods~\cite{michalewicz2013solve}.
+This problem is called a travelling salesman
+problem\index{travelling salesman problem}, which can often be inefficient to
+solve using exact methods~\cite{michalewicz2013solve}.
 Heuristics are a family of methods that can be used to find a find a
 \emph{sufficiently good} solution, though not necessarily the optimal solution,
 where the emphasis is on prioritising computational efficiency.
@@ -58,9 +58,9 @@ neighbourhood. When a new solution is considered \emph{good}\footnote{`Good' is
 again a term that depends on the approach and problem.} then the search
 continues from the neighbourhood of this new solution.
 
-For this problem, the steps are to first represent a possible solution, that is a given route
-between all the potential stops as a \emph{tour}. If there are 3 total stops
-the tour must start and stop at the first one then there are two
+For this problem, the steps are to first represent a possible solution, that is
+a given route between all the potential stops as a \emph{tour}. If there are 3
+total stops the tour must start and stop at the first one then there are two
 possible tours:
 
 \[
@@ -362,12 +362,14 @@ print(cost)
 Therefore, using this particular algorithm, a pretty good route is found, with a
 total distance of 362.
 
-It is important to note that this may not be the optimal route, and different algorithms
-may produce better solutions.
-For example, one way to modify the algorithm is to use a different neighbourhood operator.
-Instead of swapping two stops, reverse the path between those two
-stops. This corresponds to an algorithm called the ``2 opt''
-algorithm.\footnote{The 2 opt algorithm was first published in~\cite{croes1958method}.}
+It is important to note that this may not be the optimal route, and different
+algorithms may produce better solutions.
+For example, one way to modify the algorithm is to use a different neighbourhood
+operator.
+Instead of swapping two stops, reverse the path between those two stops. This
+corresponds to an algorithm called the ``2-opt''
+algorithm\index{2-opt algorithm}.\footnote{The 2-opt algorithm was first
+published in~\cite{croes1958method}.}
 The \mintinline{python}{reverse_path} function does this:
 
 \begin{pyin}
@@ -645,12 +647,14 @@ which gives:
 Therefore, using this particular algorithm, a pretty good route is found, with a
 total distance of 360.
 
-It is important to note that this may not be the optimal route, and different algorithms
- may produce better solutions.
-For example, one way to modify the algorithm is to use a different neighbourhood operator.
-Instead of swapping two stops, reverse the path between those two
-stops. This corresponds to an algorithm called the ``2 opt''
-algorithm.\footnote{The 2 opt algorithm was first published in~\cite{croes1958method}.}
+It is important to note that this may not be the optimal route, and different
+algorithms may produce better solutions.
+For example, one way to modify the algorithm is to use a different neighbourhood
+operator.
+Instead of swapping two stops, reverse the path between those two stops. This
+corresponds to an algorithm called the ``2-opt''
+algorithm\index{2-opt algorithm}.\footnote{The 2 opt algorithm was first
+published in~\cite{croes1958method}.}
 The \mintinline{R}{reverse_path} function does this:
 
 
@@ -740,9 +744,10 @@ given by both approaches.
 Heuristic methods, sometimes referred to as meta-heuristics, are a whole family
 of algorithms used to find approximate solutions to combinatorial optimisation
 problems. An overview is given in~\cite{bozorg2017meta}. These algorithms
-include greedy searches, tabu searches, simulated annealing, genetic algorithms,
-and ant colony optimisation. They are usually employed when the problem is too
-large or complex to use exact methodologies.
+include greedy searches, tabu searches\index{tabu search}, simulated
+annealing\index{simulated annealing}, genetic algorithms\index{genetic algorithm},
+as well \index{ant colony optimisation}. They are usually employed when the
+problem is too large or complex to use exact methodologies.
 
 The travelling salesman problem, described in this chapter, is a classic example
 of one of these problems, formally described first in~\cite{menger1932},
@@ -752,7 +757,8 @@ vehicle routing problems, which often require heuristic methods for their
 solutions. A survey is given in~\cite{braekers2016vehicle}. Variations of
 the problem include multiple, heterogeneous and/or capacitated vehicles, and
 stochastic or time-dependent travel times. A recent adaptation of the problem
-is the green vehicle routing problem~\cite{moghdani2021green}, where the
+is the green vehicle routing
+problem\index{green vehicle routing problem}~\cite{moghdani2021green}, where the
 cost function includes consideration of green house gas emissions and other
 pollutants.
 

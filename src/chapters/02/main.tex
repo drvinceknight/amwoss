@@ -4,9 +4,9 @@
 \chapterinitial{M}{any} real world situations have some level of
 unpredictability through randomness: the flip of a coin, the number of orders of
 coffee in a shop, the winning numbers of the lottery. However, mathematics can
-in fact let us make predictions about what can be expected to happen. One tool used to
-understand randomness is Markov chains, an area of mathematics sitting at the
-intersection of probability and linear algebra.
+in fact let us make predictions about what can be expected to happen. One tool
+used to understand randomness is Markov chains, an area of mathematics sitting
+at the intersection of probability and linear algebra.
 
 \section{Problem}\label{sec:markov_chains_problem}
 
@@ -38,23 +38,24 @@ They are planning on
 reconfiguring space to either have 2 extra waiting chairs or
 another barber's chair and barber.
 
-The mathematical tool used here to model this situation is a Markov chain.
+The mathematical tool used here to model this situation is a Markov
+chain\index{Markov chain}.
 
 \section{Theory}\label{sec:markov_chains_theory}
 
-A Markov chain is a model of a sequence of random events that is defined by a
-collection of \textbf{states} and rules that define how to move between these
-states.
+A Markov chain is a model of a sequence of random events\index{random events}
+that is defined by a collection of \textbf{states} and rules that define how to
+move between these states.
 
 For example, in the barber shop a single number is sufficient to describe the
 status of the shop: the number of customers present.
 If that number is 1 this implies that 1 customer is
 currently having their hair cut. If that number is 5 this implies that 2
-customers are being served and 3 are waiting. The entire set of values that this value can take
-is
-a finite set of integers from 0 to 6, this set, in general, is called the \textit{state space}.
-If the system is full (all barbers
-and waiting room occupied) then the Markov chain is in state 6 and if there is no one at the
+customers are being served and 3 are waiting. The entire set of values that this
+value can take is a finite set of integers from 0 to 6, this set, in general, is
+called the \textit{state space}.
+If the system is full (all barbers and waiting room occupied) then the Markov
+chain is in state 6 and if there is no one at the
 shop then it is in state 0. This is denoted mathematically as:
 
 \begin{equation}
@@ -63,18 +64,19 @@ shop then it is in state 0. This is denoted mathematically as:
 \end{equation}
 
 The state increases when people arrive and this happens at a rate of change of
-10 per unit time. The state decrease when people are served and this happens at a rate of 4
-per active server per unit time. In both cases it is assumed that no 2 events can occur at
-the same time.
+10 per unit time. The state decrease when people are served and this happens at
+a rate of 4 per active server per unit time. In both cases it is assumed that no
+2 events can occur at the same time.
 
-In general, the rules that govern how to move between these states can be defined in 2
-ways:
+In general, the rules that govern how to move between these states can be
+defined in 2 ways:
 
 \begin{itemize}
-    \item Using probabilities of changing state (or not) in a well defined time
-        interval.
-    \item Using rates of change from one state to another. This is called a
-        continuous time Markov chain.
+    \item Using probabilities\index{probability} of changing state (or not) in a
+          well defined time interval. This is called a discrete time Markov
+          chain\index{discrete time Markov chain}.
+    \item Using rates of change\index{rate of change} from one state to another.
+          This is called a continuous time Markov chain\index{continuous time Markov chain}.
 \end{itemize}
 
 The barber shop will be considered as a continuous time Markov chain as shown
@@ -89,14 +91,16 @@ in Figure~\ref{fig:barber-shop-continuous-markov-process}
     \label{fig:barber-shop-continuous-markov-process}
 \end{figure}
 
-Note that a Markov chain assumes the rates follow an exponential distribution.
+Note that a Markov chain assumes the rates follow an exponential
+distribution\index{exponential distribution}.
 One interesting property of this distribution is that it is considered
 memoryless which means the probability of a customer finishing service
 within the next 5 minutes does not change if they have been
 having their hair cut for 3 minutes already.
 
 These states and rates can be represented mathematically using a transition
-matrix \(Q\) where \(Q_{ij}\) represents the rate of going from state \(i\) to
+matrix\index{transition matrix}\index{matrix} \(Q\) where \(Q_{ij}\) represents the rate
+of going from state \(i\) to
 state \(j\). In this case:
 
 \begin{equation}
@@ -121,8 +125,8 @@ state after \(t\) time unis. This can be represented mathematically using a
 matrix \(P_{t}\) where \((P_{t})_{ij}\) is the probability of being in state \(j\)
 after \(t\) time units having started in state \(i\). Using a mathematical tool
 called the matrix exponential\footnote{Chapter 9 of~\cite{van1996matrix}
-gives a description of how to compute the matrix exponential
-numerically and~\cite{moler1978nineteen,
+gives a description of how to compute the matrix
+exponential\index{matrix exponential} numerically and~\cite{moler1978nineteen,
 moler2003nineteen} give a review of 19 algorithms that can be used.} the value
 of \(P_{t}\) can be calculated numerically.
 
@@ -136,9 +140,10 @@ system. This allows us to answer questions such as ``what state is the system mo
 likely to be in on average?'' or ``what is the probability of being in the last
 state on average?''.
 
-This long run probability distribution over the state can be represented using a
-vector \(\pi\) where \(\pi_i\) represents the probability of being in state
-\(i\). This vector is in fact the solution to the following matrix equation:
+This long run probability distribution\index{long run probability distribution}
+over the states can be represented using a vector\index{vector} \(\pi\) where
+\(\pi_i\) represents the probability of being in state \(i\). This vector is in
+fact the solution to the following matrix equation\index{matrix equation}:
 
 \begin{equation}
     \pi Q = 0
@@ -193,9 +198,9 @@ def get_transition_rate(
 \end{pyin}
 
 Next, a function that creates an entire transition rate matrix \(Q\) for a given
-problem is written. The Numpy~\cite{harris2020array} library will be used to
-handle all the linear algebra and the Itertools library for
-some iterations:
+problem is written. The Numpy\index{Numpy}~\cite{harris2020array} library will
+be used to handle all the linear algebra\index{linear algebra} and the
+Itertools\index{Itertools} library for some iterations:
 
 \begin{pyin}
 import itertools
@@ -253,7 +258,7 @@ which gives:
 \end{pyout}
 
 Here, the matrix exponential will be used as
-discussed above, using the scipy
+discussed above, using the SciPy\index{SciPy}~\cite{2020SciPy-NMeth}
 library. To see what would happen after 0.5 time units:
 
 \begin{pyin}
@@ -299,12 +304,12 @@ The analysis can in fact be stopped here
 however the choice of 500 time units was arbitrary and might not be the correct
 amount for all possible scenarios, as such the
 underlying equation~\ref{eqn:continuous_time_markov_process_steady_state}
-can be solved directly in order to get a solution where equilibrium is
-guaranteed.
+can be solved directly in order to get a solution where
+equilibrium\index{equilibrium} is guaranteed.
 
 The underlying linear system will be solved using a numerically efficient
-algorithm called least squares optimisation (available from the
-Numpy library):
+algorithm called least squares optimisation\index{least squares optimisation}
+(available from the Numpy library):
 
 \begin{pyin}
 def get_steady_state_vector(Q):
@@ -438,14 +443,13 @@ get_transition_rate <- function(in_state,
 
 This actual function will not be used but instead a vectorized
 version\footnote{
-A vectorized calculation refers to the manner in which an instruction is given
-to a computer. When vectorized: a single instruction with multiple
-data are given at the same time
+A vectorized\index{vectorized} calculation refers to the manner in which an
+instruction is given to a computer. When vectorized: a single instruction with
+multiple data are given at the same time
 which corresponds to ``Single instruction, multiple data'' (SIMD) as defined in
 Flynn's taxonomy~\cite{flynn1966very}. This is a type of parallelisation
 that can be done at the central processing unit level of the computer. }
-of this
-makes calculations more efficient:
+of this makes calculations more efficient:
 
 \begin{Rin}
 vectorized_get_transition_rate <- Vectorize(
@@ -502,12 +506,12 @@ which gives:
 [7,]    0    0    0    0    0    8   -8
 \end{Rout}
 
-One immediate thing that can be done with this matrix is to take the matrix exponential
-discussed above. To do this, an R library called
-expm~\cite{goulet2021expm} will be used.
+One immediate thing that can be done with this matrix is to take the
+matrix exponential discussed above. To do this, an R library called
+expm\index{expm}~\cite{goulet2021expm} will be used.
 To be able to make use of the nice \mintinline{R}{%>%} ``pipe'' operator the
-magrittr~\cite{bache2020magrittr} library will be loaded. Now to see
-what would happen after 0.5 time units:
+magrittr\index{magrittr}~\cite{bache2020magrittr} library will be loaded. Now to
+see what would happen after 0.5 time units:
 
 \begin{Rin}
 library(expm, warn.conflicts = FALSE, quietly = TRUE)
@@ -557,8 +561,8 @@ amount for all possible scenarios, as such the
 underlying equation~\ref{eqn:continuous_time_markov_process_steady_state}
 needs to be solved directly.
 
-To be able to do this, the versatile pracma~\cite{borchers2021pracma} package
-will be used which includes a number of numerical analysis functions for
+To be able to do this, the versatile pracma\index{pracma}~\cite{borchers2021pracma}
+package will be used which includes a number of numerical analysis functions for
 efficient computations.
 
 \begin{Rin}
@@ -676,32 +680,33 @@ than to increase the waiting room capacity by 2.
 \section{Wider context}\label{sec:markov_chains_wider_context}
 
 The overview of Markov chains given here has mainly concentrated on calculation
-of steady state probabilities. There are in fact many more theoretic and applied
-aspects of Markov chain models. Some examples of this include the calculation of
-sojourn times which is how long a system spends in a given state as well as
-considering models with absorption: where the system arrives at a state that it
-no longer leaves. For a good overview of
-these the following textbook is recommended:~\cite{stewart2009probability}.
+of steady state\index{steady state} probabilities. There are in fact many more
+theoretic and applied aspects of Markov chain models. Some examples of this
+include the calculation of sojourn times\index{sojourn time} which is how long a
+system spends in a given state as well as considering models with
+absorption\index{absorption}: where the system arrives at a state that it no
+longer leaves. For a good overview of these the following textbook is
+recommended:~\cite{stewart2009probability}.
 
 In~\cite{tan1997markov, stewart1996monopoly}, Markov chains are used to model
-board games. In~\cite{tan1997markov} a model of the battles that take place on
-a Risk board is used
-to understand the probabilities of invasion of territories based on troop
-numbers. This is done using an absorbing Markov chain. In~\cite{stewart1996monopoly} a
-standard model is used to identify the properties that are most likely to be
-landed on in Monopoly. This is done through calculation of steady state
-probabilities. These are both examples of discrete time Markov chains.
+board games\index{board games}. In~\cite{tan1997markov} a model of the battles
+that take place on a Risk board is used to understand the probabilities of
+invasion of territories based on troop numbers. This is done using an
+absorbing Markov chain. In~\cite{stewart1996monopoly} a standard model is used
+to identify the properties that are most likely to be landed on in Monopoly.
+This is done through calculation of steady state probabilities. These are both
+examples of discrete time Markov chains.
 
-A common application of Markov chains is in queueing systems and specifically
-queueing systems applied to healthcare. In~\cite{griffiths2013modelling} a
-model of a neurological rehabilitation unit is built and used to help better
-staff the unit.  This is accomplished using the steady state probabilities and
-calculating various performance measures.  This is an application of a
-continuous time Markov chain.
+A common application of Markov chains is in queueing\index{queueing} systems and
+specifically queueing systems applied to healthcare\index{healthcare}.
+In~\cite{griffiths2013modelling} a model of a neurological rehabilitation unit
+is built and used to help better staff the unit.  This is accomplished using the
+steady state probabilities and calculating various performance measures. This is
+an application of a continuous time Markov chain.
 
-An extension of Markov chains are Markov decision processes. This is a
-particular mathematical model that identifies the optimal decision made within a
-Markov chain.
+An extension of Markov chains are Markov decision
+processes\index{Markov decision process}. This is a particular mathematical
+model that identifies the optimal decision made within a Markov chain.
 Instead of building multiple Markov models for different decisions, in Markov
 decision processes decisions can be made at each state of the underlying chain.
 A policy can be identified giving the optimal decision at each state.

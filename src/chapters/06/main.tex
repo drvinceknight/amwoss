@@ -10,11 +10,11 @@ interactive decision making: game theory.
 \section{Problem}\label{sec:game_theory_problem}
 
 Consider a city council. Two electric taxi companies, company A and company B,
-are going to move
-in to the city and the city wants to ensure that the customers are best served
-by this new duopoly. The two taxi firms will be deciding how many vehicles to
-deploy: one, two or three. The city wants to encourage them to both use three as
-this ensures the highest level of availability to the population.
+are going to move in to the city and the city wants to ensure that the customers
+are best served by this new duopoly. The two taxi firms will be deciding how
+many vehicles to deploy: one, two or three. The city wants to encourage them to
+both use three as this ensures the highest level of availability to the
+population.
 
 Some exploratory data analysis gives the following insights:
 
@@ -91,16 +91,16 @@ Table~\ref{tbl:profit-of-taxi-companies-offset}
     \label{tbl:profit-of-taxi-companies-offset}
 \end{table}
 
-For example, from Table~\ref{tbl:profit-of-taxi-companies-offset} it can be seen that if Company B
-chooses to use 3 vehicles while Company A chooses to only use 2 then Company B
-would get \(\frac{17}{20} + \epsilon\) and Company A would get \(\frac{1}{2}\)
-profits per hour. The question is: what value of \(\epsilon\) ensures both
-companies use 3 vehicles?
+For example, from Table~\ref{tbl:profit-of-taxi-companies-offset} it can be seen
+that if Company B chooses to use 3 vehicles while Company A chooses to only use
+2 then Company B would get \(\frac{17}{20} + \epsilon\) and Company A would get
+\(\frac{1}{2}\) profits per hour. The question is: what value of \(\epsilon\)
+ensures both companies use 3 vehicles?
 
 \section{Theory}\label{sec:game_theory_theory}
 
 In the case of this city, the interaction can be modelled using a mathematical
-object called a game, which here requires:
+object called a normal form game\index{normal form game}, which here requires:
 
 \begin{enumerate}
     \item a given collection of actors that make decisions (players);
@@ -114,14 +114,15 @@ This is called a normal form game and is formally defined by:
 \begin{enumerate}
     \item a finite set of \(N\) players;
     \item action spaces for each player: \(\{A_1, A_2, A_3, \dots, A_N\}\);
-    \item utility functions that for each player \(u_1, u_2, u_3, \dots, u_N\)
-        where \(u_i:A_1\times A_2 \times A_3 \dots A_N \to \mathbb{R}\).
+    \item utility functions\index{utility} that for each player
+          \(u_1, u_2, u_3, \dots, u_N\) where
+          \(u_i:A_1\times A_2 \times A_3 \dots A_N \to \mathbb{R}\).
 \end{enumerate}
 
-When \(N=2\) the utility function is often represented by a pair of matrices (1
-for each player) with the same number of rows and columns. The rows
-correspond to the actions available to the first player and the columns to the
-actions available to the second player.
+When \(N=2\) the utility function is often represented by a pair of
+matrices\index{matrix} (1 for each player) with the same number of rows and
+columns. The rows correspond to the actions available to the first player and
+the columns to the actions available to the second player.
 
 Given a pair of actions (a row and column) we can read the utilities to both
 players by looking at the corresponding entry of the corresponding matrix.
@@ -156,9 +157,9 @@ A diagram of the system is shown in Figure~\ref{fig:taxi-firm-game}
 \end{figure}
 
 A strategy corresponds to a way of choosing actions, this is represented by a
-probability vector. For the \(i\)th player, this vector \(v\) would be of size
-\(|A_i|\) (the size of the action space) and \(v_i\) corresponds to the
-probability of choosing the \(i\)th action.
+probability\index{probability} vector\index{vector}. For the \(i\)th player,
+this vector \(v\) would be of size \(|A_i|\) (the size of the action space) and
+\(v_i\) corresponds to the probability of choosing the \(i\)th action.
 
 Both taxi firms always choosing to use 2 taxis (the second row/column) would
 correspond to both taxi firms choosing the strategy: \((0, 1, 0)\). 
@@ -167,42 +168,43 @@ rows) wants to improve their outcome it is evident by inspecting the second
 column that the highest number is \(19 / 20\): thus the row player has no reason
 to change what they are doing.
 
-This is called a Nash equilibrium: when both players are playing a
-strategy that is the best response against the other.
+This is called a Nash equilibrium\index{Nash equilibrium}: when both players are
+playing a strategy that is the best response\index{best response} against the
+other.
 
 An important fact is that a Nash equilibrium is guaranteed to exist.
-This was actually the theoretic result for which John Nash received a Nobel
-Prize\footnote{
+This was actually the theoretic result for which John Nash\index{John Nash}
+received a Nobel Prize\footnote{
 John Nash proved the fact that any game has a Nash equilibrium
 in~\cite{nash1950equilibrium}. Discussions and proofs for particular cases
 can be found in good game theory text books such as~\cite{maschler2013game}
 }.
-There are various algorithms that can be used for finding Nash equilibria, they involve
-a search through the pairs of spaces of possible strategies until pairs of best
-responses are found. Mathematical insight allows this do be done somewhat efficiently
-using algorithms that can be thought of as modifications of the algorithms used
-in linear programming (see Chapter~\ref{chp:linear_programming}).
-One such example is called the Lemke-Howson algorithm.
+There are various algorithms that can be used for finding Nash equilibria, they
+involve a search through the pairs of spaces of possible strategies until pairs
+of best responses are found. Mathematical insight allows this do be done
+somewhat efficiently using algorithms that can be thought of as modifications of
+the algorithms used in linear programming\index{linear programming} (see
+Chapter~\ref{chp:linear_programming}).
+One such example is called the Lemke-Howson\index{Lemke-Howson} algorithm.
 A Nash equilibrium is not necessarily guaranteed to be arrived at through
-dynamic decision making. However, any stable
-behaviour that does emerge will be a Nash
-equilibrium, such emergent processes are the topics of evolutionary game
-theory\footnote{
+dynamic decision making. However, any stable\index{stability} behaviour that
+does emerge will be a Nash equilibrium, such emergent processes are the topics
+of evolutionary game theory\index{evolutionary game theory}\footnote{
 Evolutionary game theory was formalised in~\cite{smith1974theory} although
-some of the work of Robert Axelrod is evolutionary in
+some of the work of Robert Axelrod\index{Axelrod} is evolutionary in
 principle~\cite{axelrod1990evolution}.
 },
-learning algorithms\footnote{
+learning algorithms\index{learning algorithms}\footnote{
 An excellent text on learning in games is~\cite{fudenberg1998theory}.
 }
-and/or agent based modelling which will be covered in
+and/or agent based\index{agent based} modelling which will be covered in
 Chapter~\ref{chp:agent_based_simulation}.
 
 \section{Solving with Python}\label{sec:game_theory_solving-with-python}
 
 The first step is to write a function to create a game using the
-matrix of expected profits and any offset. The Nashpy~\cite{knight2018nashpy}
-and Numpy~\cite{harris2020array} libraries will be used for this.
+matrix of expected profits and any offset. The Nashpy\index{Nashpy}~\cite{knight2018nashpy}
+and Numpy\index{Numpy}~\cite{harris2020array} libraries will be used for this.
 
 \begin{pyin}
 import nashpy as nash
@@ -353,9 +355,10 @@ companies for putting on 3 taxis.
 \section{Solving with R}\label{sec:game_theory_solving-with-R}
 
 R does not have a uniquely appropriate library for the game considered here, we
-will choose to use Recon~\cite{oliveira2019recon} which has functionality for finding the
-Nash equilibria for two player games when only considering pure strategies
-(where the players only choose to use a single action at a time).
+will choose to use Recon\index{Recon}~\cite{oliveira2019recon} which has
+functionality for finding the Nash equilibria for two player games when only
+considering pure strategies (where the players only choose to use a single
+action at a time).
 
 \begin{Rin}
 library(Recon)
@@ -412,15 +415,15 @@ companies might converge to.
 \end{itemize}
 
 There is in fact a third Nash equilibrium where both taxi firms use 2 taxis 70\%
-of the time and 3 taxis the rest of the time but \mintinline{R}{Recon} is unable
+of the time and 3 taxis the rest of the time but Recon is unable
 to find Nash equilibria with mixed behaviour for games with more than two
 strategies.
 
 As discussed, the council would like to offset the cost of 3
 taxis so as to encourage the taxi company to provide a better service.
 
-The code below gives the number of equilibria for a given offset and stops when there is a
-single equilibrium:
+The code below gives the number of equilibria for a given offset and stops when
+there is a single equilibrium:
 
 \begin{Rin}
 offset <- 0
@@ -465,16 +468,17 @@ companies for putting on 3 taxis.
 The definition of a normal form game here as well as the solution concept of
 Nash equilibrium are common starting points for the use of game theory as a
 study of emergent behaviour. Other topics include different forms of games, for
-example extensive form games which are represented by trees and more explicitly model
-asynchronous decision making. Other solution concepts involve the specific study
-of the emergence mechanisms through models based on natural evolutionary
-process: Moran processes or replicator dynamics. A good text book to read on
+example extensive form games\index{extensive form games} which are represented
+by trees and more explicitly model asynchronous decision making. Other solution
+concepts involve the specific study of the emergence mechanisms through models
+based on natural evolutionary process: Moran processes\index{Moran process} or
+replicator dynamics\index{replicator dynamics}. A good text book to read on
 these topics is~\cite{maschler2013game}.
 
-John Nash whose life was portrayed in the 2001 movie ``A Beautiful Mind'' (which
-is an adaptation of~\cite{nasar2011beautiful}) won the Nobel Prize
-for~\cite{nash1950equilibrium} in which he proved that a Nash equilibrium
-always exists. In~\cite{nash1951non} John Nash gives an
+John Nash\index{John Nash} whose life was portrayed in the 2001 movie ``A
+Beautiful Mind'' (which is an adaptation of~\cite{nasar2011beautiful}) won the
+Nobel Prize for~\cite{nash1950equilibrium} in which he proved that a Nash
+equilibrium always exists. In~\cite{nash1951non} John Nash gives an
 application of game theory to a specific version of poker.
 
 Another application of the concept of Nash equilibrium
@@ -487,13 +491,14 @@ and also propose an approach that is socially optimal: similarly to the taxi
 problem considered in this chapter.
 
 A specific area of a lot of research in game theory is the study of cooperative 
-behaviour. Axelrod~\cite{axelrod1990evolution} started this work with
-computer tournaments where he invited code submissions of strategies to play a
-game called the Iterated Prisoner's Dilemma. The outcome of this was an
+behaviour. Axelrod\index{Axelrod}~\cite{axelrod1990evolution} started this work
+with computer tournaments where he invited code submissions of strategies to
+play a game called the Iterated Prisoner's
+Dilemma\index{Iterated Prisoner's Dilemma}. The outcome of this was an
 explanation for how cooperation can emerge in a complex system with a set of 5
-rules which included the need to be `nice'. The conclusions of Axelrod's work and
-these set of rules continue to be examined and often refuted. For example,
-more recent work involving so called Zero-Determinant
+rules which included the need to be `nice'. The conclusions of Axelrod's work
+and these set of rules continue to be examined and often refuted. For example,
+more recent work involving so called Zero-Determinant\index{Zero-Determinant}
 strategies which considered extortion as a mathematical
 concept~\cite{press2012iterated} and also a possible outcome as opposed to
 cooperation.

@@ -11,6 +11,7 @@ these cases numerical methods may be needed, this is the focus
 of this chapter.
 
 \section{Problem}\label{sec:system_dynamics_problem}
+
 Consider the following scenario, where a population of 3000 people are
 susceptible to infection by some disease. This population can be described by
 the following parameters:
@@ -28,13 +29,15 @@ the following parameters:
 
 A vaccine is produced, that allows individuals to gain an immunity.
 This vaccine costs the public health care system a one-off cost of
-$\pounds 220$ per vaccine. The healthcare providers would like to know if
-achieving a vaccination rate $v$ of $85\%$ would be beneficial financially.
+$\pounds 220$ per vaccine. The healthcare\index{healthcare} providers would like
+to know if achieving a vaccination rate $v$ of $85\%$ would be beneficial
+financially.
 
 \section{Theory}\label{sec:system_dynamics_theory}
 
-The above scenario can be expressed using a compartmental model of disease, and can be
-represented in a stock and flow diagram as in Figure~\ref{fig:stockflow}.
+The above scenario can be expressed using a compartmental model of disease, and
+can be represented in a stock and flow diagram\index{stock and flow diagram} as
+in Figure~\ref{fig:stockflow}.
 
 \begin{figure}
     \begin{center}
@@ -46,7 +49,8 @@ represented in a stock and flow diagram as in Figure~\ref{fig:stockflow}.
 
 The system has three quantities, or `stocks', of different types of individuals,
 those susceptible to disease ($S$), those infected with the disease ($I$), and
-those who have recovered from the disease and so have gained immunity ($R$). The
+those who have recovered from the disease and so have gained immunity
+($R$)\footnote{This is often referred to as an SIR\index{SIR} model.}. The
 levels on these stocks change according to the flows in, out, and between them,
 controlled by `taps'. The amount of flow the taps let through are influenced in
 a multiplicative way (either negatively or positively), by other factors, such
@@ -71,10 +75,11 @@ In this system the following taps exist, influenced by the following parameters:
 \end{itemize}
 
 Mathematically the quantities or stocks are functions over time, and the change
-in stock levels are written as the derivatives, for example the change in the
-number of susceptible individuals over time is denoted by $\frac{dS}{dt}$. This
-is equal to the sum of the taps in or out of that stock. Thus the system is
-described by the following system of differential equations:
+in stock levels are written as the derivatives\index{derivative}, for example
+the change in the number of susceptible individuals over time is denoted by
+$\frac{dS}{dt}$. This is equal to the sum of the taps in or out of that stock.
+Thus the system is described by the following system of differential
+equations\index{differential equation}:
 
 \begin{align}
 \frac{dS}{dt} &= -\frac{\alpha SI}{N} + (1 - v)bN - dS \label{eqn:dS}\\
@@ -84,18 +89,17 @@ described by the following system of differential equations:
 
 Where $N = S + I + R$ is the total number of individuals in the system.
 
-The behaviour of the quantities $S$, $I$ and $R$
-under these rules can be quantified by solving this system of differential
-equations. This system contains some non-linear terms, implying that this may be
+The behaviour of the quantities $S$, $I$ and $R$ under these rules can be
+quantified by solving this system of differential equations. This system
+contains some non-linear terms, implying that this may be
 difficult to solve analytically, so a numerical method instead will be used.
 
 A number of potential numerical methods to do this exist.
-The solvers that will be used in Python
-and R choose the most appropriate for the problem at hand. In general
-methods for this kind of problems use the principle that the derivative denotes
-the rate of instantaneous change. Thus for a differential equation
-$\frac{dy}{dt} = f(t,y)$, consider the function $y$ as a discrete sequence of
-points $\{y_0, y_1, y_2, y_3, \dots\}$ on
+The solvers that will be used in Python and R choose the most appropriate for
+the problem at hand. In general methods for this kind of problems use the
+principle that the derivative denotes the rate of instantaneous change. Thus for
+a differential equation $\frac{dy}{dt} = f(t,y)$, consider the function $y$ as a
+discrete sequence of points $\{y_0, y_1, y_2, y_3, \dots\}$ on
 $\{t_0, t_0 + h, t_0 + 2h, t_0 + 3h, \dots\}$ then
 
 \begin{equation}
@@ -103,8 +107,8 @@ y_{n+1} = h \times f(t_0 + nh, y_n).
 \end{equation}
 
 This sequence approaches the true solution $y$ as $h \rightarrow 0$.
-Thus numerical methods, including the Runge-Kutta methods and the Euler
-method\footnote{
+Thus numerical methods, including the Runge-Kutta\index{Runge-Kutta} methods and
+the Euler method\index{Euler method}\footnote{
     These methods are studied in the area of numerical analysis. A good textbook
     is~\cite{burden2001numerical}.
 },
@@ -114,11 +118,12 @@ employing other methods of error reduction.
 
 \section{Solving with Python}\label{sec:system_dynamics_solving-with-python}
 
-Here the \mintinline{python}{solve_ivp} method of the SciPy~\cite{2020SciPy-NMeth}
-library will be used to numerically solve the above models.
+Here the \mintinline{python}{solve_ivp} method of the
+SciPy\index{SciPy}~\cite{2020SciPy-NMeth} library will be used to numerically
+solve the above models.
 
 First the system of differential equations described in Equations~\ref{eqn:dS},
-\ref{eqn:dI} and \ref{eqn:dR} must be defined. This is done using a regular
+\ref{eqn:dI} and \ref{eqn:dR} must be defined. This is done using a
 Python function, where the first two arguments are the current time and the
 system state respectively.
 
@@ -220,7 +225,7 @@ This function can be used to investigate the difference in behaviour between a
 vaccination rate of 0\% and a vaccination rate of 85\%. The system will now be
 observed for two years, that is 730 days.
 
-Begin with a vaccine rate of 0\%:
+Begin with a vaccination rate of 0\%:
 
 \begin{pyin}
 from scipy.integrate import odeint
@@ -239,10 +244,10 @@ The number of infected individuals increases quickly, and in fact the rate of
 change increases as more individuals are infected. However this growth slows
 down as there are fewer susceptible individuals to infect. Due to the equal
 birth and death rates the overall population size remains constant; but after
-some time period (around 200 time units) the levels of susceptible, infected,
-and recovered individuals stabilise, and the disease becomes endemic. Once this
-occurs, around 10\% of the population remain susceptible to the disease, 30\%
-are infected, and 60\% are recovered and immune.
+some time period (around 200 time units) the levels of susceptible,
+infected, and recovered individuals stabilise, and the disease becomes
+endemic. Once this occurs, around 10\% of the population remain susceptible to
+the disease, 30\% are infected, and 60\% are recovered and immune.
 
 Now with a vaccine rate of 85\%:
 
@@ -315,7 +320,7 @@ which gives
 Therefore without vaccinations, once the infection is endemic, the public health
 care system would expect to spend $\pounds 9002.33$ a day.
 
-With a vaccine rate of 85\%:
+With a vaccination rate of 85\%:
 
 \begin{pyin}
 cost = daily_cost(vaccine_rate=0.85)
@@ -351,7 +356,7 @@ around 32\%.
 
 \section{Solving with R}\label{sec:system_dynamics_solving-with-R}
 
-The deSolve~\cite{soetaert2010solving} library will be used to numerically
+The deSolve\index{deSolve}~\cite{soetaert2010solving} library will be used to numerically
 solve the above epidemiology models.
 
 First the system of differential equations described in Equations~\ref{eqn:dS},
@@ -418,7 +423,7 @@ After a tiny fraction of a time unit these quantities will change, and thus the
 rates of change will change.
 
 The following function observes the system's behaviour over some time period,
-using the \mintinline{R}{deSolve} library to numerically solve the system of
+using the deSolve library to numerically solve the system of
 differential equations:
 
 \begin{Rin}
@@ -453,33 +458,34 @@ This function can be used to investigate the difference in behaviour between
 a vaccination rate of 0\% and a vaccination rate of 85\%. The system will be
 observed for two years, that is 730 days, in time steps of 0.01 days.
 
-Begin with a vaccine rate of 0\%:
+Begin with a vaccination rate of 0\%:
 
 \begin{Rin}
 times <- seq(0, 730, by = 0.01)
 out <- solve_ode(times, vaccine_rate = 0.0)
 \end{Rin}
 
-Now \mintinline{R}{out}, is a matrix with four columns,  \mintinline{R}{time},
+Now \mintinline{R}{out}, is a matrix with four columns, \mintinline{R}{time},
 \mintinline{R}{S}, \mintinline{R}{I} and \mintinline{R}{R}, which are arrays of
 values of the time points, and the stock levels of $S$, $I$ and $R$ over the
 time respectively.
 These can be plotted to visualise their behaviour, shown in
 Figure~\ref{fig:plot_no_vaccine}.\footnote{The particular figures shown in
 Figures~\ref{fig:plot_no_vaccine} and~\ref{fig:plot_with_vaccine} were created
-using Python and the Matplotlib library~\cite{hunter2007matplotlib}. R has powerful
-plotting tools with packages such as ggplot2~\cite{wickham2016ggplot2}.}
+using Python and the Matplotlib\index{Matplotlib}
+library~\cite{hunter2007matplotlib}. R has powerful plotting tools with packages
+such as ggplot2\index{ggplot2}~\cite{wickham2016ggplot2}.}
 
 The number of infected individuals increases quickly, and in fact the rate of
 change increases as more individuals are infected. However this growth slows
 down as there are fewer susceptible individuals to infect. Due to the equal
 birth and death rates the overall population size remains constant; but after
-some time period (around 200 time units) the levels of susceptible, infected,
-and recovered individuals stabilises, and the disease becomes endemic. Once this
-steadiness occurs, around 10\% of the population remain susceptible to the
-disease, 30\% are infected, and 60\% are recovered and immune.
+some time period (around 200 time units) the levels of susceptible,
+infected, and recovered individuals stabilises, and the disease becomes endemic.
+Once this steadiness occurs, around 10\% of the population remain susceptible to
+the disease, 30\% are infected, and 60\% are recovered and immune.
 
-Now with a vaccine rate of 85\%:
+Now with a vaccination rate of 85\%:
 
 \begin{Rin}
 times <- seq(0, 730, by = 0.01)
@@ -547,7 +553,7 @@ which gives
 Therefore without vaccinations, once the infection is endemic, the public health
 care system would expect to spend $\pounds 9000$ a day.
 
-With a vaccine rate of 85\%:
+With a vaccination rate of 85\%:
 
 \begin{Rin}
 cost <- daily_cost(vaccine_rate = 0.85)
@@ -560,36 +566,36 @@ which gives
 [1] 6119.034
 \end{Rout}
 
-So vaccinating 85\% of newborns would cost the public health care system, once
+So vaccinating 85\% of newborns would cost the public healthcare system, once
 the infection is endemic $\pounds 6119.04$ a day. That is a saving of around
 32\%.
 
 \section{Wider context}\label{sec:system_dynamics_wider_context}
 
 System dynamics is an applied aspect of the more general mathematical field of
-dynamical systems. \cite{robinson1998dynamical} gives a mathematical
-overview of the theory of dynamical systems and~\cite{burden2001numerical}
+dynamical systems\index{dynamical systems}. \cite{robinson1998dynamical} gives a
+mathematical overview of the theory of dynamical systems and~\cite{burden2001numerical}
 is a good text on the numerical algorithms used to be able to observe the
 behaviour of these. For an overview of the type of
 application covered in this chapter see~\cite{martin2006theory}.
 
-In the field of operational research, Jay Forrester is recognised as the first
+In the field of operational research\index{operational research}, Jay
+Forrester\index{Jay Forrester} is recognised as the first
 person to use dynamical systems in the way shown in this chapter.
-His own account can be read
-in~\cite{forrester1995beginning}. From Forrester's initial application to
-industry in 1961~\cite{forrester1961industrial} dynamical systems continue
-to be of use today in a wide range of areas. In~\cite{coyle1999system}
-a case study of using dynamical systems for relevant modelling for the navy is
-described.
+His own account can be read in~\cite{forrester1995beginning}. From Forrester's
+initial application to industry in 1961~\cite{forrester1961industrial} dynamical
+systems continue to be of use today in a wide range of areas.
+In~\cite{coyle1999system} a case study of using dynamical systems for relevant
+modelling for the navy is described.
 \cite{vazquez2020system} gives a literature review of the application area
-of healthcare. For example, \cite{cooper2020sir} applies the same model
-from this chapter to the study of the COVID pandemic.
+of healthcare\index{healthcare}. For example, \cite{cooper2020sir} applies the
+same model from this chapter to the study of the COVID\index{COVID} pandemic.
 
 In order to be able to fully capture all the relevant details of the system to be
-modelled, an extension of system dynamics is to combine the methodology
-with discrete event simulation (see Chapter~\ref{chp:discrete_event_simulation})
-in order to model discrete aspects of the system
-and/or agent based modelling (see Chapter~\ref{chp:agent_based_simulation}) in
-order to observe emergent or learned
-behaviours. This is known as hybrid simulation, and an overview is given
-in~\cite{brailsford2019hybrid}.
+modelled, an extension of system dynamics is to combine the methodology with
+discrete event simulation\index{discrete event simulation} (see
+Chapter~\ref{chp:discrete_event_simulation}) in order to model discrete aspects
+of the system and/or agent based\index{agent based} modelling (see
+Chapter~\ref{chp:agent_based_simulation}) in order to observe emergent or learned
+behaviours. This is known as hybrid simulation\index{hybrid simulation}, and an
+overview is given in~\cite{brailsford2019hybrid}.
