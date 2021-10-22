@@ -125,7 +125,7 @@ def doctest(c, style=False, path=None):
     pyout_pattern = re.compile(r"\\begin\{pyout\}\n(.*?)\n\\end\{pyout\}", re.DOTALL)
     Rin_pattern = re.compile(r"\\begin\{Rin\}\n(.*?)\\end\{Rin\}", re.DOTALL)
     Rout_pattern = re.compile(r"\\begin\{Rout\}\n(.*?)\n\\end\{Rout\}", re.DOTALL)
-    files_to_ignore_style = ("src/chapters/07/main.tex",)
+    files_to_ignore_style = ()
     pyexecution_command = "python"
     Rexecution_command = "Rscript"
 

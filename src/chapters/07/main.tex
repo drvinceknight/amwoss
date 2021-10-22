@@ -149,15 +149,13 @@ import itertools
 import numpy as np
 \end{pyin}
 
-Now to define the \mintinline{python}{City}\footnote{
-For the purposes of pagination the style is inconsistent with the other
-chapters in this book.
-}:
+Now to define the \mintinline{python}{City}:
 
 \begin{pyin}
 class City:
     def __init__(self, size, threshold):
         """Initialises the City object.
+
         Args:
             size: an integer number of rows and columns
             threshold: float between 0 and 1 representing the
@@ -168,10 +166,12 @@ class City:
         self.coords = itertools.product(sides, sides)
         self.houses = {
             (x, y): House(x, y, threshold, self)
-            for x, y in self.coords}
+            for x, y in self.coords
+        }
 
     def run(self, n_steps):
         """Runs the simulation of a number of time steps.
+
         Args:
             n_steps: an integer number of steps
         """
@@ -189,11 +189,13 @@ class City:
 
     def mean_satisfaction(self):
         """Finds the average household satisfaction.
+
         Returns:
             The average city's household satisfaction
         """
         return np.mean(
-            [h.satisfaction() for h in self.houses.values()])
+            [h.satisfaction() for h in self.houses.values()]
+        )
 \end{pyin}
 
 This defines a class, a template or a set of instructions that can be used to
@@ -242,6 +244,7 @@ a \mintinline{python}{House} class:
 class House:
     def __init__(self, x, y, threshold, city):
         """Initialises the House object.
+
         Args:
             x: the integer x-coordinate
             y: the integer y-coordinate
@@ -258,6 +261,7 @@ class House:
 
     def satisfaction(self):
         """Determines the household's satisfaction level.
+
         Returns:
             A proportion
         """
@@ -270,6 +274,7 @@ class House:
 
     def sad(self):
         """Determines if the household is sad.
+
         Returns:
             a Boolean
         """
@@ -277,6 +282,7 @@ class House:
 
     def swap(self, house):
         """Swaps two households.
+
         Args:
             house: the house object to swap household with
         """
@@ -337,10 +343,7 @@ First 0 steps:
 
 \begin{pyin}
 initial_happiness = find_mean_happiness(
-    seed=0,
-    size=50,
-    threshold=0.65,
-    n_steps=0
+    seed=0, size=50, threshold=0.65, n_steps=0
 )
 print(initial_happiness)
 \end{pyin}
@@ -355,10 +358,7 @@ After 100 steps:
 
 \begin{pyin}
 final_happiness = find_mean_happiness(
-    seed=0,
-    size=50,
-    threshold=0.65,
-    n_steps=100
+    seed=0, size=50, threshold=0.65, n_steps=100
 )
 print(final_happiness)
 \end{pyin}
@@ -411,8 +411,11 @@ For this problem two classes will be built: a
 \mintinline{R}{House} and a \mintinline{R}{City} for them to live in.
 
 Now to define the \mintinline{R}{City}\footnote{
-For the purposes of pagination, no documentation is included in the definition
+Note that no documentation is included in the definition
 of the class and the style is inconsistent with the other chapters in this book.
+The authors do not know of any widely accepted convention for documenting classes
+in R, furthermore the text of this chapter serves as detailed documentation in this
+context.
 }
 
 \begin{Rin}
@@ -429,29 +432,34 @@ City <- R6Class("City", list(
         row <- c(row, House$new(x, y, threshold, self))
       }
       self$houses <- rbind(self$houses, row)
-    } },
+    }
+  },
   run = function(n_steps) {
     if (n_steps > 0) {
       for (turn in 1:n_steps) {
         self$take_turn()
-    } } },
+      }
+    }
+  },
   take_turn = function() {
     sad <- c()
     for (house in self$houses) {
       if (house$sad()) {
         sad <- c(sad, house)
-      } }
+      }
+    }
     sad <- sample(sad)
     num_sad <- length(sad)
     i <- 1
     while (i <= num_sad / 2) {
       sad[[i]]$swap(sad[[num_sad - i]])
       i <- i + 1
-    } },
+    }
+  },
   mean_satisfaction = function() {
     mean(sapply(self$houses, function(x) x$satisfaction()))
-  })
-)
+  }
+) )
 \end{Rin}
 
 This defines an R6 class, a template or a set of instructions that can be used
@@ -516,7 +524,9 @@ House <- R6Class("House", list(
         ay <- ( (self$y + y - 1) %% self$city$size) + 1
         if (self$city$houses[[ax, ay]]$kind == self$kind) {
           same <- same + 1
-        } } }
+        }
+      }
+    }
     (same - 1) / 8
   },
   sad = function() {
@@ -526,8 +536,8 @@ House <- R6Class("House", list(
     old <- self$kind
     self$kind <- house$kind
     house$kind <- old
-  })
-)
+  }
+) )
 \end{Rin}
 
 It contains four methods: \mintinline{R}{initialize},
