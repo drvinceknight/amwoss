@@ -5,7 +5,32 @@ with Python and R.
 
 ## Back Cover
 
-Talk about distinct parts.
+**Applied Mathematics with Open-Source Software: Operational Research Problems
+with Python and R** is aimed at a broad segment of readers who wish to learn how
+to use open-source software to solve problems in applied mathematics.
+The book has an innovative structure with 4 sections of two chapters each cover a
+large range of applied mathematical techniques: probabilistic modelling,
+dynamical systems, emergent behaviour and optimisation. The pairs of chapter in
+each section demonstrate different families of solution approaches. Each chapter
+starts with a problem, gives an overview of the relevant theory, shows a
+solution approach in R and in Python and finally gives wider context by
+including a number of published references. This structure will allow for maximum
+accessibility, with minimal prerequisites in mathematics or programming as well
+as giving the right opportunities for a reader wanting to delve deeper in to a
+particular topic.
+
+Features
+
+- An excellent resource for scholars of applied mathematics and/or operational
+  research, and indeed any academics who want to learn how to use open-source
+  software
+- Offers more general and accessible treatment of the subject than other texts,
+  both in terms of programming language but also in terms of the subjects
+  considered
+- The R and Python sections purposefully mirror each other so that a reader can
+  read only the section that interests them.
+- An accompanying open source code repository with source files and further
+  examples.
 
 ## Chapter abstracts
 
@@ -33,7 +58,7 @@ barber shop would be most beneficial to customers.
 
 A theoretic overview of concepts related to stationary distributions of
 continuous Markov chains is given before solutions approaches are given in both
-R and Python. This is done using Numpy in Python and expm in R for all the 
+R and Python. This is done using Numpy in Python and expm in R for all the
 underlying linear algebra.
 
 ### Chapter 3: Discrete event simulation
@@ -97,7 +122,7 @@ for the computation of Nash equilibria. The solution offered in R makes use of
 Recon which is a general purpose library with functionality for a few topics in
 economics.
 
-## Chapter 7:
+## Chapter 7: Agent Based Simulation
 
 This chapters models a population of association football fans as a classic
 agent based model of segregation. The goal is to understand how the individual
@@ -112,8 +137,35 @@ used: agents and the environment are written as specific classes with all the
 required functionality. The R solution makes use of the R6 library which allows
 for a similar implementation of classes with required functionality.
 
+## Chapter 8: Linear Programming
 
-## Create the Conda environment: 
+This chapter finds an exam schedule for a scenario where there are students that
+have a number of possible clashes. This is done by formulating and solving a
+linear programming problem.
+
+A theoretic description of linear programming is given. The Simplex algorithm is
+described and linear algebraic as well as classic formulations are explained.
+% TODO @geraint Is "classic formulation" the right wording here?
+
+The Python solution makes use of the Pulp library which corresponds to the
+classic formulation of the problem. The R solution uses the ROI library which
+requires inputs from the linear algebraic formulation.
+
+## Chapter 9: Heuristics
+
+This chapter identifies the best delivery route for a delivery company. This is
+a traditional travelling salesman problem which is solved using a neighbourhood
+search algorithm. This is one type of heuristic algorithm which does not
+guarantee optimality but can often perform better in practice than optimal
+approaches.
+
+A theoretic description of neighbourhood search is given and specific
+consideration of the state of the art "2-opt" algorithm.
+
+Both solution approaches are done using the standard library so no specific
+libraries are used. Although Numpy is used in Python it is not necessary.
+
+## Create the Conda environment:
 
 Assuming you have anaconda on your machine, run:
 
