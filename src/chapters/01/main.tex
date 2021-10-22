@@ -61,22 +61,23 @@ however a universal term, for some applied mathematics is the study of
 mechanics and involves things like modelling projectiles being fired out of canons.
 We will use the term a bit more freely here and mean any type of real
 world problem that can be tackled using mathematical tools. This is
-sometimes referred to as operational research, operations research,
-mathematical modelling or indeed just mathematics.
+sometimes referred to as operational research\index{operational research},
+operations research, mathematical modelling or indeed just mathematics.
 
 One of the authors, Vince, used mathematics to understand just how bad one of
-the so called ``worst plays in \index{Superbowl} history was''. Using an area of
-mathematics called game theory (seen in Chapter~\ref{chp:game_theory}) he showed
-that perhaps the strategic decision making was not as bad as it seemed, the
-outcome was just unlikely\footnote{At the time of writing this is available to
-read at:
+the so called ``worst plays in Super Bowl\index{Super Bowl} history was''. Using
+an area of mathematics called game theory\index{game theory} (seen in
+Chapter~\ref{chp:game_theory}) he showed that perhaps the strategic decision
+making was not as bad as it seemed, the outcome was just unlikely\footnote{At
+the time of writing this is available to read at:
 \url{https://vknight.org/unpeudemath/gametheory/2015/02/15/on-the-worst-play-in-superbowl-history.html}}.
 
 The other author, Geraint, used mathematics to find the best team of
-\index{Pokémon}. Using an area of mathematics called linear programming (seen in
-Chapter~\ref{chp:linear_programming}) which is
-based on linear algebra he was able to find the best makeup of Pokémon\footnote{At the time of writing this is available to
-read at:
+Pokémon\index{Pokémon}. Using an area of mathematics called linear
+programming\index{linear programming} (seen in
+Chapter~\ref{chp:linear_programming}) which is based on linear algebra he was
+able to find the best makeup of Pokémon\footnote{At the time of writing this is
+available to read at:
 \url{http://www.geraintianpalmer.org.uk/2018/05/29/pokemon-team-pulp/}}.
 
 Here, applied mathematics is the type of mathematics that helps us
@@ -85,9 +86,10 @@ answer questions that the real world asks.
 \section{What is open source software}
 \label{sec:what-is-open-source-software}
 
-Strictly speaking open source software is software with source code that
-anyone can read, modify and improve. In practice this means that you do
-not need to pay to use it which is often one of the first attractions.
+Strictly speaking open-source software\index{open-source software} is software
+with source code that anyone can read, modify and improve. In practice this
+means that you do not need to pay to use it which is often one of the first
+attractions.
 This financial aspect can also be one of the reasons that someone will
 not use a particular piece of software due to a confusion between cost
 and value: if something is free is it really going to be any good?
@@ -96,10 +98,11 @@ In practice open source software is used all over the world and powers
 some of the most important infrastructure around.
 A good example of this is cryptographic software which should not rely on
 secrecy for security\footnote{This
-is also referred to as \index{Kerckhoffs}'s principle which states that ``a cryptosystem
-should be secure, even if everything about the system, except the key, is public
-knowledge''~\cite{kerckhoffs1883cryptographie}}. This implies that
-cryptographic systems that do not require trust in a hidden system can exist.
+is also referred to as Kerckhoffs's\index{Kerckhoffs} principle which states
+that ``a cryptosystem should be secure, even if everything about the system,
+except the key, is public knowledge''~\cite{kerckhoffs1883cryptographie}}. This
+implies that cryptographic systems that do not require trust in a hidden system
+can exist.
 In practice these are all open source.
 
 Today, open source software is a lot more than a licensing agreement:
@@ -123,8 +126,8 @@ book}\label{sec:how-to-get-the-most-out-of-this-book}
 
 The book itself is open source. You can find the source files for this
 book online at \url{https://github.com/drvinceknight/ampwoss}. There will
-also find a number of \emph{Jupyter notebooks} and \emph{R markdown
-files} that include code snippets that let you follow along.
+also find a number of \emph{Jupyter notebooks}\index{Jupyter} and \emph{R markdown
+files}\index{R markdown} that include code snippets that let you follow along.
 
 We feel that you can choose to read the book from cover to cover,
 writing out the code examples as you go; or it could also be used as a
@@ -181,10 +184,10 @@ Every chapter has the following structure:
   Solving with R. We will describe how to use tools available
   in R to solve the problem.
 \item
-  The wider context. This section will include a few hand picked academic papers relevant to the
-  covered topic. It is hoped that these few papers can be a good starting point
-  for someone wanting to not only use the methodology described but also
-  understand the broader field.
+  The wider context. This section will include a few hand picked academic papers
+  relevant to the covered topic. It is hoped that these few papers can be a good
+  starting point for someone wanting to not only use the methodology described
+  but also understand the broader field.
 \end{enumerate}
 
 For a given reader, not all sections of a chapter will be of interest.
@@ -197,9 +200,9 @@ differences of implementation in the respective languages.
 
 Note that the solution proposed to each problem in each chapter is not
 necessarily unique. For example, in Chapter~\ref{chp:discrete_event_simulation}
-the Python library \index{Ciw}~\cite{ciwpython, palmer2019ciw}
+the Python library Ciw\index{Ciw}~\cite{ciwpython, palmer2019ciw}
 is used whereas an alternative could be to use a Python
-library called \index{SimPy}~\cite{simpy}.
+library called SimPy\index{SimPy}~\cite{simpy}.
 
 Please do take from the book what you find useful.
 
@@ -243,32 +246,33 @@ done.
 The code itself is written using 3 principles:
 
 \begin{itemize}
-          \item \index{Modularity}: code is written as a
+          \item Modularity\index{modularity}: code is written as a
               series of smaller sections of code. These correspond to smaller,
-              simpler, individual tasks (modules) that can be used together to carry out
-              a particular larger task.
-          \item \index{Documentation}: readable variable names as
+              simpler, individual tasks (modules) that can be used together to
+              carry out a particular larger task.
+          \item Documentation\index{documentation}: readable variable names as
               well as
               text describing the functionality of each module of code are used
               throughout. This ensures that code is not only usable but also
               understandable.
-          \item \index{Tests}: there are places where each module of code is
+          \item Tests\index{tests}: there are places where each module of code is
               used independently to check the output. This can be thought of as a
               test of functionality which readers can use to check they are
               getting expected results.
 \end{itemize}
 
-These are best practice principles in research software development
-that ensure usable, reproducible and reliable code~\cite{wilson2014best}.
-Interested readers might want to see Figure~\ref{fig:rsd-triangle} which shows
-how the 3 principles interact with each other.
+These are best practice\index{best practice} principles in research software
+development that ensure usable, reproducible and reliable
+code~\cite{wilson2014best}. Interested readers might want to see
+Figure~\ref{fig:rsd-triangle} which shows how the 3 principles interact with
+each other.
 
 \begin{figure}
     \begin{center}
         \includestandalone[width=.8\textwidth]{./assets/rsd-triangle/main}
         \caption{The relationship between modularisation, documentation and
-            testing. The authors thank Dr Nikoleta E. Glynatsi for their contribution to
-            the drawing of this diagram.}
+            testing. The authors thank Dr Nikoleta E. Glynatsi for their
+            contribution to the drawing of this diagram.}
         \label{fig:rsd-triangle}
     \end{center}
 \end{figure}

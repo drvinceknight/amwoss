@@ -1,36 +1,33 @@
 \chapter[Agent Based Simulation]{Agent Based Simulation}\label{chp:agent_based_simulation}
 
-\chapterinitial{S}{ometimes} individual behaviours and
-interactions are well understood,
-and an understanding of how a whole population of such
-individuals might behave needed. For example psychologists and economists may know a
-lot about how individual spenders and vendors behave in response to given
-stimuli, but an understanding of how these stimuli might effect the
-macro-economy is necessary.
-Agent based simulation is a paradigm of
-thinking that allows such emergent population level behaviour to be investigated
-from individual rules and interactions.
+\chapterinitial{S}{ometimes} individual behaviours and interactions are well
+understood, and an understanding of how a whole population of such individuals
+might behave needed. For example psychologists and economists may know a lot
+about how individual spenders and vendors behave in response to given stimuli,
+but an understanding of how these stimuli might effect the macro-economy is
+necessary. Agent based\index{agent based} simulation is a paradigm of thinking
+that allows such emergent population level behaviour to be investigated from
+individual rules and interactions.
 
 \section{Problem}\label{sec:agent_based_simulation_problem}
 
 Consider a city populated by two categories of household, for example a household
 might be fans of Cardiff City FC or Swansea City AFC\footnote{Swansea and
 Cardiff are two cities in South Wales with rival football clubs.}.
-Each household has a
-preference for living close to households of the same kind, and will move
-around the city while their preferences are not satisfied.
+Each household has a preference for living close to households of the same kind,
+and will move around the city while their preferences are not satisfied.
 How will these individual preferences affect the overall distribution of fans in
 the city?
 
 \section{Theory}\label{sec:agent_based_simulation_theory}
 
 The problem considered here is considered a `classic' one for the paradigm of
-agent based simulation, and is referred to as \index{Schelling}'s segregation model.
-It features in Thomas \index{Schelling}'s book `Micromotives and
-Macrobehaviours'~\cite{schelling2006micromotives}, whose
-title neatly summarises the world view of agent based modelling: we know,
-understand, determine, or can control individual micromotives; and from this
-we'd like to observe and understand macrobehaviours.
+agent based simulation, and is referred to as Schelling\index{Schelling}'s
+segregation model. It features in Thomas Schelling's book `Micromotives and
+Macrobehaviours'~\cite{schelling2006micromotives}, whose title neatly summarises
+the world view of agent based modelling: we know, understand, determine, or can
+control individual micromotives; and from this we'd like to observe and
+understand macrobehaviours.
 
 In general an agent based model consists of two components, agents, and an
 environment:
@@ -52,13 +49,12 @@ example it will consider some information about the agents it is currently
 close to.
 Then it will update some information about itself based on these observations.
 This could be recording relevant information from the observations, but could
-also include some learning, maybe considering its own previous
-actions.
+also include some learning, maybe considering its own previous actions.
 It will then decide on an action to take, and carry out this action. This
-decision may be deterministic or random and/or based on its own
-attributes from some \index{learning process}; with the ultimate aim of
-maximising its own utility. In practice, a \index{utility} can be represented by a
-function that maps the environment to some numeric value.
+decision may be deterministic or random and/or based on its own attributes from
+some learning process\index{learning process}; with the ultimate aim of
+maximising its own utility. In practice, a utility\index{utility} can be
+represented by a function that maps the environment to some numeric value.
 This process happens to all agents in the environment, possibly simultaneously.
 This is summarised in Figure~\ref{fig:abm_diagram}
 
@@ -82,9 +78,8 @@ City FC supporters, or contain a household of Swansea City AFC supporters.
 A house's neighbours are assumed to be the houses adjacent to it, horizontally,
 vertically, and diagonally.
 For mathematical simplicity, it is also assumed that the grid is a torus,
-where
-houses in the top row are vertically adjacent to the bottom row, and houses in
-the rightmost column are horizontally adjacent to the leftmost column.
+where houses in the top row are vertically adjacent to the bottom row, and
+houses in the rightmost column are horizontally adjacent to the leftmost column.
 
 Every household has a preference \(p\).
 This corresponds to the minimum proportion of neighbours they are happy to live
@@ -104,8 +99,8 @@ grey.
     \label{fig:schelling_happyunhappy}
 \end{figure}
 
-The original problem stated that households move around the city
-whenever they are unhappy with their neighbours.
+The original problem stated that households move around the city whenever they
+are unhappy with their neighbours.
 This long process of selling, searching for, and buying houses can be simplified
 to randomly pairing two unhappy households and swapping their houses.
 In fact, this can be simplified to consider the houses themselves as agents,
@@ -134,14 +129,13 @@ would occur without explicit definition.
 \section{Solving with Python}\label{sec:agent_based_simulation_solving-with-python}
 
 Agent based modelling lends itself well to a programming paradigm called
-\index{object-orientated programming}.
+object-orientated programming\index{object-orientated programming}.
 This paradigm lets a number of \textit{objects} from a set of instructions
 called a \textit{class} to be built.
 These objects can both store information (in Python these are called
-\textit{\index{attributes}}), and do things (in Python these are called
-\textit{\index{methods}}).
-Object-orientated programming allow for the creation of new
-classes which can be
+\textit{attributes}\index{attribute}), and do things (in Python these are called
+\textit{methods}\index{method}).
+Object-orientated programming allow for the creation of new classes which can be
 used to implement the individual behaviours of an agent based model.
 
 For this problem two classes will be built: a
@@ -237,7 +231,7 @@ random library; and then working inwards from the boundary
 houses with sad households are paired up and swap households.
 
 The last method defined here is the \mintinline{python}{mean_satisfaction}
-method, which is only used to observe any \index{emergent behaviour}.
+method, which is only used to observe any emergent behaviour\index{emergent behaviour}.
 This calculates the average satisfaction of all the houses in the grid, using
 the numpy library for convenience.
 
@@ -312,8 +306,8 @@ Finally the \mintinline{python}{swap} method takes another house object, and
 swaps their household kinds.
 
 A function to create and run one of these simulations will now be written
-with a given random seed, threshold, and number of steps. This function returns
-the resulting mean happiness:
+with a given random seed\index{random seed}, threshold, and number of steps.
+This function returns the resulting mean happiness:
 
 \begin{pyin}
 def find_mean_happiness(seed, size, threshold, n_steps):
@@ -379,9 +373,8 @@ Now consider that this satisfaction level is really a level of how similar
 each households' neighbours are, it is actually a level of segregation.
 This was the central premise of Schelling's original
 model~\cite{schelling2006micromotives}
-that overall
-emergent segregation levels are much higher than any individuals' personal
-preference for segregation.
+that overall emergent segregation levels are much higher than any individuals'
+personal preference for segregation.
 
 More analysis methods can be added, including plotting functions.
 Figure~\ref{fig:schelling_python_plot} shows the grid at the beginning, after 20
@@ -402,17 +395,17 @@ It visually shows the households segregating over time.
 \section{Solving with R}\label{sec:agent_based_simulation_solving-with-R}
 
 Agent based modelling lends itself well to a programming paradigm called
-\index{object-orientated programming}.
+object-orientated programming\index{object-orientated programming}.
 This paradigm lets a number of \textit{objects} from a set of instructions
 called a \textit{class} to be built.
 These objects can both store information (in the R package used here these are called
-\textit{\index{fields}}), and do things (in the R package used here these are called
-\textit{\index{methods}}).
+\textit{fields}\index{field}), and do things (in the R package used here these are called
+\textit{methods}\index{method}).
 Object-orientated programming allow for the creation of new classes which can be
 used to implement the individual behaviours of an agent based model.
 
 There are a number of ways of doing object-orientated programming in R.
-In this chapter, a package called \index{R6} will be used here.
+In this chapter, a package called R6\index{R6} will be used here.
 
 For this problem two classes will be built: a
 \mintinline{R}{House} and a \mintinline{R}{City} for them to live in.
@@ -492,7 +485,7 @@ these are put in a random order and then working inwards from the boundary,
 houses with sad households are paired up and swap households.
 
 The last method defined here is the \mintinline{R}{mean_satisfaction}
-method, which is used to observe the \index{emergent behaviour}.
+method, which is used to observe the emergent behaviour\index{emergent behaviour}.
 This calculates the average satisfaction of all the houses in the grid.
 
 In order to be able to create an instance of the above class,
@@ -652,20 +645,21 @@ multi agent systems, which discusses the theory of systems with multiple
 independent agents interacting with one another. A good source on the topic
 is~\cite{shoham2008multiagent}.
 
-The model described here is called \index{Schelling}'s segregation model, and was
-first described in~\cite{schelling2006micromotives}. Another model
+The model described here is called Schelling's\index{Schelling} segregation
+model, and was first described in~\cite{schelling2006micromotives}. Another model
 considered as classic in this domain is a model of a flock of birds presented
-in~\cite{reynolds1987flocks}, otherwise referred to as \index{Boids}, where the
+in~\cite{reynolds1987flocks}, otherwise referred to as Boids\index{Boids}, where the
 behaviours of flocks of birds are understood by capturing the individual
-interactions between individual birds. Conway's \index{Game of Life}, described
-in~\cite{gardener1970mathematical} is another classic, which comes under
-the banner of cellular \index{autonoma}. Here cells on a grid either become alive or dead
-depending on a certain simplistic set of rules. Emergent behaviours observed due
-to these rules include self replicating as well as oscillating structures.
-In the 1970s agent based tournaments were held by Robert
-\index{Axelrod}~\cite{axelrod1990evolution},
-which was the first of a number of studies
-using agent based modelling and game theory (see Chapter~\ref{chp:game_theory}) to understand the
+interactions between individual birds. Conway's Game of
+Life\index{Conways's Game of Life}, described in~\cite{gardener1970mathematical} is
+another classic, which comes under the banner of cellular
+automata\index{cellular automata}. Here cells on a grid either become alive or
+dead depending on a certain simplistic set of rules. Emergent behaviours
+observed due to these rules include self replicating as well as oscillating
+structures. In the 1970s agent based tournaments were held by Robert
+Axelrod\index{Axelrod}~\cite{axelrod1990evolution},
+which was the first of a number of studies using agent based modelling and game
+theory\index{game theory} (see Chapter~\ref{chp:game_theory}) to understand the
 emergence of cooperative behaviours.
 
 In recent years, similar methodologies have been used in a variety of
