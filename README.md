@@ -34,7 +34,7 @@ Features
 
 ## Chapter abstracts
 
-### Chapter 1: Introduction
+### Chapter 1: Introduction
 
 This chapter aims to help a reader understand if this book is for them and what
 background they need to use it. It starts by answering the following questions:
@@ -135,7 +135,7 @@ In Python the fully object oriented nature of the language is used to model
 agents and the environment as classes. The R solution makes use of the R6 library which allows
 for a similar implementation of classes with required functionality.
 
-## Chapter 8: Linear Programming
+## Chapter 8: Linear Programming
 
 This chapter finds an exam schedule for a scenario where there are students that
 have a number of possible clashes. This is done by formulating and solving a
@@ -149,7 +149,7 @@ The Python solution makes use of the Pulp library which corresponds to the
 direct formulation of the problem. The R solution uses the ROI library which
 requires the linear algebraic formulation.
 
-## Chapter 9: Heuristics
+## Chapter 9: Heuristics
 
 This chapter identifies the best delivery route for a delivery company. This is
 a traditional travelling salesman problem which aims to find a route that minimises 
@@ -162,6 +162,32 @@ guarantee optimality but can often perform better in practice than exact
 approaches.
 
 The standard Python library and base R are used to build these algorithms.
+
+# Biographies
+
+Geraint Palmer is a Welsh Medium Lecturer at Cardiff University in the School of
+Mathematics. He is a member of the operational research group where his research
+interests are in simulation and probabilistic modelling, in particular applying
+these to model public services such as healthcare systems. He uses open source
+software in all aspects of his research: he is a maintainer of Ciw, an open source
+Python library for discrete event simulation, and won the OR Society's Doctoral
+Award in 2018. Geraint is also a fellow of the Software Sustainability Institute
+and has presented at a number of international conferences on the subject of
+best practice of scientific computing, and regularly teaches programming and
+runs coding workshops for people of all ages.
+
+Vince Knight is a Senior Lecturer at Cardiff University in the School of
+Mathematics. His research interests are in emergent behaviour, probabilistic
+modelling, applications in healthcare and pedagogy. He maintains a number of
+open source research software projects, is a trustee of the UK Python
+association, is an editor for the Journal of Open Source Software, was awarded
+the 2017 John Pinner award for contribution to the Python community and is a
+fellow of the Sustainable Software Institute. He regularly wins awards for his
+teaching in the School of Mathematics. He does not only speak at conferences
+around the world but continues to organise conferences to bring the
+power of open source software to as many people as possible.
+
+# Source fils
 
 ## Create the Conda environment:
 
