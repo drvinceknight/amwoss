@@ -8,12 +8,12 @@ with Python and R.
 **Applied Mathematics with Open-Source Software: Operational Research Problems
 with Python and R** is aimed at a broad segment of readers who wish to learn how
 to use open-source software to solve problems in applied mathematics.
-The book has an innovative structure with 4 sections of two chapters each cover a
+The book has an innovative structure with 4 sections of two chapters covering a
 large range of applied mathematical techniques: probabilistic modelling,
-dynamical systems, emergent behaviour and optimisation. The pairs of chapter in
+dynamical systems, emergent behaviour and optimisation. The pairs of chapters in
 each section demonstrate different families of solution approaches. Each chapter
 starts with a problem, gives an overview of the relevant theory, shows a
-solution approach in R and in Python and finally gives wider context by
+solution approach in R and in Python, and finally gives wider context by
 including a number of published references. This structure will allow for maximum
 accessibility, with minimal prerequisites in mathematics or programming as well
 as giving the right opportunities for a reader wanting to delve deeper in to a
@@ -21,15 +21,15 @@ particular topic.
 
 Features
 
-- An excellent resource for scholars of applied mathematics and/or operational
+- An excellent resource for scholars of applied mathematics and operational
   research, and indeed any academics who want to learn how to use open-source
-  software
+  software.
 - Offers more general and accessible treatment of the subject than other texts,
   both in terms of programming language but also in terms of the subjects
-  considered
+  considered.
 - The R and Python sections purposefully mirror each other so that a reader can
   read only the section that interests them.
-- An accompanying open source code repository with source files and further
+- An accompanying open source repository with source files and further
   examples.
 
 ## Chapter abstracts
@@ -82,7 +82,7 @@ this gives a good contrast to the two frameworks.
 
 This chapter models the spread of a cold in a population as a single dimensional
 problem. The goal is to identify whether or not an investment in cold medicine
-should be made to offset the lose of productivity.
+should be made to offset a loss of productivity.
 
 A theoretic overview of what a differential equation is and what a solution of a
 differential equation represents is given.
@@ -93,29 +93,28 @@ deSolve.
 
 ### Chapter 5: System dynamics
 
-This chapter models the spread within a population of an infectious disease as a
+This chapter models the spread of an infectious disease within a population  as a
 compartmental model. The goal is to understand what interventions could be made
 to help minimise the long term effects of the disease.
 
 A theoretic overview of systems of ordinary differential equations is presented
-in terms of stocks and taps. The specific model used here: an SIR model is
+in terms of stocks and flows. The specific model used here: an SIR model is
 discussed in detail. This is all complemented with a brief discussion of some
-numerical techniques used to numerically integrate systems of ordinary
+numerical techniques used to integrate systems of ordinary
 differential equations.
 
 The solution offered in Python makes use of Numpy and Scipy which is equivalent
 to the solution offered in R which makes use of deSolve.
 
-## Chapter 6:
+## Chapter 6: Game theory
 
 This chapters models a policy decision that has implications on the actions of
-two companies in a duopoly is modeled as a normal form game. The goal is to
+two companies in a duopoly modelled as a normal form game. The goal is to
 understand what financial incentives can be put in place to ensure competition
 between the companies that benefits the consumer.
 
-A theoretic overview of the definition of normal form games and Nash equilibrium
-is given. Some discussion of other concepts such as learning algorithms and
-evolutionary game theory are also included.
+A theoretic overview of the definition of normal form games and Nash equilibria
+is given.
 
 The solution offered in Python makes use of Nashpy which is a specific library
 for the computation of Nash equilibria. The solution offered in R makes use of
@@ -132,9 +131,8 @@ the population level.
 A theoretic overview of agent based modelling is given specifically
 concentrating on the roles of agents and the environment.
 
-Python is a fully object oriented programming language and so no libraries are
-used: agents and the environment are written as specific classes with all the
-required functionality. The R solution makes use of the R6 library which allows
+In Python the fully object oriented nature of the language is used to model
+agents and the environment as classes. The R solution makes use of the R6 library which allows
 for a similar implementation of classes with required functionality.
 
 ## Chapter 8: Linear Programming
@@ -143,27 +141,27 @@ This chapter finds an exam schedule for a scenario where there are students that
 have a number of possible clashes. This is done by formulating and solving a
 linear programming problem.
 
-A theoretic description of linear programming is given. The Simplex algorithm is
-described and linear algebraic as well as classic formulations are explained.
-% TODO @geraint Is "classic formulation" the right wording here?
+A theoretic description of linear programming is given. Intuitive ideas that lead 
+to solutions approaches  are described. Direct and linear algebraic formulations 
+are explained.
 
 The Python solution makes use of the Pulp library which corresponds to the
-classic formulation of the problem. The R solution uses the ROI library which
-requires inputs from the linear algebraic formulation.
+direct formulation of the problem. The R solution uses the ROI library which
+requires the linear algebraic formulation.
 
 ## Chapter 9: Heuristics
 
 This chapter identifies the best delivery route for a delivery company. This is
-a traditional travelling salesman problem which is solved using a neighbourhood
-search algorithm. This is one type of heuristic algorithm which does not
-guarantee optimality but can often perform better in practice than optimal
+a traditional travelling salesman problem which aims to find a route that minimises 
+the total distance travelled.
+
+A theoretic description of neighbourhood search and a specific
+consideration of the "2-opt" algorithm are given. These are types
+of heuristic algorithms which may not
+guarantee optimality but can often perform better in practice than exact
 approaches.
 
-A theoretic description of neighbourhood search is given and specific
-consideration of the state of the art "2-opt" algorithm.
-
-Both solution approaches are done using the standard library so no specific
-libraries are used. Although Numpy is used in Python it is not necessary.
+The standard Python library and base R are used to build these algorithms.
 
 ## Create the Conda environment:
 
