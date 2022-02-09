@@ -50,5 +50,6 @@ jobs:
         cd src; xelatex -interaction=nonstopmode -shell-escape main.tex
     - name: Validate notebooks
       run: |
+        conda install pip
         python -m pip install nbval pytest
         python -m pytest -vv --nbval
