@@ -283,3 +283,7 @@ def check_style(dir_for_python_input_files,
             print(output.decode("utf-8"))
             exit_codes.append(1)
     return exit_codes
+
+def validatenbs(c):
+    c.run("python -m pip install nbval pytest")
+    c.run("python -m pytest -vv --nbval --current-env")
