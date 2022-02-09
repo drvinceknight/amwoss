@@ -32,7 +32,7 @@ Features
 - An accompanying open source repository with source files and further
   examples.
 
-## Chapter abstracts
+## List of chapters
 
 ### Chapter 1: Introduction
 
