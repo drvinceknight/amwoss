@@ -52,4 +52,4 @@ jobs:
       run: |
         conda install pip
         python -m pip install nbval pytest
-        python -m pytest -vv --nbval
+        python -m pytest -vv --nbval --current-env
