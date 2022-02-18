@@ -32,7 +32,7 @@ Features
 - An accompanying open source repository with source files and further
   examples.
 
-## Chapter abstracts
+## List of chapters
 
 ### Chapter 1: Introduction
 
@@ -60,6 +60,8 @@ A theoretic overview of concepts related to stationary distributions of
 continuous Markov chains is given before solutions approaches are given in both
 R and Python. This is done using Numpy in Python and expm in R for all the
 underlying linear algebra.
+
+- [Jupyter notebook example](./examples/ipynb/02/main.ipynb)
 
 ### Chapter 3: Discrete event simulation
 

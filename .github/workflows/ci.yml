@@ -48,3 +48,8 @@ jobs:
       run: |
         source activate ampwoss
         cd src; xelatex -interaction=nonstopmode -shell-escape main.tex
+    - name: Validate notebooks
+      run: |
+        source activate ampwoss
+        python -m pip install nbval pytest
+        inv validatenbs
