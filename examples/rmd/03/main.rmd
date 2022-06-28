@@ -1,0 +1,161 @@
+# Discrete Event Simulation
+
+This notebook contains code examples referring to the Discrete Event Simulation chapter of "Applied Mathematics with Open-Source Software: Operational Research Problems
+with Python and R".
+
+First we define a function that gives a Network object, containing the structure of the repair shop.
+
+```{R}
+library(simmer)
+
+#' Returns a simmer trajectory object outlining the bicycles
+#' path through the repair shop
+#'
+#' @return A simmer trajectory object
+define_bicycle_trajectories <- function() {
+  inspection_rate <- 20
+  repair_rate <- 10
+  prob_need_repair <- 0.8
+  bicycle <-
+    trajectory("Inspection") %>%
+    seize("Inspector") %>%
+    timeout(function() {
+      rexp(1, inspection_rate)
+    }) %>%
+    release("Inspector") %>%
+    branch(
+      function() (runif(1) < prob_need_repair),
+      continue = c(F),
+      trajectory("Repair") %>%
+        seize("Repairer") %>%
+        timeout(function() {
+          rexp(1, repair_rate)
+        }) %>%
+        release("Repairer"),
+      trajectory("Out")
+    )
+  return(bicycle)
+}
+```
+
+
+```{R}
+#' Runs one trial of the simulation.
+#'
+#' @param bicycle a simmer trajectory object
+#' @param num_inspectors positive integer (default: 1)
+#' @param num_repairers positive integer (default: 2)
+#' @param seed a float (default: 0)
+#'
+#' @return A simmer simulation object after one run of
+#'         the simulation
+run_simulation <- function(bicycle,
+                           num_inspectors = 1,
+                           num_repairers = 2,
+                           seed = 0) {
+  arrival_rate <- 15
+  max_time <- 8
+  repair_shop <-
+    simmer("Repair Shop") %>%
+    add_resource("Inspector", num_inspectors) %>%
+    add_resource("Repairer", num_repairers) %>%
+    add_generator(
+      "Bicycle", bicycle, function() {
+        rexp(1, arrival_rate)
+      }
+    )
+  set.seed(seed)
+  repair_shop %>% run(until = max_time)
+  return(repair_shop)
+}
+```
+
+```{R}
+#' Returns the proportion of bicycles spending over 30
+#' minutes in the repair shop
+#'
+#' @param repair_shop a simmer simulation object
+#'
+#' @return a float between 0 and 1
+get_proportion <- function(repair_shop) {
+  limit <- 0.5
+  recs <- repair_shop %>% get_mon_arrivals()
+  total_times <- recs$end_time - recs$start_time
+  return(mean(total_times > limit))
+}
+```
+
+The proportion of bicycles spending over 30 minutes 
+with current staff:
+
+```{R}
+bicycle <- define_bicycle_trajectories()
+repair_shop <- run_simulation(bicycle = bicycle)
+print(get_proportion(repair_shop = repair_shop))
+```
+
+The following function will repeat this to get a reliable average:
+
+```{R}
+#' Returns the average proportion of bicycles spending over
+#' a given limit at the repair shop.
+#'
+#' @param num_inspectors positive integer (default: 1)
+#' @param num_repairers positive integer (default: 2)
+
+#' @return a float between 0 and 1
+get_average_proportion <- function(num_inspectors = 1,
+                                   num_repairers = 2) {
+  num_trials <- 100
+  bicycle <- define_bicycle_trajectories()
+  proportions <- c()
+  for (trial in 1:num_trials) {
+    repair_shop <- run_simulation(
+      bicycle = bicycle,
+      num_inspectors = num_inspectors,
+      num_repairers = num_repairers,
+      seed = trial
+    )
+    proportion <- get_proportion(
+      repair_shop = repair_shop
+    )
+    proportions[trial] <- proportion
+  }
+  return(mean(proportions))
+}
+
+```
+
+The proportion with current staff:
+
+```{R}
+print(
+  get_average_proportion(
+    num_inspectors = 1,
+    num_repairers = 2)
+)
+```
+
+
+With 2 inspectors:
+
+```{R}
+print(
+  get_average_proportion(
+    num_inspectors = 2,
+    num_repairers = 2
+  )
+)
+```
+
+The proportion with an extra repairer:
+
+
+```{R}
+print(
+  get_average_proportion(
+    num_inspectors = 1,
+    num_repairers = 3
+  )
+)
+```
