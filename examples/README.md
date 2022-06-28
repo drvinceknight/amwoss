@@ -12,3 +12,4 @@ This directory contains examples files:
     - [Heuristics](./ipynb/09/main.ipynb)
 - [Rmd files](./rmd)
     - [Markov Chains](./rmd/02/main.ipynb)
+    - [Discrete Event Simulation](./rmd/03/main.ipynb)
