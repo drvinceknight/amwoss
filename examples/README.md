@@ -11,5 +11,3 @@ This directory contains examples files:
     - [Agent-Based Simulation](./ipynb/07/main.ipynb)
     - [Heuristics](./ipynb/09/main.ipynb)
 - [Rmd files](./rmd)
-    - [Markov Chains](./rmd/02/main.ipynb)
-    - [Discrete Event Simulation](./rmd/03/main.ipynb)
