@@ -1,0 +1,154 @@
+# Markov chains
+
+This notebook contains code examples referring to the Markov chains chapter of "Applied Mathematics with Open-Source Software: Operational Research Problems
+with Python and R".
+
+First we define a function to get the transition rates between two given states:
+
+```{R}
+#' Return the transition rate for 2 given states.
+#'
+#' @param in_state an integer
+#' @param out_state an integer
+#' @param waiting_room an integer (default: 4)
+#' @param num_barbers an integer  (default: 2)
+#'
+#' @return A real
+get_transition_rate <- function(in_state,
+                                out_state,
+                                waiting_room = 4,
+                                num_barbers = 2) {
+  arrival_rate <- 10
+  service_rate <- 4
+  capacity <- waiting_room + num_barbers
+  delta <- out_state - in_state
+
+  if (delta == 1) {
+    return(arrival_rate)
+  }
+  if (delta == -1) {
+    return(min(in_state, num_barbers) * service_rate)
+  }
+  return(0)
+}
+```
+
+We can make the code slightly more efficient by creating a vectorized version of this function:
+
+```{R}
+vectorized_get_transition_rate <- Vectorize(
+  get_transition_rate,
+  vectorize.args = c("in_state", "out_state")
+)
+```
+
+This can be used to create the transition matrix:
+
+```{R}
+#' Return the transition rate matrix Q
+#'
+#' @param waiting_room an integer (default: 4)
+#' @param num_barbers an integer (default: 2)
+#'
+#' @return A matrix
+get_transition_rate_matrix <- function(waiting_room = 4,
+                                       num_barbers = 2){
+  max_state <- waiting_room + num_barbers
+
+  Q <- outer(
+    0:max_state,
+    0:max_state,
+    vectorized_get_transition_rate,
+    waiting_room = waiting_room,
+    num_barbers = num_barbers
+  )
+  row_sums <- rowSums(Q)
+  diag(Q) <- -row_sums
+  Q
+}
+```
+
+For the problem from the chapter this is:
+
+```{R}
+Q <- get_transition_rate_matrix()
+print(Q)
+```
+
+Here is the state of the system after 0.5 time units:
+
+```{R}
+library(expm)
+library(magrittr)
+
+print( (Q * 0.5) %>% expm() %>% round(5))
+```
+
+After 500 time units:
+
+
+```{R}
+print( (Q * 500) %>% expm() %>% round(5))
+```
+
+We can obtain the steady state:
+
+```{R}
+library(pracma)
+
+#' Return the steady state vector of any given continuous time
+#' transition rate matrix
+#'
+#' @param Q a transition rate matrix
+#'
+#' @return A vector
+get_steady_state_vector <- function(Q){
+  state_space_size <- dim(Q)[1]
+  A <- rbind(t(Q), 1)
+  b <- c(integer(state_space_size), 1)
+  mldivide(A, b)
+}
+
+```
+
+
+```{R}
+print(get_steady_state_vector(Q))
+```
+
+The probability of a full shop
+
+```{R}
+#' Return the probability of the barber shop being full
+#'
+#' @param waiting_room (default: 4)
+#' @param num_barbers (default: 2)
+#'
+#' @return A real
+get_probability_of_full_shop <- function(waiting_room = 4,
+                                         num_barbers = 2){
+  arrival_rate <- 10
+  service_rate <- 4
+  pi <- get_transition_rate_matrix(
+    waiting_room = waiting_room,
+    num_barbers = num_barbers
+    ) %>%
+    get_steady_state_vector()
+
+  capacity <- waiting_room + num_barbers
+  pi[capacity + 1]
+}
+
+```
+
+```{R}
+print(get_probability_of_full_shop())
+```
+
+```{R}
+print(get_probability_of_full_shop(waiting_room = 6))
+```
+
+```{R}
+print(get_probability_of_full_shop(num_barbers = 3))
+```
