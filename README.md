@@ -224,6 +224,10 @@ An intermediate step is to run:
 
 Which creates the modified source files but does not compile the document.
 
+Note that as documented in
+[#72](https://github.com/drvinceknight/amwoss/issues/142) the
+`texlive-langgreek` latex package might be needed.
+
 ## Doctesting
 
 Run:

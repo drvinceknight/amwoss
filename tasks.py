@@ -76,7 +76,7 @@ def build(c, substitutions=substitutions):
     c.run("rm -rf build/")
     c.run("cp -r src build")
     for key, value in substitutions.items():
-        c.run(f"cd build; sed -i '.bak' 's/{key}/{value}/g' chapters/*/main.tex")
+        c.run(f"cd build; sed '-i.bak' 's/{key}/{value}/g' chapters/*/main.tex")
 
 @task
 def compile(c):
